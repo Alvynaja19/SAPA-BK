@@ -1,0 +1,447 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+/* =========================================================
+   SAPA BK – Design System Tokens (Jatidiri.app Inspired)
+   ========================================================= */
+@theme {
+    /* Fonts */
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-sora: 'Sora', sans-serif;
+
+    /* Primary Greens */
+    --color-primary:        #059669; /* emerald-600 */
+    --color-primary-dark:   #047857; /* emerald-700 – hover */
+    --color-primary-light:  #ECFDF5; /* emerald-50  – background accent */
+    --color-mint:           #10B981; /* emerald-500 – highlights */
+    --color-primary-border: #6EE7B7; /* emerald-300 */
+
+    /* Neutrals */
+    --color-bg-page:   #F8FAFC; /* slate-50 */
+    --color-bg-card:   #FFFFFF;
+    --color-text-dark: #0F172A; /* slate-900 */
+    --color-text-body: #475569; /* slate-600 */
+    --color-border:    #E2E8F0; /* slate-200 */
+
+    /* Status */
+    --color-success: #059669;
+    --color-warning: #D97706;
+    --color-error:   #DC2626;
+}
+
+/* =========================================================
+   CSS CUSTOM PROPERTIES – Light & Dark Mode Tokens
+   ========================================================= */
+:root {
+    --bg-page:       #F8FAFC;
+    --bg-card:       #FFFFFF;
+    --bg-surface:    #F1F5F9;
+    --text-primary:  #0F172A;
+    --text-body:     #475569;
+    --text-muted:    #94A3B8;
+    --border-color:  #E2E8F0;
+    --border-subtle: #F1F5F9;
+
+    /* Glass header */
+    --glass-bg:      rgba(255, 255, 255, 0.88);
+    --glass-border:  rgba(226, 232, 240, 0.80);
+
+    /* Sidebar (light) */
+    --sidebar-bg:    #0F172A;
+    --sidebar-text:  #CBD5E1;
+    --sidebar-hover: rgba(255,255,255,0.10);
+
+    /* Input */
+    --input-bg:      #FFFFFF;
+    --input-border:  #E2E8F0;
+
+    /* Shadow */
+    --shadow-card:   0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg:     0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* Dark mode tokens */
+html.dark {
+    --bg-page:       #0F172A;
+    --bg-card:       #1E293B;
+    --bg-surface:    #162032;
+    --text-primary:  #F1F5F9;
+    --text-body:     #94A3B8;
+    --text-muted:    #64748B;
+    --border-color:  #334155;
+    --border-subtle: #1E293B;
+
+    --glass-bg:      rgba(15, 23, 42, 0.90);
+    --glass-border:  rgba(51, 65, 85, 0.80);
+
+    --sidebar-bg:    #0B1120;
+    --sidebar-text:  #94A3B8;
+    --sidebar-hover: rgba(255,255,255,0.06);
+
+    --input-bg:      #1E293B;
+    --input-border:  #334155;
+
+    --shadow-card:   0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+    --shadow-lg:     0 10px 25px rgba(0,0,0,0.4);
+}
+
+/* =========================================================
+   BASE STYLES
+   ========================================================= */
+html {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+    background-color: var(--bg-page);
+    color: var(--text-body);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, .font-sora {
+    font-family: 'Sora', sans-serif;
+    color: var(--text-primary);
+}
+
+/* =========================================================
+   DARK MODE TOGGLE BUTTON
+   ========================================================= */
+.dark-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-card);
+    color: var(--text-body);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+.dark-toggle:hover {
+    background-color: var(--bg-surface);
+    color: #059669;
+    border-color: #6EE7B7;
+}
+
+/* =========================================================
+   GLASS HEADER
+   ========================================================= */
+.glass-header {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-color: var(--glass-border);
+}
+
+/* =========================================================
+   GLOW EFFECTS
+   ========================================================= */
+.hero-glow-1 {
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, transparent 70%);
+}
+.hero-glow-2 {
+    background: radial-gradient(circle, rgba(5, 150, 105, 0.12) 0%, transparent 70%);
+}
+
+/* =========================================================
+   BADGES / PILLS
+   ========================================================= */
+.pill-badge {
+    @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full
+           text-xs font-semibold tracking-wide shadow-sm;
+    background: var(--color-primary-light);
+    border: 1px solid var(--color-primary-border);
+    color: var(--color-primary-dark);
+}
+html.dark .pill-badge {
+    background: rgba(5,150,105,0.15);
+    border-color: rgba(110,231,183,0.25);
+    color: #6EE7B7;
+}
+
+.pill-badge-teal {
+    @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full
+           text-xs font-semibold tracking-wide shadow-sm;
+    background: rgba(20, 184, 166, 0.1);
+    border: 1px solid rgba(20, 184, 166, 0.3);
+    color: #0F766E;
+}
+html.dark .pill-badge-teal {
+    color: #5EEAD4;
+    border-color: rgba(94, 234, 212, 0.25);
+    background: rgba(20, 184, 166, 0.12);
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+.btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full
+           font-semibold text-sm shadow-md
+           active:translate-y-0 transition-all duration-200;
+    background: #059669;
+    color: #FFFFFF;
+    box-shadow: 0 4px 14px rgba(5,150,105,0.25);
+}
+.btn-primary:hover {
+    background: #047857;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(5,150,105,0.35);
+}
+
+.btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full
+           font-semibold text-sm transition-all duration-200;
+    border: 2px solid #059669;
+    color: #059669;
+}
+.btn-secondary:hover {
+    background: #ECFDF5;
+    transform: translateY(-2px);
+}
+html.dark .btn-secondary {
+    border-color: #059669;
+    color: #34D399;
+}
+html.dark .btn-secondary:hover {
+    background: rgba(5,150,105,0.12);
+}
+
+.btn-white {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full
+           font-bold text-sm shadow-md transition-all duration-200;
+    background: #FFFFFF;
+    color: #059669;
+}
+.btn-white:hover {
+    background: #ECFDF5;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.btn-danger {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl
+           font-semibold text-sm transition-all duration-200;
+    border: 2px solid #EF4444;
+    color: #DC2626;
+}
+.btn-danger:hover { background: #FEF2F2; }
+html.dark .btn-danger:hover { background: rgba(220,38,38,0.15); }
+
+/* =========================================================
+   CARDS
+   ========================================================= */
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    @apply rounded-2xl shadow-sm transition-all duration-300;
+    box-shadow: var(--shadow-card);
+}
+
+.card-hover {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    @apply rounded-2xl shadow-sm transition-all duration-300;
+    box-shadow: var(--shadow-card);
+}
+.card-hover:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+    border-color: #6EE7B7;
+}
+
+.card-highlight {
+    background: var(--bg-card);
+    border-top: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    border-left: 4px solid #059669;
+    @apply rounded-2xl shadow-sm transition-all duration-300;
+}
+.card-highlight:hover {
+    box-shadow: 0 4px 12px rgba(5,150,105,0.1);
+}
+
+/* =========================================================
+   BADGES
+   ========================================================= */
+.badge-green {
+    @apply inline-block px-3 py-1 rounded-full text-xs font-semibold;
+    background: rgba(5,150,105,0.12);
+    color: #047857;
+}
+html.dark .badge-green { color: #34D399; background: rgba(5,150,105,0.2); }
+
+.badge-gray {
+    @apply inline-block px-3 py-1 rounded-full text-xs font-semibold;
+    background: var(--bg-surface);
+    color: var(--text-body);
+}
+
+.badge-amber {
+    @apply inline-block px-3 py-1 rounded-full text-xs font-semibold;
+    background: rgba(217,119,6,0.1);
+    color: #B45309;
+}
+html.dark .badge-amber { color: #FCD34D; background: rgba(217,119,6,0.18); }
+
+.badge-red {
+    @apply inline-block px-3 py-1 rounded-full text-xs font-semibold;
+    background: rgba(220,38,38,0.1);
+    color: #DC2626;
+}
+html.dark .badge-red { color: #FCA5A5; background: rgba(220,38,38,0.18); }
+
+/* =========================================================
+   FORM INPUTS
+   ========================================================= */
+.form-input {
+    @apply w-full rounded-xl px-4 py-3 text-sm transition-colors duration-150;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--text-primary);
+}
+.form-input::placeholder {
+    color: var(--text-muted);
+}
+.form-input:focus {
+    outline: none;
+    border-color: #059669;
+    box-shadow: 0 0 0 3px rgba(5,150,105,0.15);
+}
+
+/* =========================================================
+   SIDEBAR ITEMS
+   ========================================================= */
+.sidebar-item {
+    @apply flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-150;
+    color: var(--text-body);
+}
+.sidebar-item:hover {
+    background: rgba(5,150,105,0.08);
+    color: #059669;
+}
+html.dark .sidebar-item:hover {
+    background: rgba(5,150,105,0.12);
+    color: #34D399;
+}
+.sidebar-item.active {
+    background: rgba(5,150,105,0.12);
+    color: #059669;
+    font-weight: 600;
+}
+html.dark .sidebar-item.active {
+    background: rgba(5,150,105,0.18);
+    color: #34D399;
+}
+
+/* =========================================================
+   STAT CARDS
+   ========================================================= */
+.stat-card {
+    @apply rounded-2xl shadow-sm p-5 flex items-center gap-4;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-card);
+}
+.stat-icon {
+    @apply w-12 h-12 rounded-full flex items-center justify-center shrink-0;
+    background: rgba(5,150,105,0.1);
+    color: #059669;
+}
+html.dark .stat-icon {
+    background: rgba(5,150,105,0.18);
+    color: #34D399;
+}
+
+/* =========================================================
+   MOBILE NAV PILL (Public)
+   ========================================================= */
+.mobile-nav-pill {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+}
+html.dark .mobile-nav-pill {
+    background: rgba(30,41,59,0.8);
+}
+
+/* =========================================================
+   DARK MODE — BODY BACKGROUND COLORS (inline Tailwind overrides)
+   ========================================================= */
+html.dark body {
+    background-color: #0F172A;
+    color: #94A3B8;
+}
+html.dark h1, html.dark h2, html.dark h3, html.dark .font-sora {
+    color: #F1F5F9;
+}
+
+/* Tailwind dark override helpers */
+html.dark .bg-white    { background-color: #1E293B !important; }
+html.dark .bg-\[\#F8FAFC\] { background-color: #0F172A !important; }
+html.dark .bg-\[\#ECFDF5\] { background-color: rgba(5,150,105,0.15) !important; }
+html.dark .bg-slate-100 { background-color: #1E293B !important; }
+html.dark .bg-slate-50  { background-color: #162032 !important; }
+html.dark .bg-\[\#0F172A\] { background-color: #0B1120 !important; }
+
+html.dark .border-slate-200   { border-color: #334155 !important; }
+html.dark .border-\[\#E2E8F0\] { border-color: #334155 !important; }
+html.dark .border-slate-200\/80 { border-color: rgba(51,65,85,0.8) !important; }
+
+html.dark .text-\[\#0F172A\]   { color: #F1F5F9 !important; }
+html.dark .text-\[\#475569\]   { color: #94A3B8 !important; }
+html.dark .text-slate-900      { color: #F1F5F9 !important; }
+html.dark .text-slate-700      { color: #CBD5E1 !important; }
+html.dark .text-slate-600      { color: #94A3B8 !important; }
+html.dark .text-slate-500      { color: #64748B !important; }
+html.dark .text-slate-400      { color: #475569 !important; }
+
+/* Topbar dark */
+html.dark header.bg-white { background-color: #1E293B !important; }
+
+/* Public nav pill */
+html.dark .bg-slate-100\/90 { background-color: rgba(30,41,59,0.9) !important; }
+
+/* Tables */
+html.dark table thead { background-color: #162032 !important; }
+html.dark table tbody tr:hover { background-color: rgba(30,41,59,0.6) !important; }
+html.dark table td, html.dark table th { border-color: #334155 !important; }
+
+/* Modals */
+html.dark .modal-box { background-color: #1E293B !important; }
+
+/* Scrollbar dark */
+html.dark ::-webkit-scrollbar { background: #1E293B; }
+html.dark ::-webkit-scrollbar-thumb { background: #334155; border-radius: 8px; }
+
+/* =========================================================
+   RESPONSIVE UTILITIES
+   ========================================================= */
+
+/* Ensure images don't overflow */
+img { max-width: 100%; height: auto; }
+
+/* Tables responsive wrapper */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Touch-friendly tap targets */
+@media (max-width: 640px) {
+    .btn-primary, .btn-secondary, .btn-white {
+        padding: 0.625rem 1.25rem;
+        font-size: 0.8125rem;
+    }
+    .sidebar-item {
+        padding: 0.625rem 0.875rem;
+    }
+}

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SAPA BK - SMA Negeri 4 Jember</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-container": "#00855d",
+                      "on-primary-container": "#f5fff7",
+                      "on-primary-fixed": "#002114",
+                      "tertiary-fixed": "#d5e6df",
+                      "on-tertiary-fixed-variant": "#3b4a44",
+                      "on-surface-variant": "#3d4a42",
+                      "error": "#ba1a1a",
+                      "inverse-surface": "#2d3133",
+                      "on-error": "#ffffff",
+                      "on-secondary-fixed-variant": "#005236",
+                      "on-secondary": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "surface": "#f7f9fb",
+                      "surface-variant": "#e0e3e5",
+                      "on-tertiary-fixed": "#101e1a",
+                      "surface-container-low": "#f2f4f6",
+                      "primary-fixed-dim": "#68dba9",
+                      "surface-tint": "#006c4a",
+                      "on-primary-fixed-variant": "#005137",
+                      "inverse-primary": "#68dba9",
+                      "tertiary": "#505f59",
+                      "tertiary-fixed-dim": "#bacac3",
+                      "inverse-on-surface": "#eff1f3",
+                      "secondary-fixed": "#6ffbbe",
+                      "surface-container-high": "#e6e8ea",
+                      "surface-bright": "#f7f9fb",
+                      "primary-fixed": "#85f8c4",
+                      "primary": "#006948",
+                      "outline-variant": "#bccac0",
+                      "surface-dim": "#d8dadc",
+                      "surface-container-highest": "#e0e3e5",
+                      "on-background": "#191c1e",
+                      "surface-container-lowest": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "surface-container": "#eceef0",
+                      "on-tertiary-container": "#f4fff9",
+                      "on-primary": "#ffffff",
+                      "outline": "#6d7a72",
+                      "on-secondary-fixed": "#002113",
+                      "secondary-fixed-dim": "#4edea3",
+                      "secondary": "#006c49",
+                      "background": "#f7f9fb",
+                      "tertiary-container": "#687872",
+                      "secondary-container": "#6cf8bb",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-container": "#00714d",
+                      "on-surface": "#191c1e"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px",
+                      "2xl": "1rem"
+              },
+              "spacing": {
+                      "container-max": "1280px",
+                      "margin-x": "2rem",
+                      "stack-md": "1rem",
+                      "stack-lg": "2rem",
+                      "gutter": "1.5rem",
+                      "stack-sm": "0.5rem"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-xl": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-xl": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .shadow-soft {
+            box-shadow: 0 4px 15px rgba(25, 28, 30, 0.04);
+        }
+        .shadow-hover {
+            box-shadow: 0 10px 25px rgba(25, 28, 30, 0.08);
+        }
+      </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<nav class="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-8 py-3 w-[95%] bg-surface/80 backdrop-blur-md dark:bg-surface-container/80 shadow-sm rounded-full mt-4 mx-auto max-w-container-max">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">
+            SAPA BK
+        </div>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-primary dark:text-primary-fixed-dim font-bold border-b-2 border-primary pb-1 font-label-md text-label-md scale-95 active:scale-90 transition-transform" href="#">Beranda</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors font-label-md text-label-md scale-95 active:scale-90 transition-transform" href="#">Tentang BK</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors font-label-md text-label-md scale-95 active:scale-90 transition-transform" href="#">E-book</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors font-label-md text-label-md scale-95 active:scale-90 transition-transform" href="#">Artikel</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors font-label-md text-label-md scale-95 active:scale-90 transition-transform" href="#">FAQ</a>
+</div>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-6 py-2 rounded-full hover:bg-on-primary-fixed-variant transition-colors scale-95 active:scale-90">
+            Login
+        </button>
+</nav>
+<main class="flex-grow pt-32 pb-16 px-margin-x max-w-container-max mx-auto w-full">
+<!-- Hero Section -->
+<section class="flex flex-col md:flex-row items-center gap-gutter mb-32">
+<div class="flex-1 space-y-stack-md">
+<h1 class="font-headline-xl text-headline-xl text-on-surface">Layanan Bimbingan Konseling Digital yang Aman dan Nyaman</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">SAPA BK hadir untuk membantu siswa SMA Negeri 4 Jember dalam menghadapi tantangan akademik, karir, dan pribadi melalui layanan konseling yang mudah diakses dan profesional.</p>
+<div class="flex gap-4 pt-4">
+<button class="bg-primary text-on-primary font-label-md text-label-md px-6 py-3 rounded-full hover:bg-on-primary-fixed-variant transition-colors">Mulai Konsultasi</button>
+<button class="border border-primary text-primary font-label-md text-label-md px-6 py-3 rounded-full hover:bg-primary-container hover:text-on-primary-container transition-colors">Pelajari Lebih Lanjut</button>
+</div>
+</div>
+<div class="flex-1 flex justify-center">
+<div class="relative w-full max-w-md aspect-square rounded-2xl overflow-hidden shadow-soft">
+<img class="w-full h-full object-cover" data-alt="A friendly, modern 3D illustration of a school counselor guiding a student in a bright, inviting space. The style is clean, modern, and reassuring, using a color palette of soft greens, warm whites, and subtle earth tones. The lighting is bright and cheerful, evoking a sense of safety, trust, and professional support within an educational environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTg4l7lRL5tyAnE2osU6JvqxL6tVlWKB8iKIQiMQXkmVP_xeSjR0dQmdo4-6Ssy1sDy0jCe2hUCIwtrdAPBONWaBi0WYIWcWAZmAdsWFjUcUINagz1QnSiSAubzYczXZ2XuagMX05mblU4oO06Ta6vehRtqh6KyjbKCGKu7BpGL0qHO06zhLpwXBXjLXF8IB8vfvyBnutOewy75TO5uwhO843cGmbkVvVeehlqy8Mq9XQIKrX0v2ZSHA"/>
+</div>
+</div>
+</section>
+<!-- Layanan BK Section -->
+<section class="mb-32">
+<h2 class="font-headline-lg text-headline-lg text-center mb-12">Layanan Kami</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<div class="bg-surface-container-lowest rounded-2xl p-6 shadow-soft border-l-4 border-primary hover:shadow-hover transition-shadow">
+<span class="material-symbols-outlined text-primary text-4xl mb-4" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<h3 class="font-headline-md text-headline-md mb-2">Chatbot AI</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Tanya jawab cepat 24/7 untuk bantuan awal yang responsif.</p>
+</div>
+<div class="bg-surface-container-lowest rounded-2xl p-6 shadow-soft border-l-4 border-primary hover:shadow-hover transition-shadow">
+<span class="material-symbols-outlined text-primary text-4xl mb-4" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<h3 class="font-headline-md text-headline-md mb-2">E-book</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Koleksi buku digital untuk pengembangan diri dan karir.</p>
+</div>
+<div class="bg-surface-container-lowest rounded-2xl p-6 shadow-soft border-l-4 border-primary hover:shadow-hover transition-shadow">
+<span class="material-symbols-outlined text-primary text-4xl mb-4" style="font-variation-settings: 'FILL' 1;">article</span>
+<h3 class="font-headline-md text-headline-md mb-2">Artikel</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Informasi terkini seputar kesehatan mental dan pendidikan.</p>
+</div>
+<div class="bg-surface-container-lowest rounded-2xl p-6 shadow-soft border-l-4 border-primary hover:shadow-hover transition-shadow">
+<span class="material-symbols-outlined text-primary text-4xl mb-4" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<h3 class="font-headline-md text-headline-md mb-2">Tes Psikologi</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Kenali potensi dan minat bakatmu lebih dalam.</p>
+</div>
+</div>
+</section>
+<!-- E-book Pilihan -->
+<section class="mb-32 bg-primary-container/10 p-12 rounded-3xl">
+<h2 class="font-headline-lg text-headline-lg text-center mb-12">E-book Pilihan</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- E-book Card 1 -->
+<div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-soft flex flex-col hover:shadow-hover transition-shadow">
+<div class="h-48 w-full relative">
+<img class="w-full h-full object-cover" data-alt="A beautifully designed modern book cover featuring abstract geometric shapes in shades of green and white. The design is minimalist, professional, and calming, perfect for a high school educational resource on personal development. Bright, soft lighting enhances the clean, light-mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnByiSQ14RQk_NbLD75l1g0wXCWGZTq7GOnqvGQt35mSBct7Li26xtDxhtuaWfeI0VRtY_txxHx160_Yp3uo5ekQkn50UzaiecR_A_kmjtL6BcdAyij_2C3QtfPmkEDn17RpTKkKqPZWYB8Fp8R4Hj3L7rtsNsKB4YOCbhr6i-mCjhWixarXsMcEDznqKPojbEKBcQ_I0_w8l3F1ZTlkbxGmMMOhs2ufJK613NykZaG0CEhQ7-W2uN8g"/>
+</div>
+<div class="p-4 flex flex-col flex-grow">
+<h4 class="font-label-md text-label-md font-bold mb-2 flex-grow">Manajemen Waktu Efektif</h4>
+<button class="w-full border border-primary text-primary font-label-md text-label-md py-2 rounded-full hover:bg-primary-container hover:text-on-primary-container transition-colors mt-auto">Baca</button>
+</div>
+</div>
+<!-- E-book Card 2 -->
+<div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-soft flex flex-col hover:shadow-hover transition-shadow">
+<div class="h-48 w-full relative">
+<img class="w-full h-full object-cover" data-alt="A beautifully designed modern book cover featuring abstract organic shapes in shades of green and white. The design is minimalist, professional, and calming, perfect for a high school educational resource on stress management. Bright, soft lighting enhances the clean, light-mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlKLP_BCVa_JdqLfiYneXLgI6TzwghKTPoOZQXbAqsq55lFvPlOpfcRCc0XqHw8gMfOR5ILtvO-92WsJCTjy_H-8sjmwGF4mGBkzaqj_F6tfAaglvxBWC26kimUKCn0AmNYAkPbaC6Pla1oEFMKQPY51HpBvwfGySCt9FR7Y7ANvLApJnJ8L-lDZVWR5w2i_vOR7ufoiK2SnfMI7R2jspU0Ki-83ZdjgYdHjvQNGmfpiWn6sOkV4urBg"/>
+</div>
+<div class="p-4 flex flex-col flex-grow">
+<h4 class="font-label-md text-label-md font-bold mb-2 flex-grow">Mengelola Stres Belajar</h4>
+<button class="w-full border border-primary text-primary font-label-md text-label-md py-2 rounded-full hover:bg-primary-container hover:text-on-primary-container transition-colors mt-auto">Baca</button>
+</div>
+</div>
+<!-- E-book Card 3 -->
+<div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-soft flex flex-col hover:shadow-hover transition-shadow">
+<div class="h-48 w-full relative">
+<img class="w-full h-full object-cover" data-alt="A beautifully designed modern book cover featuring abstract path illustrations in shades of green and white. The design is minimalist, professional, and calming, perfect for a high school educational resource on career planning. Bright, soft lighting enhances the clean, light-mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWCN4ow9C-uf1vf5crcd7WCL3d2C1OVGhbatC0UoEndqnCNw4ZLaXHZXcm705qQ-UnPVbyE3Pe8V3BA_4r-ccF5UKeyFM4cvNqXMkDAxVp-27QK3Jbv5ly9iBOX76aWEBbvoRfn3HkjthoYCpL2nuSmaHOyPz3Cu25mNDyW7X9YJwZYgZhT5_RbZ_XYq3_PNXNH8acK2ZbEWXXPb-bsuadiqSQvNvcfMGHmk9TPyxEqCQR4Ozkkqj1DA"/>
+</div>
+<div class="p-4 flex flex-col flex-grow">
+<h4 class="font-label-md text-label-md font-bold mb-2 flex-grow">Panduan Memilih Jurusan</h4>
+<button class="w-full border border-primary text-primary font-label-md text-label-md py-2 rounded-full hover:bg-primary-container hover:text-on-primary-container transition-colors mt-auto">Baca</button>
+</div>
+</div>
+<!-- E-book Card 4 -->
+<div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-soft flex flex-col hover:shadow-hover transition-shadow">
+<div class="h-48 w-full relative">
+<img class="w-full h-full object-cover" data-alt="A beautifully designed modern book cover featuring abstract conversational bubbles in shades of green and white. The design is minimalist, professional, and calming, perfect for a high school educational resource on communication skills. Bright, soft lighting enhances the clean, light-mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeUfLwM2ujza37f7zWF8YM4iP0AMXK_4y_cNSCTCxC2UViXSvkF_QvA-D3IUIUc7vaJaFW75YTYZxs6IgLBfAngh30uWxL6yalttnn2SNnp26NkbcjeFHAA9QFCrjMQRGeKW1ZLK6Ci3q5NjwsqAYJFoJPxPFen5JazkLQvxmm6ZzZ5QmWZPa20CUUHAWvWN8I5LD4O8AeIp3tlVlUz7cxtzcoeFcQJklf2myNRUsY7rX46RxjI3hx5w"/>
+</div>
+<div class="p-4 flex flex-col flex-grow">
+<h4 class="font-label-md text-label-md font-bold mb-2 flex-grow">Komunikasi Asertif</h4>
+<button class="w-full border border-primary text-primary font-label-md text-label-md py-2 rounded-full hover:bg-primary-container hover:text-on-primary-container transition-colors mt-auto">Baca</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-margin-x flex flex-col md:flex-row justify-between items-center bg-primary-container dark:bg-on-primary-fixed-variant text-on-primary-container dark:text-primary-fixed font-body-md text-body-md bottom-0 mt-auto">
+<div class="font-headline-md text-headline-md font-bold text-on-primary-container mb-4 md:mb-0">
+            SAPA BK
+        </div>
+<div class="text-sm opacity-80 mb-4 md:mb-0">
+            © 2024 SMA Negeri 4 Jember. All Rights Reserved.
+        </div>
+<div class="flex gap-6">
+<a class="text-on-primary-container/80 dark:text-primary-fixed/80 hover:text-on-primary-container dark:hover:text-primary-fixed transition-colors opacity-80 hover:opacity-100" href="#">Kebijakan Privasi</a>
+<a class="text-on-primary-container/80 dark:text-primary-fixed/80 hover:text-on-primary-container dark:hover:text-primary-fixed transition-colors opacity-80 hover:opacity-100" href="#">Syarat &amp; Ketentuan</a>
+<a class="text-on-primary-container/80 dark:text-primary-fixed/80 hover:text-on-primary-container dark:hover:text-primary-fixed transition-colors opacity-80 hover:opacity-100" href="#">Kontak Kami</a>
+</div>
+</footer>
+<!-- Floating Chat Widget -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:bg-on-primary-fixed-variant transition-colors z-50">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">chat</span>
+</button>
+</body></html>

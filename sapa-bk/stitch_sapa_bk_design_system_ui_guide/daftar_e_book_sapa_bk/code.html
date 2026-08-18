@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html lang="id">
+
+<head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>E-book BK - SAPA BK</title>
+        <!-- Material Symbols -->
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+                rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+                rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet" />
+        <style>
+                .material-symbols-outlined {
+                        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+                }
+
+                .icon-filled {
+                        font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+                }
+        </style>
+        <!-- Tailwind CSS -->
+        <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+        <script id="tailwind-config">
+                tailwind.config = {
+                        darkMode: "class",
+                        theme: {
+                                extend: {
+                                        "colors": {
+                                                "primary-container": "#00855d",
+                                                "on-primary-container": "#f5fff7",
+                                                "on-primary-fixed": "#002114",
+                                                "tertiary-fixed": "#d5e6df",
+                                                "on-tertiary-fixed-variant": "#3b4a44",
+                                                "on-surface-variant": "#3d4a42",
+                                                "error": "#ba1a1a",
+                                                "inverse-surface": "#2d3133",
+                                                "on-error": "#ffffff",
+                                                "on-secondary-fixed-variant": "#005236",
+                                                "on-secondary": "#ffffff",
+                                                "error-container": "#ffdad6",
+                                                "surface": "#f7f9fb",
+                                                "surface-variant": "#e0e3e5",
+                                                "on-tertiary-fixed": "#101e1a",
+                                                "surface-container-low": "#f2f4f6",
+                                                "primary-fixed-dim": "#68dba9",
+                                                "surface-tint": "#006c4a",
+                                                "on-primary-fixed-variant": "#005137",
+                                                "inverse-primary": "#68dba9",
+                                                "tertiary": "#505f59",
+                                                "tertiary-fixed-dim": "#bacac3",
+                                                "inverse-on-surface": "#eff1f3",
+                                                "secondary-fixed": "#6ffbbe",
+                                                "surface-container-high": "#e6e8ea",
+                                                "surface-bright": "#f7f9fb",
+                                                "primary-fixed": "#85f8c4",
+                                                "primary": "#006948",
+                                                "outline-variant": "#bccac0",
+                                                "surface-dim": "#d8dadc",
+                                                "surface-container-highest": "#e0e3e5",
+                                                "on-background": "#191c1e",
+                                                "surface-container-lowest": "#ffffff",
+                                                "on-error-container": "#93000a",
+                                                "surface-container": "#eceef0",
+                                                "on-tertiary-container": "#f4fff9",
+                                                "on-primary": "#ffffff",
+                                                "outline": "#6d7a72",
+                                                "on-secondary-fixed": "#002113",
+                                                "secondary-fixed-dim": "#4edea3",
+                                                "secondary": "#006c49",
+                                                "background": "#f7f9fb",
+                                                "tertiary-container": "#687872",
+                                                "secondary-container": "#6cf8bb",
+                                                "on-tertiary": "#ffffff",
+                                                "on-secondary-container": "#00714d",
+                                                "on-surface": "#191c1e"
+                                        },
+                                        "borderRadius": {
+                                                "DEFAULT": "0.25rem",
+                                                "lg": "0.5rem",
+                                                "xl": "0.75rem",
+                                                "full": "9999px"
+                                        },
+                                        "spacing": {
+                                                "container-max": "1280px",
+                                                "margin-x": "2rem",
+                                                "stack-md": "1rem",
+                                                "stack-lg": "2rem",
+                                                "gutter": "1.5rem",
+                                                "stack-sm": "0.5rem"
+                                        },
+                                        "fontFamily": {
+                                                "body-lg": ["Inter"],
+                                                "headline-lg-mobile": ["Inter"],
+                                                "body-md": ["Inter"],
+                                                "headline-xl": ["Inter"],
+                                                "label-md": ["Inter"],
+                                                "headline-lg": ["Inter"],
+                                                "headline-md": ["Inter"]
+                                        },
+                                        "fontSize": {
+                                                "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                                                "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                                                "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                                                "headline-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                                                "label-md": ["14px", { "lineHeight": "1.4", "fontWeight": "500" }],
+                                                "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                                                "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }]
+                                        }
+                                }
+                        }
+                }
+        </script>
+</head>
+
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col font-sans">
+        <!-- TopNavBar -->
+        <nav
+                class="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-8 py-3 w-[95%] rounded-full mt-4 mx-auto max-w-container-max bg-surface/80 backdrop-blur-md shadow-sm">
+                <div class="flex items-center gap-4">
+                        <span class="font-headline-md text-headline-md font-bold text-primary">SAPA BK</span>
+                </div>
+                <div class="hidden md:flex items-center gap-8">
+                        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors"
+                                href="#">Beranda</a>
+                        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors"
+                                href="#">Tentang BK</a>
+                        <!-- Active Tab -->
+                        <a class="font-label-md text-label-md text-primary font-bold border-b-2 border-primary pb-1 hover:text-primary transition-colors"
+                                href="#">E-book</a>
+                        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors"
+                                href="#">Artikel</a>
+                        <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors"
+                                href="#">FAQ</a>
+                </div>
+                <div class="flex items-center">
+                        <button
+                                class="bg-primary text-on-primary font-label-md text-label-md px-6 py-2 rounded-full hover:bg-primary/90 scale-95 active:scale-90 transition-transform">
+                                Login
+                        </button>
+                </div>
+        </nav>
+        <!-- Main Content Canvas -->
+        <main class="flex-grow pt-32 pb-24 px-gutter md:px-margin-x max-w-container-max mx-auto w-full">
+                <!-- Header Section -->
+                <header
+                        class="mb-12 text-center md:text-left flex flex-col md:flex-row md:items-end justify-between gap-6">
+                        <div class="max-w-2xl">
+                                <h1 class="font-headline-xl text-headline-xl text-on-surface mb-4">E-book BK</h1>
+                                <p class="font-body-lg text-body-lg text-on-surface-variant">Jelajahi koleksi buku
+                                        digital, panduan, dan materi pengembangan diri yang dirancang khusus untuk
+                                        mendukung kesehatan mental dan akademik Anda.</p>
+                        </div>
+                        <div class="w-full md:w-auto relative max-w-md shrink-0">
+                                <span
+                                        class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+                                <input class="w-full pl-12 pr-4 py-3 bg-surface border border-outline-variant rounded-full focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary font-body-md text-body-md text-on-surface transition-all placeholder:text-on-surface-variant/60"
+                                        placeholder="Cari judul atau topik..." type="text" />
+                        </div>
+                </header>
+                <!-- Category Filters -->
+                <div class="flex overflow-x-auto pb-4 mb-8 gap-3 no-scrollbar scroll-smooth">
+                        <button
+                                class="shrink-0 bg-primary text-on-primary px-5 py-2 rounded-full font-label-md text-label-md transition-colors">Semua
+                                Topik</button>
+                        <button
+                                class="shrink-0 bg-surface-container text-on-surface-variant hover:bg-surface-variant px-5 py-2 rounded-full font-label-md text-label-md transition-colors">Kesehatan
+                                Mental</button>
+                        <button
+                                class="shrink-0 bg-surface-container text-on-surface-variant hover:bg-surface-variant px-5 py-2 rounded-full font-label-md text-label-md transition-colors">Karir
+                                & Studi</button>
+                        <button
+                                class="shrink-0 bg-surface-container text-on-surface-variant hover:bg-surface-variant px-5 py-2 rounded-full font-label-md text-label-md transition-colors">Motivasi</button>
+                        <button
+                                class="shrink-0 bg-surface-container text-on-surface-variant hover:bg-surface-variant px-5 py-2 rounded-full font-label-md text-label-md transition-colors">Manajemen
+                                Waktu</button>
+                </div>
+                <!-- E-book Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-stack-lg">
+                        <!-- Card 1 -->
+                        <article
+                                class="bg-surface rounded-2xl p-4 shadow-[0_4px_15px_rgba(25,28,30,0.04)] border border-outline-variant/30 flex flex-col group hover:-translate-y-1 transition-transform duration-300">
+                                <div
+                                        class="relative w-full aspect-[2/3] rounded-xl overflow-hidden mb-4 bg-surface-variant">
+                                        <img class="w-full h-full object-cover"
+                                                data-alt="A modern, minimalist digital book cover focused on high school student mental health. The design features a calm, abstract geometric pattern using soft greens and pristine whites. The typography is clean and professional. The lighting is bright and even, conveying a sense of clarity, safety, and modern academic support in a light-mode aesthetic."
+                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjvIkC1QuQJlCVjeFdpAhL5o7Hkq53J-Knr98S76ab6mmGHlmwBdFOjln8dYDeo27AdaDYvg2rgMVRLIa_yRsXg2Pdak06kVXxq77umgZ68ym787YnW2kvf-ACeuRaep6IhzJNSKs1p2cXY86RKs_BJQ9K1kqxa0nb5qmlTIJ52iAz_m_i4uHwdzAuIx-hA2d4kkpOwg0VZVwJUwikU_ICIhCHa5jhi_7klx0dYrFo8QlYtWTNCG8GIg" />
+                                        <div
+                                                class="absolute top-3 left-3 bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-md text-label-md flex items-center gap-1 shadow-sm">
+                                                <span class="material-symbols-outlined text-[16px]">book</span> Gratis
+                                        </div>
+                                </div>
+                                <div class="flex-grow flex flex-col">
+                                        <h3
+                                                class="font-body-lg text-body-lg font-bold text-on-surface mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                                                Seni Mengelola Stres Akademik</h3>
+                                        <p class="font-body-md text-body-md text-on-surface-variant mb-4 line-clamp-2">
+                                                Panduan praktis untuk mengenali dan mengelola tekanan belajar menjelang
+                                                ujian akhir.</p>
+                                        <div class="mt-auto">
+                                                <button
+                                                        class="w-full bg-primary/10 text-primary hover:bg-primary hover:text-on-primary py-2.5 rounded-full font-label-md text-label-md transition-colors flex items-center justify-center gap-2">
+                                                        Baca Sekarang
+                                                        <span
+                                                                class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                                                </button>
+                                        </div>
+                                </div>
+                        </article>
+                        <!-- Card 2 -->
+                        <article
+                                class="bg-surface rounded-2xl p-4 shadow-[0_4px_15px_rgba(25,28,30,0.04)] border border-outline-variant/30 flex flex-col group hover:-translate-y-1 transition-transform duration-300">
+                                <div
+                                        class="relative w-full aspect-[2/3] rounded-xl overflow-hidden mb-4 bg-surface-variant">
+                                        <img class="w-full h-full object-cover"
+                                                data-alt="A clean, professional e-book cover illustrating time management for students. It displays a minimalist line-art illustration of a modern clock or calendar against a pure white background with subtle teal and primary green accents. The overall mood is organized, calming, and digitally native, perfectly suited for a high-end educational portal."
+                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZiLIuJ1B8Nsikk8icJCGs6Fxjoij99K7G1YtUDZT_ew0eGJEFjIpp7h_qOZCFZ-san4KpYHzDBkqsQ7FmYNnLhmuyaWIptcAzvYOU_04q0XRkkXaARAz1UaeuqWdeWkZNY7G2XOCXotOXr8vXyk06xQ5e5bS9oJrh_xw4DRzDkCSo2GmaND-GuW9ASVRNKBu88r2QWUJdQSO10UeISLB_S4EJXygwRJSbgR7pQqB3uoXn8ekNaZJu2w" />
+                                        <div
+                                                class="absolute top-3 left-3 bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-md text-label-md flex items-center gap-1 shadow-sm">
+                                                <span class="material-symbols-outlined text-[16px]">book</span> Gratis
+                                        </div>
+                                </div>
+                                <div class="flex-grow flex flex-col">
+                                        <h3
+                                                class="font-body-lg text-body-lg font-bold text-on-surface mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                                                Peta Karir Masa Depan</h3>
+                                        <p class="font-body-md text-body-md text-on-surface-variant mb-4 line-clamp-2">
+                                                Langkah demi langkah menemukan minat, bakat, dan jurusan kuliah yang
+                                                tepat untuk Anda.</p>
+                                        <div class="mt-auto">
+                                                <button
+                                                        class="w-full bg-primary/10 text-primary hover:bg-primary hover:text-on-primary py-2.5 rounded-full font-label-md text-label-md transition-colors flex items-center justify-center gap-2">
+                                                        Baca Sekarang
+                                                        <span
+                                                                class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                                                </button>
+                                        </div>
+                                </div>
+                        </article>
+                        <!-- Card 3 -->
+                        <article
+                                class="bg-surface rounded-2xl p-4 shadow-[0_4px_15px_rgba(25,28,30,0.04)] border border-outline-variant/30 flex flex-col group hover:-translate-y-1 transition-transform duration-300">
+                                <div
+                                        class="relative w-full aspect-[2/3] rounded-xl overflow-hidden mb-4 bg-surface-variant">
+                                        <img class="w-full h-full object-cover"
+                                                data-alt="A soft minimalism digital book cover focusing on career guidance. The artwork features an abstract path or upward arrow composed of sleek, translucent overlapping shapes in shades of green and soft gray. The composition is highly balanced with ample whitespace, radiating a positive, forward-looking, and safe atmosphere typical of premium counseling resources."
+                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQxzBx5jDoqeE2vV4m45SXBerXLW4__AM1V-8-RulbiGfvsmEU6Mhw_Z2CWnA99CPRRq9r9qSNX5NWjnOcl3NGo-52s76YL4vrYRd7Rv5oCRyXaXmjf7IaMzL3dGhm1UQKMak1waJ8bUIQw4_qxFApmvly6EK9O6ZYZeG7OAKIuz766dhkJo7bbaeac2wLOsSfyeGZDyEw-QJ2MqNfa02PsXGhr5WvL17KxeMqqLGJJ5Uxp6L4n_aJug" />
+                                        <div
+                                                class="absolute top-3 left-3 bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-md text-label-md flex items-center gap-1 shadow-sm">
+                                                <span class="material-symbols-outlined text-[16px]">book</span> Gratis
+                                        </div>
+                                </div>
+                                <div class="flex-grow flex flex-col">
+                                        <h3
+                                                class="font-body-lg text-body-lg font-bold text-on-surface mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                                                Komunikasi Asertif 101</h3>
+                                        <p class="font-body-md text-body-md text-on-surface-variant mb-4 line-clamp-2">
+                                                Teknik membangun hubungan yang sehat dengan teman sebaya dan guru di
+                                                lingkungan sekolah.</p>
+                                        <div class="mt-auto">
+                                                <button
+                                                        class="w-full bg-primary/10 text-primary hover:bg-primary hover:text-on-primary py-2.5 rounded-full font-label-md text-label-md transition-colors flex items-center justify-center gap-2">
+                                                        Baca Sekarang
+                                                        <span
+                                                                class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                                                </button>
+                                        </div>
+                                </div>
+                        </article>
+                        <!-- Card 4 -->
+                        <article
+                                class="bg-surface rounded-2xl p-4 shadow-[0_4px_15px_rgba(25,28,30,0.04)] border border-outline-variant/30 flex flex-col group hover:-translate-y-1 transition-transform duration-300">
+                                <div
+                                        class="relative w-full aspect-[2/3] rounded-xl overflow-hidden mb-4 bg-surface-variant">
+                                        <img class="w-full h-full object-cover"
+                                                data-alt="An inviting and modern e-book cover designed for teenage emotional well-being. It showcases a gentle, stylized illustration of a blooming plant or serene landscape in a refined green and white color palette. The visual style is uncluttered and contemporary, emphasizing trust, growth, and a tranquil digital sanctuary aesthetic."
+                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBgm7QV2MedJgAjO903YYvd78s9e6KtoVQpLYF-Zd4rVRxP_na7sypiuCdkFjyUKRkLMWlK68LoXSKvaDF_2z_hPit0ugCcFsKHJmC7VHqCgOZLD0JDKUiu1or31Ey5x3N5PBRfvWfONQIL1LySOKkACGDa5DR9QTMBM9hmk3Up46s3RUdiifWWEwacdtu2uKpC61tgkMWFn1YoQbhkrPV7CJFgc5tuFFaOCLxHqD4l2giO1Pr1J5dmw" />
+                                        <div
+                                                class="absolute top-3 left-3 bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-md text-label-md flex items-center gap-1 shadow-sm">
+                                                <span class="material-symbols-outlined text-[16px]">book</span> Gratis
+                                        </div>
+                                </div>
+                                <div class="flex-grow flex flex-col">
+                                        <h3
+                                                class="font-body-lg text-body-lg font-bold text-on-surface mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                                                Fokus dan Produktivitas</h3>
+                                        <p class="font-body-md text-body-md text-on-surface-variant mb-4 line-clamp-2">
+                                                Buku saku membebaskan diri dari distraksi digital untuk mencapai target
+                                                harian.</p>
+                                        <div class="mt-auto">
+                                                <button
+                                                        class="w-full bg-primary/10 text-primary hover:bg-primary hover:text-on-primary py-2.5 rounded-full font-label-md text-label-md transition-colors flex items-center justify-center gap-2">
+                                                        Baca Sekarang
+                                                        <span
+                                                                class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                                                </button>
+                                        </div>
+                                </div>
+                        </article>
+                </div>
+                <!-- Pagination -->
+                <div class="mt-16 flex justify-center items-center gap-2">
+                        <button
+                                class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+                        </button>
+                        <button
+                                class="w-10 h-10 rounded-full flex items-center justify-center bg-primary text-on-primary font-label-md text-label-md shadow-sm">1</button>
+                        <button
+                                class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors font-label-md text-label-md">2</button>
+                        <button
+                                class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors font-label-md text-label-md">3</button>
+                        <span class="text-on-surface-variant font-label-md text-label-md px-2">...</span>
+                        <button
+                                class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+                        </button>
+                </div>
+        </main>
+        <!-- Footer -->
+        <footer
+                class="w-full py-12 px-margin-x flex flex-col md:flex-row justify-between items-center bg-primary-container mt-auto">
+                <div class="mb-6 md:mb-0 text-center md:text-left">
+                        <h2 class="font-headline-md text-headline-md font-bold text-on-primary-container mb-2">SAPA BK
+                        </h2>
+                        <p class="font-body-md text-body-md text-on-primary-container/80">© 2024 SMA Negeri 4 Jember.
+                                All Rights Reserved.</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-6">
+                        <a class="font-body-md text-body-md text-on-primary-container/80 hover:text-on-primary-container transition-colors opacity-80 hover:opacity-100"
+                                href="#">Kebijakan Privasi</a>
+                        <a class="font-body-md text-body-md text-on-primary-container/80 hover:text-on-primary-container transition-colors opacity-80 hover:opacity-100"
+                                href="#">Syarat & Ketentuan</a>
+                        <a class="font-body-md text-body-md text-on-primary-container/80 hover:text-on-primary-container transition-colors opacity-80 hover:opacity-100"
+                                href="#">Kontak Kami</a>
+                </div>
+        </footer>
+</body>
+
+</html>
