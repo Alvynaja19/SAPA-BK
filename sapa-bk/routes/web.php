@@ -30,6 +30,12 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+
+    // Lupa Password
+    Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
+    Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('/reset-password/{token}', [AuthController::class, 'showResetPassword'])->name('password.reset');
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])
@@ -56,10 +62,10 @@ Route::middleware(['auth', 'role:siswa'])->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| HALAMAN GURU BK
+| HALAMAN GURU BK (Juga dapat diakses Admin per SRS F-56)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'role:guru_bk'])->prefix('bk')->name('counselor.')->group(function () {
+Route::middleware(['auth', 'role:guru_bk,admin'])->prefix('bk')->name('counselor.')->group(function () {
     Route::get('/dashboard', [CounselorController::class, 'dashboard'])->name('dashboard');
     Route::get('/siswa', [CounselorController::class, 'siswa'])->name('siswa');
     Route::get('/percakapan', [CounselorController::class, 'percakapan'])->name('percakapan');

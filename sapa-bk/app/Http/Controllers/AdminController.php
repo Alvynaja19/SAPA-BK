@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Models\StudentProfile;
+use App\Models\CounselorProfile;
 use App\Models\ChatSession;
 use App\Models\Ebook;
 use App\Models\Article;
@@ -30,7 +33,7 @@ class AdminController extends Controller
     /** Manajemen user — /admin/users */
     public function users(Request $request)
     {
-        $query = User::query();
+        $query = User::query()->with(['studentProfile', 'counselorProfile']);
 
         if ($request->filled('role')) {
             $query->where('role', $request->role);
@@ -49,27 +52,55 @@ class AdminController extends Controller
     /** Detail user — /admin/users/{id} */
     public function userDetail(int $id)
     {
-        $user = User::findOrFail($id);
+        $user = User::with(['studentProfile', 'counselorProfile'])->findOrFail($id);
         return view('admin.user-detail', compact('user'));
     }
 
-    /** Buat akun Guru BK / Admin */
+    /** Buat akun Guru BK / Siswa / Admin */
     public function userStore(Request $request)
     {
         $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8',
-            'role'     => 'required|in:siswa,guru_bk,admin',
+            'name'         => 'required|string|max:255',
+            'email'        => 'required|email|unique:users,email',
+            'password'     => 'required|string|min:8',
+            'role'         => 'required|in:siswa,guru_bk,admin',
+            'phone'        => 'nullable|string|max:20',
+            // Guru BK fields
+            'nip'          => 'nullable|string|max:30',
+            'spesialisasi' => 'nullable|string|max:100',
+            // Student fields
+            'nisn'         => 'nullable|string|max:20',
+            'kelas'        => 'nullable|string|max:20',
+            'jurusan'      => 'nullable|string|max:50',
+            'tahun_masuk'  => 'nullable|integer|digits:4',
         ]);
 
-        User::create([
-            'name'      => $request->name,
-            'email'     => $request->email,
-            'password'  => bcrypt($request->password),
-            'role'      => $request->role,
-            'is_active' => true,
-        ]);
+        DB::transaction(function () use ($request) {
+            $user = User::create([
+                'name'      => $request->name,
+                'email'     => $request->email,
+                'password'  => bcrypt($request->password),
+                'role'      => $request->role,
+                'phone'     => $request->phone,
+                'is_active' => true,
+            ]);
+
+            if ($request->role === 'guru_bk') {
+                CounselorProfile::create([
+                    'user_id'      => $user->id,
+                    'nip'          => $request->nip,
+                    'spesialisasi' => $request->spesialisasi,
+                ]);
+            } elseif ($request->role === 'siswa') {
+                StudentProfile::create([
+                    'user_id'     => $user->id,
+                    'nisn'        => $request->nisn,
+                    'kelas'       => $request->kelas,
+                    'jurusan'     => $request->jurusan,
+                    'tahun_masuk' => $request->tahun_masuk ?? date('Y'),
+                ]);
+            }
+        });
 
         return redirect()->route('admin.users')->with('success', 'Akun berhasil dibuat.');
     }

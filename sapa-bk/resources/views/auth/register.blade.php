@@ -72,13 +72,51 @@
                         @error('name') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
 
-                    <!-- Email -->
-                    <div>
-                        <label for="email" class="block text-xs font-bold mb-1.5 uppercase tracking-wide" style="color: var(--text-primary);">Email Terdaftar</label>
-                        <input id="email" type="email" name="email" value="{{ old('email') }}" required
-                               class="form-input @error('email') border-red-400 @enderror"
-                               placeholder="nama@email.com">
-                        @error('email') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                    <!-- Email & No HP Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label for="email" class="block text-xs font-bold mb-1.5 uppercase tracking-wide" style="color: var(--text-primary);">Email Terdaftar</label>
+                            <input id="email" type="email" name="email" value="{{ old('email') }}" required
+                                   class="form-input @error('email') border-red-400 @enderror"
+                                   placeholder="nama@email.com">
+                            @error('email') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div>
+                            <label for="phone" class="block text-xs font-bold mb-1.5 uppercase tracking-wide" style="color: var(--text-primary);">No. Telepon / WA</label>
+                            <input id="phone" type="text" name="phone" value="{{ old('phone') }}"
+                                   class="form-input @error('phone') border-red-400 @enderror"
+                                   placeholder="081234567890">
+                            @error('phone') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                        </div>
+                    </div>
+
+                    <!-- Detail Siswa Grid: NISN, Kelas, Jurusan -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <label for="nisn" class="block text-xs font-bold mb-1.5 uppercase tracking-wide" style="color: var(--text-primary);">NISN</label>
+                            <input id="nisn" type="text" name="nisn" value="{{ old('nisn') }}"
+                                   class="form-input @error('nisn') border-red-400 @enderror"
+                                   placeholder="0012345678">
+                            @error('nisn') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                        </div>
+                        <div>
+                            <label for="kelas" class="block text-xs font-bold mb-1.5 uppercase tracking-wide" style="color: var(--text-primary);">Kelas</label>
+                            <select id="kelas" name="kelas" class="form-input @error('kelas') border-red-400 @enderror">
+                                <option value="">Pilih Kelas</option>
+                                <option value="X" {{ old('kelas') == 'X' ? 'selected' : '' }}>Kelas X</option>
+                                <option value="XI" {{ old('kelas') == 'XI' ? 'selected' : '' }}>Kelas XI</option>
+                                <option value="XII" {{ old('kelas') == 'XII' ? 'selected' : '' }}>Kelas XII</option>
+                            </select>
+                            @error('kelas') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                        </div>
+                        <div>
+                            <label for="jurusan" class="block text-xs font-bold mb-1.5 uppercase tracking-wide" style="color: var(--text-primary);">Jurusan</label>
+                            <input id="jurusan" type="text" name="jurusan" value="{{ old('jurusan') ?? 'MIPA' }}"
+                                   class="form-input @error('jurusan') border-red-400 @enderror"
+                                   placeholder="IPA / IPS / Kurikulum Merdeka">
+                            @error('jurusan') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                        </div>
                     </div>
 
                     <!-- Password -->

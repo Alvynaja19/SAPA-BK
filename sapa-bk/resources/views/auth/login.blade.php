@@ -85,6 +85,17 @@
                     <p class="text-xs" style="color: var(--text-body);">Masukkan email dan password terdaftar Anda</p>
                 </div>
 
+                @if (session('status'))
+                    <div class="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-700">
+                        {{ session('status') }}
+                    </div>
+                @endif
+                @if (session('success'))
+                    <div class="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-700">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
                 <form method="POST" action="{{ route('login.post') }}" id="login-form" class="space-y-4">
                     @csrf
 
@@ -103,7 +114,7 @@
                     <div>
                         <div class="flex justify-between items-center mb-1.5">
                             <label for="password" class="block text-xs font-bold uppercase tracking-wide" style="color: var(--text-primary);">Password</label>
-                            <a href="#" class="text-xs text-[#059669] hover:underline font-semibold">Lupa password?</a>
+                            <a href="{{ route('password.request') }}" class="text-xs text-[#059669] hover:underline font-semibold">Lupa password?</a>
                         </div>
                         <div class="relative">
                             <input id="password" type="password" name="password" required autocomplete="current-password"
