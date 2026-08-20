@@ -142,11 +142,11 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="text-center max-w-3xl mx-auto mb-16">
-            <span class="badge-green text-xs font-bold mb-3 inline-block">Layanan Utama</span>
-            <h2 class="font-sora text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight">
+            <span class="badge-green text-sm font-bold mb-4 inline-block px-4 py-1.5">Layanan Utama</span>
+            <h2 class="font-sora text-4xl sm:text-5xl font-extrabold text-[#0F172A] tracking-tight mt-2">
                 Layanan Digital BK SMAN 4 Jember
             </h2>
-            <p class="text-[#475569] mt-4 text-base leading-relaxed">
+            <p class="text-[#475569] mt-5 text-lg sm:text-xl leading-relaxed">
                 Dirancang khusus untuk membantu setiap siswa berkembang di bidang akademik, pengembangan karakter, hingga persiapan karir masa depan.
             </p>
         </div>
@@ -154,76 +154,76 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             
             <!-- Card 1: AI Chatbot -->
-            <div class="card-hover p-7 flex flex-col justify-between group">
+            <div class="card-hover p-8 flex flex-col justify-between group">
                 <div>
-                    <div class="w-14 h-14 rounded-2xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-[#059669] group-hover:text-white transition-all duration-300">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                    <div class="w-16 h-16 rounded-2xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-[#059669] group-hover:text-white transition-all duration-300">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
                     </div>
-                    <h3 class="font-sora font-bold text-lg text-[#0F172A] mb-3 group-hover:text-[#059669] transition-colors">
+                    <h3 class="font-sora font-bold text-xl text-[#0F172A] mb-3 group-hover:text-[#059669] transition-colors">
                         Asisten AI Chatbot BK
                     </h3>
-                    <p class="text-sm text-[#475569] leading-relaxed">
+                    <p class="text-base text-[#475569] leading-relaxed">
                         Tanyakan keluh kesah, tips belajar, atau info universitas 24/7. Dijawab instan berdasarkan pedoman resmi BK SMAN 4 Jember.
                     </p>
                 </div>
-                <div class="mt-6 pt-4 border-t border-slate-100 flex items-center text-xs font-bold text-[#059669]">
+                <div class="mt-6 pt-4 border-t border-slate-100 flex items-center text-sm font-bold text-[#059669]">
                     <span>Konsultasi AI</span>
                     <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </div>
             </div>
 
             <!-- Card 2: E-Book Digital -->
-            <div class="card-hover p-7 flex flex-col justify-between group">
+            <div class="card-hover p-8 flex flex-col justify-between group">
                 <div>
-                    <div class="w-14 h-14 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-teal-600 group-hover:text-white transition-all duration-300">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                    <div class="w-16 h-16 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-teal-600 group-hover:text-white transition-all duration-300">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                     </div>
-                    <h3 class="font-sora font-bold text-lg text-[#0F172A] mb-3 group-hover:text-[#059669] transition-colors">
+                    <h3 class="font-sora font-bold text-xl text-[#0F172A] mb-3 group-hover:text-[#059669] transition-colors">
                         Perpustakaan E-Book
                     </h3>
-                    <p class="text-sm text-[#475569] leading-relaxed">
+                    <p class="text-base text-[#475569] leading-relaxed">
                         Akses gratis modul bimbingan karir, buku kesehatan mental remaja, serta strategi sukses menembus PTN impian.
                     </p>
                 </div>
-                <div class="mt-6 pt-4 border-t border-slate-100 flex items-center text-xs font-bold text-[#059669]">
+                <div class="mt-6 pt-4 border-t border-slate-100 flex items-center text-sm font-bold text-[#059669]">
                     <span>Buka Perpustakaan</span>
                     <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </div>
             </div>
 
             <!-- Card 3: Artikel & Edukasi -->
-            <div class="card-hover p-7 flex flex-col justify-between group">
+            <div class="card-hover p-8 flex flex-col justify-between group">
                 <div>
-                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
+                    <div class="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
                     </div>
-                    <h3 class="font-sora font-bold text-lg text-[#0F172A] mb-3 group-hover:text-[#059669] transition-colors">
+                    <h3 class="font-sora font-bold text-xl text-[#0F172A] mb-3 group-hover:text-[#059669] transition-colors">
                         Artikel & Edukasi BK
                     </h3>
-                    <p class="text-sm text-[#475569] leading-relaxed">
+                    <p class="text-base text-[#475569] leading-relaxed">
                         Kumpulan artikel dan jurnal inspiratif karya Guru BK profesional mengenai manajemen stres dan efektivitas belajar.
                     </p>
                 </div>
-                <div class="mt-6 pt-4 border-t border-slate-100 flex items-center text-xs font-bold text-[#059669]">
+                <div class="mt-6 pt-4 border-t border-slate-100 flex items-center text-sm font-bold text-[#059669]">
                     <span>Baca Artikel</span>
                     <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </div>
             </div>
 
             <!-- Card 4: Tes Mandiri -->
-            <div class="card-hover p-7 flex flex-col justify-between group">
+            <div class="card-hover p-8 flex flex-col justify-between group">
                 <div>
-                    <div class="w-14 h-14 rounded-2xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-[#059669] group-hover:text-white transition-all duration-300">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                    <div class="w-16 h-16 rounded-2xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-[#059669] group-hover:text-white transition-all duration-300">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
                     </div>
-                    <h3 class="font-sora font-bold text-lg text-[#0F172A] mb-3 group-hover:text-[#059669] transition-colors">
+                    <h3 class="font-sora font-bold text-xl text-[#0F172A] mb-3 group-hover:text-[#059669] transition-colors">
                         Tes Minat & Bakat
                     </h3>
-                    <p class="text-sm text-[#475569] leading-relaxed">
+                    <p class="text-base text-[#475569] leading-relaxed">
                         Evaluasi kepribadian dan rekomendasi jurusan yang disesuaikan dengan profil bakat ilmiah setiap siswa SMAN 4 Jember.
                     </p>
                 </div>
-                <div class="mt-6 pt-4 border-t border-slate-100 flex items-center text-xs font-bold text-[#059669]">
+                <div class="mt-6 pt-4 border-t border-slate-100 flex items-center text-sm font-bold text-[#059669]">
                     <span>Ikuti Tes</span>
                     <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </div>
@@ -238,11 +238,11 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="text-center max-w-2xl mx-auto mb-16">
-            <span class="badge-green text-xs font-bold mb-3 inline-block">Alur Mudah</span>
-            <h2 class="font-sora text-3xl font-extrabold text-[#0F172A]">
+            <span class="badge-green text-sm font-bold mb-4 inline-block px-4 py-1.5">Alur Mudah</span>
+            <h2 class="font-sora text-4xl sm:text-5xl font-extrabold text-[#0F172A] mt-2">
                 3 Langkah Mudah Konsultasi
             </h2>
-            <p class="text-[#475569] mt-3 text-sm">
+            <p class="text-[#475569] mt-5 text-lg sm:text-xl">
                 Proses cepat dan praktis untuk mendapatkan bantuan bimbingan konseling kapan saja.
             </p>
         </div>
@@ -250,34 +250,34 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             
             <!-- Step 1 -->
-            <div class="card p-8 relative overflow-hidden text-center group">
-                <div class="w-12 h-12 rounded-2xl bg-[#059669] text-white font-sora font-bold text-lg flex items-center justify-center mx-auto mb-6 shadow-md shadow-[#059669]/20">
+            <div class="card p-10 relative overflow-hidden text-center group">
+                <div class="w-14 h-14 rounded-2xl bg-[#059669] text-white font-sora font-bold text-xl flex items-center justify-center mx-auto mb-6 shadow-md shadow-[#059669]/20">
                     1
                 </div>
-                <h3 class="font-sora font-bold text-lg text-[#0F172A] mb-3">Registrasi Akun Siswa</h3>
-                <p class="text-sm text-[#475569] leading-relaxed">
+                <h3 class="font-sora font-bold text-xl text-[#0F172A] mb-3">Registrasi Akun Siswa</h3>
+                <p class="text-base text-[#475569] leading-relaxed">
                     Masuk menggunakan akun NISN atau email siswa SMAN 4 Jember untuk mulai membuka akses konsultasi privat.
                 </p>
             </div>
 
             <!-- Step 2 -->
-            <div class="card p-8 relative overflow-hidden text-center group">
-                <div class="w-12 h-12 rounded-2xl bg-[#059669] text-white font-sora font-bold text-lg flex items-center justify-center mx-auto mb-6 shadow-md shadow-[#059669]/20">
+            <div class="card p-10 relative overflow-hidden text-center group">
+                <div class="w-14 h-14 rounded-2xl bg-[#059669] text-white font-sora font-bold text-xl flex items-center justify-center mx-auto mb-6 shadow-md shadow-[#059669]/20">
                     2
                 </div>
-                <h3 class="font-sora font-bold text-lg text-[#0F172A] mb-3">Tanyakan atau Pilih Konselor</h3>
-                <p class="text-sm text-[#475569] leading-relaxed">
+                <h3 class="font-sora font-bold text-xl text-[#0F172A] mb-3">Tanyakan atau Pilih Konselor</h3>
+                <p class="text-base text-[#475569] leading-relaxed">
                     Tuliskan pertanyaanmu ke Asisten Chatbot AI atau pilih jadwal temu langsung dengan Guru BK SMAN 4 Jember.
                 </p>
             </div>
 
             <!-- Step 3 -->
-            <div class="card p-8 relative overflow-hidden text-center group">
-                <div class="w-12 h-12 rounded-2xl bg-[#059669] text-white font-sora font-bold text-lg flex items-center justify-center mx-auto mb-6 shadow-md shadow-[#059669]/20">
+            <div class="card p-10 relative overflow-hidden text-center group">
+                <div class="w-14 h-14 rounded-2xl bg-[#059669] text-white font-sora font-bold text-xl flex items-center justify-center mx-auto mb-6 shadow-md shadow-[#059669]/20">
                     3
                 </div>
-                <h3 class="font-sora font-bold text-lg text-[#0F172A] mb-3">Dapatkan Solusi & Panduan</h3>
-                <p class="text-sm text-[#475569] leading-relaxed">
+                <h3 class="font-sora font-bold text-xl text-[#0F172A] mb-3">Dapatkan Solusi & Panduan</h3>
+                <p class="text-base text-[#475569] leading-relaxed">
                     Dapatkan rekomendasi solusi, akses e-book relevan, dan pendampingan berkelanjutan hingga tuntas.
                 </p>
             </div>
@@ -292,8 +292,8 @@
         
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
-                <span class="badge-green text-xs font-bold mb-3 inline-block">Pustaka Digital</span>
-                <h2 class="font-sora text-3xl font-extrabold text-[#0F172A]">E-Book BK Pilihan</h2>
+                <span class="badge-green text-sm font-bold mb-3 inline-block px-4 py-1.5">Pustaka Digital</span>
+                <h2 class="font-sora text-4xl sm:text-5xl font-extrabold text-[#0F172A] mt-2">E-Book BK Pilihan</h2>
             </div>
             <a href="{{ route('ebook.public') }}" class="btn-secondary text-sm hidden sm:inline-flex">
                 Lihat Semua E-Book
@@ -356,8 +356,8 @@
         
         <div class="flex items-end justify-between mb-12">
             <div>
-                <span class="badge-green text-xs font-bold mb-3 inline-block">Informasi & Edukasi</span>
-                <h2 class="font-sora text-3xl font-extrabold text-[#0F172A]">Artikel Edukasi Terbaru</h2>
+                <span class="badge-green text-sm font-bold mb-3 inline-block px-4 py-1.5">Informasi & Edukasi</span>
+                <h2 class="font-sora text-4xl sm:text-5xl font-extrabold text-[#0F172A] mt-2">Artikel Edukasi Terbaru</h2>
             </div>
             <a href="{{ route('artikel.list') }}" class="btn-secondary text-sm hidden sm:inline-flex">Lihat Semua Artikel →</a>
         </div>
@@ -373,10 +373,10 @@
                         <span class="badge-green text-[10px]">Artikel BK</span>
                         <span class="text-xs text-slate-400">• {{ $article->created_at->format('d M Y') }}</span>
                     </div>
-                    <h3 class="font-sora font-bold text-[#0F172A] text-base mb-2 group-hover:text-[#059669] transition-colors line-clamp-2">
+                    <h3 class="font-sora font-bold text-[#0F172A] text-lg mb-2 group-hover:text-[#059669] transition-colors line-clamp-2">
                         {{ $article->title }}
                     </h3>
-                    <p class="text-xs text-[#475569] leading-relaxed line-clamp-3 mb-4">
+                    <p class="text-sm text-[#475569] leading-relaxed line-clamp-3 mb-4">
                         {{ Str::limit(strip_tags($article->content), 120) }}
                     </p>
                     <span class="text-xs font-bold text-[#059669] inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
@@ -396,8 +396,8 @@
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="text-center mb-12">
-            <span class="badge-green text-xs font-bold mb-3 inline-block">Pertanyaan Umum</span>
-            <h2 class="font-sora text-3xl font-extrabold text-[#0F172A]">Pertanyaan Yang Sering Ditanyakan</h2>
+            <span class="badge-green text-sm font-bold mb-4 inline-block px-4 py-1.5">Pertanyaan Umum</span>
+            <h2 class="font-sora text-4xl sm:text-5xl font-extrabold text-[#0F172A] mt-2">Pertanyaan Yang Sering Ditanyakan</h2>
         </div>
 
         <div class="space-y-4" id="faq-list">
@@ -405,7 +405,7 @@
             <div class="card overflow-hidden" x-data="{ open: {{ $i === 0 ? 'true' : 'false' }} }">
                 <button @click="open = !open"
                         class="w-full flex items-center justify-between p-5 text-left hover:bg-[#F8FAFC] transition-colors">
-                    <span class="font-sora font-bold text-[#0F172A] text-sm pr-4">{{ $faq->question }}</span>
+                    <span class="font-sora font-bold text-[#0F172A] text-base pr-4">{{ $faq->question }}</span>
                     <div class="w-8 h-8 rounded-full bg-[#ECFDF5] text-[#059669] flex items-center justify-center shrink-0 transition-transform duration-300"
                          :class="{ 'rotate-180 bg-[#059669] text-white': open }">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -413,7 +413,7 @@
                         </svg>
                     </div>
                 </button>
-                <div x-show="open" x-collapse class="px-5 pb-5 text-xs sm:text-sm text-[#475569] leading-relaxed border-t border-slate-100 pt-4">
+                <div x-show="open" x-collapse class="px-5 pb-5 text-sm sm:text-base text-[#475569] leading-relaxed border-t border-slate-100 pt-4">
                     {{ $faq->answer }}
                 </div>
             </div>
@@ -431,10 +431,10 @@
 <section class="py-16 bg-gradient-to-r from-[#047857] via-[#059669] to-[#10B981] relative overflow-hidden">
     <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-        <h2 class="font-sora text-3xl sm:text-4xl font-extrabold text-white mb-4">
+        <h2 class="font-sora text-4xl sm:text-5xl font-extrabold text-white mb-4">
             Siap Memulai Konsultasi & Belajar?
         </h2>
-        <p class="text-emerald-100 text-base sm:text-lg mb-8 max-w-xl mx-auto">
+        <p class="text-emerald-100 text-lg sm:text-xl mb-8 max-w-xl mx-auto">
             Daftar gratis sekarang dan nikmati seluruh kemudahan asisten digital Bimbingan Konseling SMAN 4 Jember.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">

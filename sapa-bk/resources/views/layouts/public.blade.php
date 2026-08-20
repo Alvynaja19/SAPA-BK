@@ -33,11 +33,8 @@
 
                 <!-- Logo -->
                 <a href="{{ route('home') }}" class="flex items-center gap-2.5 sm:gap-3 group shrink-0">
-                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-[#047857] to-[#10B981] flex items-center justify-center shadow-md shadow-[#059669]/20 group-hover:scale-105 transition-transform">
-                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
-                        </svg>
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl overflow-hidden bg-white flex items-center justify-center shadow-md shadow-[#059669]/20 group-hover:scale-105 transition-transform p-0.5 shrink-0">
+                        <img src="/logo-sman4.png" alt="Logo SMAN 4 Jember" class="w-full h-full object-contain">
                     </div>
                     <div>
                         <span class="font-sora font-extrabold text-base sm:text-lg leading-none tracking-tight block" style="color: var(--text-primary);">SAPA BK</span>
@@ -45,42 +42,42 @@
                     </div>
                 </a>
 
-                <!-- Nav Links (Desktop Pill Navigation) -->
-                <nav class="hidden lg:flex items-center p-1.5 rounded-full border shadow-inner" style="background: var(--bg-surface); border-color: var(--border-color);">
+                <!-- Nav Links (Desktop Navigation) -->
+                <nav class="hidden lg:flex items-center gap-1">
                     <a href="{{ route('home') }}"
-                       class="px-4 py-2 rounded-full text-xs font-bold transition-all duration-200
-                              {{ request()->routeIs('home') ? 'bg-[#059669] text-white shadow-md shadow-[#059669]/30' : '' }}"
+                       class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200
+                              {{ request()->routeIs('home') ? 'bg-[#059669] text-white shadow-md shadow-[#059669]/30' : 'hover:bg-slate-100' }}"
                        style="{{ !request()->routeIs('home') ? 'color: var(--text-body);' : '' }}">
                         Beranda
                     </a>
                     <a href="{{ route('tentang') }}"
-                       class="px-4 py-2 rounded-full text-xs font-bold transition-all duration-200
-                              {{ request()->routeIs('tentang') ? 'bg-[#059669] text-white shadow-md shadow-[#059669]/30' : '' }}"
+                       class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200
+                              {{ request()->routeIs('tentang') ? 'bg-[#059669] text-white shadow-md shadow-[#059669]/30' : 'hover:bg-slate-100' }}"
                        style="{{ !request()->routeIs('tentang') ? 'color: var(--text-body);' : '' }}">
                         Tentang BK
                     </a>
                     <a href="{{ route('ebook.public') }}"
-                       class="px-4 py-2 rounded-full text-xs font-bold transition-all duration-200
-                              {{ request()->routeIs('ebook.public') ? 'bg-[#059669] text-white shadow-md shadow-[#059669]/30' : '' }}"
+                       class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200
+                              {{ request()->routeIs('ebook.public') ? 'bg-[#059669] text-white shadow-md shadow-[#059669]/30' : 'hover:bg-slate-100' }}"
                        style="{{ !request()->routeIs('ebook.public') ? 'color: var(--text-body);' : '' }}">
                         E-Book
                     </a>
                     <a href="{{ route('artikel.list') }}"
-                       class="px-4 py-2 rounded-full text-xs font-bold transition-all duration-200
-                              {{ request()->routeIs('artikel.*') ? 'bg-[#059669] text-white shadow-md shadow-[#059669]/30' : '' }}"
+                       class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200
+                              {{ request()->routeIs('artikel.*') ? 'bg-[#059669] text-white shadow-md shadow-[#059669]/30' : 'hover:bg-slate-100' }}"
                        style="{{ !request()->routeIs('artikel.*') ? 'color: var(--text-body);' : '' }}">
                         Artikel
                     </a>
                     <a href="{{ route('faq') }}"
-                       class="px-4 py-2 rounded-full text-xs font-bold transition-all duration-200
-                              {{ request()->routeIs('faq') ? 'bg-[#059669] text-white shadow-md shadow-[#059669]/30' : '' }}"
+                       class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200
+                              {{ request()->routeIs('faq') ? 'bg-[#059669] text-white shadow-md shadow-[#059669]/30' : 'hover:bg-slate-100' }}"
                        style="{{ !request()->routeIs('faq') ? 'color: var(--text-body);' : '' }}">
                         FAQ
                     </a>
                     @guest
                     <a href="{{ route('login') }}"
-                       class="px-4 py-2 rounded-full text-xs font-bold transition-all duration-200
-                              {{ request()->routeIs('login') ? 'bg-[#059669] text-white shadow-md shadow-[#059669]/30' : '' }}"
+                       class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200
+                              {{ request()->routeIs('login') ? 'bg-[#059669] text-white shadow-md shadow-[#059669]/30' : 'hover:bg-slate-100' }}"
                        style="{{ !request()->routeIs('login') ? 'color: var(--text-body);' : '' }}">
                         Masuk / Login
                     </a>
@@ -209,56 +206,53 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-10 pb-10 sm:pb-12 border-b border-emerald-800/80">
                 <!-- Brand Info -->
                 <div class="sm:col-span-2 lg:col-span-5">
-                    <a href="{{ route('home') }}" class="flex items-center gap-3 mb-5">
-                        <div class="w-10 h-10 rounded-2xl bg-[#059669] flex items-center justify-center shadow-lg">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
-                            </svg>
+                    <a href="{{ route('home') }}" class="flex items-center gap-3 mb-5" style="text-decoration:none;">
+                        <div class="w-10 h-10 rounded-2xl overflow-hidden bg-white flex items-center justify-center shadow-lg p-0.5 shrink-0">
+                            <img src="/logo-sman4.png" alt="Logo SMAN 4 Jember" class="w-full h-full object-contain">
                         </div>
-                        <span class="font-sora font-extrabold text-xl text-white">SAPA BK</span>
+                        <span class="font-sora font-extrabold text-2xl" style="color:#ffffff;">SAPA BK</span>
                     </a>
-                    <p class="text-emerald-100/80 text-sm leading-relaxed max-w-sm mb-6">
+                    <p class="text-base leading-relaxed max-w-sm mb-6" style="color:#cbd5e1;">
                         Platform pendamping digital Bimbingan Konseling & pengembangan minat-bakat untuk seluruh siswa SMA Negeri 4 Jember.
                     </p>
                     <div class="flex items-center gap-3">
                         <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-                        <span class="text-xs font-semibold text-emerald-300">Layanan Aktif & Siap Membantu 24/7</span>
+                        <span class="text-sm font-semibold" style="color:#6ee7b7;">Layanan Aktif & Siap Membantu 24/7</span>
                     </div>
                 </div>
 
                 <!-- Navigation -->
                 <div class="lg:col-span-3">
-                    <h4 class="font-sora font-bold text-sm text-white uppercase tracking-wider mb-5">Menu Utama</h4>
-                    <ul class="space-y-3 text-sm text-emerald-100/80">
-                        <li><a href="{{ route('home') }}" class="hover:text-emerald-400 transition-colors">Beranda</a></li>
-                        <li><a href="{{ route('tentang') }}" class="hover:text-emerald-400 transition-colors">Tentang BK SMAN 4 Jember</a></li>
-                        <li><a href="{{ route('ebook.public') }}" class="hover:text-emerald-400 transition-colors">Perpustakaan E-Book</a></li>
-                        <li><a href="{{ route('artikel.list') }}" class="hover:text-emerald-400 transition-colors">Artikel & Edukasi</a></li>
-                        <li><a href="{{ route('faq') }}" class="hover:text-emerald-400 transition-colors">Pertanyaan Umum (FAQ)</a></li>
+                    <h4 class="font-sora font-bold text-base uppercase tracking-wider mb-5" style="color:#ffffff;">Menu Utama</h4>
+                    <ul class="space-y-3.5 text-base" style="color:#cbd5e1;">
+                        <li><a href="{{ route('home') }}" style="color:#cbd5e1;" onmouseover="this.style.color='#34d399'" onmouseout="this.style.color='#cbd5e1'">Beranda</a></li>
+                        <li><a href="{{ route('tentang') }}" style="color:#cbd5e1;" onmouseover="this.style.color='#34d399'" onmouseout="this.style.color='#cbd5e1'">Tentang BK SMAN 4 Jember</a></li>
+                        <li><a href="{{ route('ebook.public') }}" style="color:#cbd5e1;" onmouseover="this.style.color='#34d399'" onmouseout="this.style.color='#cbd5e1'">Perpustakaan E-Book</a></li>
+                        <li><a href="{{ route('artikel.list') }}" style="color:#cbd5e1;" onmouseover="this.style.color='#34d399'" onmouseout="this.style.color='#cbd5e1'">Artikel & Edukasi</a></li>
+                        <li><a href="{{ route('faq') }}" style="color:#cbd5e1;" onmouseover="this.style.color='#34d399'" onmouseout="this.style.color='#cbd5e1'">Pertanyaan Umum (FAQ)</a></li>
                     </ul>
                 </div>
 
                 <!-- Contact Info -->
                 <div class="lg:col-span-4">
-                    <h4 class="font-sora font-bold text-sm text-white uppercase tracking-wider mb-5">Lokasi & Kontak</h4>
-                    <ul class="space-y-3 text-sm text-emerald-100/80">
+                    <h4 class="font-sora font-bold text-base uppercase tracking-wider mb-5" style="color:#ffffff;">Lokasi & Kontak</h4>
+                    <ul class="space-y-4 text-base" style="color:#cbd5e1;">
                         <li class="flex items-start gap-3">
-                            <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                            <span>SMA Negeri 4 Jember<br>Jl. Hayam Wuruk No.9, Jember, Jawa Timur</span>
+                            <svg class="w-5 h-5 shrink-0 mt-1" style="color:#34d399;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            <span style="color:#cbd5e1;">SMA Negeri 4 Jember<br>Jl. Hayam Wuruk No.9, Jember, Jawa Timur</span>
                         </li>
                         <li class="flex items-center gap-3">
-                            <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                            <span>bk@sman4jember.sch.id</span>
+                            <svg class="w-5 h-5 shrink-0" style="color:#34d399;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            <span style="color:#cbd5e1;">bk@sman4jember.sch.id</span>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            <div class="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-emerald-200/70">
+            <div class="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm" style="color:#94a3b8;">
                 <p>&copy; {{ date('Y') }} SAPA BK SMAN 4 Jember. Hak cipta dilindungi undang-undang.</p>
                 <p class="flex items-center gap-1">
-                    Platform Konsultasi & Kesehatan Mental Siswa SMAN 4 Jember
+                    Platform Konsultasi &amp; Kesehatan Mental Siswa SMAN 4 Jember
                 </p>
             </div>
         </div>

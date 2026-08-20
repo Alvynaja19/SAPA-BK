@@ -36,11 +36,8 @@
 
         <!-- Logo Emblem -->
         <div class="flex items-center gap-3 px-6 py-5" style="border-bottom: 1px solid var(--border-color);">
-            <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#047857] to-[#10B981] flex items-center justify-center shadow-md shadow-[#059669]/20 shrink-0">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
-                </svg>
+            <div class="w-10 h-10 rounded-2xl overflow-hidden bg-white flex items-center justify-center shadow-md shadow-[#059669]/20 shrink-0 p-0.5">
+                <img src="/logo-sman4.png" alt="Logo SMAN 4 Jember" class="w-full h-full object-contain">
             </div>
             <div>
                 <span class="font-sora font-extrabold text-base leading-none block" style="color: var(--text-primary);">SAPA BK</span>
