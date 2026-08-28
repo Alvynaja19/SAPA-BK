@@ -70,6 +70,7 @@ Route::middleware(['auth', 'role:guru_bk,admin'])->prefix('bk')->name('counselor
     Route::get('/siswa', [CounselorController::class, 'siswa'])->name('siswa');
     Route::get('/percakapan', [CounselorController::class, 'percakapan'])->name('percakapan');
     Route::get('/percakapan/{id}', [CounselorController::class, 'percakapanDetail'])->name('percakapan.detail');
+    Route::get('/live-chat', [CounselorController::class, 'liveChat'])->name('live-chat');
 
     // E-book
     Route::get('/ebook', [CounselorController::class, 'ebook'])->name('ebook');

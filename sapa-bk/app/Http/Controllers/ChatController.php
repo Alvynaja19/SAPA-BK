@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\ChatSession;
 use App\Models\ChatMessage;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class ChatController extends Controller
 {
@@ -26,7 +27,7 @@ class ChatController extends Controller
     public function show(int $sessionId)
     {
         $session  = ChatSession::where('user_id', auth()->id())
-                               ->with('messages')
+                               ->with(['messages', 'counselor'])
                                ->findOrFail($sessionId);
         $sessions = ChatSession::where('user_id', auth()->id())->latest()->get();
         return view('student.chat', compact('session', 'sessions'));
@@ -40,13 +41,15 @@ class ChatController extends Controller
         $session = ChatSession::create([
             'user_id' => auth()->id(),
             'title'   => 'Konsultasi ' . now()->format('d M Y, H:i'),
+            'type'    => 'bot',
+            'status'  => 'active',
         ]);
 
         return response()->json(['session_id' => $session->id]);
     }
 
     /**
-     * Kirim pesan & dapatkan respons AI BK pintar.
+     * Kirim pesan (Mode AI & Live Chat Guru BK).
      */
     public function send(Request $request)
     {
@@ -57,8 +60,8 @@ class ChatController extends Controller
 
         // Pastikan sesi milik user yang sedang login
         $session = ChatSession::where('id', $request->session_id)
-                              ->where('user_id', auth()->id())
-                              ->firstOrFail();
+                               ->where('user_id', auth()->id())
+                               ->firstOrFail();
 
         // Update judul sesi jika ini pesan pertama
         if ($session->messages()->count() === 0) {
@@ -67,14 +70,30 @@ class ChatController extends Controller
             ]);
         }
 
-        // Simpan pesan user
+        // Jika sesi sedang dalam mode Live Chat dengan Guru BK (human)
+        if ($session->type === 'human') {
+            $message = ChatMessage::create([
+                'session_id' => $session->id,
+                'role'       => 'user',
+                'content'    => $request->message,
+            ]);
+
+            return response()->json([
+                'type'       => 'human',
+                'status'     => $session->status,
+                'message_id' => $message->id,
+                'counselor'  => $session->counselor ? $session->counselor->name : null,
+            ]);
+        }
+
+        // Simpan pesan user untuk mode AI
         ChatMessage::create([
             'session_id' => $session->id,
             'role'       => 'user',
             'content'    => $request->message,
         ]);
 
-        // --- INTELLIGENT BK RESPONSE GENERATOR ---
+        // --- INTELLIGENT BK RESPONSE GENERATOR (Mode Bot) ---
         $response = $this->generateBkResponse($request->message, auth()->user()->name);
 
         $assistantMessage = ChatMessage::create([
@@ -88,10 +107,67 @@ class ChatController extends Controller
         ]);
 
         return response()->json([
+            'type'               => 'bot',
             'answer'             => $response['answer'],
             'sources'            => $response['sources'],
             'recommended_ebooks' => $response['recommended_ebooks'],
             'message_id'         => $assistantMessage->id,
+        ]);
+    }
+
+    /**
+     * Minta beralih ke Live Chat Guru BK — POST /api/chat/{session_id}/request-live
+     */
+    public function requestLiveChat(Request $request, int $sessionId)
+    {
+        $session = ChatSession::where('user_id', auth()->id())
+                               ->findOrFail($sessionId);
+
+        // Cek Jam Operasional (08:00 - 15:00 WIB)
+        $nowWib = Carbon::now('Asia/Jakarta');
+        $hour = $nowWib->hour;
+
+        if ($hour < 8 || $hour >= 15) {
+            return response()->json([
+                'success'       => false,
+                'outside_hours' => true,
+                'message'       => 'Layanan Live Chat Guru BK hanya aktif pada Jam Operasional 08:00 - 15:00 WIB. Silakan gunakan Chatbot AI atau berkonsultasi kembali di jam kerja.',
+            ], 422);
+        }
+
+        $session->update([
+            'type'         => 'human',
+            'status'       => 'waiting',
+            'requested_at' => now(),
+        ]);
+
+        ChatMessage::create([
+            'session_id' => $session->id,
+            'role'       => 'system',
+            'content'    => 'Siswa mengajukan sesi Live Chat dengan Guru BK. Menunggu respon antrean konselor SMAN 4 Jember...',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Permintaan Live Chat berhasil dikirim. Guru BK akan segera melayani Anda.',
+            'session' => $session,
+        ]);
+    }
+
+    /**
+     * Polling status & pesan terbaru sesi — GET /api/chat/{id}/status
+     */
+    public function sessionStatus(int $sessionId)
+    {
+        $session = ChatSession::where('user_id', auth()->id())
+                               ->with(['counselor:id,name', 'messages'])
+                               ->findOrFail($sessionId);
+
+        return response()->json([
+            'type'      => $session->type,
+            'status'    => $session->status,
+            'counselor' => $session->counselor ? $session->counselor->name : null,
+            'messages'  => $session->messages,
         ]);
     }
 
@@ -110,7 +186,7 @@ class ChatController extends Controller
                     . "1. **Kenali Minat & Bakat**: Kelompokkan mata pelajaran favoritmu dan kecenderungan gaya berkerjamu.\n"
                     . "2. **Riset Daya Tampung & Prospek**: Pelajari rasio keketatan jurusan impian di PTN tujuan.\n"
                     . "3. **Evaluasi Nilai Rapor (SNBP)**: Analisis konsistensi grafik nilai dari semester 1 hingga 5.\n"
-                    . "4. **Konsultasikan dengan Guru BK**: Kamu bisa menjadwalkan sesi diskusikan pilihan jurusan bersama Tim Konselor SMAN 4 Jember.\n\n"
+                    . "4. **Konsultasikan dengan Guru BK**: Kamu bisa menjadwatchkan sesi diskusikan pilihan jurusan bersama Tim Konselor SMAN 4 Jember.\n\n"
                     . "Ada universitas atau jurusan tertentu yang sedang kamu pertimbangkan?";
             $recommendedEbooks = ['Panduan Memilih Jurusan PTN 2026', 'Strategi Sukses SNBP & UTBK-SNBT'];
         }
@@ -158,8 +234,8 @@ class ChatController extends Controller
     public function history(int $sessionId)
     {
         $session = ChatSession::where('user_id', auth()->id())
-                              ->with('messages')
-                              ->findOrFail($sessionId);
+                               ->with('messages')
+                               ->findOrFail($sessionId);
 
         return response()->json($session->messages);
     }

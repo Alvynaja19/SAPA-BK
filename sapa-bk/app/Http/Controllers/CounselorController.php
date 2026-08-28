@@ -19,14 +19,42 @@ class CounselorController extends Controller
     /** Dashboard Guru BK — /bk/dashboard */
     public function dashboard()
     {
-        $totalSiswa      = User::where('role', 'siswa')->count();
-        $totalPercakapan = ChatSession::count();
-        $totalEbook      = Ebook::count();
-        $totalTes        = Questionnaire::where('is_active', true)->count();
-        $recentSessions  = ChatSession::with('user')->latest()->take(5)->get();
+        $totalSiswa          = User::where('role', 'siswa')->count();
+        $totalPercakapan     = ChatSession::count();
+        $totalEbook          = Ebook::count();
+        $totalArtikel        = Article::count();
+        $totalTes            = Questionnaire::where('is_active', true)->count();
+
+        // Metrik antrean konseling
+        $waitingCount        = ChatSession::where('type', 'human')->where('status', 'waiting')->count();
+        $activeLiveCount     = ChatSession::where('type', 'human')->where('status', 'active')->count();
+
+        $waitingSessions     = ChatSession::where('type', 'human')
+                                          ->where('status', 'waiting')
+                                          ->with(['user.studentProfile'])
+                                          ->orderBy('requested_at', 'asc')
+                                          ->take(5)
+                                          ->get();
+
+        $recentSessions      = ChatSession::with('user')->latest()->take(6)->get();
+
+        $recentBadEvaluations = ChatEvaluation::where('rating', 'bad')
+                                              ->with(['message.session.user', 'evaluator'])
+                                              ->latest()
+                                              ->take(4)
+                                              ->get();
 
         return view('counselor.dashboard', compact(
-            'totalSiswa', 'totalPercakapan', 'totalEbook', 'totalTes', 'recentSessions'
+            'totalSiswa',
+            'totalPercakapan',
+            'totalEbook',
+            'totalArtikel',
+            'totalTes',
+            'waitingCount',
+            'activeLiveCount',
+            'waitingSessions',
+            'recentSessions',
+            'recentBadEvaluations'
         ));
     }
 
@@ -279,5 +307,128 @@ class CounselorController extends Controller
     {
         Faq::findOrFail($id)->delete();
         return back()->with('success', 'FAQ berhasil dihapus.');
+    }
+
+    /**
+     * Portal Live Chat Konseling Guru BK — /bk/live-chat
+     */
+    public function liveChat()
+    {
+        $waitingSessions = ChatSession::where('type', 'human')
+                                      ->where('status', 'waiting')
+                                      ->with(['user.studentProfile', 'messages'])
+                                      ->orderBy('requested_at', 'asc')
+                                      ->get();
+
+        $activeSessions = ChatSession::where('type', 'human')
+                                     ->where('counselor_id', auth()->id())
+                                     ->where('status', 'active')
+                                     ->with(['user.studentProfile', 'messages'])
+                                     ->latest()
+                                     ->get();
+
+        return view('counselor.live-chat', compact('waitingSessions', 'activeSessions'));
+    }
+
+    /**
+     * API Data Antrean Live Chat — GET /api/bk/live-chat/queue
+     */
+    public function liveChatQueue()
+    {
+        $waitingSessions = ChatSession::where('type', 'human')
+                                      ->where('status', 'waiting')
+                                      ->with(['user.studentProfile', 'messages'])
+                                      ->orderBy('requested_at', 'asc')
+                                      ->get();
+
+        $activeSessions = ChatSession::where('type', 'human')
+                                     ->where('counselor_id', auth()->id())
+                                     ->where('status', 'active')
+                                     ->with(['user.studentProfile', 'messages'])
+                                     ->latest()
+                                     ->get();
+
+        return response()->json([
+            'waiting' => $waitingSessions,
+            'active'  => $activeSessions,
+        ]);
+    }
+
+    /**
+     * Terima Antrean Sesi Siswa — POST /api/bk/live-chat/{id}/accept
+     */
+    public function liveChatAccept(int $id)
+    {
+        $session = ChatSession::where('type', 'human')
+                               ->where('status', 'waiting')
+                               ->findOrFail($id);
+
+        $session->update([
+            'counselor_id' => auth()->id(),
+            'status'       => 'active',
+        ]);
+
+        ChatMessage::create([
+            'session_id' => $session->id,
+            'role'       => 'system',
+            'content'    => 'Guru BK ' . auth()->user()->name . ' telah menerima percakapan dan bergabung ke sesi konseling live.',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Sesi konseling berhasil diterima.',
+            'session' => $session->load(['user.studentProfile', 'messages']),
+        ]);
+    }
+
+    /**
+     * Guru BK Kirim Pesan Live Chat — POST /api/bk/live-chat/{id}/send
+     */
+    public function liveChatSend(Request $request, int $id)
+    {
+        $request->validate([
+            'message' => 'required|string|max:2000',
+        ]);
+
+        $session = ChatSession::where('type', 'human')
+                               ->where('counselor_id', auth()->id())
+                               ->where('status', 'active')
+                               ->findOrFail($id);
+
+        $message = ChatMessage::create([
+            'session_id' => $session->id,
+            'role'       => 'counselor',
+            'content'    => $request->message,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+        ]);
+    }
+
+    /**
+     * Akhiri Sesi Live Chat — POST /api/bk/live-chat/{id}/close
+     */
+    public function liveChatClose(int $id)
+    {
+        $session = ChatSession::where('type', 'human')
+                               ->where('counselor_id', auth()->id())
+                               ->findOrFail($id);
+
+        $session->update([
+            'status' => 'closed',
+        ]);
+
+        ChatMessage::create([
+            'session_id' => $session->id,
+            'role'       => 'system',
+            'content'    => 'Sesi konseling live telah diakhiri oleh Guru BK ' . auth()->user()->name . '.',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Sesi konseling telah diakhiri.',
+        ]);
     }
 }

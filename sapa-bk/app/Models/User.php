@@ -46,5 +46,53 @@ class User extends Authenticatable
     {
         return $this->hasOne(CounselorProfile::class);
     }
+
+    /**
+     * Sesi percakapan konsultasi user.
+     */
+    public function chatSessions()
+    {
+        return $this->hasMany(ChatSession::class);
+    }
+
+    /**
+     * Hasil tes kuesioner siswa.
+     */
+    public function results()
+    {
+        return $this->hasMany(QuestionnaireResult::class);
+    }
+
+    /**
+     * E-book yang diunggah.
+     */
+    public function ebooks()
+    {
+        return $this->hasMany(Ebook::class, 'uploaded_by');
+    }
+
+    /**
+     * Artikel yang ditulis.
+     */
+    public function articles()
+    {
+        return $this->hasMany(Article::class, 'author_id');
+    }
+
+    /**
+     * Dokumen knowledge base.
+     */
+    public function knowledgeDocuments()
+    {
+        return $this->hasMany(KnowledgeDocument::class, 'uploaded_by');
+    }
+
+    /**
+     * Evaluasi chatbot oleh guru BK.
+     */
+    public function chatEvaluations()
+    {
+        return $this->hasMany(ChatEvaluation::class, 'evaluated_by');
+    }
 }
 

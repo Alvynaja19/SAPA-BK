@@ -1,447 +1,227 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap') layer(base);
+@import 'prismjs/themes/prism.min.css';
 @import 'tailwindcss';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
 
-/* =========================================================
-   SAPA BK – Design System Tokens (Jatidiri.app Inspired)
-   ========================================================= */
+@custom-variant dark (&:is(.dark *));
+
 @theme {
-    /* Fonts */
-    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-    --font-sora: 'Sora', sans-serif;
+  --font-*: initial;
+  --font-outfit: Outfit, sans-serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-sora: 'Sora', sans-serif;
 
-    /* Primary Greens */
-    --color-primary:        #059669; /* emerald-600 */
-    --color-primary-dark:   #047857; /* emerald-700 – hover */
-    --color-primary-light:  #ECFDF5; /* emerald-50  – background accent */
-    --color-mint:           #10B981; /* emerald-500 – highlights */
-    --color-primary-border: #6EE7B7; /* emerald-300 */
+  --breakpoint-*: initial;
+  --breakpoint-2xsm: 375px;
+  --breakpoint-xsm: 425px;
+  --breakpoint-3xl: 2000px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
 
-    /* Neutrals */
-    --color-bg-page:   #F8FAFC; /* slate-50 */
-    --color-bg-card:   #FFFFFF;
-    --color-text-dark: #0F172A; /* slate-900 */
-    --color-text-body: #475569; /* slate-600 */
-    --color-border:    #E2E8F0; /* slate-200 */
+  --text-title-2xl: 72px;
+  --text-title-2xl--line-height: 90px;
+  --text-title-xl: 60px;
+  --text-title-xl--line-height: 72px;
+  --text-title-lg: 48px;
+  --text-title-lg--line-height: 60px;
+  --text-title-md: 36px;
+  --text-title-md--line-height: 44px;
+  --text-title-sm: 30px;
+  --text-title-sm--line-height: 38px;
+  --text-theme-xl: 20px;
+  --text-theme-xl--line-height: 30px;
+  --text-theme-sm: 14px;
+  --text-theme-sm--line-height: 20px;
+  --text-theme-xs: 12px;
+  --text-theme-xs--line-height: 18px;
 
-    /* Status */
-    --color-success: #059669;
-    --color-warning: #D97706;
-    --color-error:   #DC2626;
+  --color-current: currentColor;
+  --color-transparent: transparent;
+  --color-white: #ffffff;
+  --color-black: #101828;
+
+  --color-brand-25: #f2f7ff;
+  --color-brand-50: #ecf3ff;
+  --color-brand-100: #dde9ff;
+  --color-brand-200: #c2d6ff;
+  --color-brand-300: #9cb9ff;
+  --color-brand-400: #7592ff;
+  --color-brand-500: #465fff;
+  --color-brand-600: #3641f5;
+  --color-brand-700: #2a31d8;
+  --color-brand-800: #252dae;
+  --color-brand-900: #262e89;
+  --color-brand-950: #161950;
+
+  --color-blue-light-25: #f5fbff;
+  --color-blue-light-50: #f0f9ff;
+  --color-blue-light-100: #e0f2fe;
+  --color-blue-light-200: #b9e6fe;
+  --color-blue-light-300: #7cd4fd;
+  --color-blue-light-400: #36bffa;
+  --color-blue-light-500: #0ba5ec;
+  --color-blue-light-600: #0086c9;
+  --color-blue-light-700: #026aa2;
+  --color-blue-light-800: #065986;
+  --color-blue-light-900: #0b4a6f;
+  --color-blue-light-950: #062c41;
+
+  --color-gray-25: #fcfcfd;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f2f4f7;
+  --color-gray-200: #e4e7ec;
+  --color-gray-300: #d0d5dd;
+  --color-gray-400: #98a2b3;
+  --color-gray-500: #667085;
+  --color-gray-600: #475467;
+  --color-gray-700: #344054;
+  --color-gray-800: #1d2939;
+  --color-gray-900: #101828;
+  --color-gray-950: #0c111d;
+  --color-gray-dark: #1a2231;
+
+  --color-orange-25: #fffaf5;
+  --color-orange-50: #fff6ed;
+  --color-orange-100: #ffead5;
+  --color-orange-200: #fddcab;
+  --color-orange-300: #feb273;
+  --color-orange-400: #fd853a;
+  --color-orange-500: #fb6514;
+  --color-orange-600: #ec4a0a;
+  --color-orange-700: #c4320a;
+  --color-orange-800: #9c2a10;
+  --color-orange-900: #7e2410;
+  --color-orange-950: #511c10;
+
+  --color-success-25: #f6fef9;
+  --color-success-50: #ecfdf3;
+  --color-success-100: #d1fadf;
+  --color-success-200: #a6f4c5;
+  --color-success-300: #6ce9a6;
+  --color-success-400: #32d583;
+  --color-success-500: #12b76a;
+  --color-success-600: #039855;
+  --color-success-700: #027a48;
+  --color-success-800: #05603a;
+  --color-success-900: #054f31;
+  --color-success-950: #053321;
+
+  --color-error-25: #fffbfa;
+  --color-error-50: #fef3f2;
+  --color-error-100: #fee4e2;
+  --color-error-200: #fecdca;
+  --color-error-300: #fda29b;
+  --color-error-400: #f97066;
+  --color-error-500: #f04438;
+  --color-error-600: #d92d20;
+  --color-error-700: #b42318;
+  --color-error-800: #912018;
+  --color-error-900: #7a271a;
+  --color-error-950: #55160c;
+
+  --color-warning-25: #fffcf5;
+  --color-warning-50: #fffaeb;
+  --color-warning-100: #fef0c7;
+  --color-warning-200: #fedf89;
+  --color-warning-300: #fec84b;
+  --color-warning-400: #fdb022;
+  --color-warning-500: #f79009;
+  --color-warning-600: #dc6803;
+  --color-warning-700: #b54708;
+  --color-warning-800: #93370d;
+  --color-warning-900: #7a2e0e;
+  --color-warning-950: #4e1d09;
+
+  --shadow-theme-md: 0px 4px 8px -2px rgba(16, 24, 40, 0.1), 0px 2px 4px -2px rgba(16, 24, 40, 0.06);
+  --shadow-theme-lg: 0px 12px 16px -4px rgba(16, 24, 40, 0.08), 0px 4px 6px -2px rgba(16, 24, 40, 0.03);
+  --shadow-theme-sm: 0px 1px 3px 0px rgba(16, 24, 40, 0.1), 0px 1px 2px 0px rgba(16, 24, 40, 0.06);
+  --shadow-theme-xs: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+  --shadow-theme-xl: 0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03);
+
+  --z-index-1: 1;
+  --z-index-9: 9;
+  --z-index-99: 99;
+  --z-index-999: 999;
+  --z-index-9999: 9999;
+  --z-index-99999: 99999;
+  --z-index-999999: 999999;
 }
 
-/* =========================================================
-   CSS CUSTOM PROPERTIES – Light & Dark Mode Tokens
-   ========================================================= */
-:root {
-    --bg-page:       #F8FAFC;
-    --bg-card:       #FFFFFF;
-    --bg-surface:    #F1F5F9;
-    --text-primary:  #0F172A;
-    --text-body:     #475569;
-    --text-muted:    #94A3B8;
-    --border-color:  #E2E8F0;
-    --border-subtle: #F1F5F9;
-
-    /* Glass header */
-    --glass-bg:      rgba(255, 255, 255, 0.88);
-    --glass-border:  rgba(226, 232, 240, 0.80);
-
-    /* Sidebar (light) */
-    --sidebar-bg:    #0F172A;
-    --sidebar-text:  #CBD5E1;
-    --sidebar-hover: rgba(255,255,255,0.10);
-
-    /* Input */
-    --input-bg:      #FFFFFF;
-    --input-border:  #E2E8F0;
-
-    /* Shadow */
-    --shadow-card:   0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-    --shadow-lg:     0 10px 25px rgba(0,0,0,0.08);
-}
-
-/* Dark mode tokens */
-html.dark {
-    --bg-page:       #0F172A;
-    --bg-card:       #1E293B;
-    --bg-surface:    #162032;
-    --text-primary:  #F1F5F9;
-    --text-body:     #94A3B8;
-    --text-muted:    #64748B;
-    --border-color:  #334155;
-    --border-subtle: #1E293B;
-
-    --glass-bg:      rgba(15, 23, 42, 0.90);
-    --glass-border:  rgba(51, 65, 85, 0.80);
-
-    --sidebar-bg:    #0B1120;
-    --sidebar-text:  #94A3B8;
-    --sidebar-hover: rgba(255,255,255,0.06);
-
-    --input-bg:      #1E293B;
-    --input-border:  #334155;
-
-    --shadow-card:   0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
-    --shadow-lg:     0 10px 25px rgba(0,0,0,0.4);
-}
-
-/* =========================================================
-   BASE STYLES
-   ========================================================= */
-html {
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-body {
-    background-color: var(--bg-page);
-    color: var(--text-body);
-    font-family: var(--font-sans);
-    overflow-x: hidden;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-h1, h2, h3, .font-sora {
-    font-family: 'Sora', sans-serif;
-    color: var(--text-primary);
-}
-
-/* =========================================================
-   DARK MODE TOGGLE BUTTON
-   ========================================================= */
-.dark-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
-    background-color: var(--bg-card);
-    color: var(--text-body);
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
     cursor: pointer;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-}
-.dark-toggle:hover {
-    background-color: var(--bg-surface);
-    color: #059669;
-    border-color: #6EE7B7;
+  }
+  body {
+    @apply relative font-normal font-outfit z-1 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100;
+  }
 }
 
-/* =========================================================
-   GLASS HEADER
-   ========================================================= */
-.glass-header {
-    background: var(--glass-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-color: var(--glass-border);
+/* TailAdmin Utility Classes */
+@utility menu-item {
+  @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-theme-sm;
+}
+@utility menu-item-active {
+  @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
+}
+@utility menu-item-inactive {
+  @apply text-gray-700 hover:bg-gray-100 group-hover:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-300;
+}
+@utility menu-item-icon-active {
+  @apply text-brand-500 dark:text-brand-400;
+}
+@utility menu-item-icon-inactive {
+  @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300;
+}
+@utility menu-dropdown-item {
+  @apply relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-theme-sm font-medium;
+}
+@utility menu-dropdown-item-active {
+  @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
+}
+@utility menu-dropdown-item-inactive {
+  @apply text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/5;
+}
+@utility menu-dropdown-badge {
+  @apply text-success-600 dark:text-success-500 block rounded-full px-2.5 py-0.5 text-xs font-medium uppercase;
+}
+@utility menu-dropdown-badge-active {
+  @apply bg-success-100 dark:bg-success-500/20;
+}
+@utility menu-dropdown-badge-inactive {
+  @apply bg-success-50 group-hover:bg-success-100 dark:bg-success-500/15 dark:group-hover:bg-success-500/20;
 }
 
-/* =========================================================
-   GLOW EFFECTS
-   ========================================================= */
-.hero-glow-1 {
-    background: radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, transparent 70%);
-}
-.hero-glow-2 {
-    background: radial-gradient(circle, rgba(5, 150, 105, 0.12) 0%, transparent 70%);
+@utility no-scrollbar {
+  &::-webkit-scrollbar { display: none; }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-/* =========================================================
-   BADGES / PILLS
-   ========================================================= */
-.pill-badge {
-    @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full
-           text-xs font-semibold tracking-wide shadow-sm;
-    background: var(--color-primary-light);
-    border: 1px solid var(--color-primary-border);
-    color: var(--color-primary-dark);
-}
-html.dark .pill-badge {
-    background: rgba(5,150,105,0.15);
-    border-color: rgba(110,231,183,0.25);
-    color: #6EE7B7;
+@utility custom-scrollbar {
+  &::-webkit-scrollbar { @apply size-1.5; }
+  &::-webkit-scrollbar-track { @apply rounded-full; }
+  &::-webkit-scrollbar-thumb { @apply bg-gray-200 rounded-full dark:bg-gray-700; }
 }
 
-.pill-badge-teal {
-    @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full
-           text-xs font-semibold tracking-wide shadow-sm;
-    background: rgba(20, 184, 166, 0.1);
-    border: 1px solid rgba(20, 184, 166, 0.3);
-    color: #0F766E;
-}
-html.dark .pill-badge-teal {
-    color: #5EEAD4;
-    border-color: rgba(94, 234, 212, 0.25);
-    background: rgba(20, 184, 166, 0.12);
-}
-
-/* =========================================================
-   BUTTONS
-   ========================================================= */
+/* Custom SAPA BK Badges & Buttons Compatibility */
 .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full
-           font-semibold text-sm shadow-md
-           active:translate-y-0 transition-all duration-200;
-    background: #059669;
-    color: #FFFFFF;
-    box-shadow: 0 4px 14px rgba(5,150,105,0.25);
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm text-white bg-brand-500 hover:bg-brand-600 transition-all shadow-sm;
 }
-.btn-primary:hover {
-    background: #047857;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(5,150,105,0.35);
-}
-
 .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full
-           font-semibold text-sm transition-all duration-200;
-    border: 2px solid #059669;
-    color: #059669;
-}
-.btn-secondary:hover {
-    background: #ECFDF5;
-    transform: translateY(-2px);
-}
-html.dark .btn-secondary {
-    border-color: #059669;
-    color: #34D399;
-}
-html.dark .btn-secondary:hover {
-    background: rgba(5,150,105,0.12);
-}
-
-.btn-white {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full
-           font-bold text-sm shadow-md transition-all duration-200;
-    background: #FFFFFF;
-    color: #059669;
-}
-.btn-white:hover {
-    background: #ECFDF5;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-}
-
-.btn-danger {
-    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl
-           font-semibold text-sm transition-all duration-200;
-    border: 2px solid #EF4444;
-    color: #DC2626;
-}
-.btn-danger:hover { background: #FEF2F2; }
-html.dark .btn-danger:hover { background: rgba(220,38,38,0.15); }
-
-/* =========================================================
-   CARDS
-   ========================================================= */
-.card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    @apply rounded-2xl shadow-sm transition-all duration-300;
-    box-shadow: var(--shadow-card);
-}
-
-.card-hover {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    @apply rounded-2xl shadow-sm transition-all duration-300;
-    box-shadow: var(--shadow-card);
-}
-.card-hover:hover {
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-4px);
-    border-color: #6EE7B7;
-}
-
-.card-highlight {
-    background: var(--bg-card);
-    border-top: 1px solid var(--border-color);
-    border-right: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-    border-left: 4px solid #059669;
-    @apply rounded-2xl shadow-sm transition-all duration-300;
-}
-.card-highlight:hover {
-    box-shadow: 0 4px 12px rgba(5,150,105,0.1);
-}
-
-/* =========================================================
-   BADGES
-   ========================================================= */
-.badge-green {
-    @apply inline-block px-3 py-1 rounded-full text-xs font-semibold;
-    background: rgba(5,150,105,0.12);
-    color: #047857;
-}
-html.dark .badge-green { color: #34D399; background: rgba(5,150,105,0.2); }
-
-.badge-gray {
-    @apply inline-block px-3 py-1 rounded-full text-xs font-semibold;
-    background: var(--bg-surface);
-    color: var(--text-body);
-}
-
-.badge-amber {
-    @apply inline-block px-3 py-1 rounded-full text-xs font-semibold;
-    background: rgba(217,119,6,0.1);
-    color: #B45309;
-}
-html.dark .badge-amber { color: #FCD34D; background: rgba(217,119,6,0.18); }
-
-.badge-red {
-    @apply inline-block px-3 py-1 rounded-full text-xs font-semibold;
-    background: rgba(220,38,38,0.1);
-    color: #DC2626;
-}
-html.dark .badge-red { color: #FCA5A5; background: rgba(220,38,38,0.18); }
-
-/* =========================================================
-   FORM INPUTS
-   ========================================================= */
-.form-input {
-    @apply w-full rounded-xl px-4 py-3 text-sm transition-colors duration-150;
-    background: var(--input-bg);
-    border: 1px solid var(--input-border);
-    color: var(--text-primary);
-}
-.form-input::placeholder {
-    color: var(--text-muted);
-}
-.form-input:focus {
-    outline: none;
-    border-color: #059669;
-    box-shadow: 0 0 0 3px rgba(5,150,105,0.15);
-}
-
-/* =========================================================
-   SIDEBAR ITEMS
-   ========================================================= */
-.sidebar-item {
-    @apply flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-150;
-    color: var(--text-body);
-}
-.sidebar-item:hover {
-    background: rgba(5,150,105,0.08);
-    color: #059669;
-}
-html.dark .sidebar-item:hover {
-    background: rgba(5,150,105,0.12);
-    color: #34D399;
-}
-.sidebar-item.active {
-    background: rgba(5,150,105,0.12);
-    color: #059669;
-    font-weight: 600;
-}
-html.dark .sidebar-item.active {
-    background: rgba(5,150,105,0.18);
-    color: #34D399;
-}
-
-/* =========================================================
-   STAT CARDS
-   ========================================================= */
-.stat-card {
-    @apply rounded-2xl shadow-sm p-5 flex items-center gap-4;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow-card);
-}
-.stat-icon {
-    @apply w-12 h-12 rounded-full flex items-center justify-center shrink-0;
-    background: rgba(5,150,105,0.1);
-    color: #059669;
-}
-html.dark .stat-icon {
-    background: rgba(5,150,105,0.18);
-    color: #34D399;
-}
-
-/* =========================================================
-   MOBILE NAV PILL (Public)
-   ========================================================= */
-.mobile-nav-pill {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-}
-html.dark .mobile-nav-pill {
-    background: rgba(30,41,59,0.8);
-}
-
-/* =========================================================
-   DARK MODE — BODY BACKGROUND COLORS (inline Tailwind overrides)
-   ========================================================= */
-html.dark body {
-    background-color: #0F172A;
-    color: #94A3B8;
-}
-html.dark h1, html.dark h2, html.dark h3, html.dark .font-sora {
-    color: #F1F5F9;
-}
-
-/* Tailwind dark override helpers */
-html.dark .bg-white    { background-color: #1E293B !important; }
-html.dark .bg-\[\#F8FAFC\] { background-color: #0F172A !important; }
-html.dark .bg-\[\#ECFDF5\] { background-color: rgba(5,150,105,0.15) !important; }
-html.dark .bg-slate-100 { background-color: #1E293B !important; }
-html.dark .bg-slate-50  { background-color: #162032 !important; }
-html.dark .bg-\[\#0F172A\] { background-color: #0B1120 !important; }
-
-html.dark .border-slate-200   { border-color: #334155 !important; }
-html.dark .border-\[\#E2E8F0\] { border-color: #334155 !important; }
-html.dark .border-slate-200\/80 { border-color: rgba(51,65,85,0.8) !important; }
-
-html.dark .text-\[\#0F172A\]   { color: #F1F5F9 !important; }
-html.dark .text-\[\#475569\]   { color: #94A3B8 !important; }
-html.dark .text-slate-900      { color: #F1F5F9 !important; }
-html.dark .text-slate-700      { color: #CBD5E1 !important; }
-html.dark .text-slate-600      { color: #94A3B8 !important; }
-html.dark .text-slate-500      { color: #64748B !important; }
-html.dark .text-slate-400      { color: #475569 !important; }
-
-/* Topbar dark */
-html.dark header.bg-white { background-color: #1E293B !important; }
-
-/* Public nav pill */
-html.dark .bg-slate-100\/90 { background-color: rgba(30,41,59,0.9) !important; }
-
-/* Tables */
-html.dark table thead { background-color: #162032 !important; }
-html.dark table tbody tr:hover { background-color: rgba(30,41,59,0.6) !important; }
-html.dark table td, html.dark table th { border-color: #334155 !important; }
-
-/* Modals */
-html.dark .modal-box { background-color: #1E293B !important; }
-
-/* Scrollbar dark */
-html.dark ::-webkit-scrollbar { background: #1E293B; }
-html.dark ::-webkit-scrollbar-thumb { background: #334155; border-radius: 8px; }
-
-/* =========================================================
-   RESPONSIVE UTILITIES
-   ========================================================= */
-
-/* Ensure images don't overflow */
-img { max-width: 100%; height: auto; }
-
-/* Tables responsive wrapper */
-.table-responsive {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-/* Touch-friendly tap targets */
-@media (max-width: 640px) {
-    .btn-primary, .btn-secondary, .btn-white {
-        padding: 0.625rem 1.25rem;
-        font-size: 0.8125rem;
-    }
-    .sidebar-item {
-        padding: 0.625rem 0.875rem;
-    }
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700 transition-all shadow-xs;
 }

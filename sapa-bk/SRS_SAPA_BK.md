@@ -175,6 +175,8 @@ Pengguna (Browser)
 | F-26  | Rekomendasi e-book dalam chat    | Siswa            | Chatbot dapat merekomendasikan e-book relevan sebagai bagian respons.     |
 | F-27  | Empty state                      | Siswa            | Tampilan awal ketika belum ada percakapan.                                |
 | F-28  | Sesi percakapan baru             | Siswa            | Tombol untuk memulai percakapan baru.                                     |
+| F-29  | Request Live Chat Guru BK (PRD 4.2) | Siswa         | Siswa dapat meminta beralih dari Chatbot AI ke Live Chat Guru BK pada **Jam Operasional 08:00–15:00 WIB**. Identitas siswa (Nama, NISN, Kelas) **tetap ditampilkan** agar Guru BK dapat menindaklanjuti rekam medis/konseling. |
+| F-29b | Indikator Jam Operasional & Status Offline | Siswa | Di luar jam 08:00–15:00 WIB atau saat Guru BK offline, sistem memberikan pemberitahuan dan menyarankan pesan tertunda atau konsultasi AI. |
 
 > **Catatan developer:** F-22 hingga F-28 pada tahap awal menggunakan dummy response. Integrasi ke RAG pipeline dikerjakan pada tahap akhir (lihat bagian 11).
 
@@ -195,6 +197,7 @@ Pengguna (Browser)
 | F-40  | Dashboard Guru BK                | Guru BK   | Ringkasan: total siswa, total percakapan, e-book aktif.                  |
 | F-41  | Daftar siswa                     | Guru BK   | Lihat data siswa terdaftar.                                               |
 | F-42  | Riwayat percakapan semua siswa   | Guru BK   | Pantau seluruh percakapan chatbot.                                        |
+| F-42b | Live Chat Konseling (PRD 4.2)    | Guru BK   | Halaman antrean dan balasan live chat siswa secara real-time. Identitas siswa ditampilkan lengkap. |
 | F-43  | Upload e-book                    | Guru BK   | Tambah, edit, hapus e-book.                                               |
 | F-44  | Manajemen artikel / informasi    | Guru BK   | Tambah, edit, hapus artikel BK.                                           |
 | F-45  | Manajemen knowledge base         | Guru BK   | Upload dokumen sumber (PDF, dsb.) untuk RAG pipeline.                    |
@@ -322,6 +325,7 @@ Pengguna (Browser)
 | `/bk/siswa`                   | Data Siswa                  | List siswa terdaftar                           |
 | `/bk/percakapan`              | Riwayat Percakapan          | Semua percakapan siswa                         |
 | `/bk/percakapan/{id}`         | Detail Percakapan           | Isi percakapan                                 |
+| `/bk/live-chat`               | Live Chat Konseling         | Portal antrean & percakapan real-time Guru BK  |
 | `/bk/ebook`                   | Manajemen E-book            | CRUD e-book                                    |
 | `/bk/artikel`                 | Manajemen Artikel           | CRUD artikel                                   |
 | `/bk/knowledge-base`          | Knowledge Base              | Upload dokumen RAG                             |

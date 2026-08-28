@@ -14,6 +14,13 @@ class CounselorProfile extends Model
         'user_id',
         'nip',
         'spesialisasi',
+        'is_available',
+        'last_seen_at',
+    ];
+
+    protected $casts = [
+        'is_available' => 'boolean',
+        'last_seen_at' => 'datetime',
     ];
 
     /**

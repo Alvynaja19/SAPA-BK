@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ChatSession;
 use App\Models\Ebook;
+use App\Models\Article;
 use App\Models\Questionnaire;
 use App\Models\QuestionnaireResult;
+use App\Models\CounselorProfile;
+use Carbon\Carbon;
 
 class StudentController extends Controller
 {
@@ -15,12 +18,56 @@ class StudentController extends Controller
      */
     public function dashboard()
     {
-        $user          = auth()->user();
-        $sessions      = ChatSession::where('user_id', $user->id)->latest()->take(3)->get();
-        $ebooks        = Ebook::where('is_public', true)->latest()->take(4)->get();
-        $questionnaires = Questionnaire::where('is_active', true)->latest()->take(3)->get();
+        $user = auth()->user()->load('studentProfile');
 
-        return view('student.dashboard', compact('user', 'sessions', 'ebooks', 'questionnaires'));
+        // Status Jam Kerja & Konselor
+        $nowWib = Carbon::now('Asia/Jakarta');
+        $isWorkingHours = ($nowWib->hour >= 8 && $nowWib->hour < 15);
+        $activeCounselor = CounselorProfile::where('is_available', true)->with('user')->first();
+
+        // Sesi aktif live chat siswa jika ada
+        $activeLiveSession = ChatSession::where('user_id', $user->id)
+            ->where('type', 'human')
+            ->whereIn('status', ['waiting', 'active'])
+            ->latest()
+            ->first();
+
+        // Percakapan terkini
+        $recentSessions = ChatSession::where('user_id', $user->id)
+            ->latest()
+            ->take(3)
+            ->get();
+
+        // Hasil tes minat bakat / asesmen terakhir
+        $latestTestResult = QuestionnaireResult::where('user_id', $user->id)
+            ->with('questionnaire')
+            ->latest()
+            ->first();
+
+        // Rekomendasi E-book & Artikel untuk Siswa
+        $ebooks = Ebook::where('is_public', true)->latest()->take(3)->get();
+        $articles = Article::where('is_published', true)->latest()->take(3)->get();
+        $totalTesTersedia = Questionnaire::where('is_active', true)->count();
+
+        // Stats Tambahan Aktivitas Siswa
+        $totalKonsultasiSaya = ChatSession::where('user_id', $user->id)->count();
+        $totalTesDiselesaikan = QuestionnaireResult::where('user_id', $user->id)->count();
+        $totalEbookTersedia = Ebook::where('is_public', true)->count();
+
+        return view('student.dashboard', compact(
+            'user',
+            'isWorkingHours',
+            'activeCounselor',
+            'activeLiveSession',
+            'recentSessions',
+            'latestTestResult',
+            'ebooks',
+            'articles',
+            'totalTesTersedia',
+            'totalKonsultasiSaya',
+            'totalTesDiselesaikan',
+            'totalEbookTersedia'
+        ));
     }
 
     /**
