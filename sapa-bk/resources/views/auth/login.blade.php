@@ -3,125 +3,134 @@
 @section('title', 'Login')
 
 @section('content')
-<div class="min-h-[calc(100vh-4rem)] flex items-center justify-center py-10 sm:py-12 px-4">
-    <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-0 rounded-3xl overflow-hidden shadow-2xl border"
-         style="background: var(--bg-card); border-color: var(--border-color);">
+<div class="min-h-screen bg-gradient-to-br from-[#ECFDF5] via-[#F0FDF4] to-[#E6F4EA] dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 flex items-center justify-center pt-20 sm:pt-24 pb-8 sm:pb-12 px-4 sm:px-6">
+    
+    <!-- Card Utama (Dual Column Layout dengan Hijau Identitas Sekolah SMAN 4 Jember) -->
+    <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 rounded-[32px] overflow-hidden shadow-2xl border border-emerald-200/60 dark:border-slate-800/80 bg-white dark:bg-slate-900">
 
-        <!-- Kiri — Ilustrasi & Info Brand -->
-        <div class="hidden lg:flex flex-col justify-between px-12 py-16 bg-gradient-to-br from-[#047857] via-[#059669] to-[#10B981] text-white relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+        <!-- KIRI — Visual Hero & Warna Dasar Hijau Sekolah -->
+        <div class="lg:col-span-6 bg-gradient-to-br from-[#047857] via-[#059669] to-[#10B981] dark:from-[#064E3B] dark:via-emerald-950 dark:to-slate-900 text-white p-8 sm:p-12 relative flex flex-col justify-between overflow-hidden">
+            
+            <!-- Ornamen Blur Dekoratif Berwarna Hijau Mint & Putih Glow -->
+            <div class="absolute -top-12 -left-12 w-56 h-56 rounded-full bg-white/10 dark:bg-emerald-500/10 blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-16 -right-16 w-64 h-64 rounded-full bg-teal-300/20 dark:bg-emerald-400/10 blur-3xl pointer-events-none"></div>
+            
+            <!-- Floating School Badge -->
+            <div class="absolute top-8 right-8 px-3.5 py-1.5 rounded-full bg-white/15 dark:bg-slate-900/40 backdrop-blur-md border border-white/20 dark:border-emerald-700/50 text-white font-bold text-[11px] shadow-sm flex items-center gap-2 z-10">
+                <span class="w-2 h-2 rounded-full bg-emerald-300 dark:bg-emerald-400 animate-pulse"></span>
+                <span>SMAN 4 Jember</span>
+            </div>
 
-            <div class="relative z-10">
-                <a href="{{ route('home') }}" class="flex items-center gap-3 mb-8">
-                    <div class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
-                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
-                        </svg>
-                    </div>
-                    <span class="font-sora font-extrabold text-2xl text-white">SAPA BK</span>
-                </a>
-
-                <h2 class="font-sora font-extrabold text-3xl mb-4 leading-snug">
-                    Selamat Datang Kembali!
-                </h2>
-                <p class="text-emerald-100 text-sm leading-relaxed mb-8">
-                    Masuk ke akun Anda untuk mengakses asisten digital BK, melihat riwayat konsultasi, dan modul e-book SMAN 4 Jember.
-                </p>
-
-                <div class="space-y-3">
-                    <p class="text-xs font-bold uppercase tracking-wider text-emerald-200 mb-2">⚡ Quick Login Akun Demo:</p>
-                    
-                    <button type="button" onclick="quickFill('siswa@sapabk.sch.id', 'password')"
-                            class="w-full flex items-center justify-between bg-white/10 hover:bg-white/20 backdrop-blur-md p-3 rounded-2xl border border-white/20 text-left transition-all group">
-                        <div class="flex items-center gap-3">
-                            <span class="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center font-bold text-sm">🎓</span>
-                            <div>
-                                <p class="text-xs font-bold text-white">Siswa Demo</p>
-                                <p class="text-[10px] text-emerald-100/80">siswa@sapabk.sch.id</p>
-                            </div>
-                        </div>
-                        <span class="text-xs font-bold bg-white text-[#059669] px-3 py-1 rounded-full group-hover:scale-105 transition-transform">Masuk →</span>
-                    </button>
-
-                    <button type="button" onclick="quickFill('gurubk@sapabk.sch.id', 'password')"
-                            class="w-full flex items-center justify-between bg-white/10 hover:bg-white/20 backdrop-blur-md p-3 rounded-2xl border border-white/20 text-left transition-all group">
-                        <div class="flex items-center gap-3">
-                            <span class="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center font-bold text-sm">👨‍🏫</span>
-                            <div>
-                                <p class="text-xs font-bold text-white">Guru BK Demo</p>
-                                <p class="text-[10px] text-emerald-100/80">gurubk@sapabk.sch.id</p>
-                            </div>
-                        </div>
-                        <span class="text-xs font-bold bg-white text-[#059669] px-3 py-1 rounded-full group-hover:scale-105 transition-transform">Masuk →</span>
-                    </button>
-
-                    <button type="button" onclick="quickFill('admin@sapabk.sch.id', 'password')"
-                            class="w-full flex items-center justify-between bg-white/10 hover:bg-white/20 backdrop-blur-md p-3 rounded-2xl border border-white/20 text-left transition-all group">
-                        <div class="flex items-center gap-3">
-                            <span class="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center font-bold text-sm">🛠️</span>
-                            <div>
-                                <p class="text-xs font-bold text-white">Admin Demo</p>
-                                <p class="text-[10px] text-emerald-100/80">admin@sapabk.sch.id</p>
-                            </div>
-                        </div>
-                        <span class="text-xs font-bold bg-white text-[#059669] px-3 py-1 rounded-full group-hover:scale-105 transition-transform">Masuk →</span>
-                    </button>
+            <!-- Frame & Ilustrasi Sekolah -->
+            <div class="my-auto py-4 relative z-10 text-center">
+                <div class="p-3 sm:p-4 rounded-3xl bg-white/10 dark:bg-slate-900/60 backdrop-blur-sm border border-white/20 dark:border-emerald-800/40 shadow-xl max-w-xs sm:max-w-sm mx-auto">
+                    <img src="/images/school_login_hero.png"
+                         alt="Ilustrasi SAPA BK SMAN 4 Jember"
+                         class="w-full object-contain rounded-2xl drop-shadow-md hover:scale-105 transition-transform duration-500">
                 </div>
             </div>
 
-            <p class="text-[11px] text-emerald-200/80 relative z-10 pt-6 border-t border-white/20">
-                &copy; {{ date('Y') }} SAPA BK — SMA Negeri 4 Jember.
-            </p>
+            <!-- Headline Hero Bawah -->
+            <div class="relative z-10 text-center pt-4">
+                <h2 class="font-sora font-extrabold text-2xl sm:text-3xl text-white dark:text-emerald-100 leading-tight">
+                    Wujudkan Potensi Diri.
+                </h2>
+                <p class="text-xs sm:text-sm text-emerald-100/90 dark:text-slate-300 mt-2 max-w-sm mx-auto leading-relaxed">
+                    Ruang aman digital bimbingan konseling, pendampingan minat bakat, & karir SMAN 4 Jember.
+                </p>
+            </div>
         </div>
 
-        <!-- Kanan — Form Login -->
-        <div class="flex flex-col justify-center px-6 sm:px-10 lg:px-12 py-10 sm:py-12"
-             style="background: var(--bg-card);">
-            <div class="max-w-md w-full mx-auto">
-                <div class="mb-8 text-center">
-                    <span class="pill-badge mb-3">Portal Masuk Pengguna</span>
-                    <h1 class="font-sora font-extrabold text-2xl mb-1" style="color: var(--text-primary);">Masuk ke Akun</h1>
-                    <p class="text-xs" style="color: var(--text-body);">Masukkan email dan password terdaftar Anda</p>
+        <!-- KANAN — Form Login & Quick Roles -->
+        <div class="lg:col-span-6 p-8 sm:p-12 flex flex-col justify-center bg-white dark:bg-slate-900 relative">
+            <div class="max-w-sm w-full mx-auto">
+                
+                <!-- Icon Emblem Top Header -->
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 dark:bg-emerald-950/80 text-[#059669] dark:text-emerald-400 flex items-center justify-center mx-auto mb-4 border border-emerald-500/20 dark:border-emerald-800/60 shadow-sm">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                    </svg>
                 </div>
 
+                <!-- Judul & Subtitle Login -->
+                <h1 class="font-sora font-bold text-2xl text-center text-slate-900 dark:text-white">
+                    Masuk ke Akun Anda
+                </h1>
+                <p class="text-xs text-slate-500 dark:text-slate-400 text-center mt-1 mb-6">
+                    Akses portal layanan Bimbingan & Konseling SMAN 4 Jember
+                </p>
+
+                <!-- Status Flash Messages -->
                 @if (session('status'))
-                    <div class="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-700">
+                    <div class="mb-4 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-700 dark:text-emerald-300">
                         {{ session('status') }}
                     </div>
                 @endif
                 @if (session('success'))
-                    <div class="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-700">
+                    <div class="mb-4 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-700 dark:text-emerald-300">
                         {{ session('success') }}
                     </div>
                 @endif
 
+                <!-- Quick Login Selector -->
+                <div class="mb-5 space-y-2">
+                    <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider text-center mb-2">
+                        ⚡ Quick Fill Akun Demo:
+                    </p>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button type="button" onclick="quickFill('siswa@sapabk.sch.id', 'password')"
+                                class="px-2.5 py-2 rounded-xl border border-emerald-200/80 dark:border-slate-700/80 bg-emerald-50/70 dark:bg-slate-800/90 hover:bg-emerald-100 dark:hover:bg-slate-700 text-[#047857] dark:text-emerald-400 font-semibold text-[11px] transition-all flex items-center justify-center gap-1.5 shadow-sm">
+                            <span>🎓</span> Siswa
+                        </button>
+                        <button type="button" onclick="quickFill('gurubk@sapabk.sch.id', 'password')"
+                                class="px-2.5 py-2 rounded-xl border border-emerald-200/80 dark:border-slate-700/80 bg-emerald-50/70 dark:bg-slate-800/90 hover:bg-emerald-100 dark:hover:bg-slate-700 text-[#047857] dark:text-emerald-400 font-semibold text-[11px] transition-all flex items-center justify-center gap-1.5 shadow-sm">
+                            <span>👨‍🏫</span> Guru BK
+                        </button>
+                        <button type="button" onclick="quickFill('admin@sapabk.sch.id', 'password')"
+                                class="px-2.5 py-2 rounded-xl border border-emerald-200/80 dark:border-slate-700/80 bg-emerald-50/70 dark:bg-slate-800/90 hover:bg-emerald-100 dark:hover:bg-slate-700 text-[#047857] dark:text-emerald-400 font-semibold text-[11px] transition-all flex items-center justify-center gap-1.5 shadow-sm">
+                            <span>🛠️</span> Admin
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pembatas Garis (Divider) -->
+                <div class="relative flex py-2 items-center mb-5">
+                    <div class="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
+                    <span class="flex-shrink mx-3 text-[10px] text-slate-400 dark:text-slate-500 font-semibold uppercase tracking-wider">atau Masuk Email</span>
+                    <div class="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
+                </div>
+
+                <!-- Form Login -->
                 <form method="POST" action="{{ route('login.post') }}" id="login-form" class="space-y-4">
                     @csrf
 
-                    <!-- Email -->
+                    <!-- Email Input -->
                     <div>
-                        <label for="email" class="block text-xs font-bold mb-1.5 uppercase tracking-wide" style="color: var(--text-primary);">Email</label>
+                        <label for="email" class="block text-xs font-bold mb-1.5 uppercase tracking-wide text-slate-700 dark:text-slate-300">
+                            Email Sekolah / Terdaftar
+                        </label>
                         <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="email"
-                               class="form-input @error('email') border-red-400 @enderror"
-                               placeholder="nama@email.com">
+                               class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 text-xs sm:text-sm text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition-all @error('email') border-red-400 @enderror"
+                               placeholder="nama@sapabk.sch.id">
                         @error('email')
-                            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                            <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <!-- Password -->
+                    <!-- Password Input -->
                     <div>
                         <div class="flex justify-between items-center mb-1.5">
-                            <label for="password" class="block text-xs font-bold uppercase tracking-wide" style="color: var(--text-primary);">Password</label>
-                            <a href="{{ route('password.request') }}" class="text-xs text-[#059669] hover:underline font-semibold">Lupa password?</a>
+                            <label for="password" class="block text-xs font-bold uppercase tracking-wide text-slate-700 dark:text-slate-300">
+                                Password
+                            </label>
                         </div>
                         <div class="relative">
                             <input id="password" type="password" name="password" required autocomplete="current-password"
-                                   class="form-input pr-10 @error('password') border-red-400 @enderror"
+                                   class="w-full px-4 py-3 pr-10 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 text-xs sm:text-sm text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition-all @error('password') border-red-400 @enderror"
                                    placeholder="••••••••">
                             <button type="button" id="toggle-password"
-                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-[#475569] hover:text-[#059669]">
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#059669] dark:hover:text-emerald-400 p-1">
                                 <svg id="eye-icon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -129,37 +138,37 @@
                             </button>
                         </div>
                         @error('password')
-                            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                            <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <!-- Remember -->
-                    <div class="flex items-center gap-2 pt-1">
-                        <input id="remember" type="checkbox" name="remember" class="rounded border-[#E2E8F0] text-[#059669] focus:ring-[#059669]">
-                        <label for="remember" class="text-xs" style="color: var(--text-body);">Ingat saya di perangkat ini</label>
+                    <!-- Remember & Forgot Password Grid -->
+                    <div class="flex items-center justify-between text-xs pt-1">
+                        <label for="remember" class="flex items-center gap-2 cursor-pointer text-slate-600 dark:text-slate-300">
+                            <input id="remember" type="checkbox" name="remember" class="rounded border-slate-300 dark:border-slate-600 text-[#059669] focus:ring-[#059669]">
+                            <span>Ingat Saya</span>
+                        </label>
+                        <a href="{{ route('password.request') }}" class="text-[#059669] dark:text-emerald-400 font-bold hover:underline">
+                            Lupa Password?
+                        </a>
                     </div>
 
-                    <button type="submit" class="btn-primary w-full justify-center py-3.5 text-sm">
+                    <!-- Tombol Utama Submit -->
+                    <button type="submit" class="w-full btn-primary justify-center py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-emerald-600/25 mt-2">
                         Masuk ke Akun
                     </button>
                 </form>
 
-                <!-- Mobile Quick Login (If on small screens) -->
-                <div class="mt-8 pt-6 border-t lg:hidden" style="border-color: var(--border-color);">
-                    <p class="text-xs font-bold text-center mb-3" style="color: var(--text-muted);">Quick Login Akun Demo:</p>
-                    <div class="grid grid-cols-3 gap-2">
-                        <button type="button" onclick="quickFill('siswa@sapabk.sch.id', 'password')" class="btn-secondary text-[10px] px-2 py-2">Siswa</button>
-                        <button type="button" onclick="quickFill('gurubk@sapabk.sch.id', 'password')" class="btn-secondary text-[10px] px-2 py-2">Guru BK</button>
-                        <button type="button" onclick="quickFill('admin@sapabk.sch.id', 'password')" class="btn-secondary text-[10px] px-2 py-2">Admin</button>
-                    </div>
-                </div>
-
-                <p class="text-center mt-6 text-xs" style="color: var(--text-body);">
-                    Belum punya akun?
-                    <a href="{{ route('register') }}" class="text-[#059669] font-bold hover:underline">Daftar akun baru</a>
+                <!-- Link Registrasi Bawah -->
+                <p class="text-center mt-6 text-xs text-slate-500 dark:text-slate-400">
+                    Belum Memiliki Akun Siswa?
+                    <a href="{{ route('register') }}" class="text-[#059669] dark:text-emerald-400 font-bold hover:underline ml-1">
+                        Daftar Akun Baru
+                    </a>
                 </p>
             </div>
         </div>
+
     </div>
 </div>
 @endsection
@@ -185,4 +194,3 @@
     }
 </script>
 @endpush
-

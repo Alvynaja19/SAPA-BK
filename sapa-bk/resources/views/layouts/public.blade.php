@@ -37,7 +37,7 @@
                     </div>
                     <div>
                         <span id="logo-text" class="font-sora font-extrabold text-base sm:text-lg leading-none tracking-tight block transition-colors text-slate-900 dark:text-white">SAPA BK</span>
-                        <span id="logo-subtext" class="text-[10px] sm:text-[11px] font-bold leading-tight block mt-0.5 transition-colors text-[#059669]">SMAN 4 JEMBER</span>
+                        <span id="logo-subtext" class="text-[10px] sm:text-[11px] font-bold leading-tight block mt-0.5 transition-colors text-[#059669] dark:text-emerald-400">SMAN 4 JEMBER</span>
                     </div>
                 </a>
 
@@ -45,27 +45,27 @@
                 <nav class="hidden lg:flex items-center gap-2 mx-auto">
                     <a href="{{ route('home') }}"
                        class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 nav-link
-                              {{ request()->routeIs('home') ? 'bg-[#059669] text-white' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+                              {{ request()->routeIs('home') ? 'bg-[#059669] text-white shadow-sm' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                         Beranda
                     </a>
                     <a href="{{ route('tentang') }}"
                        class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 nav-link
-                              {{ request()->routeIs('tentang') ? 'bg-[#059669] text-white' : 'hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+                              {{ request()->routeIs('tentang') ? 'bg-[#059669] text-white shadow-sm' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                         Tentang BK
                     </a>
                     <a href="{{ route('ebook.public') }}"
                        class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 nav-link
-                              {{ request()->routeIs('ebook.public') ? 'bg-[#059669] text-white' : 'hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+                              {{ request()->routeIs('ebook.public') ? 'bg-[#059669] text-white shadow-sm' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                         E-Book
                     </a>
                     <a href="{{ route('artikel.list') }}"
                        class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 nav-link
-                              {{ request()->routeIs('artikel.*') ? 'bg-[#059669] text-white' : 'hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+                              {{ request()->routeIs('artikel.*') ? 'bg-[#059669] text-white shadow-sm' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                         Artikel
                     </a>
                     <a href="{{ route('faq') }}"
                        class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 nav-link
-                              {{ request()->routeIs('faq') ? 'bg-[#059669] text-white' : 'hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+                              {{ request()->routeIs('faq') ? 'bg-[#059669] text-white shadow-sm' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                         FAQ
                     </a>
                 </nav>
@@ -170,11 +170,12 @@
     @endif
 
     <!-- ===== MAIN CONTENT ===== -->
-    <main class="{{ request()->routeIs('home') ? '' : 'pt-24' }}">
+    <main>
         @yield('content')
     </main>
 
     <!-- ===== FOOTER ===== -->
+    @unless(request()->routeIs('login', 'register', 'password.*'))
     <footer class="bg-[#042F2E] text-white pt-12 pb-10 relative overflow-hidden">
         <!-- Floating Backdrop Light -->
         <div class="absolute top-12 right-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-[#059669]/10 rounded-full filter blur-3xl pointer-events-none"></div>
@@ -234,6 +235,7 @@
             </div>
         </div>
     </footer>
+    @endunless
 
     <!-- ===== CHAT WIDGET (Floating Trigger) ===== -->
     @yield('chat-widget')

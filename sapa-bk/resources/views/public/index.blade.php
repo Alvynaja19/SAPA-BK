@@ -454,7 +454,7 @@
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
                     Informasi & Edukasi BK
                 </span>
-                <h2 class="font-sora text-3xl sm:text-4xl font-extrabold tracking-tight" style="color: var(--text-primary, #0F172A);">
+                <h2 class="font-sora text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                     Artikel & Berita Terbaru
                 </h2>
                 <div class="section-accent-bar"></div>
@@ -495,13 +495,13 @@
                 </div>
                 <!-- Content -->
                 <div class="p-6 sm:p-8">
-                    <h3 class="font-sora font-bold text-xl sm:text-2xl mb-3 group-hover:text-[#059669] transition-colors line-clamp-2 leading-tight" style="color: var(--text-primary, #0F172A);">
+                    <h3 class="font-sora font-bold text-xl sm:text-2xl mb-3 group-hover:text-[#059669] dark:group-hover:text-emerald-400 transition-colors line-clamp-2 leading-tight text-slate-900 dark:text-white">
                         {{ $articles->first()->title }}
                     </h3>
-                    <p class="text-sm leading-relaxed line-clamp-3 mb-5" style="color: var(--text-body, #475569);">
+                    <p class="text-sm leading-relaxed line-clamp-3 mb-5 text-slate-600 dark:text-slate-300">
                         {{ Str::limit(strip_tags($articles->first()->content), 160) }}
                     </p>
-                    <span class="inline-flex items-center gap-2 text-sm font-bold text-[#059669] group-hover:gap-3 transition-all">
+                    <span class="inline-flex items-center gap-2 text-sm font-bold text-[#059669] dark:text-emerald-400 group-hover:gap-3 transition-all">
                         Baca Selengkapnya
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </span>
@@ -523,18 +523,18 @@
                         <!-- Content -->
                         <div class="p-5 flex flex-col justify-between flex-1">
                             <div>
-                                <p class="text-xs mb-2" style="color: var(--text-body, #475569);">
-                                    <svg class="w-3 h-3 inline mr-1 mb-0.5 text-[#059669]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                <p class="text-xs mb-2 text-slate-500 dark:text-slate-400">
+                                    <svg class="w-3 h-3 inline mr-1 mb-0.5 text-[#059669] dark:text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                                     {{ $article->created_at->translatedFormat('d M Y') }}
                                 </p>
-                                <h3 class="font-sora font-bold text-base mb-2 group-hover:text-[#059669] transition-colors line-clamp-2" style="color: var(--text-primary, #0F172A);">
+                                <h3 class="font-sora font-bold text-base mb-2 group-hover:text-[#059669] dark:group-hover:text-emerald-400 transition-colors line-clamp-2 text-slate-900 dark:text-white">
                                     {{ $article->title }}
                                 </h3>
-                                <p class="text-xs leading-relaxed line-clamp-2" style="color: var(--text-body, #475569);">
+                                <p class="text-xs leading-relaxed line-clamp-2 text-slate-600 dark:text-slate-300">
                                     {{ Str::limit(strip_tags($article->content), 90) }}
                                 </p>
                             </div>
-                            <span class="text-xs font-bold text-[#059669] inline-flex items-center gap-1 mt-3 group-hover:translate-x-1 transition-transform">
+                            <span class="text-xs font-bold text-[#059669] dark:text-emerald-400 inline-flex items-center gap-1 mt-3 group-hover:translate-x-1 transition-transform">
                                 Baca →
                             </span>
                         </div>
@@ -554,8 +554,8 @@
                 </div>
                 <div class="p-5">
                     <p class="text-xs mb-2 text-slate-400">{{ $article->created_at->translatedFormat('d F Y') }}</p>
-                    <h3 class="font-sora font-bold text-lg mb-2 group-hover:text-[#059669] transition-colors line-clamp-2" style="color: var(--text-primary, #0F172A);">{{ $article->title }}</h3>
-                    <p class="text-sm line-clamp-2" style="color: var(--text-body, #475569);">{{ Str::limit(strip_tags($article->content), 100) }}</p>
+                    <h3 class="font-sora font-bold text-lg mb-2 group-hover:text-[#059669] dark:group-hover:text-emerald-400 transition-colors line-clamp-2 text-slate-900 dark:text-white">{{ $article->title }}</h3>
+                    <p class="text-sm line-clamp-2 text-slate-600 dark:text-slate-300">{{ Str::limit(strip_tags($article->content), 100) }}</p>
                 </div>
             </a>
             @endforeach
@@ -571,7 +571,7 @@
 
 
 {{-- ===== 4. LAYANAN UNGGULAN (mirip "PRESTASI MAHASISWA" UAD → di-adaptasi ke fitur BK) ===== --}}
-<section class="py-20 bg-[#F8FAFC] dark:bg-slate-800 border-y border-slate-200/70 dark:border-slate-700/50" id="layanan-unggulan">
+<section class="py-20 bg-[#F8FAFC] dark:bg-slate-950/80 border-y border-slate-200/70 dark:border-slate-800" id="layanan-unggulan">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Header -->
@@ -580,11 +580,11 @@
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
                 Keunggulan Platform
             </span>
-            <h2 class="font-sora text-3xl sm:text-4xl font-extrabold tracking-tight mt-1" style="color: var(--text-primary, #0F172A);">
+            <h2 class="font-sora text-3xl sm:text-4xl font-extrabold tracking-tight mt-1 text-slate-900 dark:text-white">
                 Layanan Digital BK Lengkap
             </h2>
             <div class="section-accent-bar mx-auto"></div>
-            <p class="text-base leading-relaxed" style="color: var(--text-body, #475569);">
+            <p class="text-base leading-relaxed text-slate-600 dark:text-slate-300">
                 Dirancang khusus untuk mendampingi siswa SMAN 4 Jember dalam setiap tahap perkembangan akademik dan personal.
             </p>
         </div>
@@ -594,76 +594,76 @@
 
             <!-- Card 1: AI Chatbot -->
             <div id="layanan-chatbot" class="pillar-card group flex flex-col h-full">
-                <div class="w-14 h-14 rounded-2xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-[#059669] group-hover:text-white transition-all duration-300">
+                <div class="w-14 h-14 rounded-2xl bg-[#ECFDF5] dark:bg-emerald-950/80 text-[#059669] dark:text-emerald-400 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-[#059669] group-hover:text-white transition-all duration-300">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
                 </div>
                 <div>
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-[#059669] bg-[#ECFDF5] px-2.5 py-1 rounded-full mb-4 inline-block">AI Powered</span>
-                    <h3 class="font-sora font-bold text-lg mb-3 group-hover:text-[#059669] transition-colors" style="color: var(--text-primary, #0F172A);">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-[#059669] dark:text-emerald-300 bg-[#ECFDF5] dark:bg-emerald-950/80 dark:border dark:border-emerald-800/50 px-2.5 py-1 rounded-full mb-4 inline-block">AI Powered</span>
+                    <h3 class="font-sora font-bold text-lg mb-3 group-hover:text-[#059669] dark:group-hover:text-emerald-400 transition-colors text-slate-900 dark:text-white">
                         Asisten Chatbot AI BK
                     </h3>
-                    <p class="text-sm leading-relaxed mb-5" style="color: var(--text-body, #475569);">
+                    <p class="text-sm leading-relaxed mb-5 text-slate-600 dark:text-slate-300">
                         Konsultasikan keluh kesah, tips belajar, atau info jurusan 24/7 dan dapatkan jawaban instan dari AI yang terlatih khusus pedoman BK.
                     </p>
                 </div>
-                <a href="{{ auth()->check() ? route('student.chat') : route('login') }}" class="inline-flex items-center text-sm font-bold text-[#059669] gap-1 group-hover:gap-2 transition-all mt-auto pt-2">
+                <a href="{{ auth()->check() ? route('student.chat') : route('login') }}" class="inline-flex items-center text-sm font-bold text-[#059669] dark:text-emerald-400 gap-1 group-hover:gap-2 transition-all mt-auto pt-2">
                     Mulai Chat <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </a>
             </div>
 
             <!-- Card 2: E-Book -->
             <div id="layanan-ebook" class="pillar-card group flex flex-col h-full">
-                <div class="w-14 h-14 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-teal-600 group-hover:text-white transition-all duration-300">
+                <div class="w-14 h-14 rounded-2xl bg-teal-50 dark:bg-teal-950/80 text-teal-600 dark:text-teal-400 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-teal-600 group-hover:text-white transition-all duration-300">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                 </div>
                 <div>
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-teal-600 bg-teal-50 px-2.5 py-1 rounded-full mb-4 inline-block">Pustaka Digital</span>
-                    <h3 class="font-sora font-bold text-lg mb-3 group-hover:text-[#059669] transition-colors" style="color: var(--text-primary, #0F172A);">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-teal-600 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/80 dark:border dark:border-teal-800/50 px-2.5 py-1 rounded-full mb-4 inline-block">Pustaka Digital</span>
+                    <h3 class="font-sora font-bold text-lg mb-3 group-hover:text-[#059669] dark:group-hover:text-emerald-400 transition-colors text-slate-900 dark:text-white">
                         Perpustakaan E-Book
                     </h3>
-                    <p class="text-sm leading-relaxed mb-5" style="color: var(--text-body, #475569);">
+                    <p class="text-sm leading-relaxed mb-5 text-slate-600 dark:text-slate-300">
                         Akses gratis modul bimbingan karir, buku kesehatan mental remaja, serta strategi sukses menembus PTN impian kapan saja.
                     </p>
                 </div>
-                <a href="{{ route('ebook.public') }}" class="inline-flex items-center text-sm font-bold text-teal-600 gap-1 group-hover:gap-2 transition-all mt-auto pt-2">
+                <a href="{{ route('ebook.public') }}" class="inline-flex items-center text-sm font-bold text-teal-600 dark:text-teal-400 gap-1 group-hover:gap-2 transition-all mt-auto pt-2">
                     Buka Perpustakaan <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </a>
             </div>
 
             <!-- Card 3: Artikel -->
             <div id="layanan-artikel" class="pillar-card group flex flex-col h-full">
-                <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
+                <div class="w-14 h-14 rounded-2xl bg-emerald-50 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
                 </div>
                 <div>
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full mb-4 inline-block">Edukasi</span>
-                    <h3 class="font-sora font-bold text-lg mb-3 group-hover:text-[#059669] transition-colors" style="color: var(--text-primary, #0F172A);">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/80 dark:border dark:border-emerald-800/50 px-2.5 py-1 rounded-full mb-4 inline-block">Edukasi</span>
+                    <h3 class="font-sora font-bold text-lg mb-3 group-hover:text-[#059669] dark:group-hover:text-emerald-400 transition-colors text-slate-900 dark:text-white">
                         Artikel & Edukasi BK
                     </h3>
-                    <p class="text-sm leading-relaxed mb-5" style="color: var(--text-body, #475569);">
+                    <p class="text-sm leading-relaxed mb-5 text-slate-600 dark:text-slate-300">
                         Kumpulan artikel inspiratif dari Guru BK profesional mengenai manajemen stres, efektivitas belajar, dan pengembangan karir.
                     </p>
                 </div>
-                <a href="{{ route('artikel.list') }}" class="inline-flex items-center text-sm font-bold text-emerald-600 gap-1 group-hover:gap-2 transition-all mt-auto pt-2">
+                <a href="{{ route('artikel.list') }}" class="inline-flex items-center text-sm font-bold text-emerald-600 dark:text-emerald-400 gap-1 group-hover:gap-2 transition-all mt-auto pt-2">
                     Baca Artikel <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </a>
             </div>
 
             <!-- Card 4: Tes Minat Bakat -->
             <div id="layanan-tes" class="pillar-card group flex flex-col h-full">
-                <div class="w-14 h-14 rounded-2xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-[#059669] group-hover:text-white transition-all duration-300">
+                <div class="w-14 h-14 rounded-2xl bg-[#ECFDF5] dark:bg-emerald-950/80 text-[#059669] dark:text-emerald-400 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-[#059669] group-hover:text-white transition-all duration-300">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
                 </div>
                 <div>
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-[#059669] bg-[#ECFDF5] px-2.5 py-1 rounded-full mb-4 inline-block">Self-Assessment</span>
-                    <h3 class="font-sora font-bold text-lg mb-3 group-hover:text-[#059669] transition-colors" style="color: var(--text-primary, #0F172A);">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-[#059669] dark:text-emerald-300 bg-[#ECFDF5] dark:bg-emerald-950/80 dark:border dark:border-emerald-800/50 px-2.5 py-1 rounded-full mb-4 inline-block">Self-Assessment</span>
+                    <h3 class="font-sora font-bold text-lg mb-3 group-hover:text-[#059669] dark:group-hover:text-emerald-400 transition-colors text-slate-900 dark:text-white">
                         Tes Minat & Bakat
                     </h3>
-                    <p class="text-sm leading-relaxed mb-5" style="color: var(--text-body, #475569);">
+                    <p class="text-sm leading-relaxed mb-5 text-slate-600 dark:text-slate-300">
                         Evaluasi kepribadian dan rekomendasi jurusan yang disesuaikan dengan profil bakat & potensi unik setiap siswa SMAN 4 Jember.
                     </p>
                 </div>
-                <a href="{{ auth()->check() ? route('student.tes') : route('login') }}" class="inline-flex items-center text-sm font-bold text-[#059669] gap-1 group-hover:gap-2 transition-all mt-auto pt-2">
+                <a href="{{ auth()->check() ? route('student.tes') : route('login') }}" class="inline-flex items-center text-sm font-bold text-[#059669] dark:text-emerald-400 gap-1 group-hover:gap-2 transition-all mt-auto pt-2">
                     Ikuti Tes <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </a>
             </div>
@@ -685,7 +685,7 @@
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                     Pustaka Digital
                 </span>
-                <h2 class="font-sora text-3xl sm:text-4xl font-extrabold tracking-tight" style="color: var(--text-primary, #0F172A);">
+                <h2 class="font-sora text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                     E-Book BK Pilihan
                 </h2>
                 <div class="section-accent-bar"></div>
@@ -713,15 +713,15 @@
                 <!-- Content -->
                 <div class="p-5 flex flex-col flex-1 justify-between">
                     <div>
-                        <h3 class="font-sora font-bold text-sm mb-2 group-hover:text-[#059669] transition-colors line-clamp-2" style="color: var(--text-primary, #0F172A);">
+                        <h3 class="font-sora font-bold text-sm mb-2 group-hover:text-[#059669] dark:group-hover:text-emerald-400 transition-colors line-clamp-2 text-slate-900 dark:text-white">
                             {{ $ebook->title }}
                         </h3>
-                        <p class="text-xs leading-relaxed line-clamp-2 mb-4" style="color: var(--text-body, #475569);">
+                        <p class="text-xs leading-relaxed line-clamp-2 mb-4 text-slate-600 dark:text-slate-300">
                             {{ $ebook->description }}
                         </p>
                     </div>
                     <div class="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-700">
-                        <span class="text-[10px] font-bold text-[#059669] bg-[#ECFDF5] dark:bg-emerald-900/30 px-2.5 py-1 rounded-full">Akses Gratis</span>
+                        <span class="text-[10px] font-bold text-[#059669] dark:text-emerald-300 bg-[#ECFDF5] dark:bg-emerald-950/80 dark:border dark:border-emerald-800/40 px-2.5 py-1 rounded-full">Akses Gratis</span>
                         @auth
                             <a href="{{ route('student.ebook') }}" class="btn-primary text-[10px] px-3.5 py-1.5">Baca</a>
                         @else
@@ -738,12 +738,18 @@
         </div>
     </div>
 </section>
+
+        <div class="text-center mt-8 sm:hidden">
+            <a href="{{ route('ebook.public') }}" class="btn-secondary text-sm w-full justify-center">Lihat Semua E-Book →</a>
+        </div>
+    </div>
+</section>
 @endif
 
 
 {{-- ===== 6. PENGUMUMAN & FAQ (mirip "PENGUMUMAN" UAD) ===== --}}
 @if($faqs->isNotEmpty())
-<section class="py-20 bg-[#F8FAFC] dark:bg-slate-800 border-t border-slate-200/70 dark:border-slate-700/50" id="pengumuman">
+<section class="py-20 bg-[#F8FAFC] dark:bg-slate-950/80 border-t border-slate-200/70 dark:border-slate-800" id="pengumuman">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
@@ -754,23 +760,23 @@
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     Pertanyaan Umum
                 </span>
-                <h2 class="font-sora text-3xl sm:text-4xl font-extrabold tracking-tight" style="color: var(--text-primary, #0F172A);">
+                <h2 class="font-sora text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                     Pengumuman & FAQ
                 </h2>
                 <div class="section-accent-bar"></div>
-                <p class="text-sm leading-relaxed mb-8" style="color: var(--text-body, #475569);">
+                <p class="text-sm leading-relaxed mb-8 text-slate-600 dark:text-slate-300">
                     Temukan jawaban atas pertanyaan umum seputar layanan SAPA BK SMAN 4 Jember.
                 </p>
 
                 <!-- FAQ Accordion -->
                 <div class="space-y-3" id="faq-list">
                     @foreach($faqs as $i => $faq)
-                    <div class="bg-white dark:bg-slate-700/50 rounded-2xl overflow-hidden border border-slate-200/80 dark:border-slate-600/50 transition-all"
+                    <div class="bg-white dark:bg-slate-800/90 rounded-2xl overflow-hidden border border-slate-200/80 dark:border-slate-700/60 transition-all"
                          x-data="{ open: {{ $i === 0 ? 'true' : 'false' }} }">
                         <button @click="open = !open" id="faq-btn-{{ $i+1 }}"
-                                class="w-full flex items-center justify-between p-5 text-left hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors gap-4">
-                            <span class="font-sora font-bold text-sm" style="color: var(--text-primary, #0F172A);">{{ $faq->question }}</span>
-                            <div class="w-8 h-8 rounded-full bg-[#ECFDF5] text-[#059669] flex items-center justify-center shrink-0 transition-transform duration-300 dark:bg-emerald-900/30"
+                                class="w-full flex items-center justify-between p-5 text-left hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-colors gap-4">
+                            <span class="font-sora font-bold text-sm text-slate-900 dark:text-white">{{ $faq->question }}</span>
+                            <div class="w-8 h-8 rounded-full bg-[#ECFDF5] text-[#059669] flex items-center justify-center shrink-0 transition-transform duration-300 dark:bg-emerald-950/80 dark:text-emerald-400"
                                  :class="{ 'rotate-180 bg-[#059669] text-white dark:bg-[#059669]': open }">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
@@ -778,7 +784,7 @@
                             </div>
                         </button>
                         <div x-show="open" x-collapse
-                             class="px-5 pb-5 text-sm leading-relaxed border-t border-slate-100 dark:border-slate-600/40 pt-4" style="color: var(--text-body, #475569);">
+                             class="px-5 pb-5 text-sm leading-relaxed border-t border-slate-100 dark:border-slate-700/60 pt-4 text-slate-600 dark:text-slate-300">
                             {{ $faq->answer }}
                         </div>
                     </div>
@@ -798,7 +804,7 @@
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                     Alur Konsultasi
                 </span>
-                <h2 class="font-sora text-2xl sm:text-3xl font-extrabold tracking-tight mb-2" style="color: var(--text-primary, #0F172A);">
+                <h2 class="font-sora text-2xl sm:text-3xl font-extrabold tracking-tight mb-2 text-slate-900 dark:text-white">
                     3 Langkah Mudah
                 </h2>
                 <div class="section-accent-bar"></div>
@@ -809,33 +815,20 @@
                         ['step' => '02', 'title' => 'Pilih Layanan BK', 'desc' => 'Chat dengan Asisten AI, baca e-book, ikuti tes minat bakat, atau ajukan pertanyaan langsung ke Guru BK.', 'color' => '#0891b2'],
                         ['step' => '03', 'title' => 'Dapatkan Solusi & Panduan', 'desc' => 'Terima rekomendasi solusi, akses materi relevan, dan pendampingan berkelanjutan dari Guru BK profesional.', 'color' => '#047857'],
                     ] as $step)
-                    <div class="bg-white dark:bg-slate-700/50 rounded-2xl p-5 border border-slate-200/80 dark:border-slate-600/50 flex gap-4 items-start">
+                    <div class="bg-white dark:bg-slate-800/90 rounded-2xl p-5 border border-slate-200/80 dark:border-slate-700/60 flex gap-4 items-start">
                         <div class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 font-sora font-extrabold text-white text-lg shadow-md"
                              style="background: {{ $step['color'] }}; box-shadow: 0 6px 20px {{ $step['color'] }}30;">
                             {{ $step['step'] }}
                         </div>
                         <div>
-                            <h4 class="font-sora font-bold text-base mb-1" style="color: var(--text-primary, #0F172A);">{{ $step['title'] }}</h4>
-                            <p class="text-xs leading-relaxed" style="color: var(--text-body, #475569);">{{ $step['desc'] }}</p>
+                            <h4 class="font-sora font-bold text-base mb-1 text-slate-900 dark:text-white">{{ $step['title'] }}</h4>
+                            <p class="text-xs leading-relaxed text-slate-600 dark:text-slate-300">{{ $step['desc'] }}</p>
                         </div>
                     </div>
                     @endforeach
                 </div>
 
-                <!-- Quick CTA -->
-                <div class="mt-6 bg-gradient-to-r from-[#042F2E] to-[#059669] rounded-2xl p-5 text-white">
-                    <p class="font-sora font-bold text-base mb-2">Siap Memulai?</p>
-                    <p class="text-emerald-100 text-xs mb-4">Daftar gratis dan mulai konsultasi bersama SAPA BK sekarang juga.</p>
-                    @auth
-                        <a href="{{ route('student.chat') }}" class="inline-flex items-center gap-2 bg-white text-[#047857] font-bold text-sm px-5 py-2.5 rounded-full hover:bg-emerald-50 transition-all">
-                            Mulai Konsultasi →
-                        </a>
-                    @else
-                        <a href="{{ route('register') }}" class="inline-flex items-center gap-2 bg-white text-[#047857] font-bold text-sm px-5 py-2.5 rounded-full hover:bg-emerald-50 transition-all">
-                            Daftar Sekarang →
-                        </a>
-                    @endauth
-                </div>
+
             </div>
 
         </div>
@@ -854,7 +847,7 @@
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                 Kepercayaan
             </span>
-            <h2 class="font-sora text-3xl sm:text-4xl font-extrabold tracking-tight" style="color: var(--text-primary, #0F172A);">
+            <h2 class="font-sora text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                 Mengapa Percaya SAPA BK?
             </h2>
             <div class="section-accent-bar mx-auto"></div>
@@ -872,13 +865,13 @@
             ] as $trust)
             <div class="accreditation-badge text-left gap-0">
                 <div class="flex items-start gap-4 w-full">
-                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0"
+                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 dark:bg-slate-700/80"
                          style="background: {{ $trust['bg'] }};">
                         <svg class="w-6 h-6" style="color: {{ $trust['color'] }};" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $trust['icon'] }}"/></svg>
                     </div>
                     <div>
-                        <h4 class="font-sora font-bold text-sm mb-1" style="color: var(--text-primary, #0F172A);">{{ $trust['title'] }}</h4>
-                        <p class="text-xs leading-relaxed" style="color: var(--text-body, #475569);">{{ $trust['desc'] }}</p>
+                        <h4 class="font-sora font-bold text-sm mb-1 text-slate-900 dark:text-white">{{ $trust['title'] }}</h4>
+                        <p class="text-xs leading-relaxed text-slate-600 dark:text-slate-300">{{ $trust['desc'] }}</p>
                     </div>
                 </div>
             </div>
@@ -886,22 +879,22 @@
         </div>
 
         <!-- Full-width testimonial strip -->
-        <div class="bg-gradient-to-r from-[#ECFDF5] to-[#d1fae5] dark:from-emerald-900/30 dark:to-teal-900/30 rounded-3xl p-8 sm:p-10 border border-emerald-200/60 dark:border-emerald-700/30">
+        <div class="bg-gradient-to-r from-[#ECFDF5] to-[#d1fae5] dark:from-emerald-950/90 dark:to-teal-950/90 rounded-3xl p-8 sm:p-10 border border-emerald-200/60 dark:border-emerald-800/40">
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
                 <div>
-                    <p class="font-sora text-4xl font-extrabold text-[#059669] mb-1">100%</p>
-                    <p class="font-bold text-sm" style="color: var(--text-primary, #0F172A);">Gratis untuk Seluruh Siswa</p>
-                    <p class="text-xs mt-1" style="color: var(--text-body, #475569);">Tidak ada biaya, tidak ada iklan</p>
+                    <p class="font-sora text-4xl font-extrabold text-[#059669] dark:text-emerald-400 mb-1">100%</p>
+                    <p class="font-bold text-sm text-slate-900 dark:text-white">Gratis untuk Seluruh Siswa</p>
+                    <p class="text-xs mt-1 text-slate-600 dark:text-slate-300">Tidak ada biaya, tidak ada iklan</p>
                 </div>
-                <div class="border-x-0 sm:border-x border-emerald-300/50 dark:border-emerald-700/40 px-4">
-                    <p class="font-sora text-4xl font-extrabold text-[#059669] mb-1">4 BK</p>
-                    <p class="font-bold text-sm" style="color: var(--text-primary, #0F172A);">Guru BK Berlisensi</p>
-                    <p class="text-xs mt-1" style="color: var(--text-body, #475569);">Pendampingan professional tersertifikasi</p>
+                <div class="border-x-0 sm:border-x border-emerald-300/50 dark:border-emerald-800/60 px-4">
+                    <p class="font-sora text-4xl font-extrabold text-[#059669] dark:text-emerald-400 mb-1">4 BK</p>
+                    <p class="font-bold text-sm text-slate-900 dark:text-white">Guru BK Berlisensi</p>
+                    <p class="text-xs mt-1 text-slate-600 dark:text-slate-300">Pendampingan professional tersertifikasi</p>
                 </div>
                 <div>
-                    <p class="font-sora text-4xl font-extrabold text-[#059669] mb-1">AI</p>
-                    <p class="font-bold text-sm" style="color: var(--text-primary, #0F172A);">Powered by Teknologi Terkini</p>
-                    <p class="text-xs mt-1" style="color: var(--text-body, #475569);">Asisten cerdas berbasis model bahasa besar</p>
+                    <p class="font-sora text-4xl font-extrabold text-[#059669] dark:text-emerald-400 mb-1">AI</p>
+                    <p class="font-bold text-sm text-slate-900 dark:text-white">Powered by Teknologi Terkini</p>
+                    <p class="text-xs mt-1 text-slate-600 dark:text-slate-300">Asisten cerdas berbasis model bahasa besar</p>
                 </div>
             </div>
         </div>
@@ -911,7 +904,7 @@
 
 
 {{-- ===== 8. TEMUKAN KAMI / KONTAK (mirip "TEMUKAN KAMI" UAD) ===== --}}
-<section class="py-20 bg-[#F8FAFC] dark:bg-slate-800 border-t border-slate-200/70 dark:border-slate-700/50" id="temukan-kami">
+<section class="py-20 bg-[#F8FAFC] dark:bg-slate-950/80 border-t border-slate-200/70 dark:border-slate-800" id="temukan-kami">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Header -->
@@ -920,11 +913,11 @@
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 Temukan Kami
             </span>
-            <h2 class="font-sora text-3xl sm:text-4xl font-extrabold tracking-tight" style="color: var(--text-primary, #0F172A);">
+            <h2 class="font-sora text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                 Lokasi & Informasi Kontak
             </h2>
             <div class="section-accent-bar mx-auto"></div>
-            <p class="text-sm" style="color: var(--text-body, #475569);">Temukan kami di SMAN 4 Jember atau hubungi melalui platform digital berikut.</p>
+            <p class="text-sm text-slate-600 dark:text-slate-300">Temukan kami di SMAN 4 Jember atau hubungi melalui platform digital berikut.</p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -943,13 +936,13 @@
                 </div>
                 <!-- Address Below Map -->
                 <div class="p-5 sm:p-6 flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center shrink-0">
+                    <div class="w-10 h-10 rounded-xl bg-[#ECFDF5] dark:bg-emerald-950/80 text-[#059669] dark:text-emerald-400 flex items-center justify-center shrink-0">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                     </div>
                     <div>
-                        <p class="font-sora font-bold text-sm" style="color: var(--text-primary, #0F172A);">SMA Negeri 4 Jember</p>
-                        <p class="text-xs leading-relaxed mt-1" style="color: var(--text-body, #475569);">Jl. Hayam Wuruk No.9, Kepatihan, Kec. Kaliwates, Kabupaten Jember, Jawa Timur 68131</p>
-                        <a href="https://maps.google.com/?q=SMAN+4+Jember" target="_blank" rel="noopener" class="text-xs font-bold text-[#059669] mt-2 inline-flex items-center gap-1 hover:gap-2 transition-all">
+                        <p class="font-sora font-bold text-sm text-slate-900 dark:text-white">SMA Negeri 4 Jember</p>
+                        <p class="text-xs leading-relaxed mt-1 text-slate-600 dark:text-slate-300">Jl. Hayam Wuruk No.9, Kepatihan, Kec. Kaliwates, Kabupaten Jember, Jawa Timur 68131</p>
+                        <a href="https://maps.google.com/?q=SMAN+4+Jember" target="_blank" rel="noopener" class="text-xs font-bold text-[#059669] dark:text-emerald-400 mt-2 inline-flex items-center gap-1 hover:gap-2 transition-all">
                             Buka di Google Maps →
                         </a>
                     </div>
@@ -961,32 +954,32 @@
 
                 <!-- Hubungi Kami -->
                 <div class="contact-card p-5 sm:p-6">
-                    <h3 class="font-sora font-bold text-base mb-4 flex items-center gap-2" style="color: var(--text-primary, #0F172A);">
-                        <span class="w-7 h-7 rounded-full bg-[#ECFDF5] text-[#059669] flex items-center justify-center">
+                    <h3 class="font-sora font-bold text-base mb-4 flex items-center gap-2 text-slate-900 dark:text-white">
+                        <span class="w-7 h-7 rounded-full bg-[#ECFDF5] dark:bg-emerald-950/80 text-[#059669] dark:text-emerald-400 flex items-center justify-center">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                         </span>
                         Hubungi Kami
                     </h3>
                     <ul class="space-y-3">
                         <li class="flex items-center gap-3">
-                            <svg class="w-4 h-4 text-[#059669] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                            <a href="mailto:bk@sman4jember.sch.id" class="text-sm text-[#059669] hover:underline">bk@sman4jember.sch.id</a>
+                            <svg class="w-4 h-4 text-[#059669] dark:text-emerald-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            <a href="mailto:bk@sman4jember.sch.id" class="text-sm text-[#059669] dark:text-emerald-400 hover:underline">bk@sman4jember.sch.id</a>
                         </li>
                         <li class="flex items-center gap-3">
-                            <svg class="w-4 h-4 text-[#059669] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                            <span class="text-sm" style="color: var(--text-body, #475569);">(0331) 487019</span>
+                            <svg class="w-4 h-4 text-[#059669] dark:text-emerald-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                            <span class="text-sm text-slate-600 dark:text-slate-300">(0331) 487019</span>
                         </li>
                         <li class="flex items-start gap-3">
-                            <svg class="w-4 h-4 text-[#059669] shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                            <span class="text-sm" style="color: var(--text-body, #475569);">Senin–Jumat: 07.00–14.30 WIB<br><span class="text-xs text-[#059669]">*AI Chatbot tersedia 24/7</span></span>
+                            <svg class="w-4 h-4 text-[#059669] dark:text-emerald-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span class="text-sm text-slate-600 dark:text-slate-300">Senin–Jumat: 07.00–14.30 WIB<br><span class="text-xs text-[#059669] dark:text-emerald-400">*AI Chatbot tersedia 24/7</span></span>
                         </li>
                     </ul>
                 </div>
 
                 <!-- Informasi Tentang (Quick Links) -->
                 <div class="contact-card p-5 sm:p-6">
-                    <h3 class="font-sora font-bold text-base mb-4 flex items-center gap-2" style="color: var(--text-primary, #0F172A);">
-                        <span class="w-7 h-7 rounded-full bg-[#ECFDF5] text-[#059669] flex items-center justify-center">
+                    <h3 class="font-sora font-bold text-base mb-4 flex items-center gap-2 text-slate-900 dark:text-white">
+                        <span class="w-7 h-7 rounded-full bg-[#ECFDF5] dark:bg-emerald-950/80 text-[#059669] dark:text-emerald-400 flex items-center justify-center">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </span>
                         Informasi Tentang

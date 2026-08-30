@@ -3,7 +3,7 @@
 @section('title', 'Artikel & Edukasi BK')
 
 @section('content')
-<div class="relative overflow-hidden py-6 sm:py-16 bg-gradient-to-b from-emerald-900/10 via-transparent to-transparent dark:from-emerald-950/20">
+<div class="relative overflow-hidden pt-24 sm:pt-28 pb-10 sm:pb-16 bg-gradient-to-b from-emerald-900/10 via-transparent to-transparent dark:from-emerald-950/20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- ===== HERO HEADER ===== -->
@@ -11,10 +11,10 @@
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 mb-3">
                 <span>📚 Edukasi & Informasi BK SMAN 4 Jember</span>
             </div>
-            <h1 class="font-sora text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-3" style="color: var(--text-primary);">
+            <h1 class="font-sora text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-3 text-slate-900 dark:text-white">
                 Artikel Bimbingan & <span class="bg-clip-text text-transparent bg-gradient-to-r from-[#059669] via-emerald-500 to-teal-400">Konseling</span>
             </h1>
-            <p class="text-xs sm:text-base leading-relaxed px-2 sm:px-0" style="color: var(--text-muted);">
+            <p class="text-xs sm:text-base leading-relaxed px-2 sm:px-0 text-slate-600 dark:text-slate-300">
                 Kumpulan panduan praktis, tips belajar, informasi kesehatan mental, dan persiapan karir untuk siswa SMA.
             </p>
         </div>
@@ -38,8 +38,7 @@
                            value="{{ $searchQuery }}"
                            placeholder="Cari topik artikel..."
                            onfocus="if(this.value){ this.select(); }"
-                           class="w-full pl-10 pr-10 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm"
-                           style="background: var(--bg-surface); border-color: var(--border-color); color: var(--text-primary);">
+                           class="w-full pl-10 pr-10 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white">
                     
                     @if($searchQuery)
                     <a href="{{ route('artikel.list', ['source' => $source, 'category' => $category]) }}"
@@ -55,7 +54,7 @@
                 </button>
             </form>
 
-            <!-- Topic Category Pills (Mobile Swipe + Desktop Center Wrap) -->
+            <!-- Topic Category Pills -->
             <div class="pt-1">
                 <p class="text-center text-[10px] sm:text-xs font-semibold text-slate-400 dark:text-slate-500 mb-2.5 uppercase tracking-wider">Topik Artikel</p>
                 
@@ -88,19 +87,19 @@
                 </div>
             </div>
 
-            <!-- Source Filter Tabs (Mobile Compact Pills) -->
+            <!-- Source Filter Tabs -->
             <div class="flex items-center justify-center flex-wrap gap-1.5 sm:gap-2 pt-4 sm:pt-6 border-t border-slate-200/60 dark:border-slate-800/60 mt-4 sm:mt-6 text-xs">
                 <span class="text-slate-400 font-medium text-[11px] sm:text-xs">Sumber:</span>
                 <a href="{{ route('artikel.list', ['source' => 'all', 'category' => $category, 'q' => $searchQuery]) }}"
-                   class="px-2.5 sm:px-3 py-1 rounded-lg text-[11px] sm:text-xs font-semibold {{ $source === 'all' ? 'bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900' : 'text-slate-500 hover:text-slate-800' }}">
+                   class="px-2.5 sm:px-3 py-1 rounded-lg text-[11px] sm:text-xs font-semibold {{ $source === 'all' ? 'bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900' : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200' }}">
                     Semua
                 </a>
                 <a href="{{ route('artikel.list', ['source' => 'internal', 'category' => $category, 'q' => $searchQuery]) }}"
-                   class="px-2.5 sm:px-3 py-1 rounded-lg text-[11px] sm:text-xs font-semibold {{ $source === 'internal' ? 'bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900' : 'text-slate-500 hover:text-slate-800' }}">
+                   class="px-2.5 sm:px-3 py-1 rounded-lg text-[11px] sm:text-xs font-semibold {{ $source === 'internal' ? 'bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900' : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200' }}">
                     Internal BK ({{ $internalArticles->total() }})
                 </a>
                 <a href="{{ route('artikel.list', ['source' => 'public', 'category' => $category, 'q' => $searchQuery]) }}"
-                   class="px-2.5 sm:px-3 py-1 rounded-lg text-[11px] sm:text-xs font-semibold {{ $source === 'public' ? 'bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900' : 'text-slate-500 hover:text-slate-800' }}">
+                   class="px-2.5 sm:px-3 py-1 rounded-lg text-[11px] sm:text-xs font-semibold {{ $source === 'public' ? 'bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900' : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200' }}">
                     Edukasi Terbuka ({{ $publicArticles['total'] ?? 0 }})
                 </a>
             </div>
@@ -110,7 +109,7 @@
         @if(($source === 'all' || $source === 'internal') && $internalArticles->isNotEmpty())
             <div class="mb-10 sm:mb-12">
                 <div class="flex items-center justify-between mb-4 sm:mb-6">
-                    <h2 class="font-sora font-extrabold text-lg sm:text-2xl flex items-center gap-2" style="color: var(--text-primary);">
+                    <h2 class="font-sora font-extrabold text-lg sm:text-2xl flex items-center gap-2 text-slate-900 dark:text-white">
                         <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#059669]"></span>
                         Artikel SAPA BK SMAN 4 Jember
                     </h2>
@@ -136,19 +135,19 @@
                                 </span>
                             </div>
                             <div class="p-4 sm:p-5">
-                                <h3 class="font-sora font-bold text-sm sm:text-base mb-1.5 sm:mb-2 group-hover:text-[#059669] transition-colors line-clamp-2" style="color: var(--text-primary);">
+                                <h3 class="font-sora font-bold text-sm sm:text-base mb-1.5 sm:mb-2 group-hover:text-[#059669] dark:group-hover:text-emerald-400 transition-colors line-clamp-2 text-slate-900 dark:text-white">
                                     {{ $article->title }}
                                 </h3>
-                                <p class="text-xs sm:text-sm line-clamp-3 mb-3 leading-relaxed" style="color: var(--text-muted);">
+                                <p class="text-xs sm:text-sm line-clamp-3 mb-3 leading-relaxed text-slate-600 dark:text-slate-300">
                                     {{ Str::limit(strip_tags($article->content), 110) }}
                                 </p>
                             </div>
                         </div>
                         <div class="px-4 sm:px-5 pb-4 sm:pb-5 pt-0 flex items-center justify-between border-t border-slate-100 dark:border-slate-800/60 mt-auto pt-3">
-                            <span class="text-[10px] sm:text-[11px] font-medium" style="color: var(--text-muted);">
+                            <span class="text-[10px] sm:text-[11px] font-medium text-slate-500 dark:text-slate-400">
                                 📅 {{ $article->created_at ? $article->created_at->format('d M Y') : 'Baru' }}
                             </span>
-                            <span class="text-xs font-bold text-[#059669] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                            <span class="text-xs font-bold text-[#059669] dark:text-emerald-400 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
                                 Baca &rarr;
                             </span>
                         </div>
@@ -167,11 +166,11 @@
             <div>
                 <div class="flex items-center justify-between mb-4 sm:mb-6">
                     <div>
-                        <h2 class="font-sora font-extrabold text-lg sm:text-2xl flex items-center gap-2" style="color: var(--text-primary);">
+                        <h2 class="font-sora font-extrabold text-lg sm:text-2xl flex items-center gap-2 text-slate-900 dark:text-white">
                             <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-teal-500"></span>
                             Artikel & Edukasi Bimbingan Konseling
                         </h2>
-                        <p class="text-xs sm:text-sm mt-0.5 sm:mt-1" style="color: var(--text-muted);">
+                        <p class="text-xs sm:text-sm mt-0.5 sm:mt-1 text-slate-600 dark:text-slate-300">
                             Artikel ramah siswa dan rujukan terbuka yang mudah dipahami.
                         </p>
                     </div>
@@ -182,8 +181,8 @@
                         <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-3 text-slate-400">
                             <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                         </div>
-                        <h3 class="font-sora font-bold text-base sm:text-lg mb-1" style="color: var(--text-primary);">Tidak Ada Artikel Ditemukan</h3>
-                        <p class="text-xs sm:text-sm text-slate-500 max-w-md mx-auto">
+                        <h3 class="font-sora font-bold text-base sm:text-lg mb-1 text-slate-900 dark:text-white">Tidak Ada Artikel Ditemukan</h3>
+                        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">
                             Coba ubah filter topik atau kata kunci pencarian Anda untuk menemukan artikel bimbingan konseling lainnya.
                         </p>
                     </div>
@@ -203,7 +202,7 @@
                                 </div>
 
                                 <!-- Article Title -->
-                                <h3 class="font-sora font-bold text-sm sm:text-base mb-2 leading-snug hover:text-[#059669] transition-colors line-clamp-2" style="color: var(--text-primary);">
+                                <h3 class="font-sora font-bold text-sm sm:text-base mb-2 leading-snug hover:text-[#059669] dark:hover:text-emerald-400 transition-colors line-clamp-2 text-slate-900 dark:text-white">
                                     <a href="{{ $pubArticle['url'] }}" target="_blank" rel="noopener noreferrer">
                                         {{ $pubArticle['title'] }}
                                     </a>
@@ -225,7 +224,7 @@
                                 </p>
                             </div>
 
-                            <!-- Footer Action Button (Mobile Full Width Stack) -->
+                            <!-- Footer Action Button -->
                             <div class="pt-3 border-t border-slate-100 dark:border-slate-800/60 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 mt-auto">
                                 <span class="text-[10px] sm:text-[11px] font-medium text-emerald-600 dark:text-emerald-400 inline-flex items-center gap-1">
                                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
