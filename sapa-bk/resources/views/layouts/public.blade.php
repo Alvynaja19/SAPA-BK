@@ -175,9 +175,9 @@
     </main>
 
     <!-- ===== FOOTER ===== -->
-    <footer class="bg-[#042F2E] text-white pt-14 pb-10 relative overflow-hidden mt-16 sm:mt-20 border-t border-emerald-900">
+    <footer class="bg-[#042F2E] text-white pt-12 pb-10 relative overflow-hidden">
         <!-- Floating Backdrop Light -->
-        <div class="absolute top-0 right-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-[#059669]/10 rounded-full filter blur-3xl pointer-events-none"></div>
+        <div class="absolute top-12 right-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-[#059669]/10 rounded-full filter blur-3xl pointer-events-none"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-10 pb-10 sm:pb-12 border-b border-emerald-800/80">

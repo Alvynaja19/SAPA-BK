@@ -115,6 +115,9 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 .pillar-card::before {
     content: '';
@@ -188,74 +191,150 @@
 
 @section('content')
 
-{{-- ===== 1. HERO SECTION (SIBK-digi Style) ===== --}}
-<section class="relative bg-slate-50/90 dark:bg-slate-900 pt-28 sm:pt-32 lg:pt-36 pb-16 sm:pb-20 lg:pb-24 overflow-hidden">
-    <!-- Background pattern lines -->
-    <div class="absolute inset-0 bg-[linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:100%_24px] opacity-60 pointer-events-none"></div>
+{{-- ===== 1. HERO SECTION ===== --}}
+<section class="relative bg-slate-50/90 dark:bg-slate-900 pt-32 sm:pt-40 lg:pt-44 pb-16 sm:pb-20 lg:pb-20 overflow-hidden">
+    <!-- Background grid pattern -->
+    <div class="absolute inset-0 bg-[linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:100%_28px] opacity-50 dark:opacity-10 pointer-events-none"></div>
+
+    <!-- Decorative blobs -->
+    <div class="absolute top-24 left-0 w-96 h-96 bg-emerald-100/50 dark:bg-emerald-900/20 rounded-full blur-3xl pointer-events-none -translate-x-1/2"></div>
+    <div class="absolute bottom-0 right-0 w-80 h-80 bg-teal-100/40 dark:bg-teal-900/20 rounded-full blur-3xl pointer-events-none translate-x-1/4"></div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        {{-- grid-cols-2 dengan gap-8 (32px) sesuai ketentuan --}}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-8 items-center">
             
-            <!-- Left Content -->
-            <div class="lg:col-span-6 text-center lg:text-left pt-2 sm:pt-4">
-                <!-- Pill Badge -->
-                <span class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 shadow-sm text-slate-700 dark:text-slate-300 text-xs font-semibold mb-6">
+            <!-- === LEFT: Text Block === -->
+            <div class="text-center lg:text-left">
+
+                <!-- Pill Badge — visual entry point (mb-5 agar jarak ke headline rapi) -->
+                <span class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 shadow-sm text-slate-600 dark:text-slate-400 text-xs font-semibold mb-5">
                     <span class="w-2 h-2 rounded-full bg-[#059669] animate-pulse"></span>
                     Sistem Informasi BK Digital
                 </span>
-                
-                <!-- Main H1 Title (SIBK-digi style) -->
-                <h1 class="font-sora text-4xl sm:text-5xl lg:text-[3.6rem] font-extrabold leading-[1.12] tracking-tight mb-6 text-slate-900 dark:text-white">
-                    BK Lebih Modern. <br>
+
+                <!-- Headline -->
+                <h1 class="font-sora text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight text-slate-900 dark:text-white" style="margin-bottom: 24px;">
+                    BK Lebih Modern.<br>
                     <span class="text-[#059669]">Siswa Makin Dekat.</span>
                 </h1>
-                
-                <!-- Description -->
-                <p class="text-base sm:text-lg leading-relaxed mb-10 text-slate-600 dark:text-slate-400 max-w-xl mx-auto lg:mx-0 font-normal">
-                    Sistem cerdas untuk mengelola data siswa, sesi konseling, instrumen asesmen, hingga pendampingan akademik & kesehatan mental secara privat, otomatis, dan terintegrasi di SMAN 4 Jember.
+
+                <!-- Deskripsi: dengan margin-bottom 36px yang dijamin inline style -->
+                <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-lg mx-auto lg:mx-0 font-normal" style="margin-bottom: 36px; line-height: 1.8;">
+                    Sistem cerdas untuk mengelola data siswa, sesi konseling, instrumen asesmen, hingga pendampingan akademik & kesehatan mental secara privat dan terintegrasi di SMAN 4 Jember.
                 </p>
-                
-                <!-- CTA Buttons -->
-                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+
+                <!-- CTA Buttons: dengan margin-top 36px dan margin-bottom 36px yang dijamin inline style -->
+                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4" style="margin-top: 36px; margin-bottom: 36px;">
+
+                    <!-- CTA UTAMA: py-4 + shadow kuat + icon → dominan, mudah ditemukan mata -->
                     @auth
-                        <a href="{{ route('student.chat') }}" class="bg-[#059669] hover:bg-emerald-700 text-white px-8 py-3.5 rounded-2xl font-bold text-sm sm:text-base transition-all duration-200 shadow-lg shadow-emerald-600/25 hover:-translate-y-0.5 w-full sm:w-auto text-center">
+                        <a href="{{ route('student.chat') }}"
+                           class="inline-flex items-center justify-center gap-2
+                                  bg-[#059669] hover:bg-emerald-700 text-white
+                                  px-8 py-4 rounded-2xl font-bold text-base
+                                  transition-all duration-200
+                                  shadow-lg shadow-emerald-600/30 hover:shadow-emerald-600/40
+                                  hover:-translate-y-0.5
+                                  w-full sm:w-auto">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                             Mulai Gunakan Gratis
                         </a>
                     @else
-                        <a href="{{ route('register') }}" class="bg-[#059669] hover:bg-emerald-700 text-white px-8 py-3.5 rounded-2xl font-bold text-sm sm:text-base transition-all duration-200 shadow-lg shadow-emerald-600/25 hover:-translate-y-0.5 w-full sm:w-auto text-center">
+                        <a href="{{ route('register') }}"
+                           class="inline-flex items-center justify-center gap-2
+                                  bg-[#059669] hover:bg-emerald-700 text-white
+                                  px-8 py-4 rounded-2xl font-bold text-base
+                                  transition-all duration-200
+                                  shadow-lg shadow-emerald-600/30 hover:shadow-emerald-600/40
+                                  hover:-translate-y-0.5
+                                  w-full sm:w-auto">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                             Mulai Gunakan Gratis
                         </a>
                     @endauth
-                    
-                    <a href="#tentang-sapa" class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60 px-8 py-3.5 rounded-2xl font-bold text-sm sm:text-base transition-all duration-200 shadow-sm flex items-center justify-center gap-2 w-full sm:w-auto">
-                        Jelajahi Fitur 
-                        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+
+                    <!-- CTA SEKUNDER: py-3 + tanpa shadow + font-semibold (bukan bold) + text-slate-600
+                         → terlihat jelas sebagai opsi pendukung, tidak bersaing dengan CTA utama -->
+                    <a href="#tentang-sapa"
+                       class="inline-flex items-center justify-center gap-2
+                              bg-white dark:bg-slate-800/60
+                              text-slate-600 dark:text-slate-300
+                              border border-slate-200 dark:border-slate-700
+                              hover:bg-slate-50 dark:hover:bg-slate-700/50
+                              hover:border-slate-300 dark:hover:border-slate-600
+                              px-8 py-3 rounded-2xl font-semibold text-sm
+                              transition-all duration-200
+                              w-full sm:w-auto">
+                        Jelajahi Fitur
+                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                     </a>
                 </div>
+
+                <!-- Trust indicators — pill badges yang rapi, lega, & nyaman dipandang -->
+                <div class="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-2.5 sm:gap-3">
+                    <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 text-slate-600 dark:text-slate-300 font-medium text-xs shadow-xs">
+                        <svg class="w-3.5 h-3.5 text-[#059669] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        Data Terenkripsi
+                    </span>
+                    <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 text-slate-600 dark:text-slate-300 font-medium text-xs shadow-xs">
+                        <svg class="w-3.5 h-3.5 text-[#059669] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        Konseling 100% Privat
+                    </span>
+                    <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 text-slate-600 dark:text-slate-300 font-medium text-xs shadow-xs">
+                        <svg class="w-3.5 h-3.5 text-[#059669] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                        Gratis SMAN 4 Jember
+                    </span>
+                </div>
+
             </div>
             
-            <!-- Right Content: Window Frame Card featuring GuruBk.png -->
-            <div class="lg:col-span-6 flex justify-center lg:justify-end items-center mt-6 lg:mt-0">
-                <div class="relative w-full max-w-lg">
-                    <!-- Glow effect behind window mockup -->
-                    <div class="absolute -inset-2 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-[2.5rem] blur-2xl pointer-events-none"></div>
+            <!-- RIGHT: Window Frame Card — items-center handles vertical centering -->
+            <div class="flex justify-center lg:justify-end items-center">
+                <div class="relative w-full max-w-sm sm:max-w-md">
+                    <!-- Soft animated glow -->
+                    <div class="absolute -inset-3 bg-gradient-to-r from-emerald-400/20 to-teal-400/20 rounded-[2.5rem] blur-2xl pointer-events-none" style="animation: glow-pulse 3s ease-in-out infinite;"></div>
 
-                    <!-- Window Frame Card (SIBK-digi style) -->
-                    <div class="relative bg-white dark:bg-slate-800 rounded-[2rem] shadow-2xl border border-slate-200/80 dark:border-slate-700 p-4 sm:p-5 overflow-hidden" style="border-radius: 32px;">
-                        <!-- Window Header dots -->
+                    <!-- Visual Card Container -->
+                    <div class="relative bg-white dark:bg-slate-800
+                                shadow-xl shadow-slate-300/40 dark:shadow-slate-950/40
+                                border border-slate-200/70 dark:border-slate-700/70
+                                p-4 sm:p-5 overflow-hidden" style="border-radius: 28px;">
+
+                        <!-- Window chrome dots (merah / kuning / hijau) -->
                         <div class="flex items-center gap-2 mb-3 pb-2.5 border-b border-slate-100 dark:border-slate-700/60">
-                            <span class="w-3 h-3 rounded-full bg-slate-300 dark:bg-slate-600 inline-block"></span>
-                            <span class="w-3 h-3 rounded-full bg-slate-300 dark:bg-slate-600 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-red-400 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-amber-400 inline-block"></span>
                             <span class="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span>
                             <span class="ml-auto text-[11px] font-bold text-slate-400 dark:text-slate-500 tracking-wide">Guru BK SMAN 4 Jember</span>
                         </div>
 
-                        <!-- Image: GuruBk.png -->
-                        <div class="relative rounded-2xl overflow-hidden bg-slate-50 dark:bg-slate-900 flex justify-center items-center p-2">
-                            <img src="/GuruBk.png" 
-                                 alt="Guru BK SMAN 4 Jember" 
-                                 class="w-full h-auto max-h-[400px] object-contain rounded-xl hover:scale-102 transition-transform duration-500 drop-shadow-md">
+                        <!-- Image area -->
+                        <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-slate-900/80 dark:to-slate-800/80 flex justify-center items-center p-2">
+                            <img src="/GuruBk.png"
+                                 alt="Guru BK SMAN 4 Jember"
+                                 class="w-full h-auto max-h-[300px] sm:max-h-[340px] object-contain rounded-xl hover:scale-[1.02] transition-transform duration-500 drop-shadow-sm">
+
+                            <!-- Floating Online badge -->
+                            <div class="absolute top-3 right-3 inline-flex items-center gap-1.5 bg-white dark:bg-slate-800 border border-emerald-100 dark:border-emerald-900 rounded-full px-3 py-1.5 shadow-sm">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span class="text-[11px] font-bold text-emerald-700 dark:text-emerald-400">Online</span>
+                            </div>
                         </div>
+
+                        <!-- Card Footer -->
+                        <div class="mt-3 flex items-center justify-between px-1">
+                            <div class="flex items-center gap-2">
+                                <div class="w-7 h-7 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-[#059669] dark:text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                    </svg>
+                                </div>
+                                <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">Konsultasi Sekarang</span>
+                            </div>
+                            <span class="text-[11px] text-slate-400 dark:text-slate-500 font-medium">Respon cepat</span>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -511,72 +590,80 @@
         </div>
 
         <!-- Service Cards Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
 
             <!-- Card 1: AI Chatbot -->
-            <div id="layanan-chatbot" class="pillar-card group">
+            <div id="layanan-chatbot" class="pillar-card group flex flex-col h-full">
                 <div class="w-14 h-14 rounded-2xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-[#059669] group-hover:text-white transition-all duration-300">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
                 </div>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-[#059669] bg-[#ECFDF5] px-2.5 py-1 rounded-full mb-4 inline-block">AI Powered</span>
-                <h3 class="font-sora font-bold text-lg mb-3 group-hover:text-[#059669] transition-colors" style="color: var(--text-primary, #0F172A);">
-                    Asisten Chatbot AI BK
-                </h3>
-                <p class="text-sm leading-relaxed mb-5" style="color: var(--text-body, #475569);">
-                    Konsultasikan keluh kesah, tips belajar, atau info jurusan 24/7 dan dapatkan jawaban instan dari AI yang terlatih khusus pedoman BK.
-                </p>
-                <a href="{{ auth()->check() ? route('student.chat') : route('login') }}" class="inline-flex items-center text-sm font-bold text-[#059669] gap-1 group-hover:gap-2 transition-all">
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-[#059669] bg-[#ECFDF5] px-2.5 py-1 rounded-full mb-4 inline-block">AI Powered</span>
+                    <h3 class="font-sora font-bold text-lg mb-3 group-hover:text-[#059669] transition-colors" style="color: var(--text-primary, #0F172A);">
+                        Asisten Chatbot AI BK
+                    </h3>
+                    <p class="text-sm leading-relaxed mb-5" style="color: var(--text-body, #475569);">
+                        Konsultasikan keluh kesah, tips belajar, atau info jurusan 24/7 dan dapatkan jawaban instan dari AI yang terlatih khusus pedoman BK.
+                    </p>
+                </div>
+                <a href="{{ auth()->check() ? route('student.chat') : route('login') }}" class="inline-flex items-center text-sm font-bold text-[#059669] gap-1 group-hover:gap-2 transition-all mt-auto pt-2">
                     Mulai Chat <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </a>
             </div>
 
             <!-- Card 2: E-Book -->
-            <div id="layanan-ebook" class="pillar-card group">
+            <div id="layanan-ebook" class="pillar-card group flex flex-col h-full">
                 <div class="w-14 h-14 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-teal-600 group-hover:text-white transition-all duration-300">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                 </div>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-teal-600 bg-teal-50 px-2.5 py-1 rounded-full mb-4 inline-block">Pustaka Digital</span>
-                <h3 class="font-sora font-bold text-lg mb-3 group-hover:text-[#059669] transition-colors" style="color: var(--text-primary, #0F172A);">
-                    Perpustakaan E-Book
-                </h3>
-                <p class="text-sm leading-relaxed mb-5" style="color: var(--text-body, #475569);">
-                    Akses gratis modul bimbingan karir, buku kesehatan mental remaja, serta strategi sukses menembus PTN impian kapan saja.
-                </p>
-                <a href="{{ route('ebook.public') }}" class="inline-flex items-center text-sm font-bold text-teal-600 gap-1 group-hover:gap-2 transition-all">
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-teal-600 bg-teal-50 px-2.5 py-1 rounded-full mb-4 inline-block">Pustaka Digital</span>
+                    <h3 class="font-sora font-bold text-lg mb-3 group-hover:text-[#059669] transition-colors" style="color: var(--text-primary, #0F172A);">
+                        Perpustakaan E-Book
+                    </h3>
+                    <p class="text-sm leading-relaxed mb-5" style="color: var(--text-body, #475569);">
+                        Akses gratis modul bimbingan karir, buku kesehatan mental remaja, serta strategi sukses menembus PTN impian kapan saja.
+                    </p>
+                </div>
+                <a href="{{ route('ebook.public') }}" class="inline-flex items-center text-sm font-bold text-teal-600 gap-1 group-hover:gap-2 transition-all mt-auto pt-2">
                     Buka Perpustakaan <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </a>
             </div>
 
             <!-- Card 3: Artikel -->
-            <div id="layanan-artikel" class="pillar-card group">
+            <div id="layanan-artikel" class="pillar-card group flex flex-col h-full">
                 <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
                 </div>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full mb-4 inline-block">Edukasi</span>
-                <h3 class="font-sora font-bold text-lg mb-3 group-hover:text-[#059669] transition-colors" style="color: var(--text-primary, #0F172A);">
-                    Artikel & Edukasi BK
-                </h3>
-                <p class="text-sm leading-relaxed mb-5" style="color: var(--text-body, #475569);">
-                    Kumpulan artikel inspiratif dari Guru BK profesional mengenai manajemen stres, efektivitas belajar, dan pengembangan karir.
-                </p>
-                <a href="{{ route('artikel.list') }}" class="inline-flex items-center text-sm font-bold text-emerald-600 gap-1 group-hover:gap-2 transition-all">
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full mb-4 inline-block">Edukasi</span>
+                    <h3 class="font-sora font-bold text-lg mb-3 group-hover:text-[#059669] transition-colors" style="color: var(--text-primary, #0F172A);">
+                        Artikel & Edukasi BK
+                    </h3>
+                    <p class="text-sm leading-relaxed mb-5" style="color: var(--text-body, #475569);">
+                        Kumpulan artikel inspiratif dari Guru BK profesional mengenai manajemen stres, efektivitas belajar, dan pengembangan karir.
+                    </p>
+                </div>
+                <a href="{{ route('artikel.list') }}" class="inline-flex items-center text-sm font-bold text-emerald-600 gap-1 group-hover:gap-2 transition-all mt-auto pt-2">
                     Baca Artikel <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </a>
             </div>
 
             <!-- Card 4: Tes Minat Bakat -->
-            <div id="layanan-tes" class="pillar-card group">
-                <div class="w-14 h-14 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-sky-600 group-hover:text-white transition-all duration-300">
+            <div id="layanan-tes" class="pillar-card group flex flex-col h-full">
+                <div class="w-14 h-14 rounded-2xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-[#059669] group-hover:text-white transition-all duration-300">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
                 </div>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-sky-600 bg-sky-50 px-2.5 py-1 rounded-full mb-4 inline-block">Self-Assessment</span>
-                <h3 class="font-sora font-bold text-lg mb-3 group-hover:text-[#059669] transition-colors" style="color: var(--text-primary, #0F172A);">
-                    Tes Minat & Bakat
-                </h3>
-                <p class="text-sm leading-relaxed mb-5" style="color: var(--text-body, #475569);">
-                    Evaluasi kepribadian dan rekomendasi jurusan yang disesuaikan dengan profil bakat & potensi unik setiap siswa SMAN 4 Jember.
-                </p>
-                <a href="{{ auth()->check() ? route('student.tes') : route('login') }}" class="inline-flex items-center text-sm font-bold text-sky-600 gap-1 group-hover:gap-2 transition-all">
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-[#059669] bg-[#ECFDF5] px-2.5 py-1 rounded-full mb-4 inline-block">Self-Assessment</span>
+                    <h3 class="font-sora font-bold text-lg mb-3 group-hover:text-[#059669] transition-colors" style="color: var(--text-primary, #0F172A);">
+                        Tes Minat & Bakat
+                    </h3>
+                    <p class="text-sm leading-relaxed mb-5" style="color: var(--text-body, #475569);">
+                        Evaluasi kepribadian dan rekomendasi jurusan yang disesuaikan dengan profil bakat & potensi unik setiap siswa SMAN 4 Jember.
+                    </p>
+                </div>
+                <a href="{{ auth()->check() ? route('student.tes') : route('login') }}" class="inline-flex items-center text-sm font-bold text-[#059669] gap-1 group-hover:gap-2 transition-all mt-auto pt-2">
                     Ikuti Tes <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </a>
             </div>
@@ -943,9 +1030,9 @@
 
 
 {{-- ===== 9. BOTTOM CTA BANNER ===== --}}
-<section class="py-16 bg-gradient-to-r from-[#042F2E] via-[#047857] to-[#059669] relative overflow-hidden">
+<section class="py-16 sm:py-20 bg-gradient-to-b from-[#059669] via-[#047857] to-[#042F2E] relative overflow-hidden">
     <div class="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="absolute bottom-0 left-0 w-64 h-64 bg-emerald-300/10 rounded-full blur-2xl pointer-events-none"></div>
+    <div class="absolute top-1/4 left-0 w-64 h-64 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none"></div>
 
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
         <span class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-xs font-bold text-emerald-200 uppercase tracking-widest mb-6">
@@ -958,19 +1045,19 @@
         <p class="text-emerald-100 text-base sm:text-lg mb-10 max-w-xl mx-auto leading-relaxed">
             Bergabung dengan ribuan siswa SMAN 4 Jember yang telah merasakan manfaat SAPA BK — asisten digital BK terpercaya Anda.
         </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
             @auth
-                <a href="{{ route('student.chat') }}" id="bottom-cta-chat" class="btn-white text-base px-8 py-3.5">
-                    💬 Mulai Chat Sekarang
+                <a href="{{ route('student.chat') }}" id="bottom-cta-chat" class="inline-flex items-center justify-center gap-2 bg-white text-[#047857] hover:bg-emerald-50 px-8 py-3.5 rounded-full font-extrabold text-sm sm:text-base shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all w-full sm:w-auto">
+                    Mulai Chat Sekarang
                 </a>
-                <a href="{{ route('ebook.public') }}" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full border-2 border-white text-white font-semibold text-sm hover:bg-white/10 transition-all">
-                    📚 Jelajahi E-Book BK
+                <a href="{{ route('ebook.public') }}" class="inline-flex items-center justify-center gap-2 bg-white text-[#047857] hover:bg-emerald-50 px-8 py-3.5 rounded-full font-extrabold text-sm sm:text-base shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all w-full sm:w-auto">
+                    Jelajahi E-Book BK
                 </a>
             @else
-                <a href="{{ route('register') }}" id="bottom-cta-register" class="btn-white text-base px-8 py-3.5">
-                    🚀 Daftar Akun Gratis
+                <a href="{{ route('register') }}" id="bottom-cta-register" class="inline-flex items-center justify-center gap-2 bg-white text-[#047857] hover:bg-emerald-50 px-8 py-3.5 rounded-full font-extrabold text-sm sm:text-base shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all w-full sm:w-auto">
+                    Daftar Akun Gratis
                 </a>
-                <a href="{{ route('login') }}" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full border-2 border-white text-white font-semibold text-sm hover:bg-white/10 transition-all">
+                <a href="{{ route('login') }}" class="inline-flex items-center justify-center gap-2 bg-white text-[#047857] hover:bg-emerald-50 px-8 py-3.5 rounded-full font-extrabold text-sm sm:text-base shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all w-full sm:w-auto">
                     Sudah Punya Akun? Masuk
                 </a>
             @endauth
