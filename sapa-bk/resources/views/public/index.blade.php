@@ -180,11 +180,6 @@
 .accreditation-badge:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(5,150,105,0.12); }
 .dark .accreditation-badge { background: rgba(30,41,59,0.8); border-color: rgba(51,65,85,0.6); }
 
-/* About section split bg */
-.about-gradient-bg {
-    background: linear-gradient(135deg, #042F2E 0%, #064E3B 50%, #047857 100%);
-}
-
 /* dark/light text helpers */
 .text-primary-color { color: var(--text-primary, #0F172A); }
 .text-body-color { color: var(--text-body, #475569); }
@@ -193,138 +188,124 @@
 
 @section('content')
 
-{{-- ===== 1. HERO SECTION ===== --}}
-<section class="relative overflow-hidden hero-animated-bg dark:bg-gradient-to-b dark:from-slate-900 dark:to-slate-800 pt-14 pb-28 lg:pt-24 lg:pb-36">
-    <!-- Decorative blobs -->
-    <div class="absolute top-0 left-0 w-[600px] h-[600px] bg-[#059669]/8 rounded-full blur-[100px] pointer-events-none -translate-x-1/2 -translate-y-1/2"></div>
-    <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-[#10B981]/8 rounded-full blur-[80px] pointer-events-none translate-x-1/3 translate-y-1/3"></div>
+{{-- ===== 1. HERO SECTION (SIBK-digi Style) ===== --}}
+<section class="relative bg-slate-50/90 dark:bg-slate-900 pt-28 sm:pt-32 lg:pt-36 pb-16 sm:pb-20 lg:pb-24 overflow-hidden">
+    <!-- Background pattern lines -->
+    <div class="absolute inset-0 bg-[linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:100%_24px] opacity-60 pointer-events-none"></div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-6 items-center">
-
-            <!-- Left: Text -->
-            <div class="lg:col-span-6 text-center lg:text-left" style="animation: slideInLeft 0.7s ease forwards;">
-                <span class="section-label">
-                    <span class="w-2 h-2 rounded-full bg-[#059669] animate-pulse inline-block"></span>
-                    Platform Resmi BK Digital SMAN 4 Jember
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+            
+            <!-- Left Content -->
+            <div class="lg:col-span-6 text-center lg:text-left pt-2 sm:pt-4">
+                <!-- Pill Badge -->
+                <span class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 shadow-sm text-slate-700 dark:text-slate-300 text-xs font-semibold mb-6">
+                    <span class="w-2 h-2 rounded-full bg-[#059669] animate-pulse"></span>
+                    Sistem Informasi BK Digital
                 </span>
-
-                <h1 class="font-sora text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.12] tracking-tight mb-6"
-                    style="color: var(--text-primary, #0F172A);">
-                    SAPA BK — <br class="hidden lg:block">
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#059669] via-[#10B981] to-[#047857]">
-                        Sahabat Konseling
-                    </span><br>
-                    Siswa SMAN 4 Jember
+                
+                <!-- Main H1 Title (SIBK-digi style) -->
+                <h1 class="font-sora text-4xl sm:text-5xl lg:text-[3.6rem] font-extrabold leading-[1.12] tracking-tight mb-6 text-slate-900 dark:text-white">
+                    BK Lebih Modern. <br>
+                    <span class="text-[#059669]">Siswa Makin Dekat.</span>
                 </h1>
-
-                <p class="text-base sm:text-lg leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0" style="color: var(--text-body, #475569);">
-                    <strong>Sistem Asistensi Pintar Akademik</strong> — Platform digital Bimbingan & Konseling yang mendampingi perjalanan akademik, karir, dan kesehatan mental siswa secara <em>aman, privat, dan 24 jam siap sedia</em>.
+                
+                <!-- Description -->
+                <p class="text-base sm:text-lg leading-relaxed mb-10 text-slate-600 dark:text-slate-400 max-w-xl mx-auto lg:mx-0 font-normal">
+                    Sistem cerdas untuk mengelola data siswa, sesi konseling, instrumen asesmen, hingga pendampingan akademik & kesehatan mental secara privat, otomatis, dan terintegrasi di SMAN 4 Jember.
                 </p>
-
+                
                 <!-- CTA Buttons -->
-                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-10">
+                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                     @auth
-                        <a href="{{ route('student.chat') }}" id="hero-cta-main" class="btn-primary text-base w-full sm:w-auto px-8 py-3.5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-                            Mulai Konsultasi
+                        <a href="{{ route('student.chat') }}" class="bg-[#059669] hover:bg-emerald-700 text-white px-8 py-3.5 rounded-2xl font-bold text-sm sm:text-base transition-all duration-200 shadow-lg shadow-emerald-600/25 hover:-translate-y-0.5 w-full sm:w-auto text-center">
+                            Mulai Gunakan Gratis
                         </a>
                     @else
-                        <a href="{{ route('register') }}" id="hero-cta-register" class="btn-primary text-base w-full sm:w-auto px-8 py-3.5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
-                            Daftar Akun Gratis
+                        <a href="{{ route('register') }}" class="bg-[#059669] hover:bg-emerald-700 text-white px-8 py-3.5 rounded-2xl font-bold text-sm sm:text-base transition-all duration-200 shadow-lg shadow-emerald-600/25 hover:-translate-y-0.5 w-full sm:w-auto text-center">
+                            Mulai Gunakan Gratis
                         </a>
                     @endauth
-
-                    <a href="{{ route('tentang') }}" id="hero-cta-tentang" class="btn-secondary text-base w-full sm:w-auto px-8 py-3.5">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Tentang SAPA BK
+                    
+                    <a href="#tentang-sapa" class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60 px-8 py-3.5 rounded-2xl font-bold text-sm sm:text-base transition-all duration-200 shadow-sm flex items-center justify-center gap-2 w-full sm:w-auto">
+                        Jelajahi Fitur 
+                        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                     </a>
                 </div>
+            </div>
+            
+            <!-- Right Content: Window Frame Card featuring GuruBk.png -->
+            <div class="lg:col-span-6 flex justify-center lg:justify-end items-center mt-6 lg:mt-0">
+                <div class="relative w-full max-w-lg">
+                    <!-- Glow effect behind window mockup -->
+                    <div class="absolute -inset-2 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-[2.5rem] blur-2xl pointer-events-none"></div>
 
-                <!-- Trust Stats -->
-                <div class="grid grid-cols-3 gap-4 pt-8 border-t border-slate-200/80 dark:border-slate-700/60 max-w-md mx-auto lg:mx-0">
-                    <div>
-                        <p class="font-sora text-2xl sm:text-3xl font-extrabold text-[#059669]">24/7</p>
-                        <p class="text-xs font-medium mt-0.5" style="color: var(--text-body, #475569);">Asisten AI Siap</p>
-                    </div>
-                    <div>
-                        <p class="font-sora text-2xl sm:text-3xl font-extrabold text-[#059669]">100%</p>
-                        <p class="text-xs font-medium mt-0.5" style="color: var(--text-body, #475569);">Rahasia & Privat</p>
-                    </div>
-                    <div>
-                        <p class="font-sora text-2xl sm:text-3xl font-extrabold text-[#059669]">4 BK</p>
-                        <p class="text-xs font-medium mt-0.5" style="color: var(--text-body, #475569);">Guru BK Profesional</p>
+                    <!-- Window Frame Card (SIBK-digi style) -->
+                    <div class="relative bg-white dark:bg-slate-800 rounded-[2rem] shadow-2xl border border-slate-200/80 dark:border-slate-700 p-4 sm:p-5 overflow-hidden" style="border-radius: 32px;">
+                        <!-- Window Header dots -->
+                        <div class="flex items-center gap-2 mb-3 pb-2.5 border-b border-slate-100 dark:border-slate-700/60">
+                            <span class="w-3 h-3 rounded-full bg-slate-300 dark:bg-slate-600 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-slate-300 dark:bg-slate-600 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span>
+                            <span class="ml-auto text-[11px] font-bold text-slate-400 dark:text-slate-500 tracking-wide">Guru BK SMAN 4 Jember</span>
+                        </div>
+
+                        <!-- Image: GuruBk.png -->
+                        <div class="relative rounded-2xl overflow-hidden bg-slate-50 dark:bg-slate-900 flex justify-center items-center p-2">
+                            <img src="/GuruBk.png" 
+                                 alt="Guru BK SMAN 4 Jember" 
+                                 class="w-full h-auto max-h-[400px] object-contain rounded-xl hover:scale-102 transition-transform duration-500 drop-shadow-md">
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Right: Visual Card -->
-            <div class="lg:col-span-6 flex justify-center lg:justify-end items-center relative mt-8 lg:mt-0">
-                <div class="relative w-full max-w-lg">
+        </div>
+    </div>
+</section>
 
-                    <!-- Main Card -->
-                    <div class="w-full bg-gradient-to-br from-[#042F2E] via-[#059669] to-[#10B981] p-7 rounded-3xl shadow-2xl shadow-[#059669]/30 text-white relative overflow-hidden border border-emerald-400/30">
-                        <div class="absolute -right-12 -bottom-12 w-56 h-56 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-                        <div class="absolute -left-8 -top-8 w-40 h-40 bg-emerald-300/10 rounded-full blur-xl pointer-events-none"></div>
-
-                        <!-- Card Header -->
-                        <div class="flex items-center justify-between mb-6 relative z-10">
-                            <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 shrink-0">
-                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-                                </div>
-                                <div>
-                                    <h3 class="font-sora font-bold text-base">Asisten Digital SAPA BK</h3>
-                                    <span class="text-xs text-emerald-100/90 flex items-center gap-1.5 mt-0.5">
-                                        <span class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span> Online & Siap
-                                    </span>
-                                </div>
-                            </div>
-                            <span class="text-xs text-emerald-200 bg-white/10 rounded-full px-3 py-1 font-medium">AI Powered</span>
-                        </div>
-
-                        <!-- Chat Bubbles -->
-                        <div class="space-y-3 mb-6 text-xs relative z-10">
-                            <div class="bg-white/15 backdrop-blur-md rounded-2xl rounded-tl-sm p-3.5 border border-white/20 max-w-[85%]">
-                                <p class="leading-relaxed font-medium">🤔 "Kak, saya bingung pilih jurusan IPA atau IPS. Gimana ya?"</p>
-                            </div>
-                            <div class="bg-white text-[#0F172A] rounded-2xl rounded-tr-sm p-3.5 shadow-md ml-auto max-w-[85%] font-medium">
-                                <p class="leading-relaxed text-[#047857]">✨ Hei! Aku bisa bantu analisis minat & bakatmu. Yuk mulai tes minat bakat dulu!</p>
-                            </div>
-                            <div class="bg-white/15 backdrop-blur-md rounded-2xl rounded-tl-sm p-3.5 border border-white/20 max-w-[85%]">
-                                <p class="leading-relaxed font-medium">💡 "Wah oke! Gimana cara mulainya?"</p>
-                            </div>
-                        </div>
-
-                        <div class="pt-4 border-t border-white/20 flex items-center justify-between text-xs text-emerald-100 relative z-10">
-                            <span>Konsultasi Aman & Privat</span>
-                            <span class="font-semibold bg-white/10 px-3 py-1 rounded-full">SMAN 4 JEMBER</span>
-                        </div>
-                    </div>
-
-                    <!-- Floating Badge 1 -->
-                    <div class="absolute -top-5 -right-4 bg-white/95 dark:bg-slate-800 backdrop-blur-md rounded-2xl shadow-xl border border-slate-200/80 dark:border-slate-700 px-4 py-3 flex items-center gap-3 float-badge">
-                        <div class="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-[#059669] flex items-center justify-center shrink-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold" style="color: var(--text-primary, #0F172A);">Privasi 100% Terjamin</p>
-                            <p class="text-[10px]" style="color: var(--text-body, #475569);">Kerahasiaan Siswa Dijaga</p>
-                        </div>
-                    </div>
-
-                    <!-- Floating Badge 2 -->
-                    <div class="absolute -bottom-5 -left-4 bg-white/95 dark:bg-slate-800 backdrop-blur-md rounded-2xl shadow-xl border border-slate-200/80 dark:border-slate-700 px-4 py-3 flex items-center gap-3 float-badge-2">
-                        <div class="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-900/30 text-teal-600 flex items-center justify-center shrink-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold" style="color: var(--text-primary, #0F172A);">Perpustakaan E-Book</p>
-                            <p class="text-[10px]" style="color: var(--text-body, #475569);">Gratis Dibaca Kapan Saja</p>
-                        </div>
-                    </div>
-
+<!-- Features Bar Section (Clean Flow) -->
+<section class="py-12 bg-white dark:bg-slate-800/90 border-y border-slate-100 dark:border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 divide-y sm:divide-y-0 sm:divide-x lg:divide-x-0 divide-slate-100 dark:divide-slate-700/60">
+            <!-- Feature 1 -->
+            <div class="flex items-start gap-4 pt-4 sm:pt-0 pl-0 sm:pl-4 lg:pl-0">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-900/40 flex items-center justify-center shrink-0 text-[#059669]">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-1">Aman & Terpercaya</h4>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Keamanan data terjamin dengan standar enkripsi tinggi</p>
+                </div>
+            </div>
+            <!-- Feature 2 -->
+            <div class="flex items-start gap-4 pt-4 sm:pt-0 pl-0 sm:pl-4 lg:pl-0">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-900/40 flex items-center justify-center shrink-0 text-[#059669]">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-1">Data Real-time</h4>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Pantau perkembangan peserta didik secara real-time dan akurat</p>
+                </div>
+            </div>
+            <!-- Feature 3 -->
+            <div class="flex items-start gap-4 pt-4 sm:pt-0 lg:pt-0 pl-0 sm:pl-0 lg:pl-0">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-900/40 flex items-center justify-center shrink-0 text-[#059669]">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-1">Mudah Digunakan</h4>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Antarmuka intuitif yang dirancang khusus untuk guru BK</p>
+                </div>
+            </div>
+            <!-- Feature 4 -->
+            <div class="flex items-start gap-4 pt-4 sm:pt-0 pl-0 sm:pl-4 lg:pl-0">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-900/40 flex items-center justify-center shrink-0 text-[#059669]">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-1">Efisiensi Maksimal</h4>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Hemat waktu administrasi, fokus pada layanan konseling</p>
                 </div>
             </div>
         </div>
@@ -332,74 +313,52 @@
 </section>
 
 
-{{-- ===== 2. TENTANG SAPA BK (mirip "Program Studi BK" UAD) ===== --}}
-<section class="py-20 about-gradient-bg relative overflow-hidden" id="tentang-sapa">
-    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djZoNnYtNmgtNnptMCAwdi02aC02djZoNnptNiAwaDZ2LTZoLTZ2NnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-40"></div>
-    <div class="absolute top-0 right-0 w-96 h-96 bg-emerald-300/10 rounded-full blur-3xl pointer-events-none"></div>
+{{-- ===== 2. TENTANG SAPA BK (Banner Card ala Bikonesia) ===== --}}
+<section class="py-16 bg-white dark:bg-slate-900" id="tentang-sapa">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Bikonesia-style Banner Card -->
+        <div class="relative bg-gradient-to-r from-[#047857] via-[#059669] to-[#10B981] rounded-3xl p-8 sm:p-12 lg:p-16 text-white shadow-2xl overflow-hidden" style="border-radius: 36px;">
+            <!-- Decorative background pattern -->
+            <div class="absolute -right-16 -bottom-16 w-80 h-80 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -left-16 -top-16 w-60 h-60 bg-emerald-300/10 rounded-full blur-2xl pointer-events-none"></div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-
-            <!-- Left: Text -->
-            <div>
-                <span class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-emerald-300 mb-5">
-                    <span class="w-8 h-px bg-emerald-400 inline-block"></span>
-                    Tentang Kami
-                </span>
-                <h2 class="font-sora text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-6">
-                    Sistem Asistensi Pintar Akademik Bimbingan & Konseling
-                </h2>
-                <div class="w-14 h-1 bg-gradient-to-r from-emerald-400 to-teal-300 rounded-full mb-6"></div>
-                <p class="text-emerald-100 text-base leading-relaxed mb-5">
-                    SAPA BK adalah platform digital resmi layanan Bimbingan dan Konseling SMA Negeri 4 Jember yang hadir untuk menjawab kebutuhan siswa di era modern. Dikembangkan sebagai jembatan komunikasi antara siswa dengan Guru BK profesional, SAPA BK mengintegrasikan kecerdasan buatan (AI) dengan pendekatan konseling yang humanis.
-                </p>
-                <p class="text-emerald-100/80 text-base leading-relaxed mb-8">
-                    Sejak diluncurkan, SAPA BK telah melayani konsultasi akademik, pengembangan karir, dan pendampingan kesehatan mental siswa melalui platform yang aman, rahasia, dan mudah diakses kapan saja dan di mana saja.
-                </p>
-
-                <!-- Key features list -->
-                <ul class="space-y-3 mb-8">
-                    @foreach([
-                        ['icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'text' => 'Tersertifikasi & Dikelola Guru BK Profesional SMAN 4 Jember'],
-                        ['icon' => 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z', 'text' => 'Sistem Kerahasiaan Data Siswa yang Ketat & Terpercaya'],
-                        ['icon' => 'M13 10V3L4 14h7v7l9-11h-7z', 'text' => 'AI Chatbot BK Responsif & Berbasis Pedoman BK Resmi'],
-                        ['icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253', 'text' => 'Akses Gratis ke Perpustakaan E-Book & Modul BK Lengkap'],
-                    ] as $feature)
-                    <li class="flex items-start gap-3">
-                        <div class="w-6 h-6 rounded-full bg-emerald-400/20 flex items-center justify-center shrink-0 mt-0.5">
-                            <svg class="w-3.5 h-3.5 text-emerald-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $feature['icon'] }}"/></svg>
-                        </div>
-                        <p class="text-emerald-100 text-sm leading-relaxed">{{ $feature['text'] }}</p>
-                    </li>
-                    @endforeach
-                </ul>
-
-                <a href="{{ route('tentang') }}" id="about-cta" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white text-[#047857] font-bold text-sm hover:bg-emerald-50 transition-all duration-200 shadow-lg shadow-black/20">
-                    Selengkapnya Tentang SAPA BK
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                </a>
-            </div>
-
-            <!-- Right: Stats grid -->
-            <div class="grid grid-cols-2 gap-4">
-                @foreach([
-                    ['value' => '24/7', 'label' => 'Asisten AI Online', 'sub' => 'Siap menjawab pertanyaan kapan saja', 'icon' => 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z'],
-                    ['value' => '4+', 'label' => 'Guru BK Profesional', 'sub' => 'Siap mendampingi siswa', 'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z'],
-                    ['value' => '100+', 'label' => 'E-Book & Modul BK', 'sub' => 'Koleksi lengkap untuk siswa', 'icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'],
-                    ['value' => '100%', 'label' => 'Kerahasiaan Data', 'sub' => 'Konsultasi aman & terpercaya', 'icon' => 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z'],
-                ] as $stat)
-                <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 text-center hover:bg-white/15 transition-all duration-300">
-                    <div class="w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-emerald-300" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $stat['icon'] }}"/></svg>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
+                
+                <!-- Left: Logo BK Illustration -->
+                <div class="lg:col-span-4 flex justify-center items-center">
+                    <div class="relative group max-w-[240px] sm:max-w-xs w-full">
+                        <div class="absolute inset-0 bg-white/20 rounded-full blur-2xl group-hover:bg-white/30 transition-all duration-300"></div>
+                        <img src="/logoBk.png" alt="Logo BK SAPA BK" class="relative z-10 w-full h-auto object-contain drop-shadow-xl hover:scale-105 transition-transform duration-300">
                     </div>
-                    <p class="font-sora text-3xl font-extrabold text-white mb-1">{{ $stat['value'] }}</p>
-                    <p class="font-bold text-emerald-200 text-sm mb-1">{{ $stat['label'] }}</p>
-                    <p class="text-emerald-100/70 text-xs leading-tight">{{ $stat['sub'] }}</p>
                 </div>
-                @endforeach
-            </div>
 
+                <!-- Right: Content & Explanation -->
+                <div class="lg:col-span-8 text-center lg:text-left">
+                    <h2 class="font-sora text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-6 tracking-tight text-white">
+                        Apa itu SAPA BK ?
+                    </h2>
+                    
+                    <p class="text-emerald-50 text-base sm:text-lg leading-relaxed mb-8 max-w-3xl font-medium">
+                        SAPA BK (Sistem Asistensi Pintar Akademik) merupakan platform digital resmi layanan Bimbingan dan Konseling SMA Negeri 4 Jember. SAPA BK dikembangkan dengan tujuan memfasilitasi siswa SMAN 4 Jember untuk dapat mengakses beragam informasi berkaitan dengan bimbingan dan konseling, layanan konsultasi privat bersama Guru BK profesional, tes minat bakat, serta perpustakaan e-book edukatif hanya dalam satu platform.
+                    </p>
+
+                    <div>
+                        @auth
+                            <a href="{{ route('student.chat') }}" class="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-white text-[#047857] hover:bg-emerald-50 font-extrabold text-sm sm:text-base shadow-lg transition-all duration-200 hover:-translate-y-0.5">
+                                Mulai Konsultasi
+                            </a>
+                        @else
+                            <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-white text-[#047857] hover:bg-emerald-50 font-extrabold text-sm sm:text-base shadow-lg transition-all duration-200 hover:-translate-y-0.5">
+                                Masuk Sekarang
+                            </a>
+                        @endauth
+                    </div>
+                </div>
+
+            </div>
         </div>
+
     </div>
 </section>
 
