@@ -171,6 +171,7 @@
 }
 
 @layer base {
+
   *,
   ::after,
   ::before,
@@ -178,15 +179,18 @@
   ::file-selector-button {
     border-color: var(--color-gray-200, currentColor);
   }
+
   .dark *,
   .dark ::after,
   .dark ::before {
     border-color: var(--border-color);
   }
+
   button:not(:disabled),
   [role='button']:not(:disabled) {
     cursor: pointer;
   }
+
   body {
     @apply relative font-normal font-outfit z-1 bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-slate-100;
   }
@@ -196,53 +200,75 @@
 @utility menu-item {
   @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-theme-sm;
 }
+
 @utility menu-item-active {
   @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
 }
+
 @utility menu-item-inactive {
   @apply text-gray-700 hover:bg-gray-100 group-hover:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-300;
 }
+
 @utility menu-item-icon-active {
   @apply text-brand-500 dark:text-brand-400;
 }
+
 @utility menu-item-icon-inactive {
   @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300;
 }
+
 @utility menu-dropdown-item {
   @apply relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-theme-sm font-medium;
 }
+
 @utility menu-dropdown-item-active {
   @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
 }
+
 @utility menu-dropdown-item-inactive {
   @apply text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/5;
 }
+
 @utility menu-dropdown-badge {
   @apply text-success-600 dark:text-success-500 block rounded-full px-2.5 py-0.5 text-xs font-medium uppercase;
 }
+
 @utility menu-dropdown-badge-active {
   @apply bg-success-100 dark:bg-success-500/20;
 }
+
 @utility menu-dropdown-badge-inactive {
   @apply bg-success-50 group-hover:bg-success-100 dark:bg-success-500/15 dark:group-hover:bg-success-500/20;
 }
 
 @utility no-scrollbar {
-  &::-webkit-scrollbar { display: none; }
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
 @utility custom-scrollbar {
-  &::-webkit-scrollbar { @apply size-1.5; }
-  &::-webkit-scrollbar-track { @apply rounded-full; }
-  &::-webkit-scrollbar-thumb { @apply bg-gray-200 rounded-full dark:bg-gray-700; }
+  &::-webkit-scrollbar {
+    @apply size-1.5;
+  }
+
+  &::-webkit-scrollbar-track {
+    @apply rounded-full;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    @apply bg-gray-200 rounded-full dark:bg-gray-700;
+  }
 }
 
 /* Custom SAPA BK Badges & Buttons Compatibility */
 .btn-primary {
   @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm text-white bg-[#059669] hover:bg-[#047857] transition-all shadow-sm;
 }
+
 .btn-secondary {
   @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 dark:hover:bg-slate-700/80 transition-all shadow-xs;
 }
@@ -251,10 +277,12 @@
 .card {
   @apply bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/60 rounded-2xl transition-all;
 }
+
 .card-hover {
   @apply bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/60 rounded-2xl transition-all hover:shadow-lg dark:hover:border-emerald-500/40;
 }
-.pill-badge, .badge-green {
+
+.pill-badge,
+.badge-green {
   @apply inline-flex items-center gap-1.5 bg-emerald-50 text-[#059669] dark:bg-emerald-950/70 dark:text-emerald-300 dark:border dark:border-emerald-800/50 px-3 py-1 rounded-full text-xs font-bold;
 }
-

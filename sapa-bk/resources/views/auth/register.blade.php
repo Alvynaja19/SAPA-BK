@@ -3,46 +3,73 @@
 @section('title', 'Daftar Akun')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-[#ECFDF5] via-[#F0FDF4] to-[#E6F4EA] dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 flex items-center justify-center pt-20 sm:pt-24 pb-8 sm:pb-12 px-4 sm:px-6">
+<!-- Custom CSS Animations (Keyframes) -->
+<style>
+    /* 1. Animasi Floating (Melayang) pada Ilustrasi */
+    @keyframes float-illustration {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+    }
+    .animate-float {
+        animation: float-illustration 4s ease-in-out infinite;
+    }
+
+    /* 2. Animasi Fade-in dan Slide-up saat halaman load */
+    @keyframes fade-in-up {
+        0% { opacity: 0; transform: translateY(30px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in-up {
+        opacity: 0; /* Mulai dari tidak terlihat */
+        animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* 3. Efek Glow/Menyala pada Input Field saat di-klik (Focus) */
+    .input-glow-focus:focus {
+        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.25);
+        border-color: #10b981;
+    }
+</style>
+
+<div class="min-h-screen relative overflow-hidden bg-[#f0fdf4] dark:bg-slate-950 flex items-center justify-center pt-20 sm:pt-24 pb-8 sm:pb-12 px-4 sm:px-6">
     
-    <!-- Card Utama Register (Dual Column Layout dengan Hijau Identitas Sekolah SMAN 4 Jember) -->
-    <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 rounded-[32px] overflow-hidden shadow-2xl border border-emerald-200/60 dark:border-slate-800/80 bg-white dark:bg-slate-900">
+    <!-- Premium Ambient Background Glow (Opsional) -->
+    <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-emerald-300/30 dark:bg-emerald-900/20 blur-[100px] animate-[pulse_8s_ease-in-out_infinite_alternate]"></div>
+        <div class="absolute top-[20%] right-[-10%] w-[35%] h-[40%] rounded-full bg-teal-200/40 dark:bg-teal-900/20 blur-[120px] animate-[pulse_10s_ease-in-out_infinite_alternate_reverse]"></div>
+        <div class="absolute bottom-[-10%] left-[20%] w-[50%] h-[40%] rounded-full bg-emerald-200/30 dark:bg-emerald-800/20 blur-[100px] animate-[pulse_12s_ease-in-out_infinite_alternate]"></div>
+    </div>
 
-        <!-- KIRI — Visual Hero & Warna Dasar Hijau Sekolah -->
-        <div class="lg:col-span-5 bg-gradient-to-br from-[#047857] via-[#059669] to-[#10B981] dark:from-[#064E3B] dark:via-emerald-950 dark:to-slate-900 text-white p-8 sm:p-12 relative flex flex-col justify-between overflow-hidden">
+    <!-- MAIN CONTAINER: Split-Screen Dua Kolom -->
+    <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 rounded-[32px] overflow-hidden shadow-2xl border border-emerald-200/60 dark:border-slate-800/80 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl relative z-10">
+
+        <!-- KOLOM KIRI: Panel Hijau dengan Teks & Animasi Ilustrasi -->
+        <div class="bg-gradient-to-br from-[#047857] via-[#059669] to-[#10B981] dark:from-[#064E3B] dark:via-emerald-950 dark:to-slate-900 text-white p-8 sm:p-12 relative flex flex-col justify-center items-center overflow-hidden">
             
-            <!-- Ornaments -->
+            <!-- Elemen Dekorasi Melingkar -->
             <div class="absolute -top-12 -left-12 w-56 h-56 rounded-full bg-white/10 dark:bg-emerald-500/10 blur-3xl pointer-events-none"></div>
-            <div class="absolute -bottom-16 -right-16 w-64 h-64 rounded-full bg-teal-300/20 dark:bg-emerald-400/10 blur-3xl pointer-events-none"></div>
 
-            <!-- Floating School Badge -->
-            <div class="absolute top-8 right-8 px-3.5 py-1.5 rounded-full bg-white/15 dark:bg-slate-900/40 backdrop-blur-md border border-white/20 dark:border-emerald-700/50 text-white font-bold text-[11px] shadow-sm flex items-center gap-2 z-10">
-                <span class="w-2 h-2 rounded-full bg-emerald-300 dark:bg-emerald-400 animate-pulse"></span>
-                <span>Registrasi Siswa</span>
-            </div>
-
-            <!-- Ilustrasi Sekolah -->
-            <div class="my-auto py-4 relative z-10 text-center">
-                <div class="p-3 sm:p-4 rounded-3xl bg-white/10 dark:bg-slate-900/60 backdrop-blur-sm border border-white/20 dark:border-emerald-800/40 shadow-xl max-w-xs mx-auto">
-                    <img src="/images/school_login_hero.png"
-                         alt="Ilustrasi Registrasi SAPA BK"
-                         class="w-full object-contain rounded-2xl drop-shadow-md hover:scale-105 transition-transform duration-500">
+            <div class="relative z-10 text-center w-full">
+                <!-- Elemen Ilustrasi dengan Animasi Floating -->
+                <div class="p-4 rounded-3xl bg-white/10 dark:bg-slate-900/60 backdrop-blur-sm border border-white/20 dark:border-emerald-800/40 shadow-xl max-w-xs mx-auto mb-8 animate-float">
+                    <img src="/images/school_login_hero.png" 
+                         alt="Ilustrasi Registrasi SAPA BK SMAN 4 Jember" 
+                         class="w-full object-contain rounded-2xl drop-shadow-lg">
                 </div>
-            </div>
 
-            <!-- Headline Bawah -->
-            <div class="relative z-10 text-center pt-4">
-                <h2 class="font-sora font-extrabold text-2xl text-white dark:text-emerald-100 leading-tight">
+                <!-- Teks Wujudkan Potensi Diri -->
+                <h2 class="font-sora font-extrabold text-3xl sm:text-4xl text-white dark:text-emerald-100 leading-tight mb-3">
                     Gabung Ekosistem BK Digital.
                 </h2>
-                <p class="text-xs text-emerald-100/90 dark:text-slate-300 mt-2 max-w-sm mx-auto leading-relaxed">
+                <p class="text-sm text-emerald-100/90 dark:text-slate-300 max-w-sm mx-auto leading-relaxed">
                     Dapatkan akses ke fitur Konsultasi AI, Pemetaan Minat Bakat, dan Perpustakaan E-Book SMAN 4 Jember.
                 </p>
             </div>
         </div>
 
-        <!-- KANAN — Form Registrasi Siswa -->
-        <div class="lg:col-span-7 p-8 sm:p-12 flex flex-col justify-center bg-white dark:bg-slate-900">
+        <!-- KOLOM KANAN: Panel Putih dengan Form & Animasi Load -->
+        <!-- Memiliki class animate-fade-in-up untuk animasi Slide-up -->
+        <div class="p-8 sm:p-12 flex flex-col justify-center relative animate-fade-in-up" style="animation-delay: 0.2s;">
             <div class="max-w-md w-full mx-auto">
                 
                 <div class="mb-6 text-center">
@@ -58,7 +85,7 @@
                     <div>
                         <label for="name" class="block text-xs font-bold mb-1.5 uppercase tracking-wide text-slate-700 dark:text-slate-300">Nama Lengkap Siswa</label>
                         <input id="name" type="text" name="name" value="{{ old('name') }}" required
-                               class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 text-xs sm:text-sm text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition-all @error('name') border-red-400 @enderror"
+                               class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 text-xs sm:text-sm text-slate-900 dark:text-white input-glow-focus outline-none transition-all duration-300 @error('name') border-red-400 @enderror"
                                placeholder="Contoh: Ahmad Rizki Pratama">
                         @error('name') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                     </div>
@@ -68,7 +95,7 @@
                         <div>
                             <label for="email" class="block text-xs font-bold mb-1.5 uppercase tracking-wide text-slate-700 dark:text-slate-300">Email Sekolah</label>
                             <input id="email" type="email" name="email" value="{{ old('email') }}" required
-                                   class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 text-xs sm:text-sm text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition-all @error('email') border-red-400 @enderror"
+                                   class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 text-xs sm:text-sm text-slate-900 dark:text-white input-glow-focus outline-none transition-all duration-300 @error('email') border-red-400 @enderror"
                                    placeholder="nama@email.com">
                             @error('email') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                         </div>
@@ -76,7 +103,7 @@
                         <div>
                             <label for="phone" class="block text-xs font-bold mb-1.5 uppercase tracking-wide text-slate-700 dark:text-slate-300">No. WhatsApp</label>
                             <input id="phone" type="text" name="phone" value="{{ old('phone') }}"
-                                   class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 text-xs sm:text-sm text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition-all @error('phone') border-red-400 @enderror"
+                                   class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 text-xs sm:text-sm text-slate-900 dark:text-white input-glow-focus outline-none transition-all duration-300 @error('phone') border-red-400 @enderror"
                                    placeholder="081234567890">
                             @error('phone') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                         </div>
@@ -87,13 +114,13 @@
                         <div>
                             <label for="nisn" class="block text-xs font-bold mb-1.5 uppercase tracking-wide text-slate-700 dark:text-slate-300">NISN</label>
                             <input id="nisn" type="text" name="nisn" value="{{ old('nisn') }}"
-                                   class="w-full px-3 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 text-xs text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition-all @error('nisn') border-red-400 @enderror"
+                                   class="w-full px-3 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 text-xs text-slate-900 dark:text-white input-glow-focus outline-none transition-all duration-300 @error('nisn') border-red-400 @enderror"
                                    placeholder="0012345678">
                             @error('nisn') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label for="kelas" class="block text-xs font-bold mb-1.5 uppercase tracking-wide text-slate-700 dark:text-slate-300">Kelas</label>
-                            <select id="kelas" name="kelas" class="w-full px-3 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 text-xs text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition-all @error('kelas') border-red-400 @enderror">
+                            <select id="kelas" name="kelas" class="w-full px-3 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 text-xs text-slate-900 dark:text-white input-glow-focus outline-none transition-all duration-300 @error('kelas') border-red-400 @enderror">
                                 <option value="">Pilih</option>
                                 <option value="X" {{ old('kelas') == 'X' ? 'selected' : '' }}>Kelas X</option>
                                 <option value="XI" {{ old('kelas') == 'XI' ? 'selected' : '' }}>Kelas XI</option>
@@ -104,7 +131,7 @@
                         <div>
                             <label for="jurusan" class="block text-xs font-bold mb-1.5 uppercase tracking-wide text-slate-700 dark:text-slate-300">Jurusan</label>
                             <input id="jurusan" type="text" name="jurusan" value="{{ old('jurusan') ?? 'MIPA' }}"
-                                   class="w-full px-3 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 text-xs text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition-all @error('jurusan') border-red-400 @enderror"
+                                   class="w-full px-3 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 text-xs text-slate-900 dark:text-white input-glow-focus outline-none transition-all duration-300 @error('jurusan') border-red-400 @enderror"
                                    placeholder="IPA/IPS/Merdeka">
                             @error('jurusan') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                         </div>
@@ -115,7 +142,7 @@
                         <label for="password" class="block text-xs font-bold mb-1.5 uppercase tracking-wide text-slate-700 dark:text-slate-300">Password</label>
                         <div class="relative">
                             <input id="password" type="password" name="password" required
-                                   class="w-full px-4 py-3 pr-10 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 text-xs sm:text-sm text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition-all @error('password') border-red-400 @enderror"
+                                   class="w-full px-4 py-3 pr-10 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 text-xs sm:text-sm text-slate-900 dark:text-white input-glow-focus outline-none transition-all duration-300 @error('password') border-red-400 @enderror"
                                    placeholder="Minimal 8 karakter">
                             <button type="button" onclick="togglePasswordVisibility('password', 'eye-icon-password')"
                                     class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#059669] dark:hover:text-emerald-400 p-1">
@@ -133,7 +160,7 @@
                         <label for="password_confirmation" class="block text-xs font-bold mb-1.5 uppercase tracking-wide text-slate-700 dark:text-slate-300">Konfirmasi Password</label>
                         <div class="relative">
                             <input id="password_confirmation" type="password" name="password_confirmation" required
-                                   class="w-full px-4 py-3 pr-10 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 text-xs sm:text-sm text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition-all"
+                                   class="w-full px-4 py-3 pr-10 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 text-xs sm:text-sm text-slate-900 dark:text-white input-glow-focus outline-none transition-all duration-300"
                                    placeholder="Ulangi password di atas">
                             <button type="button" onclick="togglePasswordVisibility('password_confirmation', 'eye-icon-confirmation')"
                                     class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#059669] dark:hover:text-emerald-400 p-1">
@@ -154,7 +181,7 @@
                         </label>
                     </div>
 
-                    <button type="submit" id="submit-btn" class="w-full btn-primary justify-center py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-emerald-600/25 mt-2">
+                    <button type="submit" id="submit-btn" class="w-full inline-flex items-center justify-center py-3.5 rounded-xl font-bold text-sm text-white bg-[#059669] hover:bg-[#047857] shadow-lg shadow-emerald-600/25 mt-2 transition-transform duration-300 hover:scale-105">
                         Daftar Sebagai Siswa
                     </button>
                 </form>
