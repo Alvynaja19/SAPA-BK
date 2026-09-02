@@ -14,12 +14,12 @@
 
         <div class="relative z-10">
             <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-white text-xs font-semibold mb-3 border border-white/20">
-                <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+                
                 <span>Ruang Konsultasi &amp; Pengembangan Diri Digital</span>
             </div>
             
             <h2 class="text-2xl sm:text-3xl font-bold tracking-tight mb-2">
-                Halo, {{ $user->name }}! ✨
+                Halo, {{ $user->name }}!
             </h2>
             
             <p class="text-white/90 text-xs sm:text-sm leading-relaxed max-w-2xl">
@@ -29,28 +29,28 @@
             {{-- Interactive Mood Selector --}}
             <div class="mt-5 pt-4 border-t border-white/15">
                 <p class="text-xs font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                    <span>🌱</span> Apa yang kamu rasakan hari ini? (Klik untuk respon kilat)
+                    Apa yang kamu rasakan hari ini? (Klik untuk respon kilat)
                 </p>
                 <div class="flex flex-wrap gap-2">
                     <button type="button" onclick="selectMood('semangat', 'Wah, keren! Terus pertahankan energimu. Ada target belajar atau mimpi yang ingin kamu eksplorasi hari ini?')"
                             class="mood-btn px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/25 backdrop-blur-xs text-xs font-semibold text-white border border-white/20 transition-all flex items-center gap-1.5 active:scale-95">
-                        <span>😊</span> Bersemangat
+                        Bersemangat
                     </button>
                     <button type="button" onclick="selectMood('biasa', 'Hari yang santai dan seimbang. Kamu bisa membaca e-book tips motivasi atau sekadar tanya jawab ringan di sini.')"
                             class="mood-btn px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/25 backdrop-blur-xs text-xs font-semibold text-white border border-white/20 transition-all flex items-center gap-1.5 active:scale-95">
-                        <span>😐</span> Biasa Saja
+                        Biasa Saja
                     </button>
                     <button type="button" onclick="selectMood('stres', 'Tarik napas dalam-dalam ya. Kamu tidak sendirian. Mau curhat dengan Asisten AI atau jadwalkan sesi live dengan Guru BK?')"
                             class="mood-btn px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/25 backdrop-blur-xs text-xs font-semibold text-white border border-white/20 transition-all flex items-center gap-1.5 active:scale-95">
-                        <span>😰</span> Cemas / Stres
+                        Cemas / Stres
                     </button>
                     <button type="button" onclick="selectMood('lelah', 'Istirahat sejenak bukan tanda menyerah. Coba metode 4-7-8 untuk relaksasi tubuh dan tenangkan pikiranmu.')"
                             class="mood-btn px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/25 backdrop-blur-xs text-xs font-semibold text-white border border-white/20 transition-all flex items-center gap-1.5 active:scale-95">
-                        <span>😴</span> Lelah Belajar
+                        Lelah Belajar
                     </button>
                     <button type="button" onclick="selectMood('karir', 'Memilih jurusan butuh riset yang matang. Coba tanyakan tips SNBP atau ikuti tes minat bakat untuk memetakan potensimu!')"
                             class="mood-btn px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/25 backdrop-blur-xs text-xs font-semibold text-white border border-white/20 transition-all flex items-center gap-1.5 active:scale-95">
-                        <span>🎓</span> Bingung Karir
+                         Bingung Karir
                     </button>
                 </div>
             </div>
@@ -59,12 +59,12 @@
             <div id="mood-response-box" class="hidden mt-4 p-4 rounded-xl bg-white/20 backdrop-blur-md border border-white/30 text-xs text-white">
                 <div class="flex items-start justify-between gap-3">
                     <div class="flex items-start gap-2.5">
-                        <span class="text-xl">💡</span>
+                        
                         <div>
                             <p id="mood-response-text" class="font-medium leading-relaxed"></p>
                             <div class="mt-2.5 flex items-center gap-2">
                                 <button id="mood-chat-btn" onclick="startMoodChat()" class="px-3.5 py-1.5 rounded-lg bg-white text-brand-600 font-bold text-xs shadow-xs hover:bg-gray-100 transition-all flex items-center gap-1">
-                                    <span>💬</span> Tanya Asisten AI
+                                     Tanya Asisten AI
                                 </button>
                             </div>
                         </div>
@@ -115,11 +115,11 @@
         <div class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-xs flex flex-col justify-between">
             <div class="flex items-center justify-between">
                 <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">Guru BK</span>
-                <span class="w-2.5 h-2.5 rounded-full {{ $isWorkingHours ? 'bg-success-500 animate-ping' : 'bg-amber-400' }}"></span>
+                
             </div>
             <div class="mt-1">
                 <p class="text-xs font-bold text-gray-900 dark:text-white">
-                    {{ $isWorkingHours ? '🟢 Live BK Aktif' : '⏳ Di Luar Jam Kerja' }}
+                    {{ $isWorkingHours ? 'Live BK Aktif' : 'Di Luar Jam Kerja' }}
                 </p>
                 <p class="text-[10px] text-gray-400">08:00 - 15:00 WIB</p>
             </div>
@@ -135,7 +135,7 @@
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
             <div>
                 <h3 class="font-bold text-base text-gray-900 dark:text-white flex items-center gap-2">
-                    <span>🤖</span> Tanya Apapun ke Asisten Digital BK
+                    <span>AI</span> Tanya Apapun ke Asisten Digital BK
                 </h3>
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                     Dapatkan panduan belajar, referensi SNBP/UTBK, materi e-book, atau teknik relaksasi secara instan 24/7.
@@ -151,7 +151,7 @@
             <div class="relative flex-1">
                 <input type="text" id="quick-message-input" placeholder="Tuliskan pertanyaanmu, misal: 'Bagaimana tips memilih jurusan SNBP sesuai nilai rapor?'"
                        class="w-full rounded-xl py-3 pl-4 pr-10 text-xs sm:text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-brand-500 focus:outline-hidden">
-                <span class="absolute right-3.5 top-3.5 text-gray-400">💡</span>
+                
             </div>
             <button type="submit" class="btn-primary text-xs sm:text-sm px-5 py-3 rounded-xl shrink-0 font-semibold flex items-center gap-1.5">
                 <span>Kirim</span>
@@ -164,15 +164,15 @@
             <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider shrink-0 mr-1">Topik Cepat:</span>
             <button type="button" onclick="setQuickPrompt('Bagaimana cara mengatasi rasa cemas dan takut gagal saat ujian sekolah?')"
                     class="shrink-0 px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-brand-50 dark:hover:bg-brand-500/20 hover:text-brand-500 dark:text-gray-300 text-[11px] font-medium transition-all border border-gray-200 dark:border-gray-700">
-                💚 Atasi Cemas Ujian
+                Atasi Cemas Ujian
             </button>
             <button type="button" onclick="setQuickPrompt('Bagaimana strategi memilih jurusan kuliah SNBP dan SNBT yang peluangnya tinggi?')"
                     class="shrink-0 px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-brand-50 dark:hover:bg-brand-500/20 hover:text-brand-500 dark:text-gray-300 text-[11px] font-medium transition-all border border-gray-200 dark:border-gray-700">
-                🎓 Strategi SNBP PTN
+                 Strategi SNBP PTN
             </button>
             <button type="button" onclick="setQuickPrompt('Bisa jelaskan teknik belajar Pomodoro dan Active Recall?')"
                     class="shrink-0 px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-brand-50 dark:hover:bg-brand-500/20 hover:text-brand-500 dark:text-gray-300 text-[11px] font-medium transition-all border border-gray-200 dark:border-gray-700">
-                📚 Cara Belajar Efektif
+                 Cara Belajar Efektif
             </button>
         </div>
     </div>
@@ -289,7 +289,7 @@
             <div class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-xs">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-bold text-gray-900 dark:text-white text-sm flex items-center gap-2">
-                        <span>📚</span> E-Book Panduan BK
+                         E-Book Panduan BK
                     </h3>
                     <a href="{{ route('student.ebook') }}" class="text-xs text-brand-500 font-semibold hover:underline">Lihat Semua →</a>
                 </div>
@@ -318,7 +318,7 @@
             <div class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-xs">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-bold text-gray-900 dark:text-white text-sm flex items-center gap-2">
-                        <span>💡</span> Edukasi &amp; Tips Remaja
+                         Edukasi &amp; Tips Remaja
                     </h3>
                     <a href="{{ route('artikel.list') }}" class="text-xs text-brand-500 font-semibold hover:underline">Jelajahi →</a>
                 </div>

@@ -10,8 +10,8 @@
     @if($waitingCount > 0)
     <div class="p-5 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-theme-md flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-orange-400">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-xl shrink-0">
-                ⚠️
+            <div class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center shrink-0">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </div>
             <div>
                 <h3 class="font-bold text-sm sm:text-base">
@@ -23,7 +23,7 @@
             </div>
         </div>
         <a href="{{ route('counselor.live-chat') }}" class="px-5 py-2.5 rounded-xl bg-white text-orange-900 font-bold text-xs hover:bg-orange-50 transition-all shadow-xs shrink-0 flex items-center justify-center gap-1.5">
-            <span>👨‍🏫</span> Buka Antrean Live Chat →
+            <svg class="w-4 h-4 inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Buka Antrean Live Chat →
         </a>
     </div>
     @endif
@@ -187,31 +187,31 @@
                 <div class="space-y-2">
                     <a href="{{ route('counselor.live-chat') }}" class="flex items-center justify-between p-3 rounded-xl bg-amber-50/60 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 text-xs font-semibold text-amber-900 dark:text-amber-300 transition-all hover:scale-[1.01]">
                         <span class="flex items-center gap-2">
-                            <span>👨‍🏫</span> Portal Live Chat Siswa
+                            <svg class="w-4 h-4 inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Portal Live Chat Siswa
                         </span>
                         <span>→</span>
                     </a>
                     <a href="{{ route('counselor.knowledge-base') }}" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-gray-800/50 hover:bg-brand-50 dark:hover:bg-brand-500/10 border border-gray-200 dark:border-gray-800 text-xs font-semibold text-gray-900 dark:text-gray-200 hover:text-brand-500 transition-all">
                         <span class="flex items-center gap-2">
-                            <span>📄</span> Upload Dokumen RAG (PDF)
+                            <svg class="w-4 h-4 inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg> Upload Dokumen RAG (PDF)
                         </span>
                         <span>→</span>
                     </a>
                     <a href="{{ route('counselor.ebook') }}" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-gray-800/50 hover:bg-brand-50 dark:hover:bg-brand-500/10 border border-gray-200 dark:border-gray-800 text-xs font-semibold text-gray-900 dark:text-gray-200 hover:text-brand-500 transition-all">
                         <span class="flex items-center gap-2">
-                            <span>📚</span> Tambah E-Book Digital ({{ $totalEbook }})
+                            <svg class="w-4 h-4 inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Tambah E-Book Digital ({{ $totalEbook }})
                         </span>
                         <span>→</span>
                     </a>
                     <a href="{{ route('counselor.artikel') }}" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-gray-800/50 hover:bg-brand-50 dark:hover:bg-brand-500/10 border border-gray-200 dark:border-gray-800 text-xs font-semibold text-gray-900 dark:text-gray-200 hover:text-brand-500 transition-all">
                         <span class="flex items-center gap-2">
-                            <span>🌐</span> Impor Artikel Jurnal ({{ $totalArtikel }})
+                            <svg class="w-4 h-4 inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Impor Artikel Jurnal ({{ $totalArtikel }})
                         </span>
                         <span>→</span>
                     </a>
                     <a href="{{ route('counselor.tes') }}" class="flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-gray-800/50 hover:bg-brand-50 dark:hover:bg-brand-500/10 border border-gray-200 dark:border-gray-800 text-xs font-semibold text-gray-900 dark:text-gray-200 hover:text-brand-500 transition-all">
                         <span class="flex items-center gap-2">
-                            <span>📝</span> Kelola Tes &amp; Kuesioner ({{ $totalTes }})
+                            <svg class="w-4 h-4 inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Kelola Tes &amp; Kuesioner ({{ $totalTes }})
                         </span>
                         <span>→</span>
                     </a>
@@ -222,7 +222,7 @@
             <div class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-xs">
                 <div class="flex items-center justify-between mb-3">
                     <h3 class="font-bold text-sm text-gray-900 dark:text-white flex items-center gap-1.5">
-                        <span>🔍</span> Evaluasi Respon AI
+                        <svg class="w-4 h-4 inline-block text-brand-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Evaluasi Respon AI
                     </h3>
                     <a href="{{ route('counselor.evaluasi') }}" class="text-[11px] text-brand-500 font-semibold hover:underline">Semua →</a>
                 </div>

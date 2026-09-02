@@ -38,7 +38,7 @@
         <a href="{{ route('admin.users', ['role' => 'siswa']) }}" class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-xs hover:border-brand-500 transition-all group">
             <div class="flex items-center justify-between mb-3">
                 <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-500 dark:bg-brand-500/20 dark:text-brand-400 flex items-center justify-center font-bold text-lg group-hover:scale-105 transition-transform">
-                    🎓
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
                 </div>
                 <span class="text-xs font-semibold text-brand-500 dark:text-brand-400 group-hover:underline">Lihat →</span>
             </div>
@@ -50,7 +50,7 @@
         <a href="{{ route('admin.users', ['role' => 'guru_bk']) }}" class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-xs hover:border-brand-500 transition-all group">
             <div class="flex items-center justify-between mb-3">
                 <div class="w-10 h-10 rounded-xl bg-blue-light-50 text-blue-light-600 dark:bg-blue-light-500/20 dark:text-blue-light-400 flex items-center justify-center font-bold text-lg group-hover:scale-105 transition-transform">
-                    👨‍🏫
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 </div>
                 <span class="text-xs font-semibold text-blue-light-600 dark:text-blue-light-400 group-hover:underline">Lihat →</span>
             </div>
@@ -62,7 +62,7 @@
         <a href="{{ route('admin.users', ['role' => 'admin']) }}" class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-xs hover:border-brand-500 transition-all group">
             <div class="flex items-center justify-between mb-3">
                 <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400 flex items-center justify-center font-bold text-lg group-hover:scale-105 transition-transform">
-                    🛠️
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 </div>
                 <span class="text-xs font-semibold text-purple-600 dark:text-purple-400 group-hover:underline">Lihat →</span>
             </div>
@@ -73,7 +73,7 @@
         <!-- Percakapan Stat Card -->
         <div class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-xs">
             <div class="w-10 h-10 rounded-xl bg-success-50 text-success-600 dark:bg-success-500/20 dark:text-success-400 flex items-center justify-center font-bold text-lg mb-3">
-                💬
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             </div>
             <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $stats['total_chat'] }}</p>
             <p class="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5">Sesi Konsultasi</p>
@@ -82,7 +82,7 @@
         <!-- E-book Stat Card -->
         <div class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-xs">
             <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400 flex items-center justify-center font-bold text-lg mb-3">
-                📚
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
             </div>
             <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $stats['total_ebook'] }}</p>
             <p class="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5">Modul E-Book</p>
@@ -91,7 +91,7 @@
         <!-- Artikel Stat Card -->
         <div class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-xs">
             <div class="w-10 h-10 rounded-xl bg-gray-100 text-gray-700 dark:bg-white/5 dark:text-gray-300 flex items-center justify-center font-bold text-lg mb-3">
-                📰
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
             </div>
             <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $stats['total_artikel'] }}</p>
             <p class="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5">Artikel Informasi</p>

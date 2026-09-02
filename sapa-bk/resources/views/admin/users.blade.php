@@ -29,16 +29,19 @@
                 Semua ({{ \App\Models\User::count() }})
             </a>
             <a href="{{ route('admin.users', ['role' => 'siswa', 'q' => request('q')]) }}"
-               class="px-3.5 py-2 rounded-xl text-xs font-bold transition-all {{ request('role') === 'siswa' ? 'bg-[#059669] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
-                🎓 Siswa ({{ \App\Models\User::where('role','siswa')->count() }})
+               class="px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 {{ request('role') === 'siswa' ? 'bg-[#059669] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                Siswa ({{ \App\Models\User::where('role','siswa')->count() }})
             </a>
             <a href="{{ route('admin.users', ['role' => 'guru_bk', 'q' => request('q')]) }}"
-               class="px-3.5 py-2 rounded-xl text-xs font-bold transition-all {{ request('role') === 'guru_bk' ? 'bg-[#059669] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
-                👨‍🏫 Guru BK ({{ \App\Models\User::where('role','guru_bk')->count() }})
+               class="px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 {{ request('role') === 'guru_bk' ? 'bg-[#059669] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Guru BK ({{ \App\Models\User::where('role','guru_bk')->count() }})
             </a>
             <a href="{{ route('admin.users', ['role' => 'admin', 'q' => request('q')]) }}"
-               class="px-3.5 py-2 rounded-xl text-xs font-bold transition-all {{ request('role') === 'admin' ? 'bg-[#059669] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
-                🛠️ Admin ({{ \App\Models\User::where('role','admin')->count() }})
+               class="px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 {{ request('role') === 'admin' ? 'bg-[#059669] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Admin ({{ \App\Models\User::where('role','admin')->count() }})
             </a>
         </div>
 
@@ -82,11 +85,20 @@
                         <td class="py-3.5 px-4 font-mono text-slate-600">{{ $u->email }}</td>
                         <td class="py-3.5 px-4">
                             @if($u->role === 'siswa')
-                                <span class="badge-green text-[10px] uppercase font-bold">🎓 Siswa</span>
+                                <span class="badge-green text-[10px] uppercase font-bold inline-flex items-center gap-1">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                                    Siswa
+                                </span>
                             @elseif($u->role === 'guru_bk')
-                                <span class="bg-teal-50 text-teal-700 border border-teal-200 px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold">👨‍🏫 Guru BK</span>
+                                <span class="bg-teal-50 text-teal-700 border border-teal-200 px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold inline-flex items-center gap-1">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                    Guru BK
+                                </span>
                             @else
-                                <span class="bg-indigo-50 text-indigo-700 border border-indigo-200 px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold">🛠️ Admin</span>
+                                <span class="bg-indigo-50 text-indigo-700 border border-indigo-200 px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold inline-flex items-center gap-1">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                    Admin
+                                </span>
                             @endif
                         </td>
                         <td class="py-3.5 px-4 text-slate-500">{{ $u->created_at->format('d M Y, H:i') }}</td>
