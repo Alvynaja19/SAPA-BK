@@ -190,8 +190,9 @@
                             <div class="mt-3 pt-2.5 border-t border-slate-100 space-y-1">
                                 <span class="text-[10px] font-bold uppercase tracking-wider text-[#059669] block">📚 Rekomendasi E-Book:</span>
                                 @foreach($meta['recommended_ebooks'] as $ebookTitle)
-                                <a href="{{ route('student.ebook') }}" class="inline-block bg-[#ECFDF5] text-[#059669] font-bold text-[11px] px-2.5 py-1 rounded-lg hover:underline mr-1 mt-1">
-                                    📖 {{ $ebookTitle }}
+                                <a href="{{ route('student.ebook') }}" class="inline-flex items-center gap-1 bg-[#ECFDF5] text-[#059669] font-bold text-[11px] px-2.5 py-1 rounded-lg hover:underline mr-1 mt-1">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                                    {{ $ebookTitle }}
                                 </a>
                                 @endforeach
                             </div>
@@ -427,7 +428,7 @@
             ebooksHtml = `
                 <div class="mt-3 pt-2.5 border-t border-slate-100 space-y-1">
                     <span class="text-[10px] font-bold uppercase tracking-wider text-[#059669] block">📚 Rekomendasi E-Book:</span>
-                    ${ebooks.map(eb => `<a href="/student/ebook" class="inline-block bg-[#ECFDF5] text-[#059669] font-bold text-[11px] px-2.5 py-1 rounded-lg hover:underline mr-1 mt-1">📖 ${escapeHtml(eb)}</a>`).join('')}
+                    ${ebooks.map(eb => `<a href="/student/ebook" class="inline-flex items-center gap-1 bg-[#ECFDF5] text-[#059669] font-bold text-[11px] px-2.5 py-1 rounded-lg hover:underline mr-1 mt-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>${escapeHtml(eb)}</a>`).join('')}
                 </div>
             `;
         }

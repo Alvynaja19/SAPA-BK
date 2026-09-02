@@ -4,8 +4,7 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12">
-    <div class="text-center mb-12">
-        <span class="badge-green text-xs mb-3 inline-block">FAQ</span>
+    <div class="text-center mb-12 mt-4 sm:mt-8">
         <h1 class="text-3xl font-bold text-[#0F172A] dark:text-white">Pertanyaan Umum</h1>
         <p class="text-[#475569] dark:text-slate-300 mt-3">Temukan jawaban atas pertanyaan yang sering diajukan seputar layanan BK.</p>
     </div>

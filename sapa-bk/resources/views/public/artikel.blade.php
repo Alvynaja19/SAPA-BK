@@ -7,10 +7,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- ===== HERO HEADER ===== -->
-        <div class="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 mb-3">
-                <span>📚 Edukasi & Informasi BK SMAN 4 Jember</span>
-            </div>
+        <div class="text-center max-w-3xl mx-auto mb-8 sm:mb-12 mt-4 sm:mt-8">
             <h1 class="font-sora text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-3 text-slate-900 dark:text-white">
                 Artikel Bimbingan & <span class="bg-clip-text text-transparent bg-gradient-to-r from-[#059669] via-emerald-500 to-teal-400">Konseling</span>
             </h1>
@@ -210,11 +207,13 @@
 
                                 <!-- Author & Source -->
                                 <div class="mb-2.5 space-y-0.5">
-                                    <p class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 truncate">
-                                        ✍️ {{ $pubArticle['author'] }}
+                                    <p class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 truncate flex items-center gap-1">
+                                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                                        <span class="truncate">{{ $pubArticle['author'] }}</span>
                                     </p>
-                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate">
-                                        📖 {{ $pubArticle['journal'] }} ({{ $pubArticle['source'] }})
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate flex items-center gap-1">
+                                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                                        <span class="truncate">{{ $pubArticle['journal'] }} ({{ $pubArticle['source'] }})</span>
                                     </p>
                                 </div>
 

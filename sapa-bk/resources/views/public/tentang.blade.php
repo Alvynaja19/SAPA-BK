@@ -85,7 +85,7 @@
             
             <div class="card p-6 text-center group hover:-translate-y-1 transition-transform">
                 <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950 text-[#059669] dark:text-emerald-400 flex items-center justify-center mx-auto mb-4 font-bold text-xl">
-                    🔒
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                 </div>
                 <h3 class="font-sora font-bold text-base text-[#0F172A] dark:text-white mb-2">Privasi 100% Rahasia</h3>
                 <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -95,7 +95,7 @@
 
             <div class="card p-6 text-center group hover:-translate-y-1 transition-transform">
                 <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950 text-[#059669] dark:text-emerald-400 flex items-center justify-center mx-auto mb-4 font-bold text-xl">
-                    🤝
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                 </div>
                 <h3 class="font-sora font-bold text-base text-[#0F172A] dark:text-white mb-2">Pendampingan Empatis</h3>
                 <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -105,7 +105,7 @@
 
             <div class="card p-6 text-center group hover:-translate-y-1 transition-transform">
                 <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950 text-[#059669] dark:text-emerald-400 flex items-center justify-center mx-auto mb-4 font-bold text-xl">
-                    📱
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                 </div>
                 <h3 class="font-sora font-bold text-base text-[#0F172A] dark:text-white mb-2">Akses Digital 24/7</h3>
                 <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -115,7 +115,7 @@
 
             <div class="card p-6 text-center group hover:-translate-y-1 transition-transform">
                 <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950 text-[#059669] dark:text-emerald-400 flex items-center justify-center mx-auto mb-4 font-bold text-xl">
-                    🎯
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
                 <h3 class="font-sora font-bold text-base text-[#0F172A] dark:text-white mb-2">Berbasis Sains & Data</h3>
                 <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">

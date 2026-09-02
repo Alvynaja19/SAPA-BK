@@ -16,7 +16,10 @@
 
     <!-- Modal Form Tambah Artikel Manual -->
     <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
-        <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-4">✍️ Tulis Artikel Baru</h3>
+        <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+            Tulis Artikel Baru
+        </h3>
         <form action="{{ route('counselor.artikel.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -128,7 +131,10 @@
                         {{ $pubItem['source'] }} API • {{ $pubItem['year'] ?? 'Terbaru' }}
                     </span>
                     <h4 class="font-bold text-sm text-slate-800 dark:text-white mt-1 line-clamp-2">{{ $pubItem['title'] }}</h4>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">✍️ {{ $pubItem['author'] }}</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                        <span>{{ $pubItem['author'] }}</span>
+                    </p>
                     <p class="text-[11px] text-slate-400 dark:text-slate-500 italic mt-2 line-clamp-2">"{{ $pubItem['abstract'] }}"</p>
                 </div>
                 <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700/60 flex items-center justify-between">

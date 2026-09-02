@@ -81,7 +81,7 @@
         {{-- Card 1 --}}
         <div class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-xs flex items-center gap-3.5">
             <div class="w-11 h-11 rounded-xl bg-brand-50 text-brand-500 dark:bg-brand-500/20 dark:text-brand-400 flex items-center justify-center shrink-0 text-xl font-bold">
-                💬
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
             </div>
             <div class="min-w-0">
                 <p class="text-xl font-bold text-gray-900 dark:text-white">{{ $totalKonsultasiSaya ?? 0 }}</p>
@@ -92,7 +92,7 @@
         {{-- Card 2 --}}
         <div class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-xs flex items-center gap-3.5">
             <div class="w-11 h-11 rounded-xl bg-purple-50 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400 flex items-center justify-center shrink-0 text-xl font-bold">
-                🎯
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>
             <div class="min-w-0">
                 <p class="text-xl font-bold text-gray-900 dark:text-white">{{ $totalTesDiselesaikan ?? 0 }} <span class="text-xs text-gray-400 font-normal">/ {{ $totalTesTersedia ?? 0 }}</span></p>
@@ -103,7 +103,7 @@
         {{-- Card 3 --}}
         <div class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-xs flex items-center gap-3.5">
             <div class="w-11 h-11 rounded-xl bg-blue-light-50 text-blue-light-600 dark:bg-blue-light-500/20 dark:text-blue-light-400 flex items-center justify-center shrink-0 text-xl font-bold">
-                📚
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
             </div>
             <div class="min-w-0">
                 <p class="text-xl font-bold text-gray-900 dark:text-white">{{ $totalEbookTersedia ?? 0 }}</p>
@@ -188,7 +188,7 @@
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-2.5">
                         <div class="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400 flex items-center justify-center text-lg font-bold">
-                            🧩
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/></svg>
                         </div>
                         <div>
                             <h3 class="font-bold text-gray-900 dark:text-white text-base">Hasil Asesmen &amp; Minat Bakat</h3>
@@ -219,7 +219,7 @@
                 </div>
                 @else
                 <div class="p-6 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-800 text-center">
-                    <span class="text-3xl block mb-2">🎯</span>
+                    <div class="flex justify-center mb-2"><svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
                     <h4 class="font-bold text-xs text-gray-900 dark:text-white mb-1">Belum Ada Tes yang Diikuti</h4>
                     <p class="text-[11px] text-gray-500 dark:text-gray-400 max-w-md mx-auto mb-4">
                         Yuk kenali gaya belajarmu, tipe kepribadian, dan kecocokan jurusan lewat tes asesmen psikologi online SAPA BK.
@@ -236,7 +236,7 @@
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-2.5">
                         <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-500 dark:bg-brand-500/20 dark:text-brand-400 flex items-center justify-center text-lg font-bold">
-                            💬
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
                         </div>
                         <div>
                             <h3 class="font-bold text-gray-900 dark:text-white text-base">Percakapan Konsultasi Terakhir</h3>
@@ -251,7 +251,11 @@
                     <div class="flex items-center justify-between p-3.5 rounded-xl bg-gray-50 dark:bg-gray-800/50 hover:bg-brand-50/50 dark:hover:bg-white/5 border border-gray-100 dark:border-gray-800 transition-all">
                         <div class="flex items-center gap-3 min-w-0">
                             <div class="w-9 h-9 rounded-xl {{ $session->type === 'human' ? 'bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-400' : 'bg-brand-50 text-brand-500 dark:bg-brand-500/20 dark:text-brand-400' }} flex items-center justify-center shrink-0 font-bold text-sm">
-                                {{ $session->type === 'human' ? '👨‍🏫' : '🤖' }}
+                                @if($session->type === 'human')
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                @else
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                @endif
                             </div>
                             <div class="min-w-0">
                                 <div class="flex items-center gap-2">
@@ -294,7 +298,7 @@
                     @forelse($ebooks as $ebook)
                     <div class="p-3 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 hover:border-brand-300 transition-all flex items-start gap-3">
                         <div class="w-10 h-12 rounded-lg bg-brand-500 text-white flex items-center justify-center shrink-0 shadow-xs">
-                            <span class="text-base">📖</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                         </div>
                         <div class="min-w-0 flex-1">
                             <h4 class="font-bold text-xs text-gray-900 dark:text-white truncate">{{ $ebook->title }}</h4>
