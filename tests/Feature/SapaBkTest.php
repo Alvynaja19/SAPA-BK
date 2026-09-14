@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\ChatSession;
+use App\Models\Questionnaire;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -155,7 +156,7 @@ class SapaBkTest extends TestCase
         $storeResp->assertSessionHas('success');
         $this->assertDatabaseHas('questionnaires', ['title' => 'Asesmen Kepribadian Holland RIASEC']);
 
-        $q = \App\Models\Questionnaire::where('title', 'Asesmen Kepribadian Holland RIASEC')->first();
+        $q = Questionnaire::where('title', 'Asesmen Kepribadian Holland RIASEC')->first();
 
         // 2. Guru membuka halaman kelola soal
         $soalPageResp = $this->get('/bk/tes/'.$q->id.'/soal');
@@ -217,7 +218,7 @@ class SapaBkTest extends TestCase
         $siswa = User::where('role', 'siswa')->first() ?? User::factory()->create(['role' => 'siswa', 'is_active' => true]);
         $this->actingAs($siswa);
 
-        $q = \App\Models\Questionnaire::first() ?? \App\Models\Questionnaire::create([
+        $q = Questionnaire::first() ?? Questionnaire::create([
             'title' => 'Kuesioner Uji Akses',
             'description' => 'Deskripsi uji akses.',
             'is_active' => true,
@@ -240,5 +241,34 @@ class SapaBkTest extends TestCase
 
         // Siswa mencoba menghapus kuesioner -> Ditolak (403 Forbidden)
         $this->delete('/bk/tes/'.$q->id)->assertStatus(403);
+    }
+
+    public function test_siswa_can_view_and_update_profile()
+    {
+        $siswa = User::where('role', 'siswa')->first() ?? User::factory()->create(['role' => 'siswa', 'is_active' => true]);
+        $this->actingAs($siswa);
+
+        // Akses halaman profil
+        $response = $this->get('/profil');
+        $response->assertStatus(200);
+        $response->assertSee('Pengaturan Profil Siswa');
+        $response->assertSee($siswa->name);
+        $response->assertSee($siswa->email);
+
+        // Update profil siswa
+        $updateResp = $this->put('/profil', [
+            'name' => 'Ahmad Fauzi Pratama Update',
+            'nisn' => '0054321987',
+            'kelas' => 'XII MIPA 2',
+            'no_hp' => '082199998888',
+        ]);
+
+        $updateResp->assertRedirect();
+        $this->assertDatabaseHas('users', [
+            'id' => $siswa->id,
+            'name' => 'Ahmad Fauzi Pratama Update',
+            'kelas' => 'XII MIPA 2',
+            'no_hp' => '082199998888',
+        ]);
     }
 }
