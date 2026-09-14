@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<!--
+  SAPA BK — UI Mockup Dashboard Siswa
+  Referensi SRS: bagian 4.4 (Dashboard Siswa) & 7.2 (Struktur Halaman Siswa)
+  Halaman yang dicover dalam satu file (navigasi lewat sidebar, tanpa reload):
+   - /dashboard      → F-30
+   - /chat           → F-21–F-28 (termasuk F-29, F-29b live chat & jam operasional)
+   - /riwayat        → F-31
+   - /ebook/akses    → F-32
+   - /tes            → F-33, F-34
+   - /profil         → F-04
+  Desain sengaja dibuat lebih "kalem" dibanding landing page: ini ruang kerja
+  harian siswa, jadi prioritasnya kejelasan & kecepatan, bukan showcase visual.
+-->
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard Siswa — SAPA BK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #EDF1EC;
+    --bg-alt: #E3EADD;
+    --surface: #FFFFFF;
+    --ink: #1B2A24;
+    --ink-soft: #52645B;
+    --ink-faint: #7C8C82;
+    --primary: #24463F;
+    --primary-hover: #16302B;
+    --primary-soft: #DCE6DE;
+    --accent: #C98A3B;
+    --accent-soft: #F1DFBE;
+    --accent-ink: #6B4A1B;
+    --line: #D3DCCC;
+    --good: #3FA35E;
+    --warn: #C9603B;
+    --radius-s: 6px;
+    --radius-m: 12px;
+    --radius-l: 16px;
+    --shadow-card: 0 1px 0 rgba(27,42,36,0.05), 0 6px 16px -12px rgba(27,42,36,0.25);
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background: var(--bg); color: var(--ink);
+    font-family:'Work Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height:1.5; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{ font-family:'Fraunces', Georgia, serif; font-weight:600; margin:0; line-height:1.2; color:var(--ink); }
+  p{ margin:0; }
+  a{ color:inherit; text-decoration:none; }
+  ul{ margin:0; padding:0; list-style:none; }
+  button, input, textarea{ font-family:inherit; }
+  img,svg{ display:block; }
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:11px 20px; border-radius:var(--radius-s); font-weight:600; font-size:14.5px;
+    border:1px solid transparent; cursor:pointer; transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+    white-space:nowrap;
+  }
+  .btn-primary{ background:var(--primary); color:#F3F5EF; }
+  .btn-primary:hover{ background:var(--primary-hover); }
+  .btn-ghost{ background:transparent; border-color:var(--line); color:var(--primary); }
+  .btn-ghost:hover{ border-color:var(--primary); }
+  .btn-sm{ padding:7px 14px; font-size:13px; }
+  .btn-block{ width:100%; }
+  .btn[disabled]{ opacity:.5; cursor:not-allowed; }
+
+  .card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-m); box-shadow:var(--shadow-card); }
+
+  /* ---------- APP SHELL ---------- */
+  .app-shell{ display:flex; min-height:100vh; }
+
+  .sidebar{
+    width:252px; flex-shrink:0; background:var(--primary); color:#DCE6DE;
+    display:flex; flex-direction:column; position:sticky; top:0; height:100vh; z-index:30;
+  }
+  .side-brand{ display:flex; align-items:center; gap:10px; padding:22px 20px 18px; }
+  .side-brand-mark{ width:32px; height:32px; border-radius:8px; background:rgba(255,255,255,0.12); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .side-brand-name{ font-family:'Fraunces',serif; font-weight:600; font-size:17px; color:#F3F5EF; }
+  .side-brand-sub{ font-size:10.5px; color:#9DB2A2; }
+
+  .side-nav{ padding: 6px 12px; display:flex; flex-direction:column; gap:2px; flex:1; overflow-y:auto; }
+  .side-nav a{
+    display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:9px;
+    font-size:14.5px; color:#C9D8CD; border-left:3px solid transparent;
+  }
+  .side-nav a svg{ width:18px; height:18px; stroke:#C9D8CD; flex-shrink:0; }
+  .side-nav a:hover{ background:rgba(255,255,255,0.06); color:#F3F5EF; }
+  .side-nav a.active{ background:rgba(255,255,255,0.1); color:#F3F5EF; border-left-color:var(--accent); }
+  .side-nav a.active svg{ stroke:var(--accent); }
+  .side-nav .nav-label{ font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:#7E9587; padding:14px 12px 4px; }
+
+  .side-foot{ padding:14px 16px 18px; border-top:1px solid rgba(255,255,255,0.1); }
+  .side-user{ display:flex; align-items:center; gap:10px; padding:8px; border-radius:9px; }
+  .side-user-avatar{
+    width:34px; height:34px; border-radius:50%; background:var(--accent); color:#2A1C08;
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; flex-shrink:0;
+  }
+  .side-user-name{ font-size:13.5px; color:#F3F5EF; font-weight:600; }
+  .side-user-role{ font-size:11.5px; color:#9DB2A2; }
+  .side-logout{ display:flex; align-items:center; gap:10px; margin-top:8px; padding:9px 8px; font-size:13.5px; color:#C9D8CD; border-radius:8px; }
+  .side-logout:hover{ background:rgba(255,255,255,0.06); color:#F3F5EF; }
+  .side-logout svg{ width:17px; height:17px; stroke:currentColor; }
+
+  .sidebar-backdrop{ display:none; }
+
+  /* ---------- MAIN COLUMN ---------- */
+  .main-col{ flex:1; display:flex; flex-direction:column; min-width:0; }
+  .topbar{
+    height:64px; flex-shrink:0; background:var(--surface); border-bottom:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between; padding:0 26px;
+    position:sticky; top:0; z-index:20;
+  }
+  .topbar-left{ display:flex; align-items:center; gap:14px; }
+  #pageTitle{ font-size:18px; }
+  .menu-toggle{ display:none; background:none; border:none; padding:4px; cursor:pointer; }
+  .menu-toggle span{ display:block; width:20px; height:2px; background:var(--ink); margin:4px 0; }
+  .topbar-user{ display:flex; align-items:center; gap:10px; }
+  .topbar-user-avatar{ width:34px; height:34px; border-radius:50%; background:var(--bg-alt); color:var(--primary); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; }
+  .topbar-user-name{ font-size:13.5px; font-weight:600; }
+  .topbar-user-role{ font-size:11.5px; color:var(--ink-faint); }
+
+  .content{ padding:28px; flex:1; }
+  .page{ display:none; }
+  .page.active{ display:block; animation: pageFade .25s ease; }
+  @keyframes pageFade{ from{ opacity:0; } to{ opacity:1; } }
+
+  @media (max-width: 980px){
+    .sidebar{ position:fixed; left:-260px; top:0; transition:left .25s ease; box-shadow: 20px 0 40px -20px rgba(0,0,0,0.3); }
+    .sidebar.open{ left:0; }
+    .sidebar-backdrop.open{ display:block; position:fixed; inset:0; background:rgba(20,30,26,0.35); z-index:25; }
+    .menu-toggle{ display:block; }
+    .content{ padding:20px; }
+  }
+
+  /* ---------- DASHBOARD ---------- */
+  .greeting-row{ display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px; margin-bottom:26px; }
+  .greeting h1{ font-size:26px; }
+  .greeting p{ color:var(--ink-soft); font-size:14.5px; margin-top:4px; }
+  .greeting-actions{ display:flex; gap:10px; }
+
+  .stat-grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; margin-bottom:28px; }
+  @media (max-width: 1100px){ .stat-grid{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px){ .stat-grid{ grid-template-columns: 1fr; } }
+  .stat-card{ padding:20px; display:flex; flex-direction:column; gap:6px; }
+  .stat-card .label{ font-size:13px; color:var(--ink-faint); }
+  .stat-card .value{ font-family:'Fraunces',serif; font-size:26px; font-weight:600; }
+  .stat-card .caption{ font-size:12.5px; color:var(--ink-faint); }
+  .stat-card.live .value{ display:flex; align-items:center; gap:8px; font-size:20px; }
+  .stat-dot{ width:9px; height:9px; border-radius:50%; background:var(--good); box-shadow:0 0 0 3px rgba(63,163,94,0.2); flex-shrink:0; }
+
+  .dash-grid{ display:grid; grid-template-columns: 1.5fr 1fr; gap:20px; align-items:start; }
+  @media (max-width: 900px){ .dash-grid{ grid-template-columns: 1fr; } }
+
+  .panel{ padding:22px; }
+  .panel-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .panel-head h3{ font-size:16px; }
+  .panel-head a{ font-size:13px; color:var(--primary); font-weight:600; }
+
+  .activity-item{ display:flex; justify-content:space-between; align-items:center; gap:14px; padding:13px 0; border-bottom:1px solid var(--line); }
+  .activity-item:last-child{ border-bottom:none; }
+  .activity-item .qtext{ font-size:14px; font-weight:500; }
+  .activity-item .meta{ font-size:12.5px; color:var(--ink-faint); margin-top:3px; }
+  .chip-muted{ font-size:11.5px; color:var(--ink-faint); background:var(--bg-alt); padding:3px 9px; border-radius:6px; flex-shrink:0; }
+
+  .side-panels{ display:flex; flex-direction:column; gap:20px; }
+  .reco-book{ display:flex; gap:12px; align-items:center; }
+  .reco-cover{ width:44px; height:58px; border-radius:5px; background: linear-gradient(160deg, #2F5D52, #1B2A24); flex-shrink:0; }
+  .reco-book .title{ font-size:13.5px; font-weight:600; }
+  .progress-bar{ margin-top:8px; height:5px; background:var(--bg-alt); border-radius:99px; overflow:hidden; }
+  .progress-bar span{ display:block; height:100%; background:var(--accent); }
+
+  .reminder-card{ background:var(--accent-soft); border:1px solid #E4C68F; border-radius:var(--radius-m); padding:18px; }
+  .reminder-card .title{ font-size:14px; font-weight:600; color:var(--accent-ink); }
+  .reminder-card p{ font-size:13px; color:var(--accent-ink); margin-top:4px; opacity:.85; }
+  .reminder-card .btn{ margin-top:12px; }
+
+  /* ---------- CHAT ---------- */
+  .chat-layout{ display:grid; grid-template-columns: 260px 1fr; gap:18px; height: calc(100vh - 64px - 56px); }
+  @media (max-width: 900px){ .chat-layout{ grid-template-columns:1fr; height:auto; } .chat-sessions{ display:none; } }
+  .chat-sessions{ display:flex; flex-direction:column; overflow:hidden; }
+  .chat-sessions .panel-head{ padding:16px 16px 0; margin-bottom:10px; }
+  .session-list{ overflow-y:auto; padding:0 10px 10px; flex:1; }
+  .session-item{ display:block; padding:11px 10px; border-radius:9px; margin-bottom:3px; cursor:pointer; }
+  .session-item:hover{ background:var(--bg-alt); }
+  .session-item.active{ background:var(--primary-soft); }
+  .session-item .title{ font-size:13.5px; font-weight:600; }
+  .session-item .snippet{ font-size:12px; color:var(--ink-faint); margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+  .chat-main{ display:flex; flex-direction:column; overflow:hidden; }
+  .chat-banner{
+    display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    padding:13px 18px; background:#EAF3EC; border-bottom:1px solid var(--line);
+  }
+  .chat-banner-text{ display:flex; align-items:center; gap:9px; font-size:13.5px; color:var(--primary); font-weight:500; }
+  .chat-banner .stat-dot{ position:static; }
+  .chat-banner small{ display:block; font-weight:400; color:var(--ink-soft); font-size:12px; }
+
+  .chat-messages{ flex:1; overflow-y:auto; padding:22px; display:flex; flex-direction:column; gap:16px; background:#F7F9F5; }
+  .bubble-row{ display:flex; }
+  .bubble-row.user{ justify-content:flex-end; }
+  .bubble{ max-width:70%; padding:12px 15px; border-radius:14px; font-size:14.5px; line-height:1.5; }
+  .bubble.user{ background:var(--primary); color:#F1F4EF; border-bottom-right-radius:4px; }
+  .bubble.bot{ background:var(--surface); border:1px solid var(--line); border-bottom-left-radius:4px; }
+  .bubble.bot .src{ display:block; margin-top:9px; font-size:11.5px; color:var(--ink-faint); }
+  @media (max-width:700px){ .bubble{ max-width:86%; } }
+
+  .reco-chip{
+    display:flex; align-items:center; gap:10px; margin-top:11px; padding:9px 11px;
+    background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  }
+  .reco-chip .mini-cover{ width:26px; height:34px; border-radius:4px; background: linear-gradient(160deg,#B97A33,#6B4A1B); flex-shrink:0; }
+  .reco-chip .info{ flex:1; min-width:0; }
+  .reco-chip .info .t{ font-size:12.5px; font-weight:600; }
+  .reco-chip .info .s{ font-size:11px; color:var(--ink-faint); }
+  .reco-chip a{ font-size:12px; font-weight:600; color:var(--primary); flex-shrink:0; }
+
+  .typing-dots{ display:flex; gap:4px; padding:4px 2px; }
+  .typing-dots span{ width:6px; height:6px; border-radius:50%; background:var(--ink-faint); animation: typingBounce 1.2s infinite ease-in-out; }
+  .typing-dots span:nth-child(2){ animation-delay:.15s; }
+  .typing-dots span:nth-child(3){ animation-delay:.3s; }
+  @keyframes typingBounce{ 0%,60%,100%{ transform:translateY(0); opacity:.4; } 30%{ transform:translateY(-4px); opacity:1; } }
+
+  .chat-empty{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:40px 20px; gap:14px; }
+  .chat-empty-icon{ width:56px; height:56px; border-radius:50%; background:var(--bg-alt); display:flex; align-items:center; justify-content:center; }
+  .chat-empty-icon svg{ width:26px; height:26px; stroke:var(--primary); }
+  .chat-empty h3{ font-size:17px; }
+  .chat-empty p{ font-size:13.5px; color:var(--ink-soft); max-width:320px; }
+  .prompt-chips{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:6px; }
+  .prompt-chip{ font-size:12.5px; padding:8px 13px; border:1px solid var(--line); border-radius:999px; background:var(--surface); cursor:pointer; }
+  .prompt-chip:hover{ border-color:var(--primary); color:var(--primary); }
+
+  .chat-input-row{ display:flex; align-items:flex-end; gap:10px; padding:14px 18px; border-top:1px solid var(--line); background:var(--surface); }
+  .chat-input-row textarea{
+    flex:1; resize:none; border:1px solid var(--line); border-radius:14px; padding:11px 15px;
+    font-size:14px; line-height:1.4; max-height:110px; background:var(--bg);
+  }
+  .chat-input-row textarea:focus{ outline:2px solid var(--accent); outline-offset:1px; }
+  .send-btn{ width:42px; height:42px; border-radius:50%; background:var(--accent); border:none; display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer; }
+  .send-btn svg{ width:17px; height:17px; stroke:#2A1C08; }
+
+  /* ---------- RIWAYAT ---------- */
+  .filter-row{ display:flex; gap:10px; margin-bottom:18px; flex-wrap:wrap; align-items:center; }
+  .search-input{ flex:1; min-width:200px; padding:10px 14px; border:1px solid var(--line); border-radius:9px; background:var(--surface); font-size:14px; }
+  .search-input:focus{ outline:2px solid var(--accent); outline-offset:1px; }
+
+  .riwayat-table{ width:100%; border-collapse:collapse; }
+  .riwayat-table thead th{ text-align:left; font-size:12px; text-transform:uppercase; letter-spacing:.03em; color:var(--ink-faint); padding:0 16px 10px; }
+  .riwayat-table tbody tr{ background:var(--surface); }
+  .riwayat-table tbody tr td{ padding:15px 16px; border-top:1px solid var(--line); font-size:14px; }
+  .riwayat-table tbody tr:first-child td{ border-top:none; }
+  .riwayat-table tbody tr td:first-child{ border-radius:0; }
+  .riwayat-wrap{ border:1px solid var(--line); border-radius:var(--radius-m); overflow:hidden; }
+  .riwayat-wrap .riwayat-table{ margin:0; }
+  .riwayat-table thead{ background:var(--bg-alt); }
+  .status-pill{ font-size:11.5px; padding:3px 10px; border-radius:999px; font-weight:600; }
+  .status-pill.selesai{ background:#DCE6DE; color:var(--primary); }
+  .status-pill.aktif{ background:var(--accent-soft); color:var(--accent-ink); }
+  .riwayat-table .q{ font-weight:500; }
+  .riwayat-table .date{ color:var(--ink-faint); font-size:13px; }
+
+  @media (max-width: 760px){
+    .riwayat-table thead{ display:none; }
+    .riwayat-table, .riwayat-table tbody, .riwayat-table tr, .riwayat-table td{ display:block; width:100%; }
+    .riwayat-table tr{ padding:14px 16px; border-top:1px solid var(--line); }
+    .riwayat-table tr:first-child{ border-top:none; }
+    .riwayat-table td{ padding:3px 0; border:none !important; }
+  }
+
+  /* ---------- EBOOK ---------- */
+  .ebook-filters{ display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+  .filter-chip{ font-size:13px; padding:8px 15px; border-radius:999px; border:1px solid var(--line); background:var(--surface); cursor:pointer; }
+  .filter-chip.active{ background:var(--primary); color:#F3F5EF; border-color:var(--primary); }
+
+  .ebook-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+  @media (max-width:1100px){ .ebook-grid{ grid-template-columns:repeat(3,1fr); } }
+  @media (max-width:760px){ .ebook-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:480px){ .ebook-grid{ grid-template-columns:1fr; } }
+  .ebook-item{ display:flex; flex-direction:column; gap:10px; }
+  .ebook-item .cover{ aspect-ratio:3/4; border-radius:8px 8px 4px 4px; position:relative; display:flex; align-items:flex-end; padding:14px; overflow:hidden; }
+  .ebook-item .cover span{ color:#fff; font-family:'Fraunces',serif; font-weight:600; font-size:14px; line-height:1.25; }
+  .ebook-item .cover::after{ content:""; position:absolute; left:0; top:0; bottom:0; width:7px; background:rgba(0,0,0,0.15); }
+  .cover.c1{ background:linear-gradient(160deg,#2F5D52,#1B2A24); }
+  .cover.c2{ background:linear-gradient(160deg,#B97A33,#6B4A1B); }
+  .cover.c3{ background:linear-gradient(160deg,#3E6B5C,#24463F); }
+  .cover.c4{ background:linear-gradient(160deg,#6B8A70,#2C4A40); }
+  .cover.c5{ background:linear-gradient(160deg,#4A7A6A,#1F3A34); }
+  .cover.c6{ background:linear-gradient(160deg,#A9773F,#5A3E17); }
+  .badge-reco{ position:absolute; top:10px; left:10px; background:var(--accent); color:#2A1C08; font-size:10.5px; font-weight:700; padding:3px 8px; border-radius:5px; }
+  .ebook-item .meta strong{ display:block; font-size:14px; font-weight:600; }
+  .ebook-item .meta .sub{ font-size:12px; color:var(--ink-faint); margin-top:2px; }
+  .ebook-item .actions{ display:flex; gap:8px; margin-top:2px; }
+  .icon-btn{ width:36px; height:36px; border-radius:8px; border:1px solid var(--line); background:var(--surface); display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer; }
+  .icon-btn svg{ width:16px; height:16px; stroke:var(--primary); }
+
+  /* ---------- TES ---------- */
+  .tes-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  @media (max-width:900px){ .tes-grid{ grid-template-columns:1fr; } }
+  .tes-card{ padding:22px; display:flex; flex-direction:column; gap:12px; }
+  .tes-card .tes-icon{ width:42px; height:42px; border-radius:10px; background:var(--bg-alt); display:flex; align-items:center; justify-content:center; }
+  .tes-card .tes-icon svg{ width:21px; height:21px; stroke:var(--primary); }
+  .tes-card h3{ font-size:16px; }
+  .tes-card p{ font-size:13.5px; color:var(--ink-soft); flex:1; }
+  .tes-status{ font-size:11.5px; font-weight:600; padding:3px 10px; border-radius:999px; align-self:flex-start; }
+  .tes-status.belum{ background:var(--accent-soft); color:var(--accent-ink); }
+  .tes-status.selesai{ background:#DCE6DE; color:var(--primary); }
+
+  /* ---------- PROFIL ---------- */
+  .profil-grid{ display:grid; grid-template-columns:1fr 1.4fr; gap:20px; align-items:start; }
+  @media (max-width:900px){ .profil-grid{ grid-template-columns:1fr; } }
+  .avatar-card{ padding:26px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; }
+  .avatar-big{ width:84px; height:84px; border-radius:50%; background:var(--accent); color:#2A1C08; display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif; font-weight:600; font-size:28px; }
+  .avatar-card h3{ font-size:16px; margin-top:4px; }
+  .avatar-card .role-tag{ font-size:12px; color:var(--ink-faint); }
+
+  .form-panel{ padding:24px; }
+  .form-panel h3{ font-size:16px; margin-bottom:16px; }
+  .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+  @media (max-width:560px){ .form-row{ grid-template-columns:1fr; } }
+  .form-group{ display:flex; flex-direction:column; gap:6px; }
+  .form-group.full{ grid-column:1/-1; }
+  .form-group label{ font-size:12.5px; font-weight:600; color:var(--ink-soft); }
+  .form-group input{ padding:10px 13px; border:1px solid var(--line); border-radius:9px; font-size:14px; background:var(--bg); }
+  .form-group input:focus{ outline:2px solid var(--accent); outline-offset:1px; }
+  .form-group input[disabled]{ color:var(--ink-faint); background:var(--bg-alt); }
+  .form-actions{ display:flex; gap:10px; margin-top:6px; }
+  .divider-gap{ height:20px; }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <div class="sidebar-backdrop" id="backdrop"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <a href="sapa-bk-landing-page.html" class="side-brand">
+      <div class="side-brand-mark">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#F3F5EF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v4M4.5 8.5 7 10M19.5 8.5 17 10M12 21v-7M6 14h12"/><circle cx="12" cy="7" r="3.2"/>
+        </svg>
+      </div>
+      <div>
+        <div class="side-brand-name">SAPA BK</div>
+        <div class="side-brand-sub">SMA Negeri 4 Jember</div>
+      </div>
+    </a>
+
+    <nav class="side-nav">
+      <a href="#" data-page="dashboard" data-title="Dashboard" class="active">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7.5" height="7.5" rx="1.5"/><rect x="13" y="3.5" width="7.5" height="7.5" rx="1.5"/><rect x="3.5" y="13" width="7.5" height="7.5" rx="1.5"/><rect x="13" y="13" width="7.5" height="7.5" rx="1.5"/></svg>
+        Dashboard
+      </a>
+      <a href="#" data-page="chat" data-title="Chat SAPA">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v10H8l-4 3.2V5.5Z"/></svg>
+        Chat SAPA
+      </a>
+      <a href="#" data-page="riwayat" data-title="Riwayat Konsultasi">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12.5" r="8.3"/><path d="M12 7.5v5.3l3.4 2"/></svg>
+        Riwayat Konsultasi
+      </a>
+      <a href="#" data-page="ebook" data-title="E-book">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5c-2-1.3-4.6-1.7-7-1V17c2.4-.7 5-.3 7 1 2-1.3 4.6-1.7 7-1V5.5c-2.4-.7-5-.3-7 1Z"/><path d="M12 6.5V18"/></svg>
+        E-book
+      </a>
+      <a href="#" data-page="tes" data-title="Kuesioner / Tes">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="4" width="13" height="17" rx="2"/><path d="M9 3.5h6v2H9zM8.5 12.5l2 2 4.5-4.5"/></svg>
+        Kuesioner / Tes
+      </a>
+      <span class="nav-label">Akun</span>
+      <a href="#" data-page="profil" data-title="Profil Saya">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.3"/><path d="M5 20c1-3.6 3.6-5.5 7-5.5s6 1.9 7 5.5"/></svg>
+        Profil Saya
+      </a>
+    </nav>
+
+    <div class="side-foot">
+      <div class="side-user">
+        <div class="side-user-avatar">KA</div>
+        <div>
+          <div class="side-user-name">Kanaya Adzra</div>
+          <div class="side-user-role">XI IPA 2 · Siswa</div>
+        </div>
+      </div>
+      <a href="#" class="side-logout">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Keluar
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-col">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menuToggle" aria-label="Buka menu"><span></span><span></span><span></span></button>
+        <h2 id="pageTitle">Dashboard</h2>
+      </div>
+      <div class="topbar-user">
+        <div>
+          <div class="topbar-user-name" style="text-align:right;">Kanaya Adzra</div>
+          <div class="topbar-user-role">NISN 0051234567</div>
+        </div>
+        <div class="topbar-user-avatar">KA</div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- ============ DASHBOARD ============ -->
+      <section class="page active" id="page-dashboard">
+        <div class="greeting-row">
+          <div class="greeting">
+            <h1>Halo, Kanaya 👋</h1>
+            <p>Semoga harimu berjalan baik. Ini ringkasan aktivitasmu di SAPA BK.</p>
+          </div>
+          <div class="greeting-actions">
+            <a href="#" class="btn btn-ghost" data-page="ebook">Lihat e-book</a>
+            <a href="#" class="btn btn-primary" data-page="chat">Mulai konsultasi baru</a>
+          </div>
+        </div>
+
+        <div class="stat-grid">
+          <div class="card stat-card">
+            <span class="label">Sesi Konsultasi</span>
+            <span class="value">12</span>
+            <span class="caption">sepanjang semester ini</span>
+          </div>
+          <div class="card stat-card">
+            <span class="label">E-book Dibaca</span>
+            <span class="value">5</span>
+            <span class="caption">dari 18 koleksi tersedia</span>
+          </div>
+          <div class="card stat-card">
+            <span class="label">Tes Selesai</span>
+            <span class="value">2/3</span>
+            <span class="caption">1 tes menunggu diisi</span>
+          </div>
+          <div class="card stat-card live">
+            <span class="label">Live Chat Guru BK</span>
+            <span class="value"><span class="stat-dot"></span>Online</span>
+            <span class="caption">Jam layanan 08.00–15.00 WIB</span>
+          </div>
+        </div>
+
+        <div class="dash-grid">
+          <div class="card panel">
+            <div class="panel-head">
+              <h3>Aktivitas Terbaru</h3>
+              <a href="#" data-page="riwayat">Lihat semua</a>
+            </div>
+            <div class="activity-item">
+              <div>
+                <div class="qtext">Bagaimana cara mengatasi kesulitan belajar?</div>
+                <div class="meta">2 hari lalu · 6 pesan</div>
+              </div>
+              <span class="chip-muted">Selesai</span>
+            </div>
+            <div class="activity-item">
+              <div>
+                <div class="qtext">Bingung pilih jurusan kuliah</div>
+                <div class="meta">5 hari lalu · 10 pesan</div>
+              </div>
+              <span class="chip-muted">Selesai</span>
+            </div>
+            <div class="activity-item">
+              <div>
+                <div class="qtext">Cara menghadapi teman yang toxic</div>
+                <div class="meta">1 minggu lalu · 4 pesan</div>
+              </div>
+              <span class="chip-muted">Selesai</span>
+            </div>
+          </div>
+
+          <div class="side-panels">
+            <div class="card panel">
+              <div class="panel-head"><h3>Lanjutkan membaca</h3></div>
+              <div class="reco-book">
+                <div class="reco-cover"></div>
+                <div style="flex:1;">
+                  <div class="title">Strategi Belajar Efektif</div>
+                  <div class="progress-bar"><span style="width:40%;"></span></div>
+                </div>
+              </div>
+              <a href="#" data-page="ebook" class="btn btn-ghost btn-sm btn-block" style="margin-top:14px;">Lanjutkan Membaca</a>
+            </div>
+
+            <div class="reminder-card">
+              <div class="title">Kuesioner Gaya Belajar</div>
+              <p>Belum kamu isi. Hasilnya membantu Guru BK memahami cara belajar yang cocok untukmu.</p>
+              <a href="#" data-page="tes" class="btn btn-primary btn-sm">Isi Sekarang</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ CHAT ============ -->
+      <section class="page" id="page-chat">
+        <div class="chat-layout">
+          <div class="card chat-sessions">
+            <div class="panel-head">
+              <h3 style="font-size:14.5px;">Riwayat Singkat</h3>
+            </div>
+            <button class="btn btn-primary btn-sm btn-block" id="btnSesiBaru" style="margin:0 16px 12px; width:calc(100% - 32px);">+ Sesi Baru</button>
+            <div class="session-list">
+              <div class="session-item active">
+                <div class="title">Jurusan kuliah</div>
+                <div class="snippet">Aku bingung mau lanjut kuliah jurusan apa…</div>
+              </div>
+              <div class="session-item">
+                <div class="title">Kesulitan belajar Matematika</div>
+                <div class="snippet">Aku selalu susah paham pas pelajaran…</div>
+              </div>
+              <div class="session-item">
+                <div class="title">Teman yang toxic</div>
+                <div class="snippet">Gimana caranya ngomong ke temen kalau…</div>
+              </div>
+              <div class="session-item">
+                <div class="title">Persiapan ujian akhir</div>
+                <div class="snippet">Aku deg-degan banget mikirin ujian…</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card chat-main">
+            <div class="chat-banner">
+              <div class="chat-banner-text">
+                <span class="stat-dot"></span>
+                <div>
+                  Guru BK sedang online
+                  <small>Kamu bisa lanjut bicara langsung bila butuh.</small>
+                </div>
+              </div>
+              <button class="btn btn-ghost btn-sm">Minta Live Chat Guru BK</button>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+              <div class="bubble-row user"><div class="bubble user">Aku bingung mau lanjut kuliah jurusan apa, gimana ya?</div></div>
+              <div class="bubble-row">
+                <div class="bubble bot">
+                  Coba mulai dari mengenali mata pelajaran atau kegiatan yang paling kamu nikmati, lalu hubungkan dengan jurusan yang relevan. Mengisi Tes Minat & Bakat di menu Kuesioner juga bisa membantu memperjelas arahnya.
+                  <span class="src">Sumber: Panduan Menentukan Jurusan Kuliah, hal. 12</span>
+                  <div class="reco-chip">
+                    <div class="mini-cover"></div>
+                    <div class="info">
+                      <div class="t">Menentukan Jurusan Kuliah</div>
+                      <div class="s">E-book · 56 halaman</div>
+                    </div>
+                    <a href="#" data-page="ebook">Buka</a>
+                  </div>
+                </div>
+              </div>
+              <div class="bubble-row user"><div class="bubble user">Ooh oke, ada rekomendasi tesnya nggak?</div></div>
+              <div class="bubble-row">
+                <div class="bubble bot">
+                  <div class="typing-dots"><span></span><span></span><span></span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="chat-input-row">
+              <textarea rows="1" placeholder="Tulis pertanyaanmu di sini…" id="chatInputBox"></textarea>
+              <button class="send-btn" aria-label="Kirim pesan">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ RIWAYAT ============ -->
+      <section class="page" id="page-riwayat">
+        <div class="filter-row">
+          <input type="text" class="search-input" placeholder="Cari percakapan berdasarkan kata kunci…" />
+        </div>
+        <div class="riwayat-wrap">
+          <table class="riwayat-table">
+            <thead>
+              <tr><th>Pertanyaan</th><th>Tanggal</th><th>Pesan</th><th>Status</th><th></th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="q">Bagaimana cara mengatasi kesulitan belajar?</td>
+                <td class="date">6 Sep 2026</td>
+                <td>6 pesan</td>
+                <td><span class="status-pill selesai">Selesai</span></td>
+                <td><a href="#" data-page="chat" class="btn btn-ghost btn-sm">Buka</a></td>
+              </tr>
+              <tr>
+                <td class="q">Bingung pilih jurusan kuliah</td>
+                <td class="date">3 Sep 2026</td>
+                <td>10 pesan</td>
+                <td><span class="status-pill aktif">Berlanjut</span></td>
+                <td><a href="#" data-page="chat" class="btn btn-ghost btn-sm">Buka</a></td>
+              </tr>
+              <tr>
+                <td class="q">Cara menghadapi teman yang toxic</td>
+                <td class="date">30 Agu 2026</td>
+                <td>4 pesan</td>
+                <td><span class="status-pill selesai">Selesai</span></td>
+                <td><a href="#" data-page="chat" class="btn btn-ghost btn-sm">Buka</a></td>
+              </tr>
+              <tr>
+                <td class="q">Persiapan menghadapi ujian akhir semester</td>
+                <td class="date">22 Agu 2026</td>
+                <td>8 pesan</td>
+                <td><span class="status-pill selesai">Selesai</span></td>
+                <td><a href="#" data-page="chat" class="btn btn-ghost btn-sm">Buka</a></td>
+              </tr>
+              <tr>
+                <td class="q">Tips mengatur waktu belajar dan organisasi</td>
+                <td class="date">14 Agu 2026</td>
+                <td>5 pesan</td>
+                <td><span class="status-pill selesai">Selesai</span></td>
+                <td><a href="#" data-page="chat" class="btn btn-ghost btn-sm">Buka</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ EBOOK ============ -->
+      <section class="page" id="page-ebook">
+        <div class="ebook-filters">
+          <button class="filter-chip active">Semua</button>
+          <button class="filter-chip">Akademik</button>
+          <button class="filter-chip">Karier</button>
+          <button class="filter-chip">Pribadi & Sosial</button>
+        </div>
+
+        <div class="ebook-grid">
+          <div class="ebook-item">
+            <div class="cover c1"><span class="badge-reco">Rekomendasi</span><span>Strategi Belajar Efektif</span></div>
+            <div class="meta"><strong>Strategi Belajar Efektif</strong><div class="sub">48 hlm · sedang dibaca 40%</div></div>
+            <div class="actions">
+              <button class="btn btn-primary btn-sm" style="flex:1;">Lanjutkan</button>
+              <button class="icon-btn" aria-label="Unduh"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg></button>
+            </div>
+          </div>
+          <div class="ebook-item">
+            <div class="cover c2"><span>Mengelola Stres di Sekolah</span></div>
+            <div class="meta"><strong>Mengelola Stres di Sekolah</strong><div class="sub">32 hlm · belum dibaca</div></div>
+            <div class="actions">
+              <button class="btn btn-ghost btn-sm" style="flex:1;">Baca</button>
+              <button class="icon-btn" aria-label="Unduh"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg></button>
+            </div>
+          </div>
+          <div class="ebook-item">
+            <div class="cover c3"><span class="badge-reco">Rekomendasi</span><span>Menentukan Jurusan Kuliah</span></div>
+            <div class="meta"><strong>Menentukan Jurusan Kuliah</strong><div class="sub">56 hlm · belum dibaca</div></div>
+            <div class="actions">
+              <button class="btn btn-ghost btn-sm" style="flex:1;">Baca</button>
+              <button class="icon-btn" aria-label="Unduh"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg></button>
+            </div>
+          </div>
+          <div class="ebook-item">
+            <div class="cover c4"><span>Mengenal Diri Sendiri</span></div>
+            <div class="meta"><strong>Mengenal Diri Sendiri</strong><div class="sub">40 hlm · selesai dibaca</div></div>
+            <div class="actions">
+              <button class="btn btn-ghost btn-sm" style="flex:1;">Baca Ulang</button>
+              <button class="icon-btn" aria-label="Unduh"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg></button>
+            </div>
+          </div>
+          <div class="ebook-item">
+            <div class="cover c5"><span>Membangun Kebiasaan Belajar</span></div>
+            <div class="meta"><strong>Membangun Kebiasaan Belajar</strong><div class="sub">38 hlm · belum dibaca</div></div>
+            <div class="actions">
+              <button class="btn btn-ghost btn-sm" style="flex:1;">Baca</button>
+              <button class="icon-btn" aria-label="Unduh"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg></button>
+            </div>
+          </div>
+          <div class="ebook-item">
+            <div class="cover c6"><span>Mengenal Ragam Profesi</span></div>
+            <div class="meta"><strong>Mengenal Ragam Profesi</strong><div class="sub">44 hlm · belum dibaca</div></div>
+            <div class="actions">
+              <button class="btn btn-ghost btn-sm" style="flex:1;">Baca</button>
+              <button class="icon-btn" aria-label="Unduh"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ TES ============ -->
+      <section class="page" id="page-tes">
+        <div class="tes-grid">
+          <div class="card tes-card">
+            <div class="tes-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="4" width="13" height="17" rx="2"/><path d="M9 3.5h6v2H9z"/></svg></div>
+            <h3>Kuesioner Gaya Belajar</h3>
+            <p>Kenali gaya belajar yang paling cocok untukmu — visual, auditori, atau kinestetik.</p>
+            <span class="tes-status belum">Belum diisi</span>
+            <button class="btn btn-primary btn-block">Isi Sekarang</button>
+          </div>
+          <div class="card tes-card">
+            <div class="tes-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.3"/><path d="m15 9-1.8 4.2L9 15l1.8-4.2Z"/></svg></div>
+            <h3>Tes Minat & Bakat</h3>
+            <p>Membantu memetakan minat yang bisa jadi bahan pertimbangan memilih jurusan.</p>
+            <span class="tes-status selesai">Selesai · 2 Sep 2026</span>
+            <button class="btn btn-ghost btn-block">Lihat Hasil</button>
+          </div>
+          <div class="card tes-card">
+            <div class="tes-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="3.3"/><circle cx="16" cy="10" r="2.6"/><path d="M3.5 19c.6-3 2.7-4.6 5.5-4.6s4.9 1.6 5.5 4.6"/></svg></div>
+            <h3>Angket Kondisi Sosial-Emosional</h3>
+            <p>Angket ringan untuk membantu Guru BK memahami kondisimu di sekolah akhir-akhir ini.</p>
+            <span class="tes-status selesai">Selesai · 28 Agu 2026</span>
+            <button class="btn btn-ghost btn-block">Lihat Hasil</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ PROFIL ============ -->
+      <section class="page" id="page-profil">
+        <div class="profil-grid">
+          <div class="card avatar-card">
+            <div class="avatar-big">KA</div>
+            <h3>Kanaya Adzra</h3>
+            <div class="role-tag">Siswa · XI IPA 2</div>
+            <button class="btn btn-ghost btn-sm" style="margin-top:8px;">Ganti Foto</button>
+          </div>
+
+          <div>
+            <div class="card form-panel">
+              <h3>Data Diri</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Nama Lengkap</label>
+                  <input type="text" value="Kanaya Adzra Putri" />
+                </div>
+                <div class="form-group">
+                  <label>NISN</label>
+                  <input type="text" value="0051234567" disabled />
+                </div>
+                <div class="form-group">
+                  <label>Kelas</label>
+                  <input type="text" value="XI IPA 2" disabled />
+                </div>
+                <div class="form-group">
+                  <label>Email</label>
+                  <input type="email" value="kanaya.adzra@siswa.sman4jember.sch.id" />
+                </div>
+                <div class="form-group full">
+                  <label>No. HP</label>
+                  <input type="text" value="0812-3456-7890" />
+                </div>
+              </div>
+              <div class="form-actions">
+                <button class="btn btn-primary">Simpan Perubahan</button>
+                <button class="btn btn-ghost">Batal</button>
+              </div>
+            </div>
+
+            <div class="divider-gap"></div>
+
+            <div class="card form-panel">
+              <h3>Ubah Kata Sandi</h3>
+              <div class="form-row">
+                <div class="form-group full">
+                  <label>Kata Sandi Saat Ini</label>
+                  <input type="password" placeholder="••••••••" />
+                </div>
+                <div class="form-group">
+                  <label>Kata Sandi Baru</label>
+                  <input type="password" placeholder="••••••••" />
+                </div>
+                <div class="form-group">
+                  <label>Konfirmasi Kata Sandi</label>
+                  <input type="password" placeholder="••••••••" />
+                </div>
+              </div>
+              <div class="form-actions">
+                <button class="btn btn-primary">Perbarui Kata Sandi</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+  // ---------- Navigasi antar halaman (tanpa reload) ----------
+  const navLinks = document.querySelectorAll('[data-page]');
+  const pages = document.querySelectorAll('.page');
+  const sideNavLinks = document.querySelectorAll('.side-nav a[data-page]');
+  const pageTitle = document.getElementById('pageTitle');
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('backdrop');
+
+  function goToPage(name, title){
+    pages.forEach(p => p.classList.remove('active'));
+    const target = document.getElementById('page-' + name);
+    if(target) target.classList.add('active');
+    sideNavLinks.forEach(l => l.classList.toggle('active', l.dataset.page === name));
+    if(title) pageTitle.textContent = title;
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('open');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      goToPage(link.dataset.page, link.dataset.title || link.textContent.trim());
+    });
+  });
+
+  // ---------- Sidebar mobile toggle ----------
+  document.getElementById('menuToggle').addEventListener('click', () => {
+    sidebar.classList.add('open');
+    backdrop.classList.add('open');
+  });
+  backdrop.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('open');
+  });
+
+  // ---------- Filter chip e-book (visual only) ----------
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    });
+  });
+
+  // ---------- Sesi chat: klik item riwayat singkat ----------
+  document.querySelectorAll('.session-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.session-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+    });
+  });
+
+  // ---------- Tombol "+ Sesi Baru" → tampilkan empty state (F-27) ----------
+  const chatMessages = document.getElementById('chatMessages');
+  const emptyStateHTML = `
+    <div class="chat-empty">
+      <div class="chat-empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v10H8l-4 3.2V5.5Z"/></svg>
+      </div>
+      <h3>Mulai percakapan baru</h3>
+      <p>Ceritakan apa pun yang sedang kamu pikirkan. Tidak ada pertanyaan yang terlalu kecil.</p>
+      <div class="prompt-chips">
+        <button class="prompt-chip" data-prompt="Bagaimana cara mengatur waktu belajar yang baik?">Cara mengatur waktu belajar</button>
+        <button class="prompt-chip" data-prompt="Aku ingin tahu tentang pilihan jurusan kuliah.">Pilihan jurusan kuliah</button>
+        <button class="prompt-chip" data-prompt="Aku cuma butuh teman bicara hari ini.">Butuh teman bicara</button>
+      </div>
+    </div>`;
+
+  document.getElementById('btnSesiBaru').addEventListener('click', () => {
+    chatMessages.innerHTML = emptyStateHTML;
+    document.querySelectorAll('.session-item').forEach(i => i.classList.remove('active'));
+    attachPromptChipEvents();
+  });
+
+  function attachPromptChipEvents(){
+    document.querySelectorAll('.prompt-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.getElementById('chatInputBox').value = chip.dataset.prompt;
+        document.getElementById('chatInputBox').focus();
+      });
+    });
+  }
+
+  // ---------- Textarea auto-grow sederhana ----------
+  const chatInputBox = document.getElementById('chatInputBox');
+  chatInputBox.addEventListener('input', function(){
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 110) + 'px';
+  });
+</script>
+</body>
+</html>

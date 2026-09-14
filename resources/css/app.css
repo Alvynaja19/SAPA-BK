@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap') layer(base);
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-outfit: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+
+  --color-brand-25: #f4f8f4;
+  --color-brand-50: #edf5ee;
+  --color-brand-100: #d7ead9;
+  --color-brand-200: #b4dab7;
+  --color-brand-300: #87c48c;
+  --color-brand-400: #53a85b;
+  --color-brand-500: #2e7d34;
+  --color-brand-600: #256b2a;
+  --color-brand-700: #205a26;
+  --color-brand-800: #1a461e;
+  --color-brand-900: #143818;
+  --color-brand-950: #0b210e;
+
+  --color-accent-50: #fefbf0;
+  --color-accent-100: #fdf4d4;
+  --color-accent-200: #fbe9ae;
+  --color-accent-300: #f8d77a;
+  --color-accent-400: #f5c338;
+  --color-accent-500: #f4b400;
+  --color-accent-600: #d89e00;
+  --color-accent-700: #b28000;
+  --color-accent-800: #7a5200;
+  --color-accent-900: #5c3d00;
+
+  --color-gray-25: #fcfcfd;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f2f4f7;
+  --color-gray-200: #e4e7ec;
+  --color-gray-300: #d0d5dd;
+  --color-gray-400: #98a2b3;
+  --color-gray-500: #667085;
+  --color-gray-600: #475467;
+  --color-gray-700: #344054;
+  --color-gray-800: #1d2939;
+  --color-gray-900: #101828;
+  --color-gray-950: #0c111d;
+  --color-gray-dark: #1a2231;
+}

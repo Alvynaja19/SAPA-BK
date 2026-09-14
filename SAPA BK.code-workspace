@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "SAPA BK",
+			"path": "."
+		},
+		{
+			"name": "saasable-ui",
+			"path": "../saasable-ui"
+		},
+		{
+			"path": "../tailadmin-laravel-main (1)"
+		}
+	]
+}

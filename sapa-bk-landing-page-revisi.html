@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<!--
+  SAPA BK — UI Mockup Landing Page (v2, dengan aksen animasi 3D)
+  Referensi: SRS SAPA_BK.md — bagian 4.2 (Landing Page Publik)
+  Perubahan dari v1: scene 3D di hero (Three.js, motif topi toga + buku
+  terbuka + pensil, mewakili dunia pendidikan), tilt interaktif pada
+  kartu chat, hover 3D pada cover e-book, urutan animasi masuk di hero.
+  Palet warna disesuaikan dengan logo SMA Negeri 4 Jember (hijau, emas,
+  biru, merah). Semua menghormati prefers-reduced-motion.
+-->
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SAPA BK — SMA Negeri 4 Jember</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #FBF8EA;
+    --bg-alt: #F7EDC2;
+    --surface: #FFFFFF;
+    --ink: #1C2B18;
+    --ink-soft: #4E5E46;
+    --ink-faint: #83927A;
+    --primary: #2E7D34;
+    --primary-hover: #205A26;
+    --accent: #F4B400;
+    --accent-hover: #D89E00;
+    --accent-soft: #FBE9AE;
+    --accent-ink: #7A5200;
+    --red: #D6362E;
+    --red-soft: #FADBD8;
+    --blue: #1C6EB4;
+    --blue-soft: #D9E9F6;
+    --line: #E6DBA0;
+    --radius-s: 6px;
+    --radius-m: 14px;
+    --shadow-card: 0 1px 0 rgba(28,43,24,0.07), 0 8px 20px -14px rgba(28,43,24,0.28);
+    --maxw: 1180px;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    line-height: 1.15;
+    margin: 0;
+    color: var(--ink);
+  }
+  p{ margin: 0; }
+  a{ color: inherit; text-decoration: none; }
+  img,svg{ display:block; max-width:100%; }
+  ul{ margin:0; padding:0; list-style:none; }
+  button{ font-family: inherit; cursor: pointer; }
+
+  .wrap{
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+  section{ padding: 88px 0; }
+  @media (max-width: 760px){
+    section{ padding: 56px 0; }
+    .wrap{ padding: 0 20px; }
+  }
+
+  .eyebrow-free-heading{ font-size: clamp(28px, 4vw, 44px); max-width: 640px; }
+  .section-lede{
+    color: var(--ink-soft);
+    font-size: 17px;
+    max-width: 480px;
+    margin-top: 14px;
+  }
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding: 13px 24px;
+    border-radius: var(--radius-s);
+    font-weight: 600;
+    font-size: 15px;
+    border: 1px solid transparent;
+    transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .btn-primary{ background: var(--primary); color: #F3F5EF; }
+  .btn-primary:hover{ background: var(--primary-hover); }
+  .btn-primary:focus-visible{ outline: 3px solid var(--accent-soft); outline-offset: 2px; }
+  .btn-ghost{ background: transparent; color: var(--primary); border-color: var(--line); }
+  .btn-ghost:hover{ border-color: var(--primary); }
+  .btn-ghost:focus-visible{ outline: 3px solid var(--accent-soft); outline-offset: 2px; }
+
+  /* ---------- NAVBAR ---------- */
+  header.nav{
+    position: sticky; top: 0; z-index: 40;
+    background: rgba(251,248,234,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 16px 0;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-mark{
+    width: 34px; height:34px; border-radius: 9px;
+    background: var(--primary);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .brand-name{ font-family:'Fraunces', serif; font-weight:600; font-size:19px; }
+  .brand-sub{ font-size:11px; color: var(--ink-faint); margin-top:-2px; }
+
+  .nav-links{ display:flex; align-items:center; gap:32px; }
+  .nav-links a{ font-size:15px; color: var(--ink-soft); }
+  .nav-links a:hover{ color: var(--primary); }
+  .nav-actions{ display:flex; align-items:center; gap:14px; }
+  .nav-actions a.login{ font-size:15px; font-weight:600; color:var(--primary); }
+
+  .nav-toggle{ display:none; background:none; border:none; padding:6px; }
+  .nav-toggle span{ display:block; width:22px; height:2px; background:var(--ink); margin:5px 0; }
+
+  @media (max-width: 900px){
+    .nav-links{
+      position:absolute; top:100%; left:0; right:0;
+      flex-direction:column; align-items:flex-start; gap:0;
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+      max-height:0; overflow:hidden;
+      transition: max-height .25s ease;
+    }
+    .nav-links.open{ max-height: 320px; }
+    .nav-links a{ padding: 14px 20px; width:100%; border-top:1px solid var(--line); }
+    .nav-toggle{ display:block; }
+    .nav-actions .login{ display:none; }
+  }
+
+  /* ---------- HERO (dengan lapisan 3D) ---------- */
+  .hero{ position:relative; overflow:hidden; }
+  .hero-canvas{
+    position:absolute; top:-6%; right:-4%; width:62%; height:112%;
+    z-index:0; pointer-events:none;
+  }
+  .hero-canvas canvas{ display:block; }
+  .hero-canvas.static-fallback{
+    background:
+      radial-gradient(circle at 68% 38%, rgba(244,180,0,0.32), transparent 58%),
+      radial-gradient(circle at 42% 68%, rgba(46,125,52,0.24), transparent 55%);
+    filter: blur(2px);
+  }
+  @media (max-width: 900px){ .hero-canvas{ display:none; } }
+
+  .hero .wrap{
+    position:relative; z-index:1;
+    display:grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 56px;
+    align-items:center;
+    padding-top: 64px;
+    padding-bottom: 40px;
+  }
+  @media (max-width: 900px){
+    .hero .wrap{ grid-template-columns: 1fr; padding-top: 36px; }
+  }
+
+  @keyframes heroRise{
+    from{ opacity:0; transform: translateY(16px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+  .hero-meaning, .hero h1, .hero-lede, .hero-ctas, .hero-trust, .chat-mock-wrap{
+    animation: heroRise .7s ease both;
+  }
+  .hero-meaning{ animation-delay: .05s; }
+  .hero h1{ animation-delay: .15s; }
+  .hero-lede{ animation-delay: .28s; }
+  .hero-ctas{ animation-delay: .4s; }
+  .hero-trust{ animation-delay: .5s; }
+  .chat-mock-wrap{ animation-delay: .3s; }
+  @media (prefers-reduced-motion: reduce){
+    .hero-meaning, .hero h1, .hero-lede, .hero-ctas, .hero-trust, .chat-mock-wrap{ animation:none; }
+  }
+
+  .hero-meaning{
+    display:inline-flex; align-items:baseline; gap:6px;
+    font-size:14px; color: var(--accent-ink);
+    background: var(--accent-soft);
+    padding: 6px 12px; border-radius: 999px;
+    margin-bottom:22px;
+  }
+  .hero h1{ font-size: clamp(32px, 4.6vw, 52px); max-width: 560px; }
+  .hero h1 em{ font-style: normal; color: var(--primary); }
+  .hero-lede{ margin-top:20px; font-size:18px; color: var(--ink-soft); max-width: 480px; }
+  .hero-ctas{ display:flex; gap:14px; margin-top:32px; flex-wrap:wrap; }
+  .hero-trust{ margin-top: 36px; display:flex; gap:26px; color: var(--ink-faint); font-size: 13px; }
+  .hero-trust strong{ color: var(--ink); display:block; font-family:'Fraunces',serif; font-size:20px; font-weight:600; }
+
+  /* Hero chat mockup card — kini dengan perspective tilt */
+  .chat-mock-wrap{ position:relative; perspective: 1200px; }
+  .chat-mock-wrap::before{
+    content:"";
+    position:absolute; top:-28px; right:-18px; width:72%; height:65%;
+    background: radial-gradient(circle, rgba(244,180,0,0.35), transparent 70%);
+    filter: blur(34px);
+    z-index:-1;
+  }
+  .chat-mock{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    box-shadow: var(--shadow-card);
+    overflow:hidden;
+    transform-style: preserve-3d;
+    transition: transform .15s ease-out, box-shadow .15s ease-out;
+    will-change: transform;
+  }
+  .chat-mock-head{
+    display:flex; align-items:center; gap:10px;
+    padding: 16px 18px;
+    background: var(--primary);
+    color:#EAF0EA;
+  }
+  .status-dot{ width:9px; height:9px; border-radius:50%; background:#7FD79A; box-shadow: 0 0 0 3px rgba(127,215,154,0.25); }
+  .chat-mock-head .who{ font-weight:600; font-size:14px; }
+  .chat-mock-head .status-text{ font-size:12px; color:#C9D8CD; margin-left:auto; text-align:right; }
+  .chat-mock-body{ padding: 20px 18px; display:flex; flex-direction:column; gap:14px; background: #F7F9F5; }
+  .bubble{ max-width: 82%; padding: 11px 14px; border-radius: 14px; font-size: 14.5px; line-height:1.45; }
+  .bubble.user{ align-self:flex-end; background: var(--primary); color:#F1F4EF; border-bottom-right-radius:4px; }
+  .bubble.bot{ align-self:flex-start; background: var(--surface); border: 1px solid var(--line); color: var(--ink); border-bottom-left-radius:4px; }
+  .bubble.bot .src{ display:block; margin-top:8px; font-size:11.5px; color: var(--ink-faint); }
+  .chat-mock-foot{
+    display:flex; align-items:center; gap:10px;
+    padding: 12px 14px; border-top:1px solid var(--line); background: var(--surface);
+  }
+  .chat-mock-foot .fakeinput{
+    flex:1; background: var(--bg); border-radius: 999px; padding: 10px 16px;
+    font-size: 13.5px; color: var(--ink-faint);
+  }
+  .chat-mock-foot .sendbtn{
+    width:36px; height:36px; border-radius:50%; background:var(--accent);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+
+  /* ---------- LAYANAN ---------- */
+  .services{ background: var(--surface); }
+  .services-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; }
+  .service-grid{
+    margin-top: 44px;
+    display:grid; grid-template-columns: 1fr 1fr; gap: 2px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    overflow:hidden;
+  }
+  @media (max-width: 760px){ .service-grid{ grid-template-columns: 1fr; } }
+  .service-item{ background: var(--surface); padding: 32px 30px; display:flex; gap:18px; }
+  .service-icon{
+    width:44px; height:44px; border-radius: 10px;
+    background: var(--bg-alt);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .service-icon svg{ width:22px; height:22px; stroke: var(--primary); }
+  .service-item h3{ font-size: 18px; margin-bottom:6px; }
+  .service-item p{ color: var(--ink-soft); font-size:14.5px; }
+  .service-item .tag{
+    display:inline-block; margin-top:10px; font-size:12px; color: var(--accent-ink);
+    background: var(--accent-soft); padding:3px 9px; border-radius:6px;
+  }
+
+  /* ---------- CARA KERJA ---------- */
+  .how{ background: var(--bg); }
+  .how-steps{ margin-top: 56px; display:grid; grid-template-columns: repeat(3, 1fr); gap: 40px; position: relative; }
+  .how-steps::before{
+    content:"";
+    position:absolute; top:23px; left: calc(100%/6); right: calc(100%/6);
+    height: 1px;
+    background: repeating-linear-gradient(90deg, var(--line) 0 8px, transparent 8px 14px);
+  }
+  @media (max-width: 760px){
+    .how-steps{ grid-template-columns: 1fr; gap: 30px; }
+    .how-steps::before{ top:0; bottom:0; left:23px; right:auto; width:1px; height:auto;
+      background: repeating-linear-gradient(180deg, var(--line) 0 8px, transparent 8px 14px); }
+  }
+  .how-step{ position:relative; }
+  .how-num{
+    width:46px; height:46px; border-radius:50%;
+    background: var(--primary); color:#EAF0EA;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces',serif; font-weight:600; font-size:17px;
+    position:relative; z-index:2;
+  }
+  .how-step h3{ font-size:17px; margin-top:18px; margin-bottom:8px; }
+  .how-step p{ color: var(--ink-soft); font-size:14.5px; max-width: 300px; }
+
+  /* ---------- E-BOOK (cover dengan hover 3D ala buku dibuka) ---------- */
+  .ebooks{ background: var(--surface); }
+  .ebook-row{ margin-top:40px; display:grid; grid-template-columns: repeat(4, 1fr); gap:20px; perspective: 900px; }
+  @media (max-width: 900px){ .ebook-row{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px){ .ebook-row{ grid-template-columns: 1fr; } }
+  .ebook-card{ display:flex; flex-direction:column; gap:12px; }
+  .ebook-cover{
+    aspect-ratio: 3/4; border-radius: 8px 8px 4px 4px;
+    display:flex; align-items:flex-end; padding:16px;
+    position:relative; overflow:hidden;
+    transform-style: preserve-3d;
+    transform-origin: left center;
+    transition: transform .28s ease, box-shadow .28s ease;
+  }
+  .ebook-cover::after{ content:""; position:absolute; left:0; top:0; bottom:0; width:8px; background: rgba(0,0,0,0.15); }
+  .ebook-cover span{ color:#fff; font-family:'Fraunces',serif; font-weight:600; font-size:15px; line-height:1.25; }
+  .ebook-cover.c1{ background: linear-gradient(160deg, #3C9445, #1C4A20); }
+  .ebook-cover.c2{ background: linear-gradient(160deg, #F4B400, #8A5B00); }
+  .ebook-cover.c3{ background: linear-gradient(160deg, #2C86C9, #123F66); }
+  .ebook-cover.c4{ background: linear-gradient(160deg, #E1483F, #7A1F1A); }
+  .ebook-card:hover .ebook-cover{
+    transform: rotateY(-16deg) translateX(3px);
+    box-shadow: 18px 20px 30px -16px rgba(20,30,26,0.4);
+  }
+  .ebook-meta{ font-size:13px; color: var(--ink-faint); }
+  .ebook-meta strong{ color: var(--ink); display:block; font-size:14.5px; font-weight:600; margin-bottom:2px; }
+  @media (prefers-reduced-motion: reduce){
+    .ebook-cover{ transition:none; }
+    .ebook-card:hover .ebook-cover{ transform:none; }
+  }
+
+  /* ---------- ARTIKEL ---------- */
+  .articles{ background: var(--bg-alt); }
+  .article-row{ margin-top: 44px; display:grid; grid-template-columns: repeat(3,1fr); gap: 28px; }
+  @media (max-width: 900px){ .article-row{ grid-template-columns: 1fr; } }
+  .article-card{ background: var(--surface); border-radius: var(--radius-m); overflow:hidden; border:1px solid var(--line); }
+  .article-thumb{ height:130px; background: repeating-linear-gradient(135deg, var(--primary) 0 2px, var(--primary-hover) 2px 4px); }
+  .article-card .abody{ padding: 22px; }
+  .article-card h3{ font-size:16.5px; margin-bottom:8px; }
+  .article-card p{ font-size:13.5px; color: var(--ink-soft); }
+  .article-card .ameta{ margin-top:14px; font-size:12.5px; color: var(--ink-faint); display:flex; justify-content:space-between; }
+
+  /* ---------- FAQ ---------- */
+  .faq .wrap{ max-width: 780px; }
+  .faq-list{ margin-top: 36px; border-top:1px solid var(--line); }
+  details{ border-bottom:1px solid var(--line); padding: 20px 0; }
+  summary{ cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; font-weight:600; font-size:16px; gap:16px; }
+  summary::-webkit-details-marker{ display:none; }
+  summary .plus{ font-size:20px; color: var(--accent); flex-shrink:0; transition: transform .2s ease; }
+  details[open] summary .plus{ transform: rotate(45deg); }
+  details p{ margin-top:14px; color: var(--ink-soft); font-size:14.5px; max-width:640px; }
+
+  /* ---------- FOOTER ---------- */
+  footer{ background: var(--primary); color:#DCE6DE; padding: 56px 0 30px; }
+  .foot-row{ display:flex; justify-content:space-between; gap:40px; flex-wrap:wrap; }
+  footer h4{ color:#F3F5EF; font-size:15px; margin-bottom:14px; }
+  footer .brand-name{ color:#F3F5EF; }
+  .foot-col a{ display:block; color:#B9CABD; font-size:14px; padding:4px 0; }
+  .foot-col a:hover{ color:#fff; }
+  .foot-bottom{ margin-top:44px; padding-top:22px; border-top:1px solid rgba(255,255,255,0.12); font-size:12.5px; color:#9DB2A2; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+
+  /* ---------- CHATBOT WIDGET (floating) ---------- */
+  .fab{
+    position: fixed; right: 24px; bottom: 24px; z-index:60;
+    width:58px; height:58px; border-radius:50%;
+    background: var(--accent); border:none;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 10px 24px -8px rgba(0,0,0,0.35), 0 0 0 0 rgba(244,180,0,0.5);
+    animation: fabPulse 3.2s ease-in-out infinite;
+  }
+  @keyframes fabPulse{
+    0%, 100%{ box-shadow: 0 10px 24px -8px rgba(0,0,0,0.35), 0 0 0 0 rgba(244,180,0,0.35); }
+    50%{ box-shadow: 0 10px 24px -8px rgba(0,0,0,0.35), 0 0 0 10px rgba(244,180,0,0); }
+  }
+  @media (prefers-reduced-motion: reduce){ .fab{ animation:none; } }
+  .fab svg{ width:26px; height:26px; stroke:#2A1C08; }
+  .fab .fabdot{ position:absolute; top:6px; right:6px; width:10px; height:10px; border-radius:50%; background:#3FA35E; border:2px solid var(--surface); }
+
+  .widget-panel{
+    position: fixed; right:24px; bottom: 94px; z-index:60;
+    width: 340px; max-width: calc(100vw - 40px);
+    background: var(--surface); border-radius: var(--radius-m);
+    border:1px solid var(--line);
+    box-shadow: 0 20px 45px -16px rgba(0,0,0,0.35);
+    overflow:hidden;
+    transform: translateY(12px) scale(0.98);
+    opacity:0; pointer-events:none;
+    transition: opacity .18s ease, transform .18s ease;
+  }
+  .widget-panel.open{ opacity:1; transform: translateY(0) scale(1); pointer-events:auto; }
+  .widget-head{ background: var(--primary); color:#EAF0EA; padding:16px 18px; }
+  .widget-head .who{ font-weight:600; font-size:14.5px; }
+  .widget-head .hours{ font-size:12px; color:#C9D8CD; margin-top:3px; }
+  .widget-body{ padding:16px; background:#F7F9F5; display:flex; flex-direction:column; gap:12px; max-height:260px; overflow:auto; }
+  .widget-notice{ font-size:12px; background: var(--accent-soft); color: var(--accent-ink); padding:9px 11px; border-radius:8px; line-height:1.4; }
+  .widget-foot{ padding:12px 14px; border-top:1px solid var(--line); display:flex; gap:8px; background:var(--surface); }
+  .widget-foot input{
+    flex:1; border:1px solid var(--line); border-radius:999px; padding:9px 14px; font-size:13.5px; font-family:inherit;
+    background: var(--bg);
+  }
+  .widget-foot input:focus{ outline:2px solid var(--accent); outline-offset:1px; }
+  .widget-foot button{
+    width:34px; height:34px; border-radius:50%; background:var(--accent); border:none; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .widget-panel, .nav-links, summary .plus{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="nav">
+    <div class="wrap nav-row">
+      <div class="brand">
+        <div class="brand-mark">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EAF0EA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v4M4.5 8.5 7 10M19.5 8.5 17 10M12 21v-7M6 14h12"/>
+            <circle cx="12" cy="7" r="3.2"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">SAPA BK</div>
+          <div class="brand-sub">SMA Negeri 4 Jember</div>
+        </div>
+      </div>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#hero">Beranda</a>
+        <a href="#layanan">Tentang BK</a>
+        <a href="#ebook">E-book</a>
+        <a href="#artikel">Artikel</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="login" href="#">Masuk</a>
+        <a class="btn btn-primary" href="#">Daftar</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Buka menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-canvas" id="heroCanvas" aria-hidden="true"></div>
+    <div class="wrap">
+      <div>
+        <div class="hero-meaning">
+          <strong style="color:var(--accent-ink)">SAPA</strong>&nbsp;— singkatan sekaligus ajakan untuk menyapa dan bercerita
+        </div>
+        <h1>Ruang aman untuk bicara, bertanya, dan menemukan <em>arah</em>.</h1>
+        <p class="hero-lede">Asisten BK digital SMA Negeri 4 Jember. Tanyakan soal belajar, jurusan, atau apa pun yang sedang kamu pikirkan — SAPA membantu mencari jawabannya, dan menyambungkanmu ke Guru BK bila kamu butuh bicara langsung.</p>
+        <div class="hero-ctas">
+          <a href="#" class="btn btn-primary" id="openWidgetFromHero">Mulai ngobrol dengan SAPA</a>
+          <a href="#layanan" class="btn btn-ghost">Lihat layanan BK</a>
+        </div>
+        <div class="hero-trust">
+          <div><strong>08.00–15.00</strong>jam live chat Guru BK</div>
+          <div><strong>24 jam</strong>SAPA siap menjawab</div>
+          <div><strong>Rahasia</strong>terjaga & tercatat aman</div>
+        </div>
+      </div>
+
+      <div class="chat-mock-wrap">
+        <div class="chat-mock" aria-hidden="true">
+          <div class="chat-mock-head">
+            <div class="status-dot"></div>
+            <div class="who">SAPA — Asisten BK</div>
+            <div class="status-text">Online<br/>08.00–15.00 WIB</div>
+          </div>
+          <div class="chat-mock-body">
+            <div class="bubble user">Bagaimana cara mengatasi kesulitan belajar?</div>
+            <div class="bubble bot">
+              Coba mulai dari mengenali pelajaran mana yang paling terasa berat, lalu pecah jadi target belajar kecil setiap hari. Kamu juga bisa konsultasi ke Guru BK untuk menyusun strategi yang lebih personal.
+              <span class="src">Sumber: Panduan Belajar Efektif, hal. 5</span>
+            </div>
+          </div>
+          <div class="chat-mock-foot">
+            <div class="fakeinput">Tulis pertanyaanmu di sini…</div>
+            <div class="sendbtn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2A1C08" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAYANAN BK -->
+  <section class="services" id="layanan">
+    <div class="wrap">
+      <div class="services-head">
+        <div>
+          <h2 class="eyebrow-free-heading">Layanan yang bisa kamu akses</h2>
+          <p class="section-lede">Empat pintu masuk, satu tujuan: membantumu melewati apa pun yang sedang dihadapi di sekolah maupun di luar sekolah.</p>
+        </div>
+      </div>
+
+      <div class="service-grid">
+        <div class="service-item">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5c-2-1.3-4.6-1.7-7-1V17c2.4-.7 5-.3 7 1 2-1.3 4.6-1.7 7-1V5.5c-2.4-.7-5-.3-7 1Z"/><path d="M12 6.5V18"/></svg>
+          </div>
+          <div>
+            <h3>Konseling Akademik</h3>
+            <p>Bantuan menyusun strategi belajar dan mengatasi kesulitan pada mata pelajaran tertentu.</p>
+            <span class="tag">Chatbot & Guru BK</span>
+          </div>
+        </div>
+
+        <div class="service-item">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="3.3"/><circle cx="16" cy="10" r="2.6"/><path d="M3.5 19c.6-3 2.7-4.6 5.5-4.6s4.9 1.6 5.5 4.6"/><path d="M14.5 19c.4-2.2 1.9-3.4 4-3.4"/></svg>
+          </div>
+          <div>
+            <h3>Konseling Pribadi & Sosial</h3>
+            <p>Ruang bercerita soal pertemanan, keluarga, atau perasaan yang sedang berat dijalani sendiri.</p>
+            <span class="tag">Chatbot & Guru BK</span>
+          </div>
+        </div>
+
+        <div class="service-item">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.3"/><path d="m15 9-1.8 4.2L9 15l1.8-4.2Z"/></svg>
+          </div>
+          <div>
+            <h3>Konseling Karier</h3>
+            <p>Arahan mengenali minat, memilih jurusan kuliah, dan merencanakan langkah setelah SMA.</p>
+            <span class="tag">Chatbot & Guru BK</span>
+          </div>
+        </div>
+
+        <div class="service-item">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v5.5l3.5 2"/><circle cx="12" cy="12.5" r="8.3"/></svg>
+          </div>
+          <div>
+            <h3>Live Chat Guru BK</h3>
+            <p>Ngobrol langsung dengan Guru BK pada jam sekolah, 08.00–15.00 WIB. Identitasmu tetap terekam agar penanganan lebih tepat.</p>
+            <span class="tag">08.00–15.00 WIB</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CARA KERJA -->
+  <section class="how">
+    <div class="wrap">
+      <h2 class="eyebrow-free-heading">Cara kerjanya</h2>
+      <p class="section-lede">Tiga langkah sederhana, dari pertanyaan pertama sampai bicara langsung dengan Guru BK.</p>
+
+      <div class="how-steps">
+        <div class="how-step">
+          <div class="how-num">1</div>
+          <h3>Ceritakan yang kamu rasakan</h3>
+          <p>Ketik pertanyaan atau situasi yang sedang kamu hadapi — tidak ada pertanyaan yang terlalu kecil.</p>
+        </div>
+        <div class="how-step">
+          <div class="how-num">2</div>
+          <h3>SAPA menyusun jawaban</h3>
+          <p>Jawaban disusun dari dokumen dan panduan BK sekolah, lengkap dengan sumber yang dipakai.</p>
+        </div>
+        <div class="how-step">
+          <div class="how-num">3</div>
+          <h3>Lanjut ke Guru BK bila perlu</h3>
+          <p>Butuh bicara langsung? Sambungkan ke Guru BK saat jam sekolah, 08.00–15.00 WIB.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- E-BOOK -->
+  <section class="ebooks" id="ebook">
+    <div class="wrap">
+      <div class="services-head">
+        <div>
+          <h2 class="eyebrow-free-heading">Bacaan yang bisa membantu</h2>
+          <p class="section-lede">Sebagian e-book BK bisa dibaca siapa saja. Masuk untuk membuka koleksi lengkap.</p>
+        </div>
+        <a href="#" class="btn btn-ghost">Lihat semua e-book</a>
+      </div>
+
+      <div class="ebook-row">
+        <div class="ebook-card">
+          <div class="ebook-cover c1"><span>Strategi Belajar Efektif</span></div>
+          <div class="ebook-meta"><strong>Strategi Belajar Efektif</strong>Tim BK · 48 hlm</div>
+        </div>
+        <div class="ebook-card">
+          <div class="ebook-cover c2"><span>Mengelola Stres di Sekolah</span></div>
+          <div class="ebook-meta"><strong>Mengelola Stres di Sekolah</strong>Tim BK · 32 hlm</div>
+        </div>
+        <div class="ebook-card">
+          <div class="ebook-cover c3"><span>Menentukan Jurusan Kuliah</span></div>
+          <div class="ebook-meta"><strong>Menentukan Jurusan Kuliah</strong>Tim BK · 56 hlm</div>
+        </div>
+        <div class="ebook-card">
+          <div class="ebook-cover c4"><span>Mengenal Diri Sendiri</span></div>
+          <div class="ebook-meta"><strong>Mengenal Diri Sendiri</strong>Tim BK · 40 hlm</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARTIKEL -->
+  <section class="articles" id="artikel">
+    <div class="wrap">
+      <h2 class="eyebrow-free-heading">Artikel BK terbaru</h2>
+      <p class="section-lede">Tulisan singkat seputar belajar, jurusan, dan kesehatan mental remaja.</p>
+
+      <div class="article-row">
+        <div class="article-card">
+          <div class="article-thumb"></div>
+          <div class="abody">
+            <h3>5 cara meredakan overthinking sebelum ujian</h3>
+            <p>Langkah kecil yang bisa dicoba malam sebelum ujian supaya kepala lebih tenang.</p>
+            <div class="ameta"><span>Tim BK</span><span>4 menit baca</span></div>
+          </div>
+        </div>
+        <div class="article-card">
+          <div class="article-thumb"></div>
+          <div class="abody">
+            <h3>Bingung pilih jurusan? Begini cara mengenalinya</h3>
+            <p>Tiga pertanyaan yang bisa membantumu mulai memetakan minat dan pilihan jurusan.</p>
+            <div class="ameta"><span>Tim BK</span><span>6 menit baca</span></div>
+          </div>
+        </div>
+        <div class="article-card">
+          <div class="article-thumb"></div>
+          <div class="abody">
+            <h3>Cerita ke Guru BK itu bukan hal yang memalukan</h3>
+            <p>Kenapa banyak siswa ragu memulai, dan bagaimana sesi konseling sebenarnya berjalan.</p>
+            <div class="ameta"><span>Tim BK</span><span>5 menit baca</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq">
+    <div class="wrap">
+      <h2 class="eyebrow-free-heading">Pertanyaan yang sering muncul</h2>
+
+      <div class="faq-list">
+        <details open>
+          <summary>Siapa saja yang bisa memakai SAPA BK? <span class="plus">+</span></summary>
+          <p>Semua orang bisa membuka landing page dan bertanya secara terbatas lewat chatbot widget. Untuk riwayat percakapan, dashboard, dan fitur lengkap, kamu perlu masuk sebagai siswa terdaftar.</p>
+        </details>
+        <details>
+          <summary>Apakah percakapan saya dengan SAPA bersifat rahasia? <span class="plus">+</span></summary>
+          <p>Percakapanmu tersimpan aman dan hanya bisa diakses oleh Guru BK yang berwenang, terutama saat kamu meminta untuk lanjut ke live chat.</p>
+        </details>
+        <details>
+          <summary>Kapan saya bisa mengobrol langsung dengan Guru BK? <span class="plus">+</span></summary>
+          <p>Live chat dengan Guru BK tersedia setiap hari sekolah pukul 08.00–15.00 WIB. Di luar jam itu, SAPA tetap bisa membantu menjawab atau mencatat pesanmu untuk ditindaklanjuti.</p>
+        </details>
+        <details>
+          <summary>Apakah SAPA bisa menggantikan konseling tatap muka? <span class="plus">+</span></summary>
+          <p>Tidak. SAPA membantu menjawab pertanyaan awal dan mengarahkanmu, tapi untuk situasi yang lebih personal, bicara langsung dengan Guru BK tetap yang terbaik.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-row">
+        <div style="max-width:300px;">
+          <div class="brand-name" style="font-family:'Fraunces',serif;font-weight:600;font-size:19px;margin-bottom:10px;">SAPA BK</div>
+          <p style="font-size:13.5px;color:#B9CABD;">Portal Bimbingan dan Konseling digital SMA Negeri 4 Jember. Ruang untuk bertanya, bercerita, dan mencari arah.</p>
+        </div>
+        <div class="foot-col">
+          <h4>Jelajahi</h4>
+          <a href="#hero">Beranda</a>
+          <a href="#layanan">Layanan BK</a>
+          <a href="#ebook">E-book</a>
+          <a href="#artikel">Artikel</a>
+        </div>
+        <div class="foot-col">
+          <h4>Akun</h4>
+          <a href="#">Masuk</a>
+          <a href="#">Daftar Siswa</a>
+        </div>
+        <div class="foot-col">
+          <h4>Kontak</h4>
+          <a href="#">Ruang BK, SMA Negeri 4 Jember</a>
+          <a href="#">bk@sman4jember.sch.id</a>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© 2026 SAPA BK — SMA Negeri 4 Jember</span>
+        <span>Mockup UI · v2.0 (aksen 3D)</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CHATBOT WIDGET -->
+  <button class="fab" id="fabBtn" aria-label="Buka chatbot SAPA" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v10H8l-4 3.2V5.5Z"/></svg>
+    <span class="fabdot"></span>
+  </button>
+
+  <div class="widget-panel" id="widgetPanel" role="dialog" aria-label="Chatbot SAPA">
+    <div class="widget-head">
+      <div class="who">SAPA — Asisten BK</div>
+      <div class="hours">Live chat Guru BK: 08.00–15.00 WIB</div>
+    </div>
+    <div class="widget-body">
+      <div class="widget-notice">Kamu belum masuk. Pertanyaan bersifat umum — masuk untuk riwayat percakapan dan live chat Guru BK.</div>
+      <div class="bubble bot">Halo! Saya masih dalam tahap pengembangan. Silakan hubungi Guru BK secara langsung.</div>
+    </div>
+    <div class="widget-foot">
+      <input type="text" placeholder="Tulis pertanyaanmu…" aria-label="Tulis pertanyaan" />
+      <button aria-label="Kirim pesan">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2A1C08" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+  // ---------- Nav toggle ----------
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+
+  // ---------- Chatbot widget toggle ----------
+  const fabBtn = document.getElementById('fabBtn');
+  const widgetPanel = document.getElementById('widgetPanel');
+  function toggleWidget(forceOpen){
+    const willOpen = forceOpen !== undefined ? forceOpen : !widgetPanel.classList.contains('open');
+    widgetPanel.classList.toggle('open', willOpen);
+    fabBtn.setAttribute('aria-expanded', String(willOpen));
+  }
+  fabBtn.addEventListener('click', () => toggleWidget());
+  document.getElementById('openWidgetFromHero').addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleWidget(true);
+    widgetPanel.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  });
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---------- Tilt interaktif pada kartu chat hero ----------
+  (function(){
+    const wrap = document.querySelector('.chat-mock-wrap');
+    const card = document.querySelector('.chat-mock');
+    if(!wrap || !card || reduceMotion) return;
+    wrap.addEventListener('mousemove', (e) => {
+      const rect = wrap.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      card.style.transform = `rotateX(${(-py * 8).toFixed(2)}deg) rotateY(${(px * 10).toFixed(2)}deg) translateZ(6px)`;
+    });
+    wrap.addEventListener('mouseleave', () => {
+      card.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0px)';
+    });
+  })();
+
+  // ---------- Scene 3D di hero: motif dunia pendidikan (toga, buku, pensil) ----------
+  (function(){
+    const heroSection = document.getElementById('hero');
+    const canvasHost = document.getElementById('heroCanvas');
+    if(!canvasHost) return;
+
+    let supportsWebGL = true;
+    try{
+      const testCanvas = document.createElement('canvas');
+      supportsWebGL = !!(window.WebGLRenderingContext && (testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl')));
+    }catch(e){ supportsWebGL = false; }
+
+    if(reduceMotion || !supportsWebGL || typeof THREE === 'undefined' || window.innerWidth < 900){
+      canvasHost.classList.add('static-fallback');
+      return;
+    }
+
+    const width = canvasHost.clientWidth;
+    const height = canvasHost.clientHeight;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
+    camera.position.set(0, 0, 13);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.6));
+    renderer.setSize(width, height);
+    canvasHost.appendChild(renderer.domElement);
+
+    const ambient = new THREE.AmbientLight(0xFBF5DC, 0.9);
+    scene.add(ambient);
+    const keyLight = new THREE.DirectionalLight(0xF4B400, 1.1);
+    keyLight.position.set(6, 8, 6);
+    scene.add(keyLight);
+    const fillLight = new THREE.DirectionalLight(0x8FC98F, 0.55);
+    fillLight.position.set(-6, -4, 4);
+    scene.add(fillLight);
+
+    const group = new THREE.Group();
+    scene.add(group);
+
+    // ===== Topi toga (mortarboard) — objek utama =====
+    const cap = new THREE.Group();
+
+    const board = new THREE.Mesh(
+      new THREE.BoxGeometry(3.1, 0.16, 3.1),
+      new THREE.MeshStandardMaterial({ color: 0x2E7D34, flatShading: true, roughness: 0.5 })
+    );
+    cap.add(board);
+
+    const capBase = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.62, 0.72, 0.5, 8),
+      new THREE.MeshStandardMaterial({ color: 0x1C2B18, flatShading: true, roughness: 0.55 })
+    );
+    capBase.position.y = -0.4;
+    cap.add(capBase);
+
+    const capButton = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.16, 0.16, 0.2, 10),
+      new THREE.MeshStandardMaterial({ color: 0xF4B400, flatShading: true, roughness: 0.4 })
+    );
+    capButton.position.y = 0.18;
+    cap.add(capButton);
+
+    // Rumbai (tassel) yang bisa berayun
+    const tasselPivot = new THREE.Group();
+    tasselPivot.position.set(1.4, 0.1, 1.35);
+    cap.add(tasselPivot);
+    const tasselCord = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.035, 0.035, 1.3, 6),
+      new THREE.MeshStandardMaterial({ color: 0xF4B400, flatShading: true, roughness: 0.5 })
+    );
+    tasselCord.position.y = -0.65;
+    tasselPivot.add(tasselCord);
+    const tasselEnd = new THREE.Mesh(
+      new THREE.SphereGeometry(0.14, 8, 8),
+      new THREE.MeshStandardMaterial({ color: 0xF4B400, flatShading: true, roughness: 0.5 })
+    );
+    tasselEnd.position.y = -1.35;
+    tasselPivot.add(tasselEnd);
+
+    cap.position.set(-0.3, 0.9, 0.3);
+    cap.rotation.x = 0.18;
+    cap.rotation.y = 0.15;
+    group.add(cap);
+
+    // ===== Buku terbuka =====
+    const book = new THREE.Group();
+    const spine = new THREE.Mesh(
+      new THREE.BoxGeometry(0.1, 0.12, 1.5),
+      new THREE.MeshStandardMaterial({ color: 0x1C6EB4, flatShading: true, roughness: 0.5 })
+    );
+    book.add(spine);
+
+    const pageLeftPivot = new THREE.Group();
+    const pageLeft = new THREE.Mesh(
+      new THREE.BoxGeometry(1.5, 0.05, 1.35),
+      new THREE.MeshStandardMaterial({ color: 0xFBF8EA, flatShading: true, roughness: 0.6 })
+    );
+    pageLeft.position.x = -0.75;
+    pageLeftPivot.add(pageLeft);
+    pageLeftPivot.rotation.z = 0.32;
+    book.add(pageLeftPivot);
+
+    const pageRightPivot = new THREE.Group();
+    const pageRight = new THREE.Mesh(
+      new THREE.BoxGeometry(1.5, 0.05, 1.35),
+      new THREE.MeshStandardMaterial({ color: 0xFBF8EA, flatShading: true, roughness: 0.6 })
+    );
+    pageRight.position.x = 0.75;
+    pageRightPivot.add(pageRight);
+    pageRightPivot.rotation.z = -0.32;
+    book.add(pageRightPivot);
+
+    book.position.set(-2.5, -1.7, -1.1);
+    book.rotation.y = 0.55;
+    book.rotation.x = -0.08;
+    group.add(book);
+
+    // ===== Pensil =====
+    const pencil = new THREE.Group();
+    const shaft = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.16, 0.16, 2.2, 6),
+      new THREE.MeshStandardMaterial({ color: 0xF4B400, flatShading: true, roughness: 0.5 })
+    );
+    pencil.add(shaft);
+    const tip = new THREE.Mesh(
+      new THREE.ConeGeometry(0.16, 0.42, 6),
+      new THREE.MeshStandardMaterial({ color: 0x8A5B00, flatShading: true, roughness: 0.6 })
+    );
+    tip.position.y = 1.31;
+    pencil.add(tip);
+    const graphite = new THREE.Mesh(
+      new THREE.ConeGeometry(0.05, 0.14, 6),
+      new THREE.MeshStandardMaterial({ color: 0x1C2B18, flatShading: true })
+    );
+    graphite.position.y = 1.55;
+    pencil.add(graphite);
+    const ferrule = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.18, 0.18, 0.18, 6),
+      new THREE.MeshStandardMaterial({ color: 0xC9C9C9, flatShading: true, roughness: 0.4, metalness: 0.3 })
+    );
+    ferrule.position.y = -1.19;
+    pencil.add(ferrule);
+    const eraser = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.16, 0.16, 0.3, 6),
+      new THREE.MeshStandardMaterial({ color: 0xD6362E, flatShading: true, roughness: 0.5 })
+    );
+    eraser.position.y = -1.43;
+    pencil.add(eraser);
+
+    pencil.position.set(2.5, 1.3, -0.7);
+    pencil.rotation.z = 0.55;
+    pencil.rotation.x = 0.2;
+    group.add(pencil);
+
+    // ===== Percikan "ide" melayang =====
+    const floaters = [];
+    const palette = [0x2E7D34, 0xF4B400, 0x1C6EB4, 0xD6362E];
+    for(let i = 0; i < 7; i++){
+      const size = 0.15 + Math.random() * 0.12;
+      const mesh = new THREE.Mesh(
+        new THREE.OctahedronGeometry(size, 0),
+        new THREE.MeshStandardMaterial({ color: palette[i % palette.length], flatShading: true, roughness: 0.5 })
+      );
+      const angle = (i / 7) * Math.PI * 2;
+      const radius = 4.4 + Math.random() * 1.1;
+      mesh.userData = { speed: 0.14 + Math.random() * 0.14, yOff: Math.random() * Math.PI * 2 };
+      mesh.position.set(Math.cos(angle) * radius, Math.sin(angle * 1.3) * 1.3, Math.sin(angle) * radius - 2);
+      group.add(mesh);
+      floaters.push(mesh);
+    }
+
+    let targetRotX = 0.35, targetRotY = -0.35;
+    group.rotation.x = targetRotX;
+    group.rotation.y = targetRotY;
+
+    heroSection.addEventListener('mousemove', (e) => {
+      const rect = heroSection.getBoundingClientRect();
+      const nx = (e.clientX - rect.left) / rect.width - 0.5;
+      const ny = (e.clientY - rect.top) / rect.height - 0.5;
+      targetRotY = -0.35 + nx * 0.55;
+      targetRotX = 0.35 + ny * 0.28;
+    });
+
+    function onResize(){
+      const w = canvasHost.clientWidth;
+      const h = canvasHost.clientHeight;
+      if(w === 0 || h === 0) return;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    }
+    window.addEventListener('resize', onResize);
+
+    const clock = new THREE.Clock();
+    function animate(){
+      requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
+
+      group.rotation.x += (targetRotX - group.rotation.x) * 0.045;
+      group.rotation.y += (targetRotY - group.rotation.y) * 0.045;
+
+      tasselPivot.rotation.z = Math.sin(t * 0.7) * 0.14;
+      pageLeftPivot.rotation.z = 0.32 + Math.sin(t * 0.5) * 0.03;
+      pageRightPivot.rotation.z = -0.32 - Math.sin(t * 0.5) * 0.03;
+      pencil.rotation.y = Math.sin(t * 0.35) * 0.5;
+      cap.position.y = 0.9 + Math.sin(t * 0.6) * 0.06;
+
+      floaters.forEach((f) => {
+        const d = f.userData;
+        f.position.y += (Math.sin(t * d.speed * 2 + d.yOff) * 0.02);
+        f.rotation.x += 0.004;
+        f.rotation.y += 0.006;
+      });
+
+      renderer.render(scene, camera);
+    }
+    animate();
+  })();
+</script>
+</body>
+</html>
