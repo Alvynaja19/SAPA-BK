@@ -904,7 +904,7 @@
       overflow: hidden;
       border: 1.5px solid rgba(255, 255, 255, 0.25);
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-      background: #E5EBE6;
+      background: #143D24;
     }
     .foot-map-wrap iframe {
       width: 100%;
@@ -912,20 +912,26 @@
       border: 0;
       display: block;
     }
+    .foot-col a.foot-map-link,
     .foot-map-link {
-      display: block;
-      padding: 6px 12px;
+      display: block !important;
+      width: 100% !important;
+      box-sizing: border-box;
+      padding: 8px 12px;
       background: #143D24;
-      color: #FFFFFF;
-      font-size: 11.5px;
+      color: #FFFFFF !important;
+      font-size: 12px;
       text-align: center;
       font-weight: 600;
       letter-spacing: 0.02em;
       transition: background .15s ease;
+      text-decoration: none;
     }
+    .foot-col a.foot-map-link:hover,
     .foot-map-link:hover {
       background: #D97706;
-      color: #FFFFFF;
+      color: #FFFFFF !important;
+      transform: none !important;
     }
 
     /* FOOTER MIDDLE BANNER */
