@@ -549,45 +549,188 @@
     footer {
       background: var(--primary);
       color: #E2ECE4;
-      padding: 56px 0 28px;
+      padding: 64px 0 32px;
       margin-top: auto;
     }
     .foot-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 40px;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: 1.3fr 1fr 1fr 1.4fr;
+      gap: 36px;
+      align-items: start;
     }
-    footer h4 {
+    @media (max-width: 960px) {
+      .foot-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px;
+      }
+    }
+    @media (max-width: 580px) {
+      .foot-row {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+    }
+    .foot-col h4 {
       color: #FFFFFF;
       font-size: 16px;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
       font-family: 'Work Sans', sans-serif;
-      font-weight: 600;
-    }
-    footer .brand-name { color: #FFFFFF; }
-    .foot-col { flex: 1; min-width: 200px; }
-    .foot-col.brand-col { flex: 1.5; min-width: 280px; }
-    .foot-col a {
-      display: inline-flex;
+      font-weight: 700;
+      display: flex;
       align-items: center;
-      color: #C9D8CD;
-      font-size: 14.5px;
-      padding: 6px 0;
-      min-height: 38px;
-      transition: color .15s ease;
+      gap: 8px;
     }
-    .foot-col a:hover { color: #FFFFFF; }
-    .foot-bottom {
-      margin-top: 44px;
-      padding-top: 22px;
-      border-top: 1px solid rgba(255,255,255,0.18);
-      font-size: 13px;
-      color: #B2C6B7;
+    .foot-col h4 .foot-bar {
+      color: var(--accent);
+      font-weight: 900;
+    }
+    .foot-col ul {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .foot-col ul li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .foot-col ul li .foot-bullet {
+      color: var(--accent);
+      font-size: 10px;
+      line-height: 1;
+    }
+    .foot-col a {
+      color: #C9D8CD;
+      font-size: 14px;
+      transition: color .15s ease, transform .15s ease;
+      display: inline-block;
+    }
+    .foot-col a:hover {
+      color: #FFFFFF;
+      transform: translateX(2px);
+    }
+    .foot-contact-item {
+      display: flex;
+      gap: 10px;
+      font-size: 13.5px;
+      color: #D2E4D6;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    .foot-contact-item svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: var(--accent);
+    }
+    .foot-map-wrap {
+      margin-top: 14px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .foot-map-wrap iframe {
+      width: 100%;
+      height: 125px;
+      border: 0;
+      display: block;
+    }
+    .foot-map-link {
+      display: block;
+      padding: 5px 10px;
+      background: rgba(0, 0, 0, 0.35);
+      color: #FFFFFF;
+      font-size: 11px;
+      text-align: center;
+      font-weight: 600;
+      transition: background .15s ease;
+    }
+    .foot-map-link:hover {
+      background: var(--accent);
+      color: #0F1D13;
+    }
+
+    /* FOOTER MIDDLE BANNER */
+    .foot-banner {
+      margin: 48px auto 36px;
+      text-align: center;
+      padding: 24px 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .foot-banner-tagline {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(22px, 3.2vw, 34px);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: #FFFFFF;
+      line-height: 1.2;
+    }
+    .foot-banner-tagline .accent-word {
+      color: var(--accent);
+    }
+    .foot-banner-tagline .sep-dot {
+      color: var(--accent);
+      margin: 0 10px;
+      opacity: 0.9;
+    }
+    .foot-banner-sub {
+      margin-top: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #D2E4D6;
+    }
+
+    /* FOOTER BOTTOM BAR */
+    .foot-bottom-bar {
+      background: rgba(0, 0, 0, 0.22);
+      border-radius: 14px;
+      padding: 16px 24px;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 16px;
+      font-size: 13px;
+      color: #C9D8CD;
+    }
+    .foot-socials {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .foot-social-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+    }
+    .social-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #15803D;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .15s ease, background .15s ease;
+    }
+    .social-btn:hover {
+      transform: translateY(-2px);
+      background: #FBBF24;
+      color: #0F1D13;
+    }
+    .social-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
     }
 
     /* FLOATING CHATBOT WIDGET */
@@ -820,58 +963,117 @@
   <footer>
     <div class="wrap">
       <div class="foot-row">
-        <div class="foot-col brand-col">
-          <div class="brand" style="margin-bottom: 14px;">
-            <div class="brand-mark" style="background: rgba(255,255,255,0.15);" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 3v4M4.5 8.5 7 10M19.5 8.5 17 10M12 21v-7M6 14h12"/>
-                <circle cx="12" cy="7" r="3.2"/>
-              </svg>
-            </div>
-            <div>
-              <div class="brand-name">SAPA BK</div>
-              <div class="brand-sub" style="color: #C9D8CD;">SMA Negeri 4 Jember</div>
-            </div>
-          </div>
-          <p style="font-size: 14px; line-height: 1.6; color: #D2E4D6; max-width: 360px;">
-            Sistem Asisten Pendamping Akademik &amp; Konseling Terpadu SMA Negeri 4 Jember. Ruang aman bagi siswa untuk berkonsultasi, berliterasi, dan merencanakan masa depan.
+        <!-- Kolom 1: SAPA BK -->
+        <div class="foot-col">
+          <div class="brand-name" style="color: #FFFFFF; font-size: 22px; font-weight: 700; margin-bottom: 14px; letter-spacing: -0.01em;">SAPA BK</div>
+          <p style="font-size: 14px; line-height: 1.65; color: #D2E4D6;">
+            Portal Bimbingan dan Konseling digital SMA Negeri 4 Jember. Ruang aman bagi seluruh siswa untuk bertanya, bercerita, dan merencanakan masa depan.
           </p>
         </div>
+
+        <!-- Kolom 2: Jelajahi Portal -->
         <div class="foot-col">
-          <h4>Jelajahi Portal</h4>
-          <a href="{{ route('home') }}">Beranda</a>
-          <a href="{{ route('about') }}">Tentang Layanan BK</a>
-          <a href="{{ route('ebook.index') }}">Katalog E-Book</a>
-          <a href="{{ route('article.index') }}">Artikel &amp; Tips</a>
-          <a href="{{ route('faq') }}">Tanya Jawab (FAQ)</a>
+          <h4><span class="foot-bar">|</span> Jelajahi Portal</h4>
+          <ul>
+            <li><span class="foot-bullet">&#9642;</span><a href="{{ route('home') }}">Beranda</a></li>
+            <li><span class="foot-bullet">&#9642;</span><a href="{{ route('home') }}#layanan">Layanan BK</a></li>
+            <li><span class="foot-bullet">&#9642;</span><a href="{{ route('ebook.index') }}">Katalog E-Book</a></li>
+            <li><span class="foot-bullet">&#9642;</span><a href="{{ route('article.index') }}">Artikel &amp; Tips</a></li>
+            <li><span class="foot-bullet">&#9642;</span><a href="{{ route('faq') }}">Tanya Jawab (FAQ)</a></li>
+          </ul>
         </div>
+
+        <!-- Kolom 3: Akun Siswa -->
         <div class="foot-col">
-          <h4>Akun Siswa</h4>
-          @auth
-            @php
-              $footDash = match(auth()->user()->role) {
-                'admin' => route('admin.dashboard'),
-                'guru_bk' => route('bk.dashboard'),
-                default => route('siswa.dashboard'),
-              };
-            @endphp
-            <a href="{{ $footDash }}">Dashboard Saya</a>
-            <a href="{{ route('profile') }}">Profil Siswa</a>
-          @else
-            <a href="{{ route('login') }}">Masuk Akun</a>
-            <a href="{{ route('register') }}">Pendaftaran Akun</a>
-          @endauth
+          <h4><span class="foot-bar">|</span> Akun Siswa</h4>
+          <ul>
+            @auth
+              @php
+                $footDash = match(auth()->user()->role) {
+                  'admin' => route('admin.dashboard'),
+                  'guru_bk' => route('bk.dashboard'),
+                  default => route('siswa.dashboard'),
+                };
+              @endphp
+              <li><span class="foot-bullet">&#9642;</span><a href="{{ $footDash }}">Dashboard Saya</a></li>
+              <li><span class="foot-bullet">&#9642;</span><a href="{{ route('profile') }}">Profil Saya</a></li>
+            @else
+              <li><span class="foot-bullet">&#9642;</span><a href="{{ route('login') }}">Masuk Akun</a></li>
+              <li><span class="foot-bullet">&#9642;</span><a href="{{ route('register') }}">Pendaftaran Akun</a></li>
+            @endauth
+            <li><span class="foot-bullet">&#9642;</span><a href="{{ route('about') }}">Tentang SAPA BK</a></li>
+          </ul>
         </div>
+
+        <!-- Kolom 4: Kontak Sekolah & Maps -->
         <div class="foot-col">
-          <h4>Kontak Sekolah</h4>
-          <a href="https://maps.google.com/?q=SMA+Negeri+4+Jember" target="_blank" rel="noopener noreferrer">Ruang BK, SMAN 4 Jember</a>
-          <a href="mailto:bk@sman4jember.sch.id">bk@sman4jember.sch.id</a>
-          <a href="{{ route('about') }}">Profil Konselor BK</a>
+          <h4><span class="foot-bar">|</span> Kontak Sekolah</h4>
+          <div class="foot-contact-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            <div>
+              <strong style="color: #FFFFFF; font-weight: 600; display: block;">Ruang BK, SMA Negeri 4 Jember</strong>
+              <span>Jl. Hayam Wuruk No.145, Kaliwates, Jember</span>
+            </div>
+          </div>
+          <div class="foot-contact-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="20" height="16" x="2" y="4" rx="2"/>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+            </svg>
+            <a href="mailto:bk@sman4jember.sch.id" style="color: #D2E4D6;">bk@sman4jember.sch.id</a>
+          </div>
+
+          <!-- Google Maps Embed SMAN 4 Jember -->
+          <div class="foot-map-wrap">
+            <iframe 
+              src="https://maps.google.com/maps?q=SMA+Negeri+4+Jember,+Jl.+Hayam+Wuruk+No.145,+Kaliwates,+Jember&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+              loading="lazy" 
+              allowfullscreen 
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Peta Lokasi SMA Negeri 4 Jember"
+            ></iframe>
+            <a href="https://maps.google.com/?q=SMA+Negeri+4+Jember" target="_blank" rel="noopener noreferrer" class="foot-map-link">
+              Buka di Google Maps &rarr;
+            </a>
+          </div>
         </div>
       </div>
-      <div class="foot-bottom">
+
+      <!-- Banner Tagline Tengah -->
+      <div class="foot-banner">
+        <div class="foot-banner-tagline">
+          <span>AMAN</span>
+          <span class="sep-dot">&#183;</span>
+          <span class="accent-word">RAHASIA</span>
+          <span class="sep-dot">&#183;</span>
+          <span>TERPERCAYA</span>
+        </div>
+        <div class="foot-banner-sub">
+          LAYANAN BIMBINGAN &amp; KONSELING DIGITAL SMA NEGERI 4 JEMBER
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="foot-bottom-bar">
         <span>&copy; {{ date('Y') }} SAPA BK : SMA Negeri 4 Jember. Hak Cipta Dilindungi.</span>
-        <span>Layanan Bimbingan &amp; Konseling Digital</span>
+        <div class="foot-socials">
+          <span class="foot-social-label">IKUTI KAMI</span>
+          <!-- Facebook -->
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-btn" title="Facebook SMAN 4 Jember" aria-label="Facebook">
+            <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <!-- Instagram -->
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-btn" title="Instagram SMAN 4 Jember" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+            </svg>
+          </a>
+        </div>
       </div>
     </div>
   </footer>
