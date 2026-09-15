@@ -291,6 +291,35 @@
       width: 100%;
     }
   }
+
+  @media (max-width: 540px) {
+    .profil-id-card {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 14px;
+      padding: 18px 16px;
+    }
+    .profil-id-meta {
+      min-width: 0;
+      width: 100%;
+    }
+    .profil-id-sub {
+      justify-content: center;
+    }
+    .profil-quick-tags {
+      justify-content: center;
+    }
+    .profil-header {
+      padding: 16px;
+    }
+    .profil-card {
+      padding: 18px 16px;
+    }
+    .form-input {
+      font-size: 16px;
+    }
+  }
 </style>
 @endpush
 

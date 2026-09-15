@@ -484,7 +484,11 @@
       flex: 1;
     }
 
-    /* RESPONSIVE MOBILE */
+    /* RESPONSIVE MOBILE & BOTTOM NAV */
+    .mobile-bottom-nav {
+      display: none;
+    }
+
     @media (max-width: 980px) {
       .sidebar {
         position: fixed;
@@ -506,6 +510,88 @@
       .menu-toggle { display: flex; }
       .content { padding: 20px; }
       .topbar { padding: 0 18px; }
+    }
+
+    @media (max-width: 768px) {
+      /* Mobile Bottom Navigation Bar */
+      .mobile-bottom-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-top: 1px solid var(--line);
+        z-index: 40;
+        justify-content: space-around;
+        align-items: center;
+        padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
+        box-shadow: 0 -4px 16px rgba(15, 29, 19, 0.05);
+      }
+      .mobile-nav-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        color: var(--ink-faint);
+        text-decoration: none;
+        font-size: 11px;
+        font-weight: 600;
+        min-width: 54px;
+        min-height: 48px;
+        padding: 4px;
+        border-radius: var(--radius-s);
+        transition: color .15s ease, transform .12s ease;
+      }
+      .mobile-nav-link svg {
+        width: 20px;
+        height: 20px;
+        stroke: currentColor;
+        transition: stroke .15s ease;
+      }
+      .mobile-nav-link:active {
+        transform: scale(0.95);
+      }
+      .mobile-nav-link.active {
+        color: var(--primary);
+      }
+      .mobile-nav-link.active svg {
+        stroke: var(--primary);
+      }
+      
+      /* Reserve safe padding at content bottom so bottom nav never covers content */
+      .content {
+        padding: 16px 14px calc(84px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+      .topbar {
+        height: 58px;
+        padding: 0 14px;
+      }
+      .page-title {
+        font-size: 16px;
+        max-width: 170px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .topbar-user-role {
+        display: none;
+      }
+      .topbar-user-name {
+        font-size: 13px;
+        max-width: 100px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .confirm-modal-box {
+        max-width: 92vw;
+        border-radius: 16px;
+      }
     }
 
     /* Alerts */
@@ -686,6 +772,46 @@
 
       @yield('content')
     </main>
+
+    <!-- MOBILE BOTTOM NAVIGATION (Siswa Quick Access) -->
+    <nav class="mobile-bottom-nav" aria-label="Navigasi Cepat Siswa">
+      <a href="{{ route('siswa.dashboard') }}" class="mobile-nav-link {{ request()->routeIs('siswa.dashboard') ? 'active' : '' }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="9" rx="1"/>
+          <rect x="14" y="3" width="7" height="5" rx="1"/>
+          <rect x="14" y="12" width="7" height="9" rx="1"/>
+          <rect x="3" y="16" width="7" height="5" rx="1"/>
+        </svg>
+        <span>Dashboard</span>
+      </a>
+      <a href="{{ route('siswa.chat') }}" class="mobile-nav-link {{ request()->routeIs('siswa.chat*') ? 'active' : '' }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <span>Konseling</span>
+      </a>
+      <a href="{{ route('siswa.tes') }}" class="mobile-nav-link {{ request()->routeIs('siswa.tes*') ? 'active' : '' }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 11l3 3L22 4"/>
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+        </svg>
+        <span>Asesmen</span>
+      </a>
+      <a href="{{ route('siswa.riwayat') }}" class="mobile-nav-link {{ request()->routeIs('siswa.riwayat*') ? 'active' : '' }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span>Riwayat</span>
+      </a>
+      <a href="{{ route('profile') }}" class="mobile-nav-link {{ request()->routeIs('profile*') ? 'active' : '' }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span>Profil</span>
+      </a>
+    </nav>
   </div>
 
 </div>

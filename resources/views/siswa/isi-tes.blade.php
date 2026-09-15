@@ -167,12 +167,31 @@
   @media (max-width: 640px) {
     .soal-options {
       margin-left: 0;
+      gap: 8px;
+    }
+    .option-label {
+      min-height: 48px;
+      padding: 12px 14px;
+      font-size: 13.5px;
     }
     .isi-tes-header-card {
-      padding: 20px;
+      padding: 18px 16px;
+      border-radius: var(--radius-m);
+    }
+    .isi-tes-title {
+      font-size: 20px;
     }
     .soal-card {
-      padding: 18px;
+      padding: 16px;
+    }
+    .form-actions-card {
+      padding: 16px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+    .form-actions-card .btn {
+      width: 100%;
     }
   }
 </style>

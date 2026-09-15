@@ -109,8 +109,8 @@
   /* Questionnaire Grid */
   .tes-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
   }
 
   /* Single Questionnaire Card */
@@ -226,11 +226,32 @@
 
   @media (max-width: 860px) {
     .tes-summary-strip {
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, 1fr);
       gap: 12px;
     }
     .tes-header {
-      padding: 20px;
+      padding: 20px 18px;
+    }
+  }
+
+  @media (max-width: 580px) {
+    .tes-summary-strip {
+      grid-template-columns: 1fr;
+    }
+    .tes-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .tes-card {
+      padding: 18px;
+    }
+    .tes-card-footer {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+    .tes-card-footer .btn {
+      width: 100%;
     }
   }
 </style>

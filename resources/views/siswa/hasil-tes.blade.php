@@ -177,6 +177,17 @@
     .hasil-metrics-grid {
       grid-template-columns: 1fr;
     }
+    .hasil-header h1 {
+      font-size: 21px;
+    }
+    .hasil-actions {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+    .hasil-actions .btn {
+      width: 100%;
+    }
   }
 </style>
 @endpush

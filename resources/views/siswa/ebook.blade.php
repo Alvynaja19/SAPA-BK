@@ -109,8 +109,8 @@
   /* Book Grid */
   .ebook-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 20px;
   }
 
   /* Single Book Card */
@@ -274,11 +274,31 @@
   /* Responsive */
   @media (max-width: 860px) {
     .ebook-summary-strip {
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, 1fr);
       gap: 12px;
     }
     .ebook-portal-header {
-      padding: 20px;
+      padding: 20px 18px;
+    }
+  }
+
+  @media (max-width: 580px) {
+    .ebook-summary-strip {
+      grid-template-columns: 1fr;
+    }
+    .ebook-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .ebook-portal-header {
+      padding: 16px;
+    }
+    .ebook-actions {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .ebook-actions .btn {
+      width: 100%;
     }
   }
 </style>

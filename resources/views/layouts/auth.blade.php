@@ -151,11 +151,14 @@
     }
     @media (max-width: 540px) {
       .auth-card {
-        padding: 28px 20px;
+        padding: 24px 18px;
         border-radius: var(--radius-m);
       }
       main.auth-main {
-        padding: 28px 16px;
+        padding: 24px 14px;
+      }
+      .form-input {
+        font-size: 16px !important;
       }
     }
 
@@ -224,7 +227,8 @@
       gap: 8px;
     }
     .preset-btn {
-      padding: 7px 10px;
+      min-height: 40px;
+      padding: 8px 10px;
       border-radius: var(--radius-s);
       border: 1px solid var(--line);
       background: var(--surface);
@@ -235,6 +239,17 @@
       cursor: pointer;
       text-align: center;
       transition: all .15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    @media (max-width: 420px) {
+      .preset-grid {
+        grid-template-columns: 1fr;
+      }
+      .preset-btn {
+        min-height: 44px;
+      }
     }
     .preset-btn:hover {
       border-color: var(--primary);

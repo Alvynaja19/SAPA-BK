@@ -284,6 +284,30 @@
     color: var(--ink-faint);
     font-size: 13.5px;
   }
+
+  @media (max-width: 560px) {
+    .greeting-row {
+      margin-bottom: 20px;
+    }
+    .greeting h1 {
+      font-size: 22px;
+    }
+    .greeting-actions {
+      width: 100%;
+    }
+    .greeting-actions .btn {
+      flex: 1;
+      min-height: 44px;
+      padding: 10px 14px;
+      font-size: 13.5px;
+    }
+    .stat-card {
+      padding: 16px;
+    }
+    .panel {
+      padding: 18px 16px;
+    }
+  }
 </style>
 @endpush
 

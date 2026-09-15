@@ -624,17 +624,165 @@
     margin-top: 8px;
   }
 
+  /* Mobile Toggle Archive Button */
+  .btn-toggle-archive-mobile {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 11px;
+    min-height: 38px;
+    border-radius: var(--radius-s);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .btn-toggle-archive-mobile:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+  .chat-sidebar-mobile-backdrop {
+    display: none;
+  }
+  .btn-close-archive-mobile {
+    display: none;
+  }
+  .chat-sidebar-head-row {
+    display: none;
+  }
+
   /* Responsive Adjustments */
-  @media (max-width: 900px) {
+  @media (max-width: 860px) {
     .chat-layout {
       grid-template-columns: 1fr;
-      height: auto;
+      height: calc(100dvh - 138px);
+      min-height: 480px;
+      gap: 0;
+      position: relative;
+    }
+    .btn-toggle-archive-mobile {
+      display: inline-flex;
     }
     .chat-sidebar {
-      max-height: 240px;
+      position: fixed;
+      left: -320px;
+      top: 0;
+      bottom: 0;
+      width: 300px;
+      max-width: 85vw;
+      z-index: 50;
+      border-radius: 0;
+      transition: left .25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 16px 0 32px rgba(15, 29, 19, 0.25);
+      background: var(--surface);
+    }
+    .chat-sidebar.open {
+      left: 0;
+    }
+    .chat-sidebar-mobile-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 29, 19, 0.45);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      z-index: 49;
+    }
+    .chat-sidebar-mobile-backdrop.open {
+      display: block;
+    }
+    .chat-sidebar-head-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line);
+    }
+    .btn-close-archive-mobile {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 36px;
+      min-height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
     }
     .chat-room {
-      height: 650px;
+      height: 100%;
+      border-radius: var(--radius-m);
+    }
+    .chat-room-head {
+      padding: 10px 12px;
+      gap: 8px;
+    }
+    .chat-counselor-info {
+      gap: 8px;
+    }
+    .counselor-avatar {
+      width: 36px;
+      height: 36px;
+    }
+    .counselor-name span {
+      font-size: 13.5px;
+      max-width: 140px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: inline-block;
+    }
+    .counselor-status {
+      font-size: 11px;
+    }
+    .mode-switch {
+      width: 100%;
+      justify-content: space-between;
+      margin-top: 4px;
+    }
+    .mode-btn {
+      flex: 1;
+      justify-content: center;
+      padding: 6px 8px;
+      font-size: 11px;
+      min-height: 36px;
+    }
+    .mode-btn span {
+      white-space: nowrap;
+    }
+    .bubble-row {
+      max-width: 92%;
+    }
+    .chat-stream {
+      padding: 14px 10px;
+      gap: 12px;
+    }
+    .quick-bar {
+      padding: 8px 10px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .quick-bar::-webkit-scrollbar {
+      display: none;
+    }
+    .chat-input-box {
+      padding: 10px;
+    }
+    .chat-input {
+      font-size: 16px !important;
+    }
+    .btn-send-chat {
+      min-width: 44px;
+      min-height: 44px;
+      padding: 10px;
     }
   }
 </style>
@@ -643,9 +791,22 @@
 @section('content')
 <div class="chat-layout">
   
+  <!-- Mobile Backdrop for Session Archive Drawer -->
+  <div class="chat-sidebar-mobile-backdrop" id="chatSidebarBackdrop"></div>
+
   <!-- ================= LEFT: DAFTAR SESI & PRIVASI ================= -->
-  <aside class="chat-sidebar">
+  <aside class="chat-sidebar" id="chatSidebar">
     <div class="chat-sidebar-head">
+      <div class="chat-sidebar-head-row">
+        <span style="font-size: 13.5px; font-weight: 700; color: var(--ink);">Arsip Sesi Bimbingan</span>
+        <button type="button" class="btn-close-archive-mobile" id="btnCloseArchiveMobile" aria-label="Tutup Arsip Sesi">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
       <!-- Tombol Buat Sesi Baru Sesuai Kanal Aktif -->
       <button type="button" onclick="startNewSession('ai')" id="btn-new-ai" class="btn-new-chat">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -741,6 +902,15 @@
     <!-- Top Header & Channel Switcher -->
     <header class="chat-room-head">
       <div class="chat-counselor-info">
+        <!-- Tombol Buka Arsip Sesi di Layar Mobile -->
+        <button type="button" class="btn-toggle-archive-mobile" id="btnToggleArchiveMobile" title="Buka Arsip Sesi">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="21 8 21 21 3 21 3 8"></polyline>
+            <rect x="1" y="3" width="22" height="5"></rect>
+            <line x1="10" y1="12" x2="14" y2="12"></line>
+          </svg>
+          <span>Sesi</span>
+        </button>
         <div class="counselor-avatar" id="header-avatar">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 3v4M4.5 8.5 7 10M19.5 8.5 17 10M12 21v-7M6 14h12"/>
@@ -1419,6 +1589,27 @@
       "'": '&#039;'
     };
     return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+  }
+
+  // Mobile Archive Drawer Toggle Handler
+  const chatSidebarEl = document.getElementById('chatSidebar');
+  const chatBackdropEl = document.getElementById('chatSidebarBackdrop');
+  const btnToggleArchiveEl = document.getElementById('btnToggleArchiveMobile');
+  const btnCloseArchiveEl = document.getElementById('btnCloseArchiveMobile');
+
+  if (btnToggleArchiveEl && chatSidebarEl && chatBackdropEl) {
+    btnToggleArchiveEl.addEventListener('click', () => {
+      chatSidebarEl.classList.add('open');
+      chatBackdropEl.classList.add('open');
+    });
+    const closeDrawer = () => {
+      chatSidebarEl.classList.remove('open');
+      chatBackdropEl.classList.remove('open');
+    };
+    chatBackdropEl.addEventListener('click', closeDrawer);
+    if (btnCloseArchiveEl) {
+      btnCloseArchiveEl.addEventListener('click', closeDrawer);
+    }
   }
 
   // Inisialisasi awal pada saat memuat halaman

@@ -628,6 +628,28 @@
       min-width: 100%;
     }
   }
+
+  @media (max-width: 480px) {
+    .riwayat-header {
+      padding: 16px;
+    }
+    .riwayat-header-actions {
+      width: 100%;
+    }
+    .riwayat-header-actions .btn {
+      width: 100%;
+    }
+    .mode-tabs {
+      width: 100%;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .mode-tab {
+      flex-shrink: 0;
+    }
+  }
 </style>
 @endpush
 
