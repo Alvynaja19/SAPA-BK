@@ -134,12 +134,43 @@
       z-index: 30;
       border-right: 1px solid rgba(255,255,255,0.08);
     }
+    .side-brand-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 18px 16px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
     .side-brand {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 22px 20px 18px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      text-decoration: none;
+      flex: 1;
+      min-width: 0;
+    }
+    .side-close-btn {
+      display: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.12);
+      border: none;
+      color: #FFFFFF;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background-color .15s ease;
+    }
+    .side-close-btn:hover {
+      background: rgba(255,255,255,0.22);
+    }
+    .side-close-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: #FFFFFF;
     }
     .side-brand-mark {
       width: 36px;
@@ -347,6 +378,12 @@
       justify-content: center;
       font-weight: 700;
       font-size: 13.5px;
+      text-decoration: none;
+      flex-shrink: 0;
+      transition: transform .12s ease;
+    }
+    .topbar-user-avatar:hover {
+      transform: scale(1.05);
     }
     .topbar-user-name {
       font-size: 14px;
@@ -492,24 +529,29 @@
     @media (max-width: 980px) {
       .sidebar {
         position: fixed;
-        left: -270px;
+        left: -300px;
         top: 0;
         bottom: 0;
-        transition: left .25s ease;
-        box-shadow: 20px 0 40px -20px rgba(0,0,0,0.35);
+        width: 280px;
+        max-width: 85vw;
+        transition: left .25s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 20px 0 40px -20px rgba(0,0,0,0.45);
+        z-index: 100;
       }
       .sidebar.open { left: 0; }
+      .side-close-btn { display: inline-flex; }
       .sidebar-backdrop.open {
         display: block;
         position: fixed;
         inset: 0;
-        background: rgba(27,42,36,0.4);
-        backdrop-filter: blur(2px);
-        z-index: 25;
+        background: rgba(27,42,36,0.55);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        z-index: 99;
       }
       .menu-toggle { display: flex; }
       .content { padding: 20px; }
-      .topbar { padding: 0 18px; }
+      .topbar { padding: 0 16px; }
     }
 
     @media (max-width: 768px) {
@@ -570,23 +612,21 @@
       .topbar {
         height: 58px;
         padding: 0 14px;
+        gap: 12px;
+      }
+      .topbar-left {
+        flex: 1;
+        min-width: 0;
       }
       .page-title {
         font-size: 16px;
-        max-width: 170px;
+        min-width: 0;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      .topbar-user-role {
-        display: none;
-      }
-      .topbar-user-name {
-        font-size: 13px;
-        max-width: 100px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+      .topbar-user-text {
+        display: none !important;
       }
       .confirm-modal-box {
         max-width: 92vw;
@@ -626,18 +666,26 @@
 
   <!-- SIDEBAR (sapa-bk-dashboard-siswa style) -->
   <aside class="sidebar" id="sidebar">
-    <a href="{{ route('home') }}" class="side-brand">
-      <div class="side-brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 3v4M4.5 8.5 7 10M19.5 8.5 17 10M12 21v-7M6 14h12"/>
-          <circle cx="12" cy="7" r="3.2"/>
+    <div class="side-brand-header">
+      <a href="{{ route('home') }}" class="side-brand">
+        <div class="side-brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v4M4.5 8.5 7 10M19.5 8.5 17 10M12 21v-7M6 14h12"/>
+            <circle cx="12" cy="7" r="3.2"/>
+          </svg>
+        </div>
+        <div>
+          <div class="side-brand-name">SAPA BK</div>
+          <div class="side-brand-sub">SMA Negeri 4 Jember</div>
+        </div>
+      </a>
+      <button type="button" class="side-close-btn" id="sideCloseBtn" aria-label="Tutup menu navigasi">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
-      </div>
-      <div>
-        <div class="side-brand-name">SAPA BK</div>
-        <div class="side-brand-sub">SMA Negeri 4 Jember</div>
-      </div>
-    </a>
+      </button>
+    </div>
 
     <nav class="side-nav">
       <!-- Dashboard -->
@@ -740,13 +788,13 @@
         <h1 class="page-title">@yield('page_title', 'Dashboard')</h1>
       </div>
       <div class="topbar-user">
-        <div style="text-align: right;">
+        <div class="topbar-user-text" style="text-align: right;">
           <div class="topbar-user-name">{{ auth()->user()->name }}</div>
           <div class="topbar-user-role">NISN: {{ auth()->user()->nisn ?? '-' }}</div>
         </div>
-        <div class="topbar-user-avatar">
+        <a href="{{ route('profile') }}" class="topbar-user-avatar" title="Lihat Profil Saya" aria-label="Profil Siswa">
           {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
-        </div>
+        </a>
       </div>
     </header>
 
@@ -844,14 +892,32 @@
     const sidebar = document.getElementById('sidebar');
     const backdrop = document.getElementById('backdrop');
     const menuToggle = document.getElementById('menuToggle');
+    const sideCloseBtn = document.getElementById('sideCloseBtn');
+
+    function closeSidebar() {
+      if(sidebar) sidebar.classList.remove('open');
+      if(backdrop) backdrop.classList.remove('open');
+    }
+
     if(menuToggle && sidebar && backdrop){
       menuToggle.addEventListener('click', () => {
         sidebar.classList.toggle('open');
         backdrop.classList.toggle('open');
       });
-      backdrop.addEventListener('click', () => {
-        sidebar.classList.remove('open');
-        backdrop.classList.remove('open');
+      backdrop.addEventListener('click', closeSidebar);
+    }
+
+    if(sideCloseBtn) {
+      sideCloseBtn.addEventListener('click', closeSidebar);
+    }
+
+    if(sidebar) {
+      sidebar.querySelectorAll('.side-nav a').forEach(link => {
+        link.addEventListener('click', () => {
+          if(window.innerWidth <= 980) {
+            closeSidebar();
+          }
+        });
       });
     }
   })();

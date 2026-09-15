@@ -287,25 +287,52 @@
 
   @media (max-width: 560px) {
     .greeting-row {
-      margin-bottom: 20px;
+      margin-bottom: 18px;
+      gap: 12px;
     }
     .greeting h1 {
-      font-size: 22px;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+    .greeting p {
+      font-size: 13px;
     }
     .greeting-actions {
       width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
     }
     .greeting-actions .btn {
-      flex: 1;
-      min-height: 44px;
-      padding: 10px 14px;
-      font-size: 13.5px;
+      min-height: 42px;
+      padding: 8px 10px;
+      font-size: 12.5px;
+      width: 100%;
     }
     .stat-card {
-      padding: 16px;
+      padding: 12px 14px;
+      gap: 4px;
+      border-radius: var(--radius-s);
+    }
+    .stat-card .label {
+      font-size: 11px;
+      line-height: 1.3;
+    }
+    .stat-card .value {
+      font-size: 20px;
+    }
+    .stat-card .caption {
+      font-size: 10px;
+      line-height: 1.3;
+    }
+    .stat-card.live .value {
+      font-size: 16px;
     }
     .panel {
-      padding: 18px 16px;
+      padding: 16px 14px;
+    }
+    .panel-head h3 {
+      font-size: 15px;
     }
   }
 </style>

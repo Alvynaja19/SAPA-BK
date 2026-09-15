@@ -204,18 +204,17 @@
 
     <!-- Main Content Container with dynamic left margin matching sidebar state -->
     <div
-      class="flex-1 min-w-0 transition-all duration-300 ease-in-out"
+      class="flex-1 min-w-0 ml-0 transition-all duration-300 ease-in-out"
       :class="{
         'xl:ml-[280px]': $store.sidebar.isExpanded || $store.sidebar.isHovered,
-        'xl:ml-[84px]': !$store.sidebar.isExpanded && !$store.sidebar.isHovered,
-        'ml-0': $store.sidebar.isMobileOpen
+        'xl:ml-[84px]': !$store.sidebar.isExpanded && !$store.sidebar.isHovered
       }"
     >
       <!-- Top Header -->
       @include('layouts.tailadmin-header')
 
       <!-- Main Body Content -->
-      <main class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-6">
+      <main class="p-3 sm:p-5 lg:p-8 max-w-7xl mx-auto space-y-6">
         
         <!-- Flash Message Alerts -->
         @if(session('success'))
