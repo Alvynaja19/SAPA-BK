@@ -809,9 +809,10 @@
     /* FOOTER */
     /* FOOTER */
     footer {
-      background: var(--primary);
-      color: #E2ECE4;
-      padding: 64px 0 32px;
+      background: #081E12;
+      color: #E2EFE5;
+      padding: 68px 0 36px;
+      border-top: 3px solid #D97706;
     }
     .foot-row {
       display: grid;
@@ -833,132 +834,151 @@
     }
     .foot-col h4 {
       color: #FFFFFF;
-      font-size: 16px;
-      margin-bottom: 16px;
+      font-size: 16.5px;
+      margin-bottom: 18px;
       font-family: 'Work Sans', sans-serif;
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 8px;
+      letter-spacing: -0.01em;
     }
     .foot-col h4 .foot-bar {
-      color: var(--accent);
+      color: #F59E0B;
       font-weight: 900;
+      font-size: 18px;
     }
     .foot-col ul {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
     .foot-col ul li {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
     .foot-col ul li .foot-bullet {
-      color: var(--accent);
-      font-size: 10px;
+      color: #F59E0B;
+      font-size: 11px;
       line-height: 1;
     }
     .foot-col a {
-      color: #C9D8CD;
-      font-size: 14px;
+      color: #E2EFE5;
+      font-size: 14.5px;
+      font-weight: 500;
       transition: color .15s ease, transform .15s ease;
       display: inline-block;
     }
     .foot-col a:hover {
       color: #FFFFFF;
-      transform: translateX(2px);
+      transform: translateX(3px);
     }
     .foot-contact-item {
       display: flex;
-      gap: 10px;
-      font-size: 13.5px;
-      color: #D2E4D6;
-      line-height: 1.5;
-      margin-bottom: 12px;
+      gap: 12px;
+      font-size: 14px;
+      color: #E2EFE5;
+      line-height: 1.55;
+      margin-bottom: 14px;
     }
     .foot-contact-item svg {
       width: 18px;
       height: 18px;
       flex-shrink: 0;
-      margin-top: 2px;
-      color: var(--accent);
+      margin-top: 3px;
+      color: #F59E0B;
+    }
+    .foot-contact-item a {
+      color: #FFFFFF;
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-color: rgba(245, 158, 11, 0.4);
+      transition: color .15s ease, text-decoration-color .15s ease;
+    }
+    .foot-contact-item a:hover {
+      color: #F59E0B;
+      text-decoration-color: #F59E0B;
     }
     .foot-map-wrap {
       margin-top: 14px;
       border-radius: 12px;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
       background: rgba(255, 255, 255, 0.05);
     }
     .foot-map-wrap iframe {
       width: 100%;
-      height: 125px;
+      height: 130px;
       border: 0;
       display: block;
     }
     .foot-map-link {
       display: block;
-      padding: 5px 10px;
-      background: rgba(0, 0, 0, 0.35);
+      padding: 7px 12px;
+      background: #15803D;
       color: #FFFFFF;
-      font-size: 11px;
+      font-size: 12px;
       text-align: center;
-      font-weight: 600;
+      font-weight: 700;
+      letter-spacing: 0.02em;
       transition: background .15s ease;
     }
     .foot-map-link:hover {
-      background: var(--accent);
-      color: #0F1D13;
+      background: #D97706;
+      color: #FFFFFF;
     }
 
     /* FOOTER MIDDLE BANNER */
     .foot-banner {
       margin: 48px auto 36px;
       text-align: center;
-      padding: 24px 16px;
-      border-top: 1px solid rgba(255, 255, 255, 0.12);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 24px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
     }
     .foot-banner-tagline {
       font-family: 'Fraunces', Georgia, serif;
-      font-size: clamp(22px, 3.2vw, 34px);
+      font-size: clamp(24px, 3.5vw, 36px);
       font-weight: 800;
       letter-spacing: 0.08em;
       color: #FFFFFF;
       line-height: 1.2;
     }
     .foot-banner-tagline .accent-word {
-      color: var(--accent);
+      color: #F59E0B;
+      text-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
     }
     .foot-banner-tagline .sep-dot {
-      color: var(--accent);
-      margin: 0 10px;
+      color: #F59E0B;
+      margin: 0 12px;
       opacity: 0.9;
     }
     .foot-banner-sub {
-      margin-top: 8px;
-      font-size: 11.5px;
+      margin-top: 10px;
+      font-size: 12px;
       font-weight: 700;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: #D2E4D6;
     }
 
     /* FOOTER BOTTOM BAR */
     .foot-bottom-bar {
-      background: rgba(0, 0, 0, 0.22);
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 14px;
-      padding: 16px 24px;
+      padding: 18px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 16px;
-      font-size: 13px;
-      color: #C9D8CD;
+      font-size: 13.5px;
+      color: #E2EFE5;
     }
     .foot-socials {
       display: flex;
@@ -967,26 +987,27 @@
     }
     .foot-social-label {
       font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
+      font-weight: 800;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: #FFFFFF;
     }
     .social-btn {
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
-      background: var(--accent);
-      color: #15803D;
+      background: #F59E0B;
+      color: #081E12;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform .15s ease, background .15s ease;
+      transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
     }
     .social-btn:hover {
       transform: translateY(-2px);
       background: #FBBF24;
-      color: #0F1D13;
+      color: #000000;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
     }
     .social-btn svg {
       width: 16px;
@@ -1591,7 +1612,7 @@
         <!-- Kolom 1: SAPA BK -->
         <div class="foot-col">
           <div class="brand-name" style="color: #FFFFFF; font-size: 22px; font-weight: 700; margin-bottom: 14px; letter-spacing: -0.01em;">SAPA BK</div>
-          <p style="font-size: 14px; line-height: 1.65; color: #D2E4D6;">
+          <p style="font-size: 14.5px; line-height: 1.65; color: #E2EFE5;">
             Portal Bimbingan dan Konseling digital SMA Negeri 4 Jember. Ruang aman bagi seluruh siswa untuk bertanya, bercerita, dan merencanakan masa depan.
           </p>
         </div>
@@ -1648,7 +1669,7 @@
               <rect width="20" height="16" x="2" y="4" rx="2"/>
               <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
             </svg>
-            <a href="mailto:bk@sman4jember.sch.id" style="color: #D2E4D6;">bk@sman4jember.sch.id</a>
+            <a href="mailto:bk@sman4jember.sch.id" style="color: #FFFFFF;">bk@sman4jember.sch.id</a>
           </div>
 
           <!-- Google Maps Embed SMAN 4 Jember -->
