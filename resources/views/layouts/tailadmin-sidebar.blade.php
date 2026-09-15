@@ -5,7 +5,7 @@
 
 <aside
   id="tailadmin-sidebar"
-  class="fixed top-0 bottom-0 left-0 z-50 flex flex-col border-r border-[#E6DBA0]/60 bg-white dark:border-gray-800 dark:bg-gray-900 transition-all duration-300 ease-in-out"
+  class="fixed top-0 bottom-0 left-0 z-50 flex flex-col border-r border-gray-200/80 bg-white dark:border-gray-800 dark:bg-gray-900 transition-all duration-300 ease-in-out"
   :class="{
     'w-[280px] translate-x-0': $store.sidebar.isExpanded || $store.sidebar.isHovered,
     'w-[84px] translate-x-0': !$store.sidebar.isExpanded && !$store.sidebar.isHovered,
@@ -15,9 +15,9 @@
   @mouseleave="$store.sidebar.setHovered(false)"
 >
   <!-- Sidebar Brand Header -->
-  <div class="h-[72px] flex items-center px-5 border-b border-[#E6DBA0]/50 dark:border-gray-800 justify-between shrink-0">
+  <div class="h-[72px] flex items-center px-5 border-b border-gray-200/80 dark:border-gray-800 justify-between shrink-0">
     <a href="{{ $role === 'admin' ? route('admin.dashboard') : route('bk.dashboard') }}" class="flex items-center gap-3 overflow-hidden">
-      <div class="h-10 w-10 shrink-0 rounded-2xl bg-[#2E7D34] text-white flex items-center justify-center font-extrabold shadow-md shadow-brand-500/25 text-lg">
+      <div class="h-10 w-10 shrink-0 rounded-2xl bg-brand-600 text-white flex items-center justify-center font-extrabold shadow-md shadow-brand-600/25 text-lg">
         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
         </svg>
@@ -29,8 +29,8 @@
           'opacity-0 hidden': !$store.sidebar.isExpanded && !$store.sidebar.isHovered
         }"
       >
-        <span class="block text-base font-extrabold text-[#1C2B18] dark:text-white tracking-tight">SAPA <span class="text-brand-600 dark:text-brand-400">BK</span></span>
-        <span class="block text-[10px] font-semibold text-[#83927A] dark:text-gray-400 tracking-wider uppercase">SMAN 4 JEMBER</span>
+        <span class="block text-base font-extrabold text-[#0F172A] dark:text-white tracking-tight">SAPA <span class="text-brand-600 dark:text-brand-400">BK</span></span>
+        <span class="block text-[10px] font-semibold text-gray-500 dark:text-gray-400 tracking-wider uppercase">SMAN 4 JEMBER</span>
       </div>
     </a>
 
@@ -53,7 +53,7 @@
       <!-- Group: Superadmin Core -->
       <div>
         <div
-          class="px-3 mb-2 text-[11px] font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider transition-opacity duration-200"
+          class="px-3 mb-2 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider transition-opacity duration-200"
           :class="{
             'block': $store.sidebar.isExpanded || $store.sidebar.isHovered,
             'hidden': !$store.sidebar.isExpanded && !$store.sidebar.isHovered
@@ -66,7 +66,7 @@
           <!-- Dashboard Admin -->
           <a
             href="{{ route('admin.dashboard') }}"
-            class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-brand-500 text-white shadow-md shadow-brand-500/20' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
+            class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
             title="Dashboard Admin"
           >
             <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -78,7 +78,7 @@
           <!-- Manajemen User -->
           <a
             href="{{ route('admin.users') }}"
-            class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('admin.users*') ? 'bg-brand-500 text-white shadow-md shadow-brand-500/20' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
+            class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('admin.users*') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
             title="Manajemen Pengguna"
           >
             <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -90,7 +90,7 @@
           <!-- Konfigurasi LLM & Vector DB -->
           <a
             href="{{ route('admin.konfigurasi') }}"
-            class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('admin.konfigurasi') ? 'bg-brand-500 text-white shadow-md shadow-brand-500/20' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
+            class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('admin.konfigurasi') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
             title="Konfigurasi Sistem & AI"
           >
             <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -103,7 +103,7 @@
           <!-- System Log -->
           <a
             href="{{ route('admin.log') }}"
-            class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('admin.log') ? 'bg-brand-500 text-white shadow-md shadow-brand-500/20' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
+            class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('admin.log') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
             title="System Log"
           >
             <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -115,7 +115,7 @@
           <!-- Laporan & Statistik -->
           <a
             href="{{ route('admin.laporan') }}"
-            class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('admin.laporan') ? 'bg-brand-500 text-white shadow-md shadow-brand-500/20' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
+            class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('admin.laporan') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
             title="Laporan & Statistik"
           >
             <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -130,7 +130,7 @@
     <!-- Group: Modul Bimbingan Konseling (Guru BK + Admin) -->
     <div>
       <div
-        class="px-3 mb-2 text-[11px] font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider transition-opacity duration-200"
+        class="px-3 mb-2 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider transition-opacity duration-200"
         :class="{
           'block': $store.sidebar.isExpanded || $store.sidebar.isHovered,
           'hidden': !$store.sidebar.isExpanded && !$store.sidebar.isHovered
@@ -144,7 +144,7 @@
           <!-- Dashboard Guru BK -->
           <a
             href="{{ route('bk.dashboard') }}"
-            class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.dashboard') ? 'bg-brand-500 text-white shadow-md shadow-brand-500/20' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
+            class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.dashboard') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
             title="Dashboard Guru BK"
           >
             <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -157,7 +157,7 @@
         <!-- Data Siswa -->
         <a
           href="{{ route('bk.siswa') }}"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.siswa') ? 'bg-brand-500 text-white shadow-md shadow-brand-500/20' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.siswa') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
           title="Data Siswa Terdaftar"
         >
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -169,7 +169,7 @@
         <!-- Riwayat Percakapan Chatbot -->
         <a
           href="{{ route('bk.percakapan') }}"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.percakapan*') ? 'bg-brand-500 text-white shadow-md shadow-brand-500/20' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.percakapan*') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
           title="Riwayat Sesi Chatbot"
         >
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -181,7 +181,7 @@
         <!-- Live Chat Konseling -->
         <a
           href="{{ route('bk.live-chat') }}"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.live-chat') ? 'bg-brand-500 text-white shadow-md shadow-brand-500/20' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.live-chat') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
           title="Live Chat Siswa (08:00 - 15:00)"
         >
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -189,7 +189,7 @@
           </svg>
           <span class="flex items-center justify-between w-full" :class="{ 'block': $store.sidebar.isExpanded || $store.sidebar.isHovered, 'hidden': !$store.sidebar.isExpanded && !$store.sidebar.isHovered }">
             <span>Live Chat Siswa</span>
-            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">Live</span>
+            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Live</span>
           </span>
         </a>
       </nav>
@@ -198,7 +198,7 @@
     <!-- Group: Manajemen Konten & Dokumen -->
     <div>
       <div
-        class="px-3 mb-2 text-[11px] font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider transition-opacity duration-200"
+        class="px-3 mb-2 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider transition-opacity duration-200"
         :class="{
           'block': $store.sidebar.isExpanded || $store.sidebar.isHovered,
           'hidden': !$store.sidebar.isExpanded && !$store.sidebar.isHovered
@@ -211,7 +211,7 @@
         <!-- E-Book BK -->
         <a
           href="{{ route('bk.ebook') }}"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.ebook') ? 'bg-brand-500 text-white shadow-md shadow-brand-500/20' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.ebook') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
           title="Manajemen E-Book"
         >
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -223,7 +223,7 @@
         <!-- Artikel BK -->
         <a
           href="{{ route('bk.artikel') }}"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.artikel') ? 'bg-brand-500 text-white shadow-md shadow-brand-500/20' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.artikel') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
           title="Manajemen Artikel"
         >
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -235,7 +235,7 @@
         <!-- Knowledge Base (RAG) -->
         <a
           href="{{ route('bk.knowledge') }}"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.knowledge') ? 'bg-brand-500 text-white shadow-md shadow-brand-500/20' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.knowledge') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
           title="Knowledge Base AI (RAG)"
         >
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -247,7 +247,7 @@
         <!-- Kuesioner & Tes -->
         <a
           href="{{ route('bk.tes') }}"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.tes*') ? 'bg-brand-500 text-white shadow-md shadow-brand-500/20' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.tes*') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
           title="Kuesioner & Asesmen Minat"
         >
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -261,7 +261,7 @@
     <!-- Group: Kontrol Kualitas & Bantuan -->
     <div>
       <div
-        class="px-3 mb-2 text-[11px] font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider transition-opacity duration-200"
+        class="px-3 mb-2 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider transition-opacity duration-200"
         :class="{
           'block': $store.sidebar.isExpanded || $store.sidebar.isHovered,
           'hidden': !$store.sidebar.isExpanded && !$store.sidebar.isHovered
@@ -274,7 +274,7 @@
         <!-- Evaluasi Chatbot AI -->
         <a
           href="{{ route('bk.evaluasi') }}"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.evaluasi') ? 'bg-brand-500 text-white shadow-md shadow-brand-500/20' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.evaluasi') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
           title="Evaluasi Respons AI"
         >
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -286,7 +286,7 @@
         <!-- FAQ Management -->
         <a
           href="{{ route('bk.faq') }}"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.faq') ? 'bg-brand-500 text-white shadow-md shadow-brand-500/20' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.faq') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
           title="Kelola FAQ Publik"
         >
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -300,7 +300,7 @@
   </div>
 
   <!-- Sidebar Footer User Quick Info -->
-  <div class="p-4 border-t border-[#E6DBA0]/50 dark:border-gray-800 shrink-0">
+  <div class="p-4 border-t border-gray-200/80 dark:border-gray-800 shrink-0">
     <div class="flex items-center gap-3">
       <div class="h-9 w-9 shrink-0 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 font-bold flex items-center justify-center text-xs">
         {{ strtoupper(substr($user->name ?? 'U', 0, 2)) }}
@@ -313,7 +313,7 @@
         }"
       >
         <p class="text-xs font-bold text-gray-900 dark:text-white truncate">{{ $user->name ?? 'Pengguna' }}</p>
-        <p class="text-[10px] text-gray-400 capitalize">{{ str_replace('_', ' ', $user->role ?? '') }}</p>
+        <p class="text-[10px] text-gray-500 dark:text-gray-400 capitalize">{{ str_replace('_', ' ', $user->role ?? '') }}</p>
       </div>
     </div>
   </div>

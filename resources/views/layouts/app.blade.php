@@ -16,25 +16,25 @@
 
   <style>
     :root {
-      --bg: #EDF1EC;
-      --bg-alt: #E3EADD;
+      --bg: #F8FAF8;
+      --bg-alt: #EEF4ED;
       --surface: #FFFFFF;
-      --ink: #1B2A24;
-      --ink-soft: #3B4D36;
-      --ink-faint: #5A6B54;
-      --primary: #24463F;
-      --primary-hover: #16302B;
-      --primary-soft: #DCE6DE;
-      --accent: #C98A3B;
-      --accent-soft: #F1DFBE;
-      --accent-ink: #6B4A1B;
-      --line: #D3DCCC;
-      --good: #2E7D34;
-      --warn: #C9603B;
+      --ink: #0F1D13;
+      --ink-soft: #2D4033;
+      --ink-faint: #526658;
+      --primary: #15803D;
+      --primary-hover: #166534;
+      --primary-soft: #DCFCE7;
+      --accent: #D97706;
+      --accent-soft: #FEF3C7;
+      --accent-ink: #78350F;
+      --line: #E2E8DF;
+      --good: #16A34A;
+      --warn: #D97706;
       --radius-s: 8px;
       --radius-m: 14px;
       --radius-l: 16px;
-      --shadow-card: 0 1px 2px rgba(27,42,36,0.06), 0 8px 18px -10px rgba(27,42,36,0.22);
+      --shadow-card: 0 1px 3px rgba(15,29,19,0.05), 0 8px 20px -8px rgba(15,29,19,0.1);
     }
 
     * { box-sizing: border-box; }
@@ -79,7 +79,7 @@
     .btn-primary {
       background: var(--primary);
       color: #FFFFFF;
-      box-shadow: 0 2px 6px rgba(36,70,63,0.25);
+      box-shadow: 0 2px 6px rgba(21,128,61,0.25);
     }
     .btn-primary:hover {
       background: var(--primary-hover);
@@ -91,7 +91,7 @@
       color: var(--primary);
     }
     .btn-ghost:hover {
-      background: rgba(36,70,63,0.08);
+      background: rgba(21,128,61,0.08);
     }
     .btn-sm {
       min-height: 38px;

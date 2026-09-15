@@ -10,28 +10,28 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #FBF8EA;
-      --bg-alt: #F7EDC2;
+      --bg: #F8FAF8;
+      --bg-alt: #EEF4ED;
       --surface: #FFFFFF;
-      --ink: #1C2B18;
-      --ink-soft: #4E5E46;
-      --ink-faint: #83927A;
-      --primary: #2E7D34;
-      --primary-hover: #205A26;
-      --accent: #F4B400;
-      --accent-hover: #D89E00;
-      --accent-soft: #FBE9AE;
-      --accent-ink: #7A5200;
-      --red: #D6362E;
-      --red-soft: #FADBD8;
-      --blue: #1C6EB4;
-      --blue-soft: #D9E9F6;
-      --line: #E6DBA0;
+      --ink: #0F1D13;
+      --ink-soft: #2D4033;
+      --ink-faint: #526658;
+      --primary: #15803D;
+      --primary-hover: #166534;
+      --accent: #D97706;
+      --accent-hover: #B45309;
+      --accent-soft: #FEF3C7;
+      --accent-ink: #78350F;
+      --red: #E11D48;
+      --red-soft: #FFE4E6;
+      --blue: #2563EB;
+      --blue-soft: #DBEAFE;
+      --line: #E2E8DF;
       --radius-s: 8px;
       --radius-m: 14px;
       --radius-l: 22px;
-      --shadow-card: 0 2px 4px rgba(28,43,24,0.04), 0 16px 36px -12px rgba(28,43,24,0.18);
-      --shadow-input: 0 1px 2px rgba(28,43,24,0.05);
+      --shadow-card: 0 2px 4px rgba(15,29,19,0.04), 0 16px 36px -12px rgba(15,29,19,0.12);
+      --shadow-input: 0 1px 2px rgba(15,29,19,0.05);
       --maxw-form: 520px;
     }
 
@@ -57,9 +57,9 @@
       pointer-events: none;
       z-index: 0;
       background:
-        radial-gradient(circle at 88% 12%, rgba(244,180,0,0.18), transparent 48%),
-        radial-gradient(circle at 10% 85%, rgba(46,125,52,0.13), transparent 44%),
-        radial-gradient(circle at 50% 50%, rgba(247,237,194,0.3), transparent 70%);
+        radial-gradient(circle at 88% 12%, rgba(217,119,6,0.08), transparent 50%),
+        radial-gradient(circle at 10% 85%, rgba(21,128,61,0.08), transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(238,244,237,0.4), transparent 70%);
     }
 
     /* Minimalist Auth Header */
@@ -67,7 +67,7 @@
       position: relative;
       z-index: 10;
       border-bottom: 1px solid var(--line);
-      background: rgba(251,248,234,0.85);
+      background: rgba(248,250,248,0.92);
       backdrop-filter: blur(8px);
     }
     .auth-nav-inner {
@@ -93,7 +93,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 12px rgba(46,125,52,0.25);
+      box-shadow: 0 4px 12px rgba(21,128,61,0.25);
     }
     .brand-title {
       font-family: 'Fraunces', serif;

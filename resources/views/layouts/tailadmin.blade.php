@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title>@yield('title', 'Dashboard') | SAPA BK — SMAN 4 Jember</title>
+  <title>@yield('title', 'Dashboard') | SAPA BK : SMAN 4 Jember</title>
 
   <!-- Favicon -->
   <link rel="icon" href="{{ asset('saasable/images/favicon.ico') }}" type="image/x-icon" />
@@ -34,49 +34,49 @@
             },
             colors: {
               brand: {
-                25: '#f4f8f4',
-                50: '#edf5ee',
-                100: '#d7ead9',
-                200: '#b4dab7',
-                300: '#87c48c',
-                400: '#53a85b',
-                500: '#2e7d34',
-                600: '#256b2a',
-                700: '#205a26',
-                800: '#1a461e',
-                900: '#143818',
-                950: '#0b210e',
+                25: '#f4fbf6',
+                50: '#edf9f0',
+                100: '#dcfce7',
+                200: '#bbf7d0',
+                300: '#86efac',
+                400: '#4ade80',
+                500: '#22c55e',
+                600: '#16a34a',
+                700: '#15803d',
+                800: '#166534',
+                900: '#14532d',
+                950: '#052e16',
               },
               accent: {
-                50: '#fefbf0',
-                100: '#fdf4d4',
-                200: '#fbe9ae',
-                300: '#f8d77a',
-                400: '#f5c338',
-                500: '#f4b400',
-                600: '#d89e00',
-                700: '#b28000',
-                800: '#7a5200',
-                900: '#5c3d00',
+                50: '#fffbeb',
+                100: '#fef3c7',
+                200: '#fde68a',
+                300: '#fcd34d',
+                400: '#fbbf24',
+                500: '#f59e0b',
+                600: '#d97706',
+                700: '#b45309',
+                800: '#92400e',
+                900: '#78350f',
               },
               landing: {
-                bg: '#FBF8EA',
-                'bg-alt': '#F7EDC2',
+                bg: '#F8FAF8',
+                'bg-alt': '#EEF4ED',
                 surface: '#FFFFFF',
-                ink: '#1C2B18',
-                'ink-soft': '#4E5E46',
-                'ink-faint': '#83927A',
-                primary: '#2E7D34',
-                'primary-hover': '#205A26',
-                accent: '#F4B400',
-                'accent-hover': '#D89E00',
-                'accent-soft': '#FBE9AE',
-                'accent-ink': '#7A5200',
-                red: '#D6362E',
-                'red-soft': '#FADBD8',
-                blue: '#1C6EB4',
-                'blue-soft': '#D9E9F6',
-                line: '#E6DBA0',
+                ink: '#0F1D13',
+                'ink-soft': '#2D4033',
+                'ink-faint': '#526658',
+                primary: '#15803D',
+                'primary-hover': '#166534',
+                accent: '#D97706',
+                'accent-hover': '#B45309',
+                'accent-soft': '#FEF3C7',
+                'accent-ink': '#78350F',
+                red: '#E11D48',
+                'red-soft': '#FFE4E6',
+                blue: '#2563EB',
+                'blue-soft': '#DBEAFE',
+                line: '#E2E8DF',
               }
             }
           }
@@ -179,7 +179,7 @@
 </head>
 
 <body
-  class="min-h-screen bg-[#FBF8EA] text-[#1C2B18] antialiased dark:bg-gray-950 dark:text-gray-200 transition-colors"
+  class="min-h-screen bg-[#F8FAFC] text-[#0F172A] antialiased dark:bg-gray-950 dark:text-gray-100 transition-colors"
   x-data
   x-init="
     const checkMobile = () => {

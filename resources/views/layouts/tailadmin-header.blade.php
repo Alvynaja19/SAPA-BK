@@ -1,4 +1,4 @@
-<header class="sticky top-0 z-30 flex w-full border-b border-[#E6DBA0]/60 bg-[#FBF8EA]/90 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/95 transition-colors">
+<header class="sticky top-0 z-30 flex w-full border-b border-gray-200/80 bg-white/90 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/95 transition-colors">
   <div class="flex grow items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
     
     <!-- Left: Hamburger Toggle & Title -->
@@ -6,7 +6,7 @@
       <!-- Desktop Toggle Button -->
       <button
         type="button"
-        class="hidden xl:flex h-10 w-10 items-center justify-center rounded-xl border border-[#E6DBA0]/60 text-gray-700 hover:bg-[#F7EDC2]/40 hover:text-gray-900 dark:border-gray-800 dark:text-gray-300 dark:hover:bg-gray-800/80 transition-colors"
+        class="hidden xl:flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200/80 text-gray-700 hover:bg-gray-100/80 hover:text-gray-900 dark:border-gray-800 dark:text-gray-300 dark:hover:bg-gray-800/80 transition-colors"
         @click="$store.sidebar.toggleExpanded()"
         title="Perlebar / Ciutkan Sidebar"
       >
@@ -18,7 +18,7 @@
       <!-- Mobile Menu Toggle Button -->
       <button
         type="button"
-        class="flex xl:hidden h-10 w-10 items-center justify-center rounded-xl border border-[#E6DBA0]/60 text-gray-700 hover:bg-[#F7EDC2]/40 hover:text-gray-900 dark:border-gray-800 dark:text-gray-300 dark:hover:bg-gray-800/80 transition-colors"
+        class="flex xl:hidden h-10 w-10 items-center justify-center rounded-xl border border-gray-200/80 text-gray-700 hover:bg-gray-100/80 hover:text-gray-900 dark:border-gray-800 dark:text-gray-300 dark:hover:bg-gray-800/80 transition-colors"
         @click="$store.sidebar.toggleMobileOpen()"
         title="Menu Navigasi"
       >
@@ -29,9 +29,9 @@
 
       <!-- SMAN 4 Jember Label -->
       <div class="hidden sm:flex items-center gap-2 pl-2">
-        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#EDF5EE] text-[#205A26] dark:bg-brand-950/60 dark:text-brand-300 border border-[#B4DAB7]/60 dark:border-brand-800/60">
-          <span class="w-1.5 h-1.5 rounded-full bg-[#2E7D34] animate-pulse"></span>
-          SAPA BK — SMAN 4 Jember
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 dark:bg-brand-950/60 dark:text-brand-300 border border-emerald-200 dark:border-brand-800/60">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+          SAPA BK : SMAN 4 Jember
         </span>
       </div>
     </div>
@@ -43,7 +43,7 @@
       <button
         type="button"
         @click="$store.theme.toggle()"
-        class="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E6DBA0]/60 text-gray-700 hover:bg-[#F7EDC2]/40 hover:text-gray-900 dark:border-gray-800 dark:text-gray-300 dark:hover:bg-gray-800/80 transition-colors"
+        class="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200/80 text-gray-700 hover:bg-gray-100/80 hover:text-gray-900 dark:border-gray-800 dark:text-gray-300 dark:hover:bg-gray-800/80 transition-colors"
         title="Ganti Mode Gelap/Terang"
       >
         <!-- Sun Icon (Light Mode) -->
@@ -65,9 +65,9 @@
           default => 'Siswa'
         };
         $roleColor = match($user?->role) {
-          'admin' => 'bg-[#FEFBF0] text-[#7A5200] border-[#FBE9AE] dark:bg-amber-950/50 dark:text-amber-300 dark:border-amber-800',
-          'guru_bk' => 'bg-[#EDF5EE] text-[#205A26] border-[#B4DAB7] dark:bg-brand-950/50 dark:text-brand-300 dark:border-brand-800',
-          default => 'bg-[#D9E9F6] text-[#1C6EB4] border-[#B8D5ED] dark:bg-blue-950/50 dark:text-blue-300 dark:border-blue-800'
+          'admin' => 'bg-amber-50 text-amber-900 border-amber-200 dark:bg-amber-950/50 dark:text-amber-300 dark:border-amber-800',
+          'guru_bk' => 'bg-emerald-50 text-emerald-900 border-emerald-200 dark:bg-brand-950/50 dark:text-brand-300 dark:border-brand-800',
+          default => 'bg-blue-50 text-blue-900 border-blue-200 dark:bg-blue-950/50 dark:text-blue-300 dark:border-blue-800'
         };
       @endphp
       <span class="hidden md:inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold border {{ $roleColor }}">
@@ -80,14 +80,14 @@
           type="button"
           @click="open = !open"
           @click.outside="open = false"
-          class="flex items-center gap-3 p-1 rounded-xl hover:bg-[#F7EDC2]/40 dark:hover:bg-gray-800 transition-colors focus:outline-hidden"
+          class="flex items-center gap-3 p-1 rounded-xl hover:bg-gray-100/80 dark:hover:bg-gray-800 transition-colors focus:outline-hidden"
         >
-          <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-[#205A26] to-[#2E7D34] text-white font-bold flex items-center justify-center shadow-xs text-sm">
+          <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-brand-700 to-brand-600 text-white font-bold flex items-center justify-center shadow-xs text-sm">
             {{ strtoupper(substr($user->name ?? 'U', 0, 2)) }}
           </div>
           <div class="hidden text-left lg:block">
             <span class="block text-xs font-bold text-gray-900 dark:text-white line-clamp-1 max-w-[130px]">{{ $user->name ?? 'User' }}</span>
-            <span class="block text-[11px] text-gray-400 dark:text-gray-400 line-clamp-1 max-w-[130px]">{{ $user->email ?? '' }}</span>
+            <span class="block text-[11px] text-gray-500 dark:text-gray-400 line-clamp-1 max-w-[130px]">{{ $user->email ?? '' }}</span>
           </div>
           <svg class="hidden lg:block h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />

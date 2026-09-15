@@ -10,26 +10,26 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #FBF8EA;
-      --bg-alt: #F7EDC2;
+      --bg: #F8FAF8;
+      --bg-alt: #EEF4ED;
       --surface: #FFFFFF;
-      --ink: #1C2B18;
-      --ink-soft: #3B4D36;
-      --ink-faint: #5A6B54;
-      --primary: #2E7D34;
-      --primary-hover: #205A26;
-      --accent: #F4B400;
-      --accent-hover: #D89E00;
-      --accent-soft: #FBE9AE;
-      --accent-ink: #614000;
-      --red: #D6362E;
-      --red-soft: #FADBD8;
-      --blue: #1C6EB4;
-      --blue-soft: #D9E9F6;
-      --line: #DFD396;
+      --ink: #0F1D13;
+      --ink-soft: #2D4033;
+      --ink-faint: #526658;
+      --primary: #15803D;
+      --primary-hover: #166534;
+      --accent: #D97706;
+      --accent-hover: #B45309;
+      --accent-soft: #FEF3C7;
+      --accent-ink: #78350F;
+      --red: #E11D48;
+      --red-soft: #FFE4E6;
+      --blue: #2563EB;
+      --blue-soft: #DBEAFE;
+      --line: #E2E8DF;
       --radius-s: 8px;
       --radius-m: 14px;
-      --shadow-card: 0 1px 2px rgba(28,43,24,0.06), 0 10px 24px -12px rgba(28,43,24,0.22);
+      --shadow-card: 0 1px 3px rgba(15,29,19,0.05), 0 10px 24px -10px rgba(15,29,19,0.1);
       --maxw: 1180px;
     }
 
@@ -94,7 +94,7 @@
     .btn-primary {
       background: var(--primary);
       color: #FFFFFF;
-      box-shadow: 0 2px 6px rgba(46,125,52,0.25);
+      box-shadow: 0 2px 6px rgba(21,128,61,0.25);
     }
     .btn-primary:hover {
       background: var(--primary-hover);
@@ -110,7 +110,7 @@
       border-color: var(--primary);
     }
     .btn-ghost:hover {
-      background: rgba(46,125,52,0.06);
+      background: rgba(21,128,61,0.06);
       border-color: var(--primary-hover);
     }
     .btn-ghost:focus-visible {
@@ -129,7 +129,7 @@
       position: sticky;
       top: 0;
       z-index: 40;
-      background: rgba(251,248,234,0.95);
+      background: rgba(248,250,248,0.96);
       backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--line);
     }
@@ -300,7 +300,7 @@
       font-weight: 600;
       color: var(--accent-ink);
       background: var(--accent-soft);
-      border: 1px solid rgba(244,180,0,0.45);
+      border: 1px solid rgba(217,119,6,0.3);
       padding: 6px 14px;
       border-radius: 999px;
       margin-bottom: 20px;
@@ -603,7 +603,7 @@
       font-size: 18px;
       position: relative;
       z-index: 2;
-      box-shadow: 0 2px 8px rgba(46,125,52,0.3);
+      box-shadow: 0 2px 8px rgba(21,128,61,0.3);
     }
     .how-step h3 {
       font-size: 18px;
@@ -879,7 +879,7 @@
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      background: #2E7D34;
+      background: #15803D;
       border: 2px solid var(--surface);
     }
 
@@ -942,7 +942,7 @@
     }
     .widget-body {
       padding: 16px;
-      background: #F8FAF6;
+      background: #F8FAF8;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -956,7 +956,7 @@
       padding: 10px 12px;
       border-radius: 8px;
       line-height: 1.45;
-      border: 1px solid rgba(244,180,0,0.3);
+      border: 1px solid rgba(217,119,6,0.3);
     }
     .widget-foot {
       padding: 12px 14px;
