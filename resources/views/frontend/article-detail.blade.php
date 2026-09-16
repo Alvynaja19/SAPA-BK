@@ -42,6 +42,12 @@
         </h1>
       </header>
 
+      @if($article->thumbnail)
+        <div style="margin-bottom: 32px; border-radius: var(--radius-m); overflow: hidden; max-height: 420px; box-shadow: var(--shadow-sm);">
+          <img src="{{ Str::startsWith($article->thumbnail, ['http://', 'https://']) ? $article->thumbnail : asset($article->thumbnail) }}" alt="{{ $article->title }}" style="width: 100%; height: 100%; max-height: 420px; object-fit: cover;">
+        </div>
+      @endif
+
       <!-- Article Body -->
       <div class="article-content" style="font-size: 16.5px; line-height: 1.8; color: var(--ink-soft);">
         {!! $article->content !!}

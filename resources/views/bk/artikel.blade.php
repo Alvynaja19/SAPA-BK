@@ -198,45 +198,52 @@
       <div class="divide-y divide-gray-100 dark:divide-gray-800">
         @forelse($articles as $art)
           <div class="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-gray-50/50 dark:hover:bg-gray-800/40 transition-colors">
-            <div class="space-y-1.5 max-w-md">
-              <div class="flex items-center gap-2 flex-wrap">
-                <!-- Category Badge -->
-                @if($art->category === 'tips_ptn')
-                  <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
-                    Tips PTN
-                  </span>
-                @elseif($art->category === 'kesehatan_mental')
-                  <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                    Kesehatan Mental
-                  </span>
-                @else
-                  <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                    Edukasi BK
-                  </span>
-                @endif
+            <div class="flex items-start gap-3.5 min-w-0 flex-1">
+              @if($art->thumbnail)
+                <div class="h-16 w-20 sm:h-20 sm:w-28 rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-800 shrink-0 border border-gray-200/60 dark:border-gray-700 shadow-xs">
+                  <img src="{{ Str::startsWith($art->thumbnail, ['http://', 'https://']) ? $art->thumbnail : asset($art->thumbnail) }}" alt="{{ $art->title }}" class="h-full w-full object-cover">
+                </div>
+              @endif
+              <div class="space-y-1.5 min-w-0 flex-1">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <!-- Category Badge -->
+                  @if($art->category === 'tips_ptn')
+                    <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                      Tips PTN
+                    </span>
+                  @elseif($art->category === 'kesehatan_mental')
+                    <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                      Kesehatan Mental
+                    </span>
+                  @else
+                    <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                      Edukasi BK
+                    </span>
+                  @endif
 
-                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold {{ $art->is_published ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300' : 'bg-gray-100 text-gray-600' }}">
-                  {{ $art->is_published ? 'Terbit' : 'Draf' }}
+                  <span class="text-[10px] px-2 py-0.5 rounded-full font-bold {{ $art->is_published ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300' : 'bg-gray-100 text-gray-600' }}">
+                    {{ $art->is_published ? 'Terbit' : 'Draf' }}
+                  </span>
+
+                  @if($art->source_name)
+                    <span class="text-[10px] px-2 py-0.5 rounded-full font-medium bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60">
+                      RSS: {{ $art->source_name }}
+                    </span>
+                  @endif
+                </div>
+
+                <h3 class="text-sm font-bold text-gray-900 dark:text-white line-clamp-2 leading-snug">
+                  {{ $art->title }}
+                </h3>
+
+                <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">
+                  {{ Str::limit(strip_tags($art->content), 120) }}
+                </p>
+
+                <span class="text-[11px] text-gray-400 block pt-0.5">
+                  {{ $art->source_name ? 'Sumber: ' . $art->source_name : 'Oleh ' . ($art->author?->name ?? 'Guru BK') }} • {{ $art->created_at ? $art->created_at->format('d M Y') : '-' }}
                 </span>
-
-                @if($art->source_name)
-                  <span class="text-[10px] px-2 py-0.5 rounded-full font-medium bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60">
-                    RSS: {{ $art->source_name }}
-                  </span>
-                @endif
               </div>
-
-              <h3 class="text-sm font-bold text-gray-900 dark:text-white line-clamp-2 leading-snug">
-                {{ $art->title }}
-              </h3>
-
-              <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">
-                {{ Str::limit(strip_tags($art->content), 120) }}
-              </p>
-
-              <span class="text-[11px] text-gray-400 block pt-0.5">
-                {{ $art->source_name ? 'Sumber: ' . $art->source_name : 'Oleh ' . ($art->author?->name ?? 'Guru BK') }} • {{ $art->created_at ? $art->created_at->format('d M Y') : '-' }}
-              </span>
             </div>
 
             <div class="flex items-center gap-2 shrink-0 self-end sm:self-center">

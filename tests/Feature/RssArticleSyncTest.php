@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Article;
 use App\Models\User;
 use App\Services\RssArticleService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -52,6 +53,10 @@ class RssArticleSyncTest extends TestCase
             'source_name' => 'Kompas.com',
             'source_url' => 'https://news.google.com/articles/fake-1',
         ]);
+
+        $article = Article::where('title', 'Tips Memilih Jurusan SNBP 2026')->first();
+        $this->assertNotNull($article);
+        $this->assertNotEmpty($article->thumbnail);
     }
 
     public function test_rss_sync_service_skips_duplicates(): void

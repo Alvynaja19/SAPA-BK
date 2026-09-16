@@ -425,7 +425,7 @@
       border-color: var(--primary);
     }
     .article-thumb {
-      height: 150px;
+      height: 160px;
       background: linear-gradient(135deg, rgba(46,125,52,0.9), rgba(28,110,180,0.85)),
                   radial-gradient(circle at top left, var(--accent), transparent);
       position: relative;
@@ -433,6 +433,13 @@
       align-items: center;
       justify-content: center;
       color: #FFFFFF;
+      overflow: hidden;
+    }
+    .article-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
     .article-thumb svg {
       width: 48px;
