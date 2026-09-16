@@ -79,6 +79,118 @@
       </span>
     </div>
 
+    <!-- Filter Bar: Judul Artikel, Kategori, Tanggal Terbit -->
+    <div class="p-4 sm:p-5 border-b border-gray-100 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-800/10">
+      <form method="GET" action="{{ route('bk.artikel') }}" class="space-y-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-end">
+          
+          <!-- Filter 1: Cari Judul Artikel -->
+          <div class="lg:col-span-5 space-y-1.5">
+            <label for="filter-q" class="block text-xs font-bold text-gray-700 dark:text-gray-300">
+              Judul Artikel
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <input
+                id="filter-q"
+                type="text"
+                name="q"
+                value="{{ request('q') }}"
+                placeholder="Cari judul artikel edukasi..."
+                class="w-full pl-9 pr-3.5 py-2 rounded-xl text-xs border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-hidden focus:border-brand-500 transition-colors min-h-[40px]"
+              />
+            </div>
+          </div>
+
+          <!-- Filter 2: Kategori -->
+          <div class="lg:col-span-3 space-y-1.5">
+            <label for="filter-category" class="block text-xs font-bold text-gray-700 dark:text-gray-300">
+              Kategori
+            </label>
+            <select
+              id="filter-category"
+              name="category"
+              class="w-full px-3 py-2 rounded-xl text-xs border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500 transition-colors min-h-[40px] cursor-pointer"
+            >
+              <option value="all" {{ request('category') === 'all' || !request('category') ? 'selected' : '' }}>Semua Kategori</option>
+              <option value="tips_ptn" {{ request('category') === 'tips_ptn' ? 'selected' : '' }}>Tips Masuk PTN</option>
+              <option value="kesehatan_mental" {{ request('category') === 'kesehatan_mental' ? 'selected' : '' }}>Kesehatan Mental</option>
+              <option value="umum" {{ request('category') === 'umum' ? 'selected' : '' }}>Edukasi Umum</option>
+            </select>
+          </div>
+
+          <!-- Filter 3: Tanggal Terbit -->
+          <div class="lg:col-span-2 space-y-1.5">
+            <label for="filter-date" class="block text-xs font-bold text-gray-700 dark:text-gray-300">
+              Tanggal Terbit
+            </label>
+            <input
+              id="filter-date"
+              type="date"
+              name="date"
+              value="{{ request('date') }}"
+              class="w-full px-3 py-2 rounded-xl text-xs border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500 transition-colors min-h-[40px] cursor-pointer"
+            />
+          </div>
+
+          <!-- Tombol Aksi: Terapkan & Reset -->
+          <div class="lg:col-span-2 flex items-center gap-2">
+            <button
+              type="submit"
+              class="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs transition-colors shadow-xs min-h-[40px] cursor-pointer"
+            >
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+              </svg>
+              <span>Filter</span>
+            </button>
+
+            @if(request()->filled('q') || (request()->filled('category') && request('category') !== 'all') || request()->filled('date'))
+              <a
+                href="{{ route('bk.artikel') }}"
+                title="Reset semua filter"
+                class="px-3 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-semibold text-xs transition-colors min-h-[40px] inline-flex items-center justify-center cursor-pointer"
+              >
+                Reset
+              </a>
+            @endif
+          </div>
+        </div>
+
+        <!-- Tag Filter Aktif (Jika Ada) -->
+        @if(request()->filled('q') || (request()->filled('category') && request('category') !== 'all') || request()->filled('date'))
+          <div class="flex items-center gap-2 flex-wrap pt-2 border-t border-gray-100 dark:border-gray-800 text-xs">
+            <span class="font-bold text-gray-500 dark:text-gray-400">Filter Aktif:</span>
+            @if(request()->filled('q'))
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-50 text-brand-700 dark:bg-brand-950/60 dark:text-brand-300 border border-brand-200 dark:border-brand-800 text-[11px] font-medium">
+                <span>Judul: <strong>"{{ request('q') }}"</strong></span>
+                <a href="{{ route('bk.artikel', array_merge(request()->except('q'), ['page' => 1])) }}" class="hover:text-brand-900 dark:hover:text-white">&times;</a>
+              </span>
+            @endif
+            @if(request()->filled('category') && request('category') !== 'all')
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-[11px] font-medium">
+                <span>Kategori: <strong>{{ match(request('category')) { 'tips_ptn' => 'Tips Masuk PTN', 'kesehatan_mental' => 'Kesehatan Mental', default => 'Edukasi Umum' } }}</strong></span>
+                <a href="{{ route('bk.artikel', array_merge(request()->except('category'), ['page' => 1])) }}" class="hover:text-blue-900 dark:hover:text-white">&times;</a>
+              </span>
+            @endif
+            @if(request()->filled('date'))
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800 text-[11px] font-medium">
+                <span>Tanggal: <strong>{{ \Carbon\Carbon::parse(request('date'))->format('d M Y') }}</strong></span>
+                <a href="{{ route('bk.artikel', array_merge(request()->except('date'), ['page' => 1])) }}" class="hover:text-amber-900 dark:hover:text-white">&times;</a>
+              </span>
+            @endif
+            <a href="{{ route('bk.artikel') }}" class="text-[11px] font-bold text-rose-600 hover:text-rose-700 dark:text-rose-400 ml-1">
+              Hapus Semua
+            </a>
+          </div>
+        @endif
+      </form>
+    </div>
+
     <!-- Table Responsive -->
     <div class="overflow-x-auto custom-scrollbar">
       <table class="w-full text-left border-collapse min-w-[920px]">
@@ -235,10 +347,25 @@
                   <div class="h-12 w-12 rounded-2xl bg-gray-100 dark:bg-gray-800 text-gray-400 mx-auto flex items-center justify-center">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" /></svg>
                   </div>
-                  <div class="font-bold text-gray-800 dark:text-gray-200">Belum ada artikel yang tersimpan</div>
-                  <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
-                    Klik tombol <strong>Tarik Artikel Terkini (RSS)</strong> di pojok kanan atas untuk menarik artikel edukasi otomatis atau klik <strong>Tulis Artikel Baru</strong>.
-                  </p>
+                  @if(request()->filled('q') || (request()->filled('category') && request('category') !== 'all') || request()->filled('date'))
+                    <div class="font-bold text-gray-800 dark:text-gray-200">Tidak ada artikel yang sesuai filter</div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                      Tidak ditemukan artikel dengan kriteria pencarian yang Anda tentukan. Coba ubah kata kunci judul, ganti kategori, atau bersihkan tanggal terbit.
+                    </p>
+                    <div class="pt-2">
+                      <a
+                        href="{{ route('bk.artikel') }}"
+                        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-bold text-xs transition-colors"
+                      >
+                        Reset Semua Filter
+                      </a>
+                    </div>
+                  @else
+                    <div class="font-bold text-gray-800 dark:text-gray-200">Belum ada artikel yang tersimpan</div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                      Klik tombol <strong>Tarik Artikel Terkini (RSS)</strong> di pojok kanan atas untuk menarik artikel edukasi otomatis atau klik <strong>Tulis Artikel Baru</strong>.
+                    </p>
+                  @endif
                 </div>
               </td>
             </tr>

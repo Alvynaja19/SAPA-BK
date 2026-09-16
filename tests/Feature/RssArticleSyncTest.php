@@ -84,4 +84,51 @@ class RssArticleSyncTest extends TestCase
         $this->assertEquals(0, $secondRun['synced']);
         $this->assertEquals(1, $secondRun['skipped']);
     }
+
+    public function test_guru_bk_can_filter_articles(): void
+    {
+        $guru = User::where('role', 'guru_bk')->first();
+        $this->actingAs($guru);
+
+        // Buat artikel tes
+        $art1 = Article::create([
+            'title' => 'Panduan Khusus Sukses Belajar UTBK',
+            'slug' => 'panduan-khusus-sukses-belajar-utbk',
+            'category' => 'tips_ptn',
+            'content' => 'Konten belajar UTBK siswa',
+            'is_published' => true,
+            'author_id' => $guru->id,
+        ]);
+        $art1->created_at = '2026-05-10 10:00:00';
+        $art1->save();
+
+        $art2 = Article::create([
+            'title' => 'Manajemen Emosi dan Self Care Remaja',
+            'slug' => 'manajemen-emosi-dan-self-care-remaja',
+            'category' => 'kesehatan_mental',
+            'content' => 'Konten kesehatan mental',
+            'is_published' => true,
+            'author_id' => $guru->id,
+        ]);
+        $art2->created_at = '2026-06-15 10:00:00';
+        $art2->save();
+
+        // 1. Filter berdasarkan kata kunci judul
+        $responseQ = $this->get(route('bk.artikel', ['q' => 'UTBK']));
+        $responseQ->assertOk();
+        $responseQ->assertSee('Panduan Khusus Sukses Belajar UTBK');
+        $responseQ->assertDontSee('Manajemen Emosi dan Self Care Remaja');
+
+        // 2. Filter berdasarkan kategori
+        $responseCat = $this->get(route('bk.artikel', ['category' => 'kesehatan_mental']));
+        $responseCat->assertOk();
+        $responseCat->assertSee('Manajemen Emosi dan Self Care Remaja');
+        $responseCat->assertDontSee('Panduan Khusus Sukses Belajar UTBK');
+
+        // 3. Filter berdasarkan tanggal terbit
+        $responseDate = $this->get(route('bk.artikel', ['date' => '2026-05-10']));
+        $responseDate->assertOk();
+        $responseDate->assertSee('Panduan Khusus Sukses Belajar UTBK');
+        $responseDate->assertDontSee('Manajemen Emosi dan Self Care Remaja');
+    }
 }

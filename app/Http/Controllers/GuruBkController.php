@@ -106,9 +106,24 @@ class GuruBkController extends Controller
         return back()->with('success', 'E-Book berhasil dihapus.');
     }
 
-    public function artikel(): View
+    public function artikel(Request $request): View
     {
-        $articles = Article::with('author')->latest()->paginate(10);
+        $query = Article::with('author');
+
+        if ($request->filled('q')) {
+            $search = trim($request->input('q'));
+            $query->where('title', 'like', "%{$search}%");
+        }
+
+        if ($request->filled('category') && $request->input('category') !== 'all') {
+            $query->where('category', $request->input('category'));
+        }
+
+        if ($request->filled('date')) {
+            $query->whereDate('created_at', $request->input('date'));
+        }
+
+        $articles = $query->latest()->paginate(10)->withQueryString();
 
         return view('bk.artikel', compact('articles'));
     }
