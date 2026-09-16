@@ -15,6 +15,72 @@
       </p>
     </div>
 
+    <!-- Filter Kategori & Pencarian Artikel -->
+    <div class="article-filter-bar">
+      <!-- Category Tabs -->
+      <div class="article-cat-group">
+        <a
+          href="{{ route('article.index', array_merge(request()->except('category', 'page'), ['category' => 'all'])) }}"
+          class="cat-chip {{ (!request('category') || request('category') === 'all') ? 'active' : '' }}"
+        >
+          <span>Semua Topik</span>
+          <span class="chip-count">{{ $categoryCounts['all'] ?? 0 }}</span>
+        </a>
+
+        <a
+          href="{{ route('article.index', array_merge(request()->except('category', 'page'), ['category' => 'tips_ptn'])) }}"
+          class="cat-chip {{ request('category') === 'tips_ptn' ? 'active' : '' }}"
+        >
+          <span>Tips Masuk PTN</span>
+          <span class="chip-count">{{ $categoryCounts['tips_ptn'] ?? 0 }}</span>
+        </a>
+
+        <a
+          href="{{ route('article.index', array_merge(request()->except('category', 'page'), ['category' => 'kesehatan_mental'])) }}"
+          class="cat-chip {{ request('category') === 'kesehatan_mental' ? 'active' : '' }}"
+        >
+          <span>Kesehatan Mental</span>
+          <span class="chip-count">{{ $categoryCounts['kesehatan_mental'] ?? 0 }}</span>
+        </a>
+
+        <a
+          href="{{ route('article.index', array_merge(request()->except('category', 'page'), ['category' => 'umum'])) }}"
+          class="cat-chip {{ request('category') === 'umum' ? 'active' : '' }}"
+        >
+          <span>Edukasi Umum</span>
+          <span class="chip-count">{{ $categoryCounts['umum'] ?? 0 }}</span>
+        </a>
+      </div>
+
+      <!-- Search Box -->
+      <form method="GET" action="{{ route('article.index') }}" class="article-search-box">
+        @if(request('category') && request('category') !== 'all')
+          <input type="hidden" name="category" value="{{ request('category') }}">
+        @endif
+        <div class="article-search-input-wrap">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--ink-faint); flex-shrink: 0;">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.3-4.3"/>
+          </svg>
+          <input
+            type="text"
+            name="q"
+            value="{{ request('q') }}"
+            placeholder="Cari artikel..."
+            class="article-search-input"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Cari</button>
+      </form>
+    </div>
+
+    @if(request()->filled('q'))
+      <div class="active-filter-badge">
+        <span>Menampilkan hasil pencarian untuk: <strong>"{{ request('q') }}"</strong></span>
+        <a href="{{ route('article.index', array_merge(request()->except('q', 'page'))) }}" style="color: var(--red); font-weight: 700; margin-left: 6px;" title="Hapus pencarian">&times;</a>
+      </div>
+    @endif
+
     <!-- Articles Grid -->
     <div class="article-row">
       @forelse($articles as $art)
@@ -70,11 +136,11 @@
               <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
             </svg>
           </div>
-          <h3 style="font-size: 19px; margin-bottom: 8px;">Belum Ada Artikel yang Dipublikasikan</h3>
+          <h3 style="font-size: 19px; margin-bottom: 8px;">Belum Ada Artikel yang Sesuai</h3>
           <p style="color: var(--ink-soft); font-size: 14.5px; max-width: 440px; margin: 0 auto 20px;">
-            Artikel edukasi baru sedang dipersiapkan oleh tim konselor kami. Silakan cek kembali dalam waktu dekat.
+            Tidak ditemukan artikel pada kategori atau kata kunci ini. Silakan coba cari dengan kata kunci lain.
           </p>
-          <a href="{{ route('home') }}" class="btn btn-primary btn-sm">Kembali ke Beranda</a>
+          <a href="{{ route('article.index') }}" class="btn btn-primary btn-sm">Lihat Semua Artikel</a>
         </div>
       @endforelse
     </div>
@@ -82,7 +148,7 @@
     <!-- Pagination -->
     @if($articles->hasPages())
       <div class="pagination-wrap">
-        {{ $articles->links() }}
+        {{ $articles->links('pagination.landing') }}
       </div>
     @endif
 

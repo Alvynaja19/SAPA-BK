@@ -63,7 +63,7 @@
     <!-- Pagination -->
     @if($ebooks->hasPages())
       <div class="pagination-wrap">
-        {{ $ebooks->links() }}
+        {{ $ebooks->links('pagination.landing') }}
       </div>
     @endif
 

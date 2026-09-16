@@ -37,7 +37,7 @@ class RssArticleSyncTest extends TestCase
             'news.google.com/*' => Http::response($fakeXml, 200, ['Content-Type' => 'application/xml']),
         ]);
 
-        $guru = User::where('role', 'guru_bk')->first();
+        $guru = User::where('role', 'guru_bk')->first() ?? User::factory()->create(['role' => 'guru_bk', 'is_active' => true]);
         $this->actingAs($guru);
 
         $response = $this->post(route('bk.artikel.sync-rss'), [
@@ -87,7 +87,7 @@ class RssArticleSyncTest extends TestCase
 
     public function test_guru_bk_can_filter_articles(): void
     {
-        $guru = User::where('role', 'guru_bk')->first();
+        $guru = User::where('role', 'guru_bk')->first() ?? User::factory()->create(['role' => 'guru_bk', 'is_active' => true]);
         $this->actingAs($guru);
 
         // Buat artikel tes

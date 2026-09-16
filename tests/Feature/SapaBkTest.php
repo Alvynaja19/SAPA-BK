@@ -31,6 +31,17 @@ class SapaBkTest extends TestCase
         $this->get('/register')->assertStatus(200);
     }
 
+    public function test_frontend_articles_page_has_filter_and_pagination()
+    {
+        $response = $this->get('/artikel?category=tips_ptn');
+        $response->assertStatus(200);
+        $response->assertSee('Semua Topik');
+        $response->assertSee('Tips Masuk PTN');
+
+        $searchResponse = $this->get('/artikel?q=Belajar');
+        $searchResponse->assertStatus(200);
+    }
+
     public function test_siswa_can_access_dashboard_and_chat()
     {
         $siswa = User::where('role', 'siswa')->first();

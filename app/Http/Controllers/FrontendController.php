@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Ebook;
 use App\Models\Faq;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class FrontendController extends Controller
@@ -37,11 +38,32 @@ class FrontendController extends Controller
         return view('frontend.ebook-detail', compact('ebook'));
     }
 
-    public function articles(): View
+    public function articles(Request $request): View
     {
-        $articles = Article::where('is_published', true)->latest()->paginate(6);
+        $query = Article::where('is_published', true);
 
-        return view('frontend.articles', compact('articles'));
+        if ($request->filled('category') && $request->category !== 'all') {
+            $query->where('category', $request->category);
+        }
+
+        if ($request->filled('q')) {
+            $q = trim($request->q);
+            $query->where(function ($sub) use ($q) {
+                $sub->where('title', 'like', "%{$q}%")
+                    ->orWhere('content', 'like', "%{$q}%");
+            });
+        }
+
+        $articles = $query->latest()->paginate(6)->withQueryString();
+
+        $categoryCounts = [
+            'all' => Article::where('is_published', true)->count(),
+            'tips_ptn' => Article::where('is_published', true)->where('category', 'tips_ptn')->count(),
+            'kesehatan_mental' => Article::where('is_published', true)->where('category', 'kesehatan_mental')->count(),
+            'umum' => Article::where('is_published', true)->where('category', 'umum')->count(),
+        ];
+
+        return view('frontend.articles', compact('articles', 'categoryCounts'));
     }
 
     public function articleDetail(string $slug): View
