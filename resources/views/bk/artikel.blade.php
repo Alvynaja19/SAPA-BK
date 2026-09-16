@@ -95,10 +95,13 @@
         <!-- Tab: Semua -->
         <a
           href="{{ route('bk.artikel', array_merge(request()->except('category', 'page'), ['category' => 'all'])) }}"
-          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 {{ (!request('category') || request('category') === 'all') ? 'bg-brand-600 text-white shadow-xs' : 'bg-gray-100/80 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300' }}"
+          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 shadow-2xs"
+          style="{{ (!request('category') || request('category') === 'all') ? 'background-color: #15803d !important; color: #ffffff !important;' : 'background-color: #f1f5f9; color: #334155;' }}"
         >
           <span>Semua Topik</span>
-          <span class="px-1.5 py-0.5 rounded-md text-[10px] font-extrabold {{ (!request('category') || request('category') === 'all') ? 'bg-white/20 text-white' : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300' }}">
+          <span class="px-1.5 py-0.5 rounded-md text-[10px] font-extrabold"
+            style="{{ (!request('category') || request('category') === 'all') ? 'background-color: rgba(255,255,255,0.2) !important; color: #ffffff !important;' : 'background-color: #e2e8f0; color: #475569;' }}"
+          >
             {{ $categoryCounts['all'] ?? 0 }}
           </span>
         </a>
@@ -106,11 +109,14 @@
         <!-- Tab: Tips PTN -->
         <a
           href="{{ route('bk.artikel', array_merge(request()->except('category', 'page'), ['category' => 'tips_ptn'])) }}"
-          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 {{ request('category') === 'tips_ptn' ? 'bg-blue-600 text-white shadow-xs' : 'bg-gray-100/80 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300' }}"
+          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 shadow-2xs"
+          style="{{ request('category') === 'tips_ptn' ? 'background-color: #2563eb !important; color: #ffffff !important;' : 'background-color: #f1f5f9; color: #334155;' }}"
         >
-          <span class="h-2 w-2 rounded-full {{ request('category') === 'tips_ptn' ? 'bg-white' : 'bg-blue-500' }}"></span>
+          <span class="h-2 w-2 rounded-full shrink-0" style="background-color: {{ request('category') === 'tips_ptn' ? '#ffffff' : '#2563eb' }};"></span>
           <span>Tips Masuk PTN</span>
-          <span class="px-1.5 py-0.5 rounded-md text-[10px] font-extrabold {{ request('category') === 'tips_ptn' ? 'bg-white/20 text-white' : 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300' }}">
+          <span class="px-1.5 py-0.5 rounded-md text-[10px] font-extrabold"
+            style="{{ request('category') === 'tips_ptn' ? 'background-color: rgba(255,255,255,0.2) !important; color: #ffffff !important;' : 'background-color: #dbeafe; color: #1e40af;' }}"
+          >
             {{ $categoryCounts['tips_ptn'] ?? 0 }}
           </span>
         </a>
@@ -118,11 +124,14 @@
         <!-- Tab: Kesehatan Mental -->
         <a
           href="{{ route('bk.artikel', array_merge(request()->except('category', 'page'), ['category' => 'kesehatan_mental'])) }}"
-          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 {{ request('category') === 'kesehatan_mental' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-gray-100/80 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300' }}"
+          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 shadow-2xs"
+          style="{{ request('category') === 'kesehatan_mental' ? 'background-color: #059669 !important; color: #ffffff !important;' : 'background-color: #f1f5f9; color: #334155;' }}"
         >
-          <span class="h-2 w-2 rounded-full {{ request('category') === 'kesehatan_mental' ? 'bg-white' : 'bg-emerald-500' }}"></span>
+          <span class="h-2 w-2 rounded-full shrink-0" style="background-color: {{ request('category') === 'kesehatan_mental' ? '#ffffff' : '#059669' }};"></span>
           <span>Kesehatan Mental</span>
-          <span class="px-1.5 py-0.5 rounded-md text-[10px] font-extrabold {{ request('category') === 'kesehatan_mental' ? 'bg-white/20 text-white' : 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300' }}">
+          <span class="px-1.5 py-0.5 rounded-md text-[10px] font-extrabold"
+            style="{{ request('category') === 'kesehatan_mental' ? 'background-color: rgba(255,255,255,0.2) !important; color: #ffffff !important;' : 'background-color: #d1fae5; color: #065f46;' }}"
+          >
             {{ $categoryCounts['kesehatan_mental'] ?? 0 }}
           </span>
         </a>
@@ -130,11 +139,14 @@
         <!-- Tab: Edukasi Umum -->
         <a
           href="{{ route('bk.artikel', array_merge(request()->except('category', 'page'), ['category' => 'umum'])) }}"
-          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 {{ request('category') === 'umum' ? 'bg-amber-600 text-white shadow-xs' : 'bg-gray-100/80 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300' }}"
+          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 shadow-2xs"
+          style="{{ request('category') === 'umum' ? 'background-color: #d97706 !important; color: #ffffff !important;' : 'background-color: #f1f5f9; color: #334155;' }}"
         >
-          <span class="h-2 w-2 rounded-full {{ request('category') === 'umum' ? 'bg-white' : 'bg-amber-500' }}"></span>
+          <span class="h-2 w-2 rounded-full shrink-0" style="background-color: {{ request('category') === 'umum' ? '#ffffff' : '#d97706' }};"></span>
           <span>Edukasi Umum</span>
-          <span class="px-1.5 py-0.5 rounded-md text-[10px] font-extrabold {{ request('category') === 'umum' ? 'bg-white/20 text-white' : 'bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300' }}">
+          <span class="px-1.5 py-0.5 rounded-md text-[10px] font-extrabold"
+            style="{{ request('category') === 'umum' ? 'background-color: rgba(255,255,255,0.2) !important; color: #ffffff !important;' : 'background-color: #fef3c7; color: #92400e;' }}"
+          >
             {{ $categoryCounts['umum'] ?? 0 }}
           </span>
         </a>
@@ -148,42 +160,38 @@
           <input type="hidden" name="category" value="{{ request('category') }}">
         @endif
 
-        <!-- Search Input -->
-        <div class="relative flex-1">
-          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
-            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
+        <!-- Search Input (Flex container prevents icon-text collision) -->
+        <div class="flex items-center flex-1 rounded-xl border border-gray-200/90 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-1.5 shadow-2xs focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-500/20 transition-all" style="min-height: 42px;">
+          <svg class="h-4 w-4 text-gray-400 shrink-0 mr-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
           <input
             type="text"
             name="q"
             value="{{ request('q') }}"
             placeholder="Cari kata kunci judul artikel..."
-            class="w-full pl-10 pr-4 py-2 rounded-xl text-xs border border-gray-200/80 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-hidden focus:border-brand-500 shadow-2xs min-h-[38px] transition-colors"
+            class="w-full bg-transparent border-0 p-0 text-xs text-gray-900 dark:text-white placeholder-gray-400 focus:outline-hidden focus:ring-0"
+            style="outline: none; border: none; background: transparent; font-size: 13px; box-shadow: none;"
           />
         </div>
 
-        <!-- Date Picker Input -->
-        <div class="relative sm:w-48 shrink-0">
-          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
-            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-          </div>
+        <!-- Date Picker Input (Native calendar without duplicate overlapping icon) -->
+        <div class="sm:w-44 shrink-0">
           <input
             type="date"
             name="date"
             value="{{ request('date') }}"
             title="Filter tanggal terbit"
-            class="w-full pl-10 pr-3 py-2 rounded-xl text-xs border border-gray-200/80 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500 shadow-2xs min-h-[38px] transition-colors cursor-pointer"
+            class="w-full px-3.5 py-1.5 rounded-xl text-xs border border-gray-200/90 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 focus:outline-hidden focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 shadow-2xs cursor-pointer transition-colors"
+            style="min-height: 42px; font-size: 13px;"
           />
         </div>
 
         <!-- Tombol Cari -->
         <button
           type="submit"
-          class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs transition-colors shadow-xs min-h-[38px] shrink-0 cursor-pointer"
+          class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-white font-bold text-xs shadow-xs shrink-0 cursor-pointer transition-all hover:opacity-90 active:scale-[0.98]"
+          style="background-color: #15803d !important; color: #ffffff !important; min-height: 42px;"
         >
           <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
