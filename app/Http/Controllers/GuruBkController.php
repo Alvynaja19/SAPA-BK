@@ -13,6 +13,7 @@ use App\Models\Questionnaire;
 use App\Models\QuestionnaireQuestion;
 use App\Models\QuestionnaireResult;
 use App\Models\User;
+use App\Services\RssArticleService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -116,6 +117,7 @@ class GuruBkController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'category' => 'nullable|string|max:50',
             'content' => 'required|string',
             'is_published' => 'boolean',
         ]);
@@ -123,6 +125,7 @@ class GuruBkController extends Controller
         Article::create([
             'title' => $validated['title'],
             'slug' => Str::slug($validated['title']).'-'.Str::random(5),
+            'category' => $validated['category'] ?? 'umum',
             'content' => $validated['content'],
             'is_published' => $request->boolean('is_published'),
             'author_id' => Auth::id(),
@@ -137,6 +140,35 @@ class GuruBkController extends Controller
         $article->delete();
 
         return back()->with('success', 'Artikel berhasil dihapus.');
+    }
+
+    public function syncRssArtikel(Request $request, RssArticleService $rssService): RedirectResponse
+    {
+        $category = $request->input('category', 'tips_ptn');
+        if (! in_array($category, ['tips_ptn', 'kesehatan_mental', 'all'], true)) {
+            $category = 'tips_ptn';
+        }
+
+        if ($category === 'all') {
+            $res1 = $rssService->syncByCategory('tips_ptn', 4, Auth::id());
+            $res2 = $rssService->syncByCategory('kesehatan_mental', 4, Auth::id());
+            $totalSynced = $res1['synced'] + $res2['synced'];
+        } else {
+            $res = $rssService->syncByCategory($category, 5, Auth::id());
+            $totalSynced = $res['synced'];
+        }
+
+        $categoryLabel = match ($category) {
+            'tips_ptn' => 'Tips Lolos PTN & SNBP',
+            'kesehatan_mental' => 'Kesehatan Mental Remaja',
+            default => 'Semua Topik (PTN & Kesehatan Mental)',
+        };
+
+        if ($totalSynced > 0) {
+            return back()->with('success', "Berhasil menarik {$totalSynced} artikel edukasi baru seputar {$categoryLabel}!");
+        }
+
+        return back()->with('info', "Artikel terbaru untuk {$categoryLabel} sudah tersinkronisasi (tidak ada artikel baru).");
     }
 
     public function knowledgeBase(): View

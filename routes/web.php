@@ -72,6 +72,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/artikel', [GuruBkController::class, 'artikel'])->name('artikel');
         Route::post('/artikel', [GuruBkController::class, 'simpanArtikel'])->name('artikel.store');
+        Route::post('/artikel/sync-rss', [GuruBkController::class, 'syncRssArtikel'])->name('artikel.sync-rss');
         Route::delete('/artikel/{id}', [GuruBkController::class, 'hapusArtikel'])->name('artikel.destroy');
 
         Route::get('/knowledge-base', [GuruBkController::class, 'knowledgeBase'])->name('knowledge');

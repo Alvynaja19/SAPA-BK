@@ -19,13 +19,21 @@
       <!-- Article Header -->
       <header style="border-bottom: 1px solid var(--line); padding-bottom: 28px; margin-bottom: 32px;">
         <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 14px;">
-          <div class="badge-pill" style="margin-bottom: 0;">Artikel Edukasi</div>
+          <div class="badge-pill" style="margin-bottom: 0;">
+            @if($article->category === 'tips_ptn')
+              Tips Masuk PTN &amp; SNBP
+            @elseif($article->category === 'kesehatan_mental')
+              Kesehatan Mental Remaja
+            @else
+              Artikel Edukasi
+            @endif
+          </div>
           <span style="font-size: 13px; color: var(--ink-faint);">
             Dipublikasikan: {{ $article->created_at ? $article->created_at->format('d F Y') : '-' }}
           </span>
           <span style="font-size: 13px; color: var(--ink-faint);">&bull;</span>
           <span style="font-size: 13px; color: var(--ink-faint);">
-            Penulis: Tim Guru BK SMAN 4 Jember
+            {{ $article->source_name ? 'Sumber: ' . $article->source_name : 'Penulis: Tim Guru BK SMAN 4 Jember' }}
           </span>
         </div>
 
@@ -38,6 +46,21 @@
       <div class="article-content" style="font-size: 16.5px; line-height: 1.8; color: var(--ink-soft);">
         {!! $article->content !!}
       </div>
+
+      @if($article->source_url)
+        <div style="margin-top: 32px; padding: 20px; border-radius: var(--radius-m); background: var(--bg-alt); border: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+          <div>
+            <div style="font-weight: 700; font-size: 14px; color: var(--ink);">Rujukan Publikasi Resmi</div>
+            <div style="font-size: 13px; color: var(--ink-soft); margin-top: 4px;">
+              Artikel ini disindikasikan dari <strong>{{ $article->source_name ?? 'Media Mitra' }}</strong>. Anda dapat membaca ulasan lengkap dari sumber aslinya.
+            </div>
+          </div>
+          <a href="{{ $article->source_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="white-space: nowrap; display: inline-flex; align-items: center; gap: 6px;">
+            <span>Buka Sumber Asli</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      @endif
 
       <!-- Author Box & Call-to-Action -->
       <footer style="margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--line); background: transparent; color: inherit; padding-left: 0; padding-right: 0;">

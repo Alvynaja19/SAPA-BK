@@ -28,7 +28,13 @@
           <div class="abody">
             <div>
               <div style="font-size: 12px; font-weight: 600; color: var(--primary); margin-bottom: 8px;">
-                Edukasi &amp; Konseling
+                @if($art->category === 'tips_ptn')
+                  Tips Masuk PTN &amp; SNBP
+                @elseif($art->category === 'kesehatan_mental')
+                  Kesehatan Mental Remaja
+                @else
+                  Edukasi &amp; Konseling
+                @endif
               </div>
               <h3>
                 <a href="{{ route('article.detail', $art->slug) }}">
@@ -41,7 +47,7 @@
             </div>
             <div>
               <div class="ameta">
-                <span>Oleh Guru BK</span>
+                <span>{{ $art->source_name ? 'Sumber: ' . $art->source_name : 'Oleh Tim Guru BK' }}</span>
                 <span>{{ $art->created_at ? $art->created_at->format('d M Y') : 'Terbaru' }}</span>
               </div>
               <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center;">
