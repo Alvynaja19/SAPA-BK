@@ -198,10 +198,10 @@
       gap: 12px;
     }
     .brand-mark {
-      width: 38px;
-      height: 38px;
+      width: 48px;
+      height: 48px;
       border-radius: 10px;
-      background: var(--primary);
+      background: transparent;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1139,8 +1139,8 @@
   <header class="nav">
     <div class="wrap nav-row">
       <div class="brand">
-        <a href="{{ route('home') }}" class="brand-mark" style="background: transparent;" aria-label="Beranda SAPA BK SMAN 4 Jember">
-          <img src="{{ asset('images/logo-sman4.png') }}" alt="Logo SMAN 4 Jember" style="width: 38px; height: 38px; object-fit: contain;" />
+        <a href="{{ route('home') }}" class="brand-mark" style="background: transparent; width: 48px; height: 48px;" aria-label="Beranda SAPA BK SMAN 4 Jember">
+          <img src="{{ asset('images/logo-sman4.png') }}" alt="Logo SMAN 4 Jember" style="width: 48px; height: 48px; object-fit: contain; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));" />
         </a>
         <div>
           <a href="{{ route('home') }}" class="brand-name">SAPA BK</a>
@@ -1195,11 +1195,11 @@
       <div class="foot-row">
         <!-- Kolom 1: SAPA BK -->
         <div class="foot-col">
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
-            <img src="{{ asset('images/logo-sman4.png') }}" alt="Logo SMAN 4 Jember" style="width: 42px; height: 42px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));" />
+          <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 14px;">
+            <img src="{{ asset('images/logo-sman4.png') }}" alt="Logo SMAN 4 Jember" style="width: 52px; height: 52px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));" />
             <div>
-              <div class="brand-name" style="color: #FFFFFF; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.1;">SAPA BK</div>
-              <div style="color: #A3CFAB; font-size: 11.5px; font-weight: 500; margin-top: 2px;">SMA Negeri 4 Jember</div>
+              <div class="brand-name" style="color: #FFFFFF; font-size: 21px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15;">SAPA BK</div>
+              <div style="color: #A3CFAB; font-size: 12px; font-weight: 500; margin-top: 3px;">SMA Negeri 4 Jember</div>
             </div>
           </div>
           <p style="font-size: 14.5px; line-height: 1.65; color: #E2EFE5;">

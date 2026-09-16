@@ -18,8 +18,8 @@
   <!-- Sidebar Brand Header -->
   <div class="h-[72px] flex items-center px-4 sm:px-5 border-b border-gray-200/80 dark:border-gray-800 justify-between shrink-0">
     <a href="{{ $role === 'admin' ? route('admin.dashboard') : route('bk.dashboard') }}" class="flex items-center gap-3 overflow-hidden">
-      <div class="h-10 w-10 shrink-0 flex items-center justify-center">
-        <img src="{{ asset('images/logo-sman4.png') }}" alt="Logo SMAN 4 Jember" class="h-9 w-9 object-contain drop-shadow-xs" />
+      <div class="h-12 w-12 shrink-0 flex items-center justify-center">
+        <img src="{{ asset('images/logo-sman4.png') }}" alt="Logo SMAN 4 Jember" class="h-11 w-11 object-contain drop-shadow-sm" style="width: 46px; height: 46px; max-width: 46px; max-height: 46px;" />
       </div>
       <div
         class="transition-opacity duration-200 whitespace-nowrap"

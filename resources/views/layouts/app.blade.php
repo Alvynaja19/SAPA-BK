@@ -173,10 +173,10 @@
       stroke: #FFFFFF;
     }
     .side-brand-mark {
-      width: 36px;
-      height: 36px;
-      border-radius: 9px;
-      background: rgba(255,255,255,0.15);
+      width: 46px;
+      height: 46px;
+      border-radius: 10px;
+      background: transparent;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -668,8 +668,8 @@
   <aside class="sidebar" id="sidebar">
     <div class="side-brand-header">
       <a href="{{ route('home') }}" class="side-brand">
-        <div class="side-brand-mark" aria-hidden="true" style="background: transparent; overflow: hidden;">
-          <img src="{{ asset('images/logo-sman4.png') }}" alt="Logo SMAN 4 Jember" style="width: 36px; height: 36px; object-fit: contain; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25));" />
+        <div class="side-brand-mark" aria-hidden="true" style="background: transparent; overflow: hidden; width: 46px; height: 46px;">
+          <img src="{{ asset('images/logo-sman4.png') }}" alt="Logo SMAN 4 Jember" style="width: 46px; height: 46px; object-fit: contain; filter: drop-shadow(0 1px 3px rgba(0,0,0,0.25));" />
         </div>
         <div>
           <div class="side-brand-name">SAPA BK</div>

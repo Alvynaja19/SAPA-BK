@@ -239,10 +239,10 @@
     gap: 12px;
   }
   .counselor-avatar {
-    width: 42px;
-    height: 42px;
+    width: 48px;
+    height: 48px;
     border-radius: 12px;
-    background: var(--primary);
+    background: transparent;
     color: #FFFFFF;
     display: flex;
     align-items: center;
@@ -729,8 +729,8 @@
       gap: 8px;
     }
     .counselor-avatar {
-      width: 36px;
-      height: 36px;
+      width: 40px;
+      height: 40px;
     }
     .counselor-name span {
       font-size: 13.5px;
@@ -911,11 +911,8 @@
           </svg>
           <span>Sesi</span>
         </button>
-        <div class="counselor-avatar" id="header-avatar">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 3v4M4.5 8.5 7 10M19.5 8.5 17 10M12 21v-7M6 14h12"/>
-            <circle cx="12" cy="7" r="3.2"/>
-          </svg>
+        <div class="counselor-avatar" id="header-avatar" style="background: transparent; overflow: hidden; width: 48px; height: 48px;">
+          <img src="{{ asset('images/logo-sman4.png') }}" alt="Logo SMAN 4 Jember" style="width: 48px; height: 48px; object-fit: contain; filter: drop-shadow(0 1px 3px rgba(0,0,0,0.2));" />
         </div>
         <div>
           <div class="counselor-name">
@@ -1437,12 +1434,9 @@
 
       // 5. Header & Banner AI
       liveBanner.classList.add('hidden');
-      headerAvatar.style.background = 'var(--primary)';
+      headerAvatar.style.background = 'transparent';
       headerAvatar.innerHTML = `
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 3v4M4.5 8.5 7 10M19.5 8.5 17 10M12 21v-7M6 14h12"/>
-          <circle cx="12" cy="7" r="3.2"/>
-        </svg>
+        <img src="{{ asset('images/logo-sman4.png') }}" alt="Logo SMAN 4 Jember" style="width: 48px; height: 48px; object-fit: contain; filter: drop-shadow(0 1px 3px rgba(0,0,0,0.2));" />
       `;
       sendBtn.classList.remove('btn-send-guru');
       chatTitle.innerText = "{{ $activeAiSession ? $activeAiSession->title : 'SAPA BK : Asisten Konseling Cerdas' }}";
