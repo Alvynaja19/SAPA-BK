@@ -16,11 +16,11 @@
       <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
     </div>
 
-    <div class="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-2">
+    <div class="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-2" id="student-list-container">
       @foreach($siswaList as $idx => $sw)
         <div
-          class="p-3 rounded-2xl border border-gray-100 dark:border-gray-800 hover:border-brand-300 hover:bg-brand-50/50 dark:hover:bg-gray-800/60 cursor-pointer transition-all flex items-center gap-3 {{ $idx === 0 ? 'bg-brand-50/70 border-brand-200 dark:bg-brand-950/40 dark:border-brand-800' : '' }}"
-          onclick="selectStudent('{{ $sw->name }}', '{{ $sw->kelas }}')"
+          class="student-card p-3 rounded-2xl border border-gray-100 dark:border-gray-800 hover:border-brand-300 hover:bg-brand-50/50 dark:hover:bg-gray-800/60 cursor-pointer transition-all flex items-center gap-3"
+          onclick="selectStudent(this, '{{ addslashes($sw->name) }}', '{{ addslashes($sw->kelas ?? 'Kelas Siswa') }}')"
         >
           <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-[#205A26] to-[#2E7D34] text-white font-bold flex items-center justify-center text-xs shrink-0">
             {{ strtoupper(substr($sw->name, 0, 2)) }}
@@ -120,9 +120,27 @@
 </div>
 
 <script>
-  function selectStudent(name, kelas) {
-    document.getElementById('current-student-name').innerText = name;
-    document.getElementById('current-student-class').innerText = kelas + ' • Status: Terhubung Sesi Konseling';
+  const activeClasses = ['bg-brand-50/70', 'border-brand-200', 'dark:bg-brand-950/40', 'dark:border-brand-800'];
+  const defaultClasses = ['border-gray-100', 'dark:border-gray-800'];
+
+  function selectStudent(element, name, kelas) {
+    // Kembalikan semua kartu siswa ke tampilan default (tidak berwarna hijau)
+    document.querySelectorAll('.student-card').forEach(card => {
+      card.classList.remove(...activeClasses);
+      card.classList.add(...defaultClasses);
+    });
+
+    // Beri warna hijau pada kartu siswa yang dipilih guru BK
+    if (element) {
+      element.classList.remove(...defaultClasses);
+      element.classList.add(...activeClasses);
+    }
+
+    const nameEl = document.getElementById('current-student-name');
+    if (nameEl) nameEl.innerText = name;
+
+    const classEl = document.getElementById('current-student-class');
+    if (classEl) classEl.innerText = (kelas || 'Kelas Siswa') + ' • Status: Terhubung Sesi Konseling';
   }
 
   function sendMessageLive() {
