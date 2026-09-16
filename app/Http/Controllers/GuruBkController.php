@@ -125,7 +125,14 @@ class GuruBkController extends Controller
 
         $articles = $query->latest()->paginate(10)->withQueryString();
 
-        return view('bk.artikel', compact('articles'));
+        $categoryCounts = [
+            'all' => Article::count(),
+            'tips_ptn' => Article::where('category', 'tips_ptn')->count(),
+            'kesehatan_mental' => Article::where('category', 'kesehatan_mental')->count(),
+            'umum' => Article::whereNotIn('category', ['tips_ptn', 'kesehatan_mental'])->count(),
+        ];
+
+        return view('bk.artikel', compact('articles', 'categoryCounts'));
     }
 
     public function simpanArtikel(Request $request): RedirectResponse
