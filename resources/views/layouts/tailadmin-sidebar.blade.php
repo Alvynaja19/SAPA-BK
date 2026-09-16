@@ -175,7 +175,7 @@
           title="Riwayat Sesi Chatbot"
         >
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3.6-3.091c-.555-.045-1.11-.103-1.66-.174M13.5 10.5h.008v.008H13.5V10.5zm-4.5 0h.008v.008H9V10.5zm-4.5 0h.008v.008H4.5V10.5z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 2a1.5 1.5 0 100 3 1.5 1.5 0 000-3zM12 5v3M4 11a3 3 0 013-3h10a3 3 0 013 3v6a3 3 0 01-3 3H7a3 3 0 01-3-3v-6zM2 13v2m20-2v2M9 13v2m6-2v2M10 17h4" />
           </svg>
           <span :class="{ 'block': $store.sidebar.isMobileOpen || $store.sidebar.isExpanded || $store.sidebar.isHovered, 'hidden': !$store.sidebar.isMobileOpen && !$store.sidebar.isExpanded && !$store.sidebar.isHovered }">Riwayat Chat AI</span>
         </a>

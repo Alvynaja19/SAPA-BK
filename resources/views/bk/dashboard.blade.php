@@ -53,13 +53,13 @@
 
     <div class="p-6 rounded-3xl bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 shadow-xs flex items-center justify-between">
       <div class="space-y-1">
-        <span class="text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Sesi Percakapan</span>
+        <span class="text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Sesi Percakapan AI</span>
         <h3 class="text-2xl font-black text-gray-900 dark:text-white">{{ $totalPercakapan }}</h3>
-        <p class="text-[11px] text-[#1C6EB4] font-semibold">Konsultasi siswa</p>
+        <p class="text-[11px] text-[#1C6EB4] font-semibold">Konsultasi Chatbot AI</p>
       </div>
       <div class="h-12 w-12 rounded-2xl bg-[#D9E9F6] text-[#1C6EB4] dark:bg-blue-950/60 dark:text-blue-300 flex items-center justify-center shrink-0">
         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 2a1.5 1.5 0 100 3 1.5 1.5 0 000-3zM12 5v3M4 11a3 3 0 013-3h10a3 3 0 013 3v6a3 3 0 01-3 3H7a3 3 0 01-3-3v-6zM2 13v2m20-2v2M9 13v2m6-2v2M10 17h4" />
         </svg>
       </div>
     </div>
