@@ -231,68 +231,69 @@
       <table class="w-full text-left border-collapse min-w-[920px]">
         <thead>
           <tr class="border-b border-gray-100 dark:border-gray-800 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider bg-gray-50/60 dark:bg-gray-800/40">
-            <th class="py-3.5 px-6 min-w-[340px] sm:min-w-[400px]">Artikel &amp; Konten</th>
-            <th class="py-3.5 px-6 w-36 whitespace-nowrap">Kategori</th>
-            <th class="py-3.5 px-6 w-44 whitespace-nowrap">Sumber / Penulis</th>
-            <th class="py-3.5 px-6 w-28 whitespace-nowrap">Status</th>
-            <th class="py-3.5 px-6 w-32 whitespace-nowrap">Tanggal Terbit</th>
-            <th class="py-3.5 px-6 w-28 text-right whitespace-nowrap">Opsi</th>
+            <th class="py-4 px-6 min-w-[360px] sm:min-w-[420px]">Artikel &amp; Konten</th>
+            <th class="py-4 px-6 w-36 whitespace-nowrap">Kategori</th>
+            <th class="py-4 px-6 w-44 whitespace-nowrap">Sumber / Penulis</th>
+            <th class="py-4 px-6 w-28 whitespace-nowrap">Status</th>
+            <th class="py-4 px-6 w-32 whitespace-nowrap">Tanggal Terbit</th>
+            <th class="py-4 px-6 w-28 text-right whitespace-nowrap">Opsi</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100 dark:divide-gray-800 text-xs text-gray-600 dark:text-gray-300">
           @forelse($articles as $art)
             <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/40 transition-colors group">
-              <!-- Thumbnail & Judul (Rapi, Sebaris, Lurus & Proporsional) -->
-              <td class="py-3.5 px-6 min-w-[340px] sm:min-w-[400px]">
-                <div class="flex items-center gap-3.5 min-w-0">
-                  <!-- Thumbnail Gambar (Uniform 60x42 Rounded) -->
-                  <div class="w-[60px] h-[42px] min-w-[60px] max-w-[60px] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 shrink-0 border border-gray-200/80 dark:border-gray-700 shadow-2xs relative flex items-center justify-center">
+              <!-- Thumbnail & Judul (Thumbnail 80x56px Pasti, Teks Judul Sebaris Lurus) -->
+              <td class="py-4 px-6 min-w-[360px] sm:min-w-[420px]">
+                <div class="flex items-center gap-4 min-w-0" style="display: flex; align-items: center; gap: 16px;">
+                  <!-- Thumbnail Gambar (Terkunci 80x56px) -->
+                  <div class="w-20 h-14 min-w-[80px] max-w-[80px] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 shrink-0 border border-gray-200/80 dark:border-gray-700 shadow-xs relative flex items-center justify-center" style="width: 80px; height: 56px; min-width: 80px; max-width: 80px; flex-shrink: 0; border-radius: 12px; overflow: hidden;">
                     @if($art->thumbnail)
                       <img
                         src="{{ Str::startsWith($art->thumbnail, ['http://', 'https://']) ? $art->thumbnail : asset($art->thumbnail) }}"
                         alt="{{ $art->title }}"
                         loading="lazy"
                         class="w-full h-full object-cover object-center block"
+                        style="width: 80px; height: 56px; min-width: 80px; max-width: 80px; object-fit: cover; display: block;"
                         onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.classList.remove('hidden');"
                       >
-                      <div class="hidden w-full h-full items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-400">
-                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <div class="hidden w-full h-full items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-400" style="width: 80px; height: 56px;">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                       </div>
                     @else
-                      <div class="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-400">
-                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <div class="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-400" style="width: 80px; height: 56px;">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                       </div>
                     @endif
                   </div>
 
-                  <!-- Judul & Cuplikan Konten (1 Baris Lurus & Rapi) -->
-                  <div class="min-w-0 flex-1">
+                  <!-- Judul & Cuplikan Konten (Sebaris & Lurus Sejajar) -->
+                  <div class="min-w-0 flex-1 space-y-1" style="min-width: 0; flex: 1;">
                     <a
                       href="{{ route('article.detail', $art->slug) }}"
                       target="_blank"
-                      class="font-bold text-xs sm:text-sm text-gray-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-400 transition-colors block"
-                      style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 100%;"
+                      class="font-bold text-sm text-gray-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-400 transition-colors block"
+                      style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; font-weight: 700; font-size: 14px;"
                       title="{{ $art->title }}"
                     >
                       {{ $art->title }}
                     </a>
                     <p
-                      class="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5"
-                      style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 100%;"
+                      class="text-xs text-gray-500 dark:text-gray-400"
+                      style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; font-size: 12px; color: #64748b;"
                       title="{{ strip_tags($art->content) }}"
                     >
-                      {{ Str::limit(strip_tags($art->content), 80) }}
+                      {{ Str::limit(strip_tags($art->content), 85) }}
                     </p>
                   </div>
                 </div>
               </td>
 
               <!-- Kategori -->
-              <td class="py-3.5 px-6 whitespace-nowrap">
+              <td class="py-4 px-6 whitespace-nowrap">
                 @if($art->category === 'tips_ptn')
                   <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800">
                     <span class="h-1.5 w-1.5 rounded-full bg-blue-500"></span>
@@ -312,7 +313,7 @@
               </td>
 
               <!-- Sumber / Penulis -->
-              <td class="py-3.5 px-6 whitespace-nowrap">
+              <td class="py-4 px-6 whitespace-nowrap">
                 @if($art->source_name)
                   <div>
                     <span class="font-semibold text-xs text-gray-900 dark:text-gray-100 block truncate max-w-[170px]" title="{{ $art->source_name }}">
@@ -338,7 +339,7 @@
               </td>
 
               <!-- Status -->
-              <td class="py-3.5 px-6 whitespace-nowrap">
+              <td class="py-4 px-6 whitespace-nowrap">
                 @if($art->is_published)
                   <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                     <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
@@ -353,12 +354,12 @@
               </td>
 
               <!-- Tanggal Terbit -->
-              <td class="py-3.5 px-6 whitespace-nowrap text-xs text-gray-600 dark:text-gray-300">
+              <td class="py-4 px-6 whitespace-nowrap text-xs text-gray-600 dark:text-gray-300">
                 {{ $art->created_at ? $art->created_at->format('d M Y') : '-' }}
               </td>
 
               <!-- Opsi -->
-              <td class="py-3.5 px-6 text-right whitespace-nowrap">
+              <td class="py-4 px-6 text-right whitespace-nowrap">
                 <div class="inline-flex items-center gap-2 justify-end">
                   <a
                     href="{{ route('article.detail', $art->slug) }}"
