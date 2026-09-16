@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SAPA BK : Portal Bimbingan & Konseling SMA Negeri 4 Jember</title>
   <meta name="description" content="SAPA BK SMA Negeri 4 Jember. Ruang aman dan terpercaya bagi siswa untuk berkonsultasi, mengakses materi bimbingan, dan terhubung dengan Guru BK." />
+  <link rel="icon" href="{{ asset('images/logo-sman4.png') }}" type="image/png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1173,12 +1174,9 @@
   <header class="nav">
     <div class="wrap nav-row">
       <div class="brand">
-        <div class="brand-mark" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 3v4M4.5 8.5 7 10M19.5 8.5 17 10M12 21v-7M6 14h12"/>
-            <circle cx="12" cy="7" r="3.2"/>
-          </svg>
-        </div>
+        <a href="{{ route('home') }}" class="brand-mark" style="background: transparent;" aria-label="Beranda SAPA BK SMAN 4 Jember">
+          <img src="{{ asset('images/logo-sman4.png') }}" alt="Logo SMAN 4 Jember" style="width: 38px; height: 38px; object-fit: contain;" />
+        </a>
         <div>
           <a href="{{ route('home') }}" class="brand-name">SAPA BK</a>
           <div class="brand-sub">SMA Negeri 4 Jember</div>
@@ -1611,7 +1609,13 @@
       <div class="foot-row">
         <!-- Kolom 1: SAPA BK -->
         <div class="foot-col">
-          <div class="brand-name" style="color: #FFFFFF; font-size: 22px; font-weight: 700; margin-bottom: 14px; letter-spacing: -0.01em;">SAPA BK</div>
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+            <img src="{{ asset('images/logo-sman4.png') }}" alt="Logo SMAN 4 Jember" style="width: 42px; height: 42px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));" />
+            <div>
+              <div class="brand-name" style="color: #FFFFFF; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.1;">SAPA BK</div>
+              <div style="color: #A3CFAB; font-size: 11.5px; font-weight: 500; margin-top: 2px;">SMA Negeri 4 Jember</div>
+            </div>
+          </div>
           <p style="font-size: 14.5px; line-height: 1.65; color: #E2EFE5;">
             Portal Bimbingan dan Konseling digital SMA Negeri 4 Jember. Ruang aman bagi seluruh siswa untuk bertanya, bercerita, dan merencanakan masa depan.
           </p>

@@ -7,7 +7,7 @@
   <meta name="description" content="Portal Konseling & Bimbingan Siswa SAPA BK SMA Negeri 4 Jember." />
 
   <!-- Favicon -->
-  <link rel="icon" href="{{ asset('saasable/images/favicon.ico') }}" type="image/x-icon" />
+  <link rel="icon" href="{{ asset('images/logo-sman4.png') }}" type="image/png" />
 
   <!-- Google Fonts: Fraunces & Work Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -668,11 +668,8 @@
   <aside class="sidebar" id="sidebar">
     <div class="side-brand-header">
       <a href="{{ route('home') }}" class="side-brand">
-        <div class="side-brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 3v4M4.5 8.5 7 10M19.5 8.5 17 10M12 21v-7M6 14h12"/>
-            <circle cx="12" cy="7" r="3.2"/>
-          </svg>
+        <div class="side-brand-mark" aria-hidden="true" style="background: transparent; overflow: hidden;">
+          <img src="{{ asset('images/logo-sman4.png') }}" alt="Logo SMAN 4 Jember" style="width: 36px; height: 36px; object-fit: contain; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25));" />
         </div>
         <div>
           <div class="side-brand-name">SAPA BK</div>

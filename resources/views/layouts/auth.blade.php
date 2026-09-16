@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>@yield('title', 'Autentikasi — SAPA BK SMAN 4 Jember')</title>
+  <title>@yield('title', 'Autentikasi : SAPA BK SMAN 4 Jember')</title>
   <meta name="description" content="Portal Konseling & Bimbingan Belajar Siswa SMA Negeri 4 Jember" />
+  <link rel="icon" href="{{ asset('images/logo-sman4.png') }}" type="image/png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -458,11 +459,8 @@
   <header class="auth-nav">
     <div class="auth-nav-inner">
       <a href="{{ route('home') }}" class="brand">
-        <div class="brand-mark">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EAF0EA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 3v4M4.5 8.5 7 10M19.5 8.5 17 10M12 21v-7M6 14h12"/>
-            <circle cx="12" cy="7" r="3.2"/>
-          </svg>
+        <div class="brand-mark" style="background: transparent;">
+          <img src="{{ asset('images/logo-sman4.png') }}" alt="Logo SMAN 4 Jember" style="width: 38px; height: 38px; object-fit: contain;" />
         </div>
         <div>
           <div class="brand-title">SAPA BK</div>

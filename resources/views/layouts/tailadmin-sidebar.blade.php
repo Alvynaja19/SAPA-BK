@@ -18,10 +18,8 @@
   <!-- Sidebar Brand Header -->
   <div class="h-[72px] flex items-center px-4 sm:px-5 border-b border-gray-200/80 dark:border-gray-800 justify-between shrink-0">
     <a href="{{ $role === 'admin' ? route('admin.dashboard') : route('bk.dashboard') }}" class="flex items-center gap-3 overflow-hidden">
-      <div class="h-10 w-10 shrink-0 rounded-2xl bg-brand-600 text-white flex items-center justify-center font-extrabold shadow-md shadow-brand-600/25 text-lg">
-        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-        </svg>
+      <div class="h-10 w-10 shrink-0 flex items-center justify-center">
+        <img src="{{ asset('images/logo-sman4.png') }}" alt="Logo SMAN 4 Jember" class="h-9 w-9 object-contain drop-shadow-xs" />
       </div>
       <div
         class="transition-opacity duration-200 whitespace-nowrap"

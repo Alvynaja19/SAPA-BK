@@ -8,7 +8,7 @@
   <title>@yield('title', 'Dashboard') | SAPA BK : SMAN 4 Jember</title>
 
   <!-- Favicon -->
-  <link rel="icon" href="{{ asset('saasable/images/favicon.ico') }}" type="image/x-icon" />
+  <link rel="icon" href="{{ asset('images/logo-sman4.png') }}" type="image/png" />
 
   <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
