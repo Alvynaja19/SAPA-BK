@@ -861,7 +861,7 @@
     <!-- 2. Daftar Sesi Live Chat Guru BK (Tampil saat mode Live Chat) -->
     <div class="chat-session-list custom-scrollbar" id="sessions-list-live" style="display: none;">
       <div class="session-channel-title" style="color: #1C6EB4;">Arsip Live Chat Guru BK</div>
-      @forelse($guruSessions as $s)
+      @forelse($guruSessions ?? [] as $s)
         <a href="{{ route('siswa.chat.session', $s->id) }}" 
            class="session-item {{ ($activeGuruSession && $activeGuruSession->id === $s->id) ? 'active-guru' : '' }}">
           <div class="session-icon session-icon-guru">
@@ -963,7 +963,7 @@
       <div style="display: flex; align-items: center; gap: 8px;">
         @if(!$activeGuruSession || $activeGuruSession->status === 'closed')
           <select id="select-guru-bk" style="font-size: 11.5px; font-weight: 600; padding: 4px 8px; border-radius: 8px; border: 1px solid #B8D5ED; background: #fff; color: #1C6EB4; outline: none;">
-            @foreach($guruList as $g)
+            @foreach($guruList ?? [] as $g)
               <option value="{{ $g->id }}">Konselor: {{ $g->name }}</option>
             @endforeach
           </select>
@@ -1207,7 +1207,7 @@
   let activeAiSessionId = "{{ $activeAiSession?->id ?? '' }}";
   let activeGuruSessionId = "{{ $activeGuruSession?->id ?? '' }}";
   let currentGuruSessionStatus = "{{ $activeGuruSession?->status ?? 'none' }}";
-  let hasActiveLiveSession = {{ ($guruSessions->where('status', 'active')->count() > 0) ? 'true' : 'false' }};
+  let hasActiveLiveSession = {{ (isset($guruSessions) && $guruSessions->where('status', 'active')->count() > 0) ? 'true' : 'false' }};
 
   // Elemen DOM Stream
   const streamAi = document.getElementById('messages-stream-ai');

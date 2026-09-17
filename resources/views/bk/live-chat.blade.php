@@ -22,14 +22,14 @@
           class="student-card p-3 rounded-2xl border transition-all flex items-center gap-3 cursor-pointer {{ $idx === 0 ? 'bg-brand-50/70 border-brand-200 dark:bg-brand-950/40 dark:border-brand-800' : 'border-gray-100 dark:border-gray-800 hover:border-brand-300 hover:bg-brand-50/50 dark:hover:bg-gray-800/60' }}"
           id="student-card-{{ $session->id }}"
           data-session-id="{{ $session->id }}"
-          onclick="selectStudentSession(this, {{ $session->id }}, '{{ addslashes($session->user->name ?? 'Siswa') }}', '{{ addslashes($session->user->kelas ?? 'Kelas Siswa') }}', '{{ $session->status }}')"
+          onclick="selectStudentSession(this, {{ $session->id }}, '{{ addslashes($session->user?->name ?? 'Siswa') }}', '{{ addslashes($session->user?->kelas ?? 'Kelas Siswa') }}', '{{ $session->status }}')"
         >
           <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-[#205A26] to-[#2E7D34] text-white font-bold flex items-center justify-center text-xs shrink-0">
-            {{ strtoupper(substr($session->user->name ?? 'S', 0, 2)) }}
+            {{ strtoupper(substr($session->user?->name ?? 'S', 0, 2)) }}
           </div>
           <div class="truncate flex-1">
-            <h4 class="font-bold text-xs text-gray-900 dark:text-white truncate">{{ $session->user->name ?? 'Siswa' }}</h4>
-            <p class="text-[11px] text-gray-400 font-medium">{{ $session->user->kelas ?? 'Kelas Siswa' }}</p>
+            <h4 class="font-bold text-xs text-gray-900 dark:text-white truncate">{{ $session->user?->name ?? 'Siswa' }}</h4>
+            <p class="text-[11px] text-gray-400 font-medium">{{ $session->user?->kelas ?? 'Kelas Siswa' }}</p>
           </div>
           <span class="h-2 w-2 rounded-full bg-emerald-500 shrink-0"></span>
         </div>
@@ -57,10 +57,10 @@
         </div>
         <div>
           <h3 class="text-xs sm:text-sm font-bold text-gray-900 dark:text-white" id="current-student-name">
-            {{ $selectedSession ? ($selectedSession->user->name ?? 'Siswa') : 'Pilih Antrean Siswa' }}
+            {{ $selectedSession ? ($selectedSession->user?->name ?? 'Siswa') : 'Pilih Antrean Siswa' }}
           </h3>
           <p class="text-[11px] text-gray-400 font-medium" id="current-student-class">
-            {{ $selectedSession ? (($selectedSession->user->kelas ?? 'Kelas Siswa') . ' • Status: Terhubung Sesi Konseling') : 'Belum ada sesi terpilih' }}
+            {{ $selectedSession ? (($selectedSession->user?->kelas ?? 'Kelas Siswa') . ' • Status: Terhubung Sesi Konseling') : 'Belum ada sesi terpilih' }}
           </p>
         </div>
       </div>
@@ -91,7 +91,7 @@
             <!-- Student Bubble -->
             <div class="flex items-start gap-3 max-w-xl">
               <div class="h-8 w-8 rounded-xl bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs font-bold flex items-center justify-center shrink-0">
-                {{ strtoupper(substr($selectedSession->user->name ?? 'S', 0, 1)) }}
+                {{ strtoupper(substr($selectedSession?->user?->name ?? 'S', 0, 1)) }}
               </div>
               <div class="space-y-1">
                 <div class="p-4 rounded-2xl rounded-tl-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs sm:text-sm shadow-xs border border-gray-100 dark:border-gray-700/60 leading-relaxed">

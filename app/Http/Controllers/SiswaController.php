@@ -6,6 +6,7 @@ use App\Models\ChatSession;
 use App\Models\Ebook;
 use App\Models\Questionnaire;
 use App\Models\QuestionnaireResult;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

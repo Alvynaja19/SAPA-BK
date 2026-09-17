@@ -246,4 +246,22 @@ class LiveChatCounselingTest extends TestCase
                 'message' => 'Sesi konseling ini telah diakhiri oleh Guru BK.',
             ]);
     }
+
+    public function test_student_can_render_chat_page_without_error(): void
+    {
+        $this->actingAs($this->student);
+
+        $response = $this->get(route('siswa.chat'));
+        $response->assertStatus(200);
+        $response->assertSee('Konselor: Dra. Hj. Siti Rahayu, M.Pd.');
+    }
+
+    public function test_teacher_can_render_live_chat_page_without_error(): void
+    {
+        $this->actingAs($this->teacherA);
+
+        $response = $this->get(route('bk.live-chat'));
+        $response->assertStatus(200);
+        $response->assertSee('Antrean Siswa Konseling');
+    }
 }
