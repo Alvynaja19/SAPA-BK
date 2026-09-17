@@ -52,6 +52,8 @@ Route::middleware('auth')->group(function () {
 
     // API Chat & Live Chat (dengan otentikasi sesi penuh)
     Route::prefix('api/chat')->group(function () {
+        Route::get('/teachers', [ChatApiController::class, 'teachers'])->name('api.chat.teachers');
+        Route::get('/live/active-session', [ChatApiController::class, 'activeLiveSession'])->name('api.chat.live.active');
         Route::post('/', [ChatApiController::class, 'sendMessage'])->name('api.chat.send');
         Route::post('/session', [ChatApiController::class, 'createSession'])->name('api.chat.session');
         Route::get('/history/{id}', [ChatApiController::class, 'history'])->name('api.chat.history');
@@ -65,6 +67,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/percakapan', [GuruBkController::class, 'percakapan'])->name('percakapan');
         Route::get('/percakapan/{id}', [GuruBkController::class, 'detailPercakapan'])->name('percakapan.detail');
         Route::get('/live-chat', [GuruBkController::class, 'liveChat'])->name('live-chat');
+        Route::get('/live-chat/api/queue', [GuruBkController::class, 'liveChatQueue'])->name('live-chat.queue');
+        Route::get('/live-chat/api/session/{sessionId}/messages', [GuruBkController::class, 'liveChatMessages'])->name('live-chat.messages');
+        Route::post('/live-chat/api/session/{sessionId}/send', [GuruBkController::class, 'sendLiveChatMessage'])->name('live-chat.send');
+        Route::post('/live-chat/api/session/{sessionId}/close', [GuruBkController::class, 'closeLiveChatSession'])->name('live-chat.close');
 
         Route::get('/ebook', [GuruBkController::class, 'ebook'])->name('ebook');
         Route::post('/ebook', [GuruBkController::class, 'simpanEbook'])->name('ebook.store');

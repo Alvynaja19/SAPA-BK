@@ -947,11 +947,31 @@
 
     <!-- Banner Info Khusus Live Chat Guru BK -->
     <div class="live-counselor-banner hidden" id="live-chat-banner">
-      <div style="display: flex; align-items: center; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
         <span class="status-dot-pulse"></span>
-        <span><strong>Live Konseling Terhubung</strong>: Guru BK piket SMAN 4 Jember siap berdiskusi langsung denganmu (Jam Layanan: 08.00 - 15.00 WIB).</span>
+        <span id="live-banner-desc">
+          @if($activeGuruSession && $activeGuruSession->status === 'active')
+            <strong>Live Konseling Terhubung</strong>: Berdiskusi langsung dengan <strong>{{ $activeGuruSession->teacher?->name ?? 'Guru BK' }}</strong> (Jam Layanan: 08.00 - 15.00 WIB).
+          @elseif($activeGuruSession && $activeGuruSession->status === 'closed')
+            <strong>Sesi Konseling Selesai</strong>: Ruang obrolan telah ditutup oleh Guru BK. Klik "Konsultasi Guru BK Baru" jika ingin bimbingan baru.
+          @else
+            <strong>Pilih Guru BK</strong>: Silakan pilih Guru BK tujuan sebelum memulai percakapan bimbingan.
+          @endif
+        </span>
       </div>
-      <span style="font-size: 11px; font-weight: 600;">Ruang BK Lt. 1</span>
+
+      <div style="display: flex; align-items: center; gap: 8px;">
+        @if(!$activeGuruSession || $activeGuruSession->status === 'closed')
+          <select id="select-guru-bk" style="font-size: 11.5px; font-weight: 600; padding: 4px 8px; border-radius: 8px; border: 1px solid #B8D5ED; background: #fff; color: #1C6EB4; outline: none;">
+            @foreach($guruList as $g)
+              <option value="{{ $g->id }}">Konselor: {{ $g->name }}</option>
+            @endforeach
+          </select>
+        @else
+          <span style="font-size: 11px; font-weight: 600; color: #1C6EB4;">{{ $activeGuruSession->teacher?->name ?? 'Guru BK Piket' }}</span>
+        @endif
+        <span style="font-size: 11px; font-weight: 600;">Ruang BK Lt. 1</span>
+      </div>
     </div>
 
     <!-- ========================================================
@@ -1186,6 +1206,8 @@
   let currentMode = "{{ $currentMode === 'guru_bk' ? 'live' : 'ai' }}";
   let activeAiSessionId = "{{ $activeAiSession?->id ?? '' }}";
   let activeGuruSessionId = "{{ $activeGuruSession?->id ?? '' }}";
+  let currentGuruSessionStatus = "{{ $activeGuruSession?->status ?? 'none' }}";
+  let hasActiveLiveSession = {{ ($guruSessions->where('status', 'active')->count() > 0) ? 'true' : 'false' }};
 
   // Elemen DOM Stream
   const streamAi = document.getElementById('messages-stream-ai');
@@ -1222,6 +1244,10 @@
 
   function startNewSession(mode) {
     if (mode === 'live') {
+      if (hasActiveLiveSession) {
+        alert('Anda masih memiliki 1 sesi konseling aktif dengan Guru BK. Harap selesaikan sesi konseling tersebut sebelum memulai konsultasi baru.');
+        return;
+      }
       window.location.href = "{{ route('siswa.chat') }}?mode=live&new=1";
     } else {
       window.location.href = "{{ route('siswa.chat') }}?new=1";
@@ -1409,8 +1435,17 @@
       sendBtn.classList.add('btn-send-guru');
       chatTitle.innerText = "{{ $activeGuruSession ? $activeGuruSession->title : 'Konsultasi Live : Guru BK SMAN 4 Jember' }}";
       headerStatusDesc.innerHTML = 'Layanan Konseling Privat Siswa &bull; Piket Aktif (08.00 - 15.00 WIB)';
-      chatInput.placeholder = 'Ketik pesan konsultasi langsung untuk Guru BK piket...';
       chatDisclaimer.innerHTML = 'Sesi dialog privat dengan Guru BK SMAN 4 Jember &bull; Terlindungi Kode Etik ABKIN';
+
+      if (currentGuruSessionStatus === 'closed') {
+        chatInput.disabled = true;
+        chatInput.placeholder = 'Sesi konseling ini telah diakhiri. Klik Konsultasi Guru BK Baru untuk memulai sesi baru.';
+        sendBtn.disabled = true;
+      } else {
+        chatInput.disabled = false;
+        chatInput.placeholder = 'Ketik pesan konsultasi langsung untuk Guru BK piket...';
+        sendBtn.disabled = false;
+      }
 
       scrollStreamToBottom('live');
     } else {
@@ -1441,6 +1476,8 @@
       sendBtn.classList.remove('btn-send-guru');
       chatTitle.innerText = "{{ $activeAiSession ? $activeAiSession->title : 'SAPA BK : Asisten Konseling Cerdas' }}";
       headerStatusDesc.innerHTML = 'Core RAG Bimbingan SMAN 4 Jember &bull; Online 24 Jam';
+      chatInput.disabled = false;
+      sendBtn.disabled = false;
       chatInput.placeholder = 'Tanyakan apa saja seputar studi dan informasi sekolah kepada Asisten AI...';
       chatDisclaimer.innerHTML = 'SAPA BK didukung oleh basis pengetahuan resmi Guru BK SMA Negeri 4 Jember &bull; Kerahasiaan data terjamin';
 
@@ -1454,11 +1491,19 @@
     const text = chatInput.value.trim();
     if (!text) return;
 
+    const targetMode = currentMode;
+
+    if (targetMode === 'live' && currentGuruSessionStatus === 'closed') {
+      alert('Sesi konseling ini telah diakhiri oleh Guru BK. Silakan klik Konsultasi Guru BK Baru untuk memulai bimbingan baru.');
+      return;
+    }
+
     chatInput.value = '';
 
-    const targetMode = currentMode;
     const targetSessionId = (targetMode === 'live') ? activeGuruSessionId : activeAiSessionId;
     const targetIndicator = (targetMode === 'live') ? typingIndicatorLive : typingIndicatorAi;
+    const teacherSelectEl = document.getElementById('select-guru-bk');
+    const selectedTeacherId = teacherSelectEl ? teacherSelectEl.value : null;
 
     // Pasang pesan siswa HANYA ke stream yang sedang aktif
     appendMessage(targetMode, 'user', text);
@@ -1476,7 +1521,8 @@
         body: JSON.stringify({
           session_id: targetSessionId || null,
           message: text,
-          mode: (targetMode === 'live') ? 'guru_bk' : 'ai'
+          mode: (targetMode === 'live') ? 'guru_bk' : 'ai',
+          teacher_id: (targetMode === 'live' && !targetSessionId) ? selectedTeacherId : null
         })
       });
 
@@ -1487,9 +1533,22 @@
         if (targetMode === 'live') {
           if (!activeGuruSessionId && data.session_id) {
             activeGuruSessionId = data.session_id;
+            currentGuruSessionStatus = data.status || 'active';
+            hasActiveLiveSession = true;
             chatTitle.innerText = data.user_message.content.substring(0, 30) + '...';
             window.history.replaceState(null, '', '/chat/' + data.session_id);
             addSessionToSidebar('live', data.session_id, data.user_message.content);
+            if (teacherSelectEl) teacherSelectEl.style.display = 'none';
+            const bannerDesc = document.getElementById('live-banner-desc');
+            if (bannerDesc && data.teacher) {
+              bannerDesc.innerHTML = `<strong>Live Konseling Terhubung</strong>: Berdiskusi langsung dengan <strong>${escapeHtml(data.teacher.name)}</strong>.`;
+            }
+          }
+          if (data.status === 'closed') {
+            currentGuruSessionStatus = 'closed';
+            chatInput.disabled = true;
+            chatInput.placeholder = 'Sesi konseling ini telah diakhiri oleh Guru BK.';
+            sendBtn.disabled = true;
           }
           appendMessage('live', 'counselor', data.assistant_message.content);
         } else {
@@ -1502,7 +1561,10 @@
           appendMessage('ai', 'assistant', data.assistant_message.content, data.assistant_message.metadata);
         }
       } else {
-        appendMessage(targetMode, targetMode === 'live' ? 'counselor' : 'assistant', 'Maaf, terjadi kendala saat mencatat pesan bimbingan. Silakan coba kembali.');
+        appendMessage(targetMode, targetMode === 'live' ? 'counselor' : 'assistant', data.message || 'Maaf, terjadi kendala saat mencatat pesan bimbingan. Silakan coba kembali.');
+        if (data.message && data.message.includes('masih memiliki 1 sesi konseling aktif')) {
+          hasActiveLiveSession = true;
+        }
       }
     } catch (err) {
       targetIndicator.style.display = 'none';
@@ -1511,6 +1573,36 @@
 
     scrollStreamToBottom(targetMode);
   }
+
+  // Polling update berkala saat siswa berada dalam mode live chat
+  async function pollStudentLiveChat() {
+    if (currentMode !== 'live' || !activeGuruSessionId) return;
+
+    try {
+      const response = await fetch(`/api/chat/history/${activeGuruSessionId}`, {
+        headers: { 'Accept': 'application/json' }
+      });
+      const res = await response.json();
+      if (res.success && res.data) {
+        const session = res.data;
+        if (session.status === 'closed' && currentGuruSessionStatus !== 'closed') {
+          currentGuruSessionStatus = 'closed';
+          hasActiveLiveSession = false;
+          chatInput.disabled = true;
+          chatInput.placeholder = 'Sesi konseling ini telah diakhiri oleh Guru BK. Klik Konsultasi Guru BK Baru untuk memulai sesi baru.';
+          sendBtn.disabled = true;
+          const bannerDesc = document.getElementById('live-banner-desc');
+          if (bannerDesc) {
+            bannerDesc.innerHTML = '<strong>Sesi Konseling Selesai</strong>: Ruang obrolan telah ditutup oleh Guru BK.';
+          }
+        }
+      }
+    } catch (e) {
+      // Silent error
+    }
+  }
+
+  setInterval(pollStudentLiveChat, 4000);
 
   // Menyisipkan bubble ke stream yang dituju secara presisi
   function appendMessage(streamMode, role, content, metadata = null) {

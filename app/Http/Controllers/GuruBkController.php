@@ -14,6 +14,7 @@ use App\Models\QuestionnaireQuestion;
 use App\Models\QuestionnaireResult;
 use App\Models\User;
 use App\Services\RssArticleService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -64,9 +65,178 @@ class GuruBkController extends Controller
 
     public function liveChat(): View
     {
-        $siswaList = User::where('role', 'siswa')->take(10)->get();
+        $counselorId = Auth::id();
 
-        return view('bk.live-chat', compact('siswaList'));
+        // 1. Panel Antrean Siswa Konseling: HARUS difilter berdasarkan teacher_id milik Guru BK yang sedang login
+        $activeQueue = ChatSession::with(['user', 'messages' => fn ($q) => $q->latest()->take(1)])
+            ->where('teacher_id', $counselorId)
+            ->where('mode', 'guru_bk')
+            ->where('status', 'active')
+            ->orderByDesc('updated_at')
+            ->get();
+
+        $selectedSession = $activeQueue->first();
+
+        // Load pesan sesi pertama jika ada antrean
+        $initialMessages = $selectedSession
+            ? ChatMessage::where('session_id', $selectedSession->id)->orderBy('created_at')->get()
+            : collect();
+
+        // Backward compatibility untuk variabel view yang sudah ada
+        $siswaList = $activeQueue->map(fn ($s) => $s->user)->filter()->unique('id');
+
+        return view('bk.live-chat', compact('activeQueue', 'selectedSession', 'initialMessages', 'siswaList'));
+    }
+
+    /**
+     * API Real-time Antrean Siswa Konseling khusus Guru BK yang login.
+     */
+    public function liveChatQueue(): JsonResponse
+    {
+        $counselorId = Auth::id();
+
+        $queue = ChatSession::with(['user', 'messages' => fn ($q) => $q->latest()->take(1)])
+            ->where('teacher_id', $counselorId)
+            ->where('mode', 'guru_bk')
+            ->where('status', 'active')
+            ->orderByDesc('updated_at')
+            ->get()
+            ->map(function ($s) {
+                $latestMessage = $s->messages->first();
+
+                return [
+                    'session_id' => $s->id,
+                    'student_id' => $s->user?->id,
+                    'name' => $s->user?->name ?? 'Siswa',
+                    'kelas' => $s->user?->kelas ?? 'Kelas Siswa',
+                    'initial' => strtoupper(substr($s->user?->name ?? 'S', 0, 2)),
+                    'status' => $s->status,
+                    'latest_message' => $latestMessage?->content ?? 'Sesi konseling baru dimulai...',
+                    'time' => $latestMessage?->created_at?->format('H:i') ?? $s->created_at?->format('H:i'),
+                ];
+            });
+
+        return response()->json([
+            'success' => true,
+            'count' => $queue->count(),
+            'data' => $queue,
+        ]);
+    }
+
+    /**
+     * API Riwayat pesan percakapan antara Guru BK dan Siswa terpilih.
+     */
+    public function liveChatMessages(int $sessionId): JsonResponse
+    {
+        $counselorId = Auth::id();
+
+        $session = ChatSession::with('user')->findOrFail($sessionId);
+
+        // Aturan Bisnis: Isolasi data konseling antar Guru BK
+        if ($session->teacher_id !== $counselorId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Akses ditolak. Sesi konseling ini ditangani oleh Guru BK lain.',
+            ], 403);
+        }
+
+        // Tandai pesan siswa sebagai telah dibaca
+        ChatMessage::where('session_id', $sessionId)
+            ->where('role', 'user')
+            ->where('is_read', false)
+            ->update([
+                'is_read' => true,
+                'read_at' => now(),
+            ]);
+
+        $messages = ChatMessage::where('session_id', $sessionId)
+            ->orderBy('created_at')
+            ->get()
+            ->map(fn ($m) => [
+                'id' => $m->id,
+                'role' => $m->role,
+                'sender_id' => $m->sender_id,
+                'content' => $m->content,
+                'time' => $m->created_at ? $m->created_at->format('H:i').' WIB' : '',
+                'metadata' => $m->metadata,
+            ]);
+
+        return response()->json([
+            'success' => true,
+            'session' => [
+                'id' => $session->id,
+                'status' => $session->status,
+                'student_name' => $session->user?->name ?? 'Siswa',
+                'student_class' => $session->user?->kelas ?? 'Kelas Siswa',
+                'is_closed' => $session->isClosed(),
+            ],
+            'messages' => $messages,
+        ]);
+    }
+
+    /**
+     * API Mengirim pesan balasan dari Guru BK ke Siswa.
+     */
+    public function sendLiveChatMessage(Request $request, int $sessionId): JsonResponse
+    {
+        $request->validate([
+            'message' => 'required|string|max:2000',
+        ]);
+
+        $counselorId = Auth::id();
+        $session = ChatSession::where('id', $sessionId)->where('teacher_id', $counselorId)->firstOrFail();
+
+        // Aturan Bisnis: Input terkunci jika sesi berstatus closed
+        if ($session->isClosed()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sesi konseling telah diakhiri. Tidak dapat mengirim pesan baru.',
+            ], 422);
+        }
+
+        $message = ChatMessage::create([
+            'session_id' => $session->id,
+            'sender_id' => $counselorId,
+            'role' => 'counselor',
+            'content' => $request->message,
+            'metadata' => [
+                'counselor' => Auth::user()->name,
+            ],
+        ]);
+
+        $session->touch();
+
+        return response()->json([
+            'success' => true,
+            'message' => [
+                'id' => $message->id,
+                'role' => 'counselor',
+                'content' => $message->content,
+                'time' => $message->created_at ? $message->created_at->format('H:i').' WIB' : 'Baru saja',
+            ],
+        ]);
+    }
+
+    /**
+     * API Mengakhiri/menyelesaikan konseling (mengubah status menjadi closed).
+     */
+    public function closeLiveChatSession(int $sessionId): JsonResponse
+    {
+        $counselorId = Auth::id();
+        $session = ChatSession::where('id', $sessionId)->where('teacher_id', $counselorId)->firstOrFail();
+
+        $session->update([
+            'status' => 'closed',
+            'closed_at' => now(),
+            'closed_by' => $counselorId,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Sesi konseling berhasil diakhiri.',
+            'session_id' => $session->id,
+            'status' => 'closed',
+        ]);
     }
 
     public function ebook(): View

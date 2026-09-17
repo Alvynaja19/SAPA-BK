@@ -58,12 +58,20 @@ class SiswaController extends Controller
             ->latest()
             ->get();
 
-        $guruSessions = ChatSession::with('messages')
+        // Daftar Guru BK yang tersedia untuk dipilih siswa
+        $guruList = User::where('role', 'guru_bk')
+            ->where('is_active', true)
+            ->select('id', 'name', 'no_hp')
+            ->orderBy('name')
+            ->get();
+
+        $guruSessions = ChatSession::with(['teacher', 'messages'])
             ->where('user_id', $user->id)
             ->where('mode', 'guru_bk')
             ->latest()
             ->get();
 
+        $activeLiveSession = $guruSessions->where('status', 'active')->first();
         $allSessions = ChatSession::where('user_id', $user->id)->latest()->get();
 
         // Tentukan mode aktif dan sesi yang sedang dibuka
@@ -72,11 +80,11 @@ class SiswaController extends Controller
         $currentSession = null;
 
         if ($session_id) {
-            $currentSession = ChatSession::with('messages')->where('user_id', $user->id)->findOrFail($session_id);
+            $currentSession = ChatSession::with(['teacher', 'messages'])->where('user_id', $user->id)->findOrFail($session_id);
             $currentMode = ($currentSession->mode === 'guru_bk') ? 'guru_bk' : 'ai';
         } elseif ($modeQuery === 'live' || $modeQuery === 'guru_bk') {
             $currentMode = 'guru_bk';
-            $currentSession = $isNew ? null : $guruSessions->first();
+            $currentSession = $isNew ? null : ($activeLiveSession ?? $guruSessions->first());
         } else {
             $currentMode = 'ai';
             $currentSession = $isNew ? null : $aiSessions->first();
@@ -84,13 +92,14 @@ class SiswaController extends Controller
 
         // Sesi aktif untuk masing-masing stream (agar stream lain tetap terisi)
         $activeAiSession = ($currentMode === 'ai') ? $currentSession : ($isNew ? null : $aiSessions->first());
-        $activeGuruSession = ($currentMode === 'guru_bk') ? $currentSession : ($isNew ? null : $guruSessions->first());
+        $activeGuruSession = ($currentMode === 'guru_bk') ? $currentSession : ($isNew ? null : ($activeLiveSession ?? $guruSessions->first()));
 
         // Backward compatibility: $sessions tetap dikirim jika dibutuhkan
         $sessions = ($currentMode === 'guru_bk') ? $guruSessions : $aiSessions;
 
         return view('siswa.chat', compact(
             'user',
+            'guruList',
             'aiSessions',
             'guruSessions',
             'allSessions',

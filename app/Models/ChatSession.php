@@ -13,9 +13,22 @@ class ChatSession extends Model
 
     protected $fillable = [
         'user_id',
+        'teacher_id',
         'title',
         'mode',
+        'status',
+        'started_at',
+        'closed_at',
+        'closed_by',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'started_at' => 'datetime',
+            'closed_at' => 'datetime',
+        ];
+    }
 
     public function isLiveChat(): bool
     {
@@ -27,9 +40,49 @@ class ChatSession extends Model
         return $this->mode === 'ai' || empty($this->mode);
     }
 
+    public function isActive(): bool
+    {
+        return $this->status === 'active';
+    }
+
+    public function isClosed(): bool
+    {
+        return $this->status === 'closed';
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active');
+    }
+
+    public function scopeClosed($query)
+    {
+        return $query->where('status', 'closed');
+    }
+
+    public function scopeForTeacher($query, int $teacherId)
+    {
+        return $query->where('teacher_id', $teacherId);
+    }
+
+    public function scopeForStudent($query, int $studentId)
+    {
+        return $query->where('user_id', $studentId);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function teacher(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'teacher_id');
+    }
+
+    public function closedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'closed_by');
     }
 
     public function messages(): HasMany

@@ -58,6 +58,16 @@ class User extends Authenticatable
         return $this->hasMany(ChatSession::class);
     }
 
+    public function counselingSessionsAsTeacher(): HasMany
+    {
+        return $this->hasMany(ChatSession::class, 'teacher_id');
+    }
+
+    public function counselingSessionsAsStudent(): HasMany
+    {
+        return $this->hasMany(ChatSession::class, 'user_id')->where('mode', 'guru_bk');
+    }
+
     public function ebooks(): HasMany
     {
         return $this->hasMany(Ebook::class, 'uploaded_by');

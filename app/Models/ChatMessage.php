@@ -13,14 +13,19 @@ class ChatMessage extends Model
 
     protected $fillable = [
         'session_id',
+        'sender_id',
         'role',
         'content',
+        'is_read',
+        'read_at',
         'metadata',
     ];
 
     protected function casts(): array
     {
         return [
+            'is_read' => 'boolean',
+            'read_at' => 'datetime',
             'metadata' => 'array',
         ];
     }
@@ -28,6 +33,11 @@ class ChatMessage extends Model
     public function session(): BelongsTo
     {
         return $this->belongsTo(ChatSession::class, 'session_id');
+    }
+
+    public function sender(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'sender_id');
     }
 
     public function evaluation(): HasOne

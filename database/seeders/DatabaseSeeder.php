@@ -29,15 +29,28 @@ class DatabaseSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        // 2. Akun Guru BK
-        $guruBk = User::create([
-            'name' => 'Dra. Hj. Siti Rahayu, M.Pd.',
-            'email' => 'gurubk@sman4jember.sch.id',
-            'password' => Hash::make('password'),
-            'role' => 'guru_bk',
-            'no_hp' => '081234567890',
-            'is_active' => true,
-        ]);
+        // 2. Akun Guru BK (Guru BK A & Guru BK B untuk pengujian isolasi antrean)
+        $guruBk = User::firstOrCreate(
+            ['email' => 'gurubk@sman4jember.sch.id'],
+            [
+                'name' => 'Dra. Hj. Siti Rahayu, M.Pd.',
+                'password' => Hash::make('password'),
+                'role' => 'guru_bk',
+                'no_hp' => '081234567890',
+                'is_active' => true,
+            ]
+        );
+
+        $guruBk2 = User::firstOrCreate(
+            ['email' => 'gurubk2@sman4jember.sch.id'],
+            [
+                'name' => 'Budi Santoso, S.Pd., Kons.',
+                'password' => Hash::make('password'),
+                'role' => 'guru_bk',
+                'no_hp' => '081234567891',
+                'is_active' => true,
+            ]
+        );
 
         // 3. Akun Siswa Teladan
         $siswa = User::create([

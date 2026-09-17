@@ -32,23 +32,51 @@ class ChatService
      *
      * @return array{session: ChatSession, user_message: ChatMessage, assistant_message: ChatMessage}
      */
-    public function processMessage(string $messageText, ?int $sessionId = null, ?User $user = null, string $mode = 'ai'): array
+    public function processMessage(string $messageText, ?int $sessionId = null, ?User $user = null, string $mode = 'ai', ?int $teacherId = null): array
     {
         $normalizedMode = ($mode === 'live' || $mode === 'guru_bk') ? 'guru_bk' : 'ai';
 
         // 1. Dapatkan atau buat sesi konsultasi
         if (! $sessionId) {
-            $title = ($normalizedMode === 'guru_bk')
-                ? 'Konsultasi Guru BK: '.mb_substr($messageText, 0, 30).'...'
-                : mb_substr($messageText, 0, 40).'...';
+            if ($normalizedMode === 'guru_bk') {
+                // Aturan Bisnis: Siswa hanya bisa memiliki 1 sesi konseling aktif
+                $existingActive = ChatSession::where('user_id', $user?->id)
+                    ->where('mode', 'guru_bk')
+                    ->where('status', 'active')
+                    ->first();
 
-            $session = ChatSession::create([
-                'user_id' => $user?->id,
-                'title' => $title,
-                'mode' => $normalizedMode,
-            ]);
+                if ($existingActive) {
+                    throw new \DomainException('Anda masih memiliki 1 sesi konseling aktif dengan Guru BK.');
+                }
+
+                // Tetapkan teacher_id jika disediakan atau ambil guru BK pertama yang aktif
+                $assignedTeacherId = $teacherId ?? User::where('role', 'guru_bk')->where('is_active', true)->value('id');
+
+                $session = ChatSession::create([
+                    'user_id' => $user?->id,
+                    'teacher_id' => $assignedTeacherId,
+                    'title' => 'Konsultasi: '.mb_substr($messageText, 0, 30).'...',
+                    'mode' => 'guru_bk',
+                    'status' => 'active',
+                    'started_at' => now(),
+                ]);
+            } else {
+                $session = ChatSession::create([
+                    'user_id' => $user?->id,
+                    'title' => mb_substr($messageText, 0, 40).'...',
+                    'mode' => 'ai',
+                    'status' => 'active',
+                    'started_at' => now(),
+                ]);
+            }
         } else {
-            $session = ChatSession::findOrFail($sessionId);
+            $session = ChatSession::with('teacher')->findOrFail($sessionId);
+
+            // Aturan Bisnis: Input chat terkunci jika sesi berstatus closed
+            if ($session->isClosed()) {
+                throw new \DomainException('Sesi konseling ini telah diakhiri oleh Guru BK.');
+            }
+
             if ($session->mode !== $normalizedMode && $normalizedMode === 'guru_bk') {
                 $session->update(['mode' => 'guru_bk']);
             }
@@ -57,18 +85,23 @@ class ChatService
         // 2. Simpan pesan dari pengguna
         $userMessage = ChatMessage::create([
             'session_id' => $session->id,
+            'sender_id' => $user?->id,
             'role' => 'user',
             'content' => $messageText,
         ]);
 
-        // 3. Jika mode Live Chat Guru BK, catat pesan balasan konselor
+        // 3. Jika mode Live Chat Guru BK, catat konfirmasi penerimaan konseling
         if ($normalizedMode === 'guru_bk') {
+            $teacher = $session->teacher ?? ($session->teacher_id ? User::find($session->teacher_id) : null);
+            $counselorName = $teacher?->name ?? 'Guru BK SMAN 4 Jember';
+
             $counselorMessage = ChatMessage::create([
                 'session_id' => $session->id,
+                'sender_id' => $session->teacher_id,
                 'role' => 'counselor',
-                'content' => 'Terima kasih telah berkonsultasi, '.($user ? explode(' ', $user->name)[0] : 'Siswa').'. Pesan bimbinganmu telah diterima oleh Guru BK piket SMAN 4 Jember. Kami siap mendiskusikan lebih lanjut baik melalui sesi ini maupun tatap muka langsung di Ruang BK sekolah.',
+                'content' => 'Terima kasih telah berkonsultasi, '.($user ? explode(' ', $user->name)[0] : 'Siswa').'. Pesan bimbinganmu telah masuk ke antrean '.$counselorName.'. Guru BK akan segera merespons langsung melalui sesi live chat ini.',
                 'metadata' => [
-                    'counselor' => 'Tim Konselor Guru BK SMAN 4 Jember',
+                    'counselor' => $counselorName,
                     'service' => 'Live Chat Konseling Guru BK',
                 ],
             ]);
