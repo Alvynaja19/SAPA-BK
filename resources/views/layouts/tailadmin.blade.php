@@ -173,6 +173,36 @@
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
       background: rgba(156, 163, 175, 0.7);
     }
+
+    /* TailAdmin Custom Confirm Modal */
+    .tailadmin-confirm-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease;
+    }
+    .tailadmin-confirm-backdrop.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .tailadmin-confirm-box {
+      width: 100%;
+      max-width: 440px;
+      transform: scale(0.95) translateY(6px);
+      transition: transform .2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .tailadmin-confirm-backdrop.is-open .tailadmin-confirm-box {
+      transform: scale(1) translateY(0);
+    }
   </style>
 
   @stack('styles')
@@ -221,7 +251,8 @@
           <div
             x-data="{ show: true }"
             x-show="show"
-            class="flex items-center justify-between gap-3 p-4 rounded-2xl bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60 shadow-xs"
+            x-transition
+            class="flex items-center justify-between gap-3 p-4 rounded-2xl bg-emerald-50 text-emerald-900 border border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-200 dark:border-emerald-800/60 shadow-xs"
           >
             <div class="flex items-center gap-3">
               <div class="h-8 w-8 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
@@ -231,7 +262,70 @@
               </div>
               <p class="text-xs sm:text-sm font-semibold">{{ session('success') }}</p>
             </div>
-            <button type="button" @click="show = false" class="text-emerald-600 hover:text-emerald-800 dark:text-emerald-400">
+            <button type="button" @click="show = false" class="text-emerald-600 hover:text-emerald-800 dark:text-emerald-400" aria-label="Tutup Notifikasi">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+          </div>
+        @endif
+
+        @if(session('error'))
+          <div
+            x-data="{ show: true }"
+            x-show="show"
+            x-transition
+            class="flex items-center justify-between gap-3 p-4 rounded-2xl bg-rose-50 text-rose-900 border border-rose-200 dark:bg-rose-950/50 dark:text-rose-200 dark:border-rose-800/60 shadow-xs"
+          >
+            <div class="flex items-center gap-3">
+              <div class="h-8 w-8 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <p class="text-xs sm:text-sm font-semibold">{{ session('error') }}</p>
+            </div>
+            <button type="button" @click="show = false" class="text-rose-600 hover:text-rose-800 dark:text-rose-400" aria-label="Tutup Notifikasi">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+          </div>
+        @endif
+
+        @if(session('warning'))
+          <div
+            x-data="{ show: true }"
+            x-show="show"
+            x-transition
+            class="flex items-center justify-between gap-3 p-4 rounded-2xl bg-amber-50 text-amber-900 border border-amber-200 dark:bg-amber-950/50 dark:text-amber-200 dark:border-amber-800/60 shadow-xs"
+          >
+            <div class="flex items-center gap-3">
+              <div class="h-8 w-8 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <p class="text-xs sm:text-sm font-semibold">{{ session('warning') }}</p>
+            </div>
+            <button type="button" @click="show = false" class="text-amber-600 hover:text-amber-800 dark:text-amber-400" aria-label="Tutup Notifikasi">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+          </div>
+        @endif
+
+        @if(session('info'))
+          <div
+            x-data="{ show: true }"
+            x-show="show"
+            x-transition
+            class="flex items-center justify-between gap-3 p-4 rounded-2xl bg-blue-50 text-blue-900 border border-blue-200 dark:bg-blue-950/50 dark:text-blue-200 dark:border-blue-800/60 shadow-xs"
+          >
+            <div class="flex items-center gap-3">
+              <div class="h-8 w-8 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <p class="text-xs sm:text-sm font-semibold">{{ session('info') }}</p>
+            </div>
+            <button type="button" @click="show = false" class="text-blue-600 hover:text-blue-800 dark:text-blue-400" aria-label="Tutup Notifikasi">
               <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
           </div>
@@ -241,7 +335,8 @@
           <div
             x-data="{ show: true }"
             x-show="show"
-            class="p-4 rounded-2xl bg-rose-50 text-rose-800 border border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/60 shadow-xs"
+            x-transition
+            class="p-4 rounded-2xl bg-rose-50 text-rose-900 border border-rose-200 dark:bg-rose-950/50 dark:text-rose-200 dark:border-rose-800/60 shadow-xs"
           >
             <div class="flex items-start justify-between gap-3">
               <div class="flex items-start gap-3">
@@ -259,7 +354,7 @@
                   </ul>
                 </div>
               </div>
-              <button type="button" @click="show = false" class="text-rose-600 hover:text-rose-800 dark:text-rose-400">
+              <button type="button" @click="show = false" class="text-rose-600 hover:text-rose-800 dark:text-rose-400" aria-label="Tutup Notifikasi Kesalahan">
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
@@ -272,6 +367,136 @@
       </main>
     </div>
   </div>
+
+  <!-- TailAdmin Custom Confirm Modal (SAPA BK) -->
+  <div
+    id="customConfirmModal"
+    class="tailadmin-confirm-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="confirmModalTitle"
+    aria-describedby="confirmModalDesc"
+  >
+    <div class="tailadmin-confirm-box rounded-3xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-2xl p-6 sm:p-7 text-center">
+      <!-- Icon Badge -->
+      <div id="confirmModalIconWrap" class="h-14 w-14 rounded-2xl mx-auto mb-4 flex items-center justify-center transition-colors">
+        <span id="confirmModalIcon"></span>
+      </div>
+
+      <!-- Title & Description -->
+      <h3 id="confirmModalTitle" class="text-lg sm:text-xl font-extrabold text-gray-900 dark:text-white tracking-tight font-title">
+        Konfirmasi Tindakan
+      </h3>
+      <p id="confirmModalDesc" class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">
+        Apakah Anda yakin ingin melanjutkan tindakan ini?
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-center gap-3 mt-6 pt-1">
+        <button
+          type="button"
+          id="confirmModalCancelBtn"
+          class="flex-1 min-h-[44px] px-4 py-2.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 font-semibold text-xs sm:text-sm transition-colors focus:outline-hidden focus:ring-2 focus:ring-gray-400 cursor-pointer"
+        >
+          Batal
+        </button>
+        <button
+          type="button"
+          id="confirmModalActionBtn"
+          class="flex-1 min-h-[44px] px-4 py-2.5 rounded-xl font-semibold text-xs sm:text-sm text-white shadow-md transition-all focus:outline-hidden focus:ring-2 focus:ring-offset-2 cursor-pointer"
+        >
+          Lanjutkan
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Confirm Modal Script -->
+  <script>
+    window.showConfirmModal = function(options) {
+      const modal = document.getElementById('customConfirmModal');
+      if (!modal) {
+        if (typeof options.onConfirm === 'function') options.onConfirm();
+        return;
+      }
+
+      const titleEl = document.getElementById('confirmModalTitle');
+      const descEl = document.getElementById('confirmModalDesc');
+      const cancelBtn = document.getElementById('confirmModalCancelBtn');
+      const actionBtn = document.getElementById('confirmModalActionBtn');
+      const iconWrap = document.getElementById('confirmModalIconWrap');
+      const iconEl = document.getElementById('confirmModalIcon');
+
+      titleEl.textContent = options.title || 'Konfirmasi Tindakan';
+      descEl.textContent = options.message || 'Apakah Anda yakin ingin melanjutkan tindakan ini?';
+      cancelBtn.textContent = options.cancelText || 'Batal';
+      actionBtn.textContent = options.confirmText || 'Lanjutkan';
+
+      const type = options.type || 'warning';
+
+      // Reset classes
+      iconWrap.className = 'h-14 w-14 rounded-2xl mx-auto mb-4 flex items-center justify-center transition-colors ';
+      actionBtn.className = 'flex-1 min-h-[44px] px-4 py-2.5 rounded-xl font-semibold text-xs sm:text-sm text-white shadow-md transition-all focus:outline-hidden focus:ring-2 focus:ring-offset-2 cursor-pointer ';
+
+      if (type === 'danger') {
+        iconWrap.className += 'bg-rose-50 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400 border border-rose-200/60 dark:border-rose-800/40';
+        actionBtn.className += 'bg-rose-600 hover:bg-rose-700 shadow-rose-600/25 focus:ring-rose-500';
+        iconEl.innerHTML = '<svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>';
+      } else if (type === 'success') {
+        iconWrap.className += 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/40';
+        actionBtn.className += 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/25 focus:ring-emerald-500';
+        iconEl.innerHTML = '<svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>';
+      } else if (type === 'info') {
+        iconWrap.className += 'bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 border border-blue-200/60 dark:border-blue-800/40';
+        actionBtn.className += 'bg-blue-600 hover:bg-blue-700 shadow-blue-600/25 focus:ring-blue-500';
+        iconEl.innerHTML = '<svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>';
+      } else {
+        // Default: warning
+        iconWrap.className += 'bg-amber-50 text-amber-600 dark:bg-amber-950/60 dark:text-amber-400 border border-amber-200/60 dark:border-amber-800/40';
+        actionBtn.className += 'bg-amber-600 hover:bg-amber-700 shadow-amber-600/25 focus:ring-amber-500';
+        iconEl.innerHTML = '<svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>';
+      }
+
+      modal.classList.add('is-open');
+      cancelBtn.focus();
+
+      function closeModal() {
+        modal.classList.remove('is-open');
+        cleanup();
+      }
+
+      function handleAction() {
+        closeModal();
+        if (typeof options.onConfirm === 'function') {
+          options.onConfirm();
+        }
+      }
+
+      function handleKeydown(e) {
+        if (e.key === 'Escape') {
+          closeModal();
+        }
+      }
+
+      function handleBackdropClick(e) {
+        if (e.target === modal) {
+          closeModal();
+        }
+      }
+
+      function cleanup() {
+        cancelBtn.removeEventListener('click', closeModal);
+        actionBtn.removeEventListener('click', handleAction);
+        document.removeEventListener('keydown', handleKeydown);
+        modal.removeEventListener('click', handleBackdropClick);
+      }
+
+      cancelBtn.addEventListener('click', closeModal);
+      actionBtn.addEventListener('click', handleAction);
+      document.addEventListener('keydown', handleKeydown);
+      modal.addEventListener('click', handleBackdropClick);
+    };
+  </script>
 
   @stack('scripts')
 </body>

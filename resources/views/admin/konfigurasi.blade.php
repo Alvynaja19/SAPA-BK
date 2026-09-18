@@ -1,6 +1,6 @@
 @extends('layouts.tailadmin')
 
-@section('title', 'Konfigurasi LLM & Vector DB — SAPA BK')
+@section('title', 'Konfigurasi LLM & Vector DB : SAPA BK')
 
 @section('content')
 <div class="space-y-6" x-data="{ testStatus: null, testing: false }">
@@ -45,7 +45,7 @@
   <div
     x-show="testStatus === 'success'"
     x-transition
-    class="p-4 rounded-2xl bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60 shadow-xs flex items-center justify-between"
+    class="p-4 rounded-2xl bg-emerald-50 text-emerald-900 border border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-200 dark:border-emerald-800/60 shadow-xs flex items-center justify-between"
     style="display: none;"
   >
     <div class="flex items-center gap-3">
@@ -56,7 +56,7 @@
         Koneksi Pipeline Berhasil! Google Gemini 2.0 Flash dan ChromaDB merespons dalam 142ms.
       </p>
     </div>
-    <button type="button" @click="testStatus = null" class="text-emerald-600 hover:text-emerald-800">
+    <button type="button" @click="testStatus = null" class="text-emerald-600 hover:text-emerald-800 dark:text-emerald-400" aria-label="Tutup Notifikasi">
       <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
     </button>
   </div>
@@ -100,7 +100,7 @@
             required
             class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500"
           >
-            <option value="gemini-2.0-flash" selected>Google Gemini 2.0 Flash (Direkomendasikan — Cepat & Responsif)</option>
+            <option value="gemini-2.0-flash" selected>Google Gemini 2.0 Flash (Direkomendasikan: Cepat & Responsif)</option>
             <option value="gemini-1.5-pro">Google Gemini 1.5 Pro (Penalaran Kompleks)</option>
             <option value="gemini-1.5-flash">Google Gemini 1.5 Flash (Legacy)</option>
           </select>
@@ -120,7 +120,7 @@
 
         <!-- Temperature -->
         <div>
-          <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1.5">Creativity / Temperature (0.0 — 1.0) *</label>
+          <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1.5">Creativity / Temperature (0.0 - 1.0) *</label>
           <input
             type="number"
             step="0.1"

@@ -1,6 +1,6 @@
 @extends('layouts.tailadmin')
 
-@section('title', 'Laporan & Statistik Penggunaan — SAPA BK')
+@section('title', 'Laporan & Statistik Penggunaan : SAPA BK')
 
 @section('content')
 <div class="space-y-6">

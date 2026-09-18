@@ -1,6 +1,6 @@
 @extends('layouts.tailadmin')
 
-@section('title', 'Manajemen Pengguna — SAPA BK')
+@section('title', 'Manajemen Pengguna : SAPA BK')
 
 @section('content')
 <div class="space-y-6" x-data="{ modalTambah: false }">
@@ -141,10 +141,10 @@
               <!-- Detail Data -->
               <td class="py-4 px-6 text-gray-500 dark:text-gray-400">
                 @if($u->role === 'siswa')
-                  <div>NISN: <span class="font-semibold text-gray-700 dark:text-gray-200">{{ $u->nisn ?? '—' }}</span></div>
-                  <div>Kelas: <span class="font-semibold text-gray-700 dark:text-gray-200">{{ $u->kelas ?? '—' }}</span></div>
+                  <div>NISN: <span class="font-semibold text-gray-700 dark:text-gray-200">{{ $u->nisn ?? '-' }}</span></div>
+                  <div>Kelas: <span class="font-semibold text-gray-700 dark:text-gray-200">{{ $u->kelas ?? '-' }}</span></div>
                 @else
-                  <div>No. HP: <span class="font-semibold text-gray-700 dark:text-gray-200">{{ $u->no_hp ?? '—' }}</span></div>
+                  <div>No. HP: <span class="font-semibold text-gray-700 dark:text-gray-200">{{ $u->no_hp ?? '-' }}</span></div>
                   <div class="text-[11px] text-gray-400">Staf Pendidikan</div>
                 @endif
               </td>
@@ -178,14 +178,23 @@
                   </a>
 
                   <!-- Toggle Status Form -->
-                  <form method="POST" action="{{ route('admin.users.toggle', $u->id) }}" onsubmit="return confirm('Apakah Anda yakin ingin mengubah status keaktifan akun {{ $u->name }}?')">
+                  <form id="toggle-user-form-{{ $u->id }}" method="POST" action="{{ route('admin.users.toggle', $u->id) }}">
                     @csrf
                     @method('PATCH')
                     @if($u->is_active)
                       <button
-                        type="submit"
-                        class="p-2 rounded-xl text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-950/50 transition-colors"
+                        type="button"
+                        onclick="showConfirmModal({
+                          title: 'Nonaktifkan Akun Pengguna?',
+                          message: 'Apakah Anda yakin ingin menonaktifkan akun {{ addslashes($u->name) }}? Pengguna ini tidak akan dapat login ke sistem hingga diaktifkan kembali.',
+                          confirmText: 'Ya, Nonaktifkan',
+                          cancelText: 'Batal',
+                          type: 'warning',
+                          onConfirm: () => document.getElementById('toggle-user-form-{{ $u->id }}').submit()
+                        })"
+                        class="p-2 rounded-xl text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-950/50 transition-colors cursor-pointer"
                         title="Nonaktifkan Akun"
+                        aria-label="Nonaktifkan Akun {{ $u->name }}"
                       >
                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
@@ -193,9 +202,18 @@
                       </button>
                     @else
                       <button
-                        type="submit"
-                        class="p-2 rounded-xl text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-colors"
+                        type="button"
+                        onclick="showConfirmModal({
+                          title: 'Aktifkan Akun Pengguna?',
+                          message: 'Apakah Anda yakin ingin mengaktifkan akun {{ addslashes($u->name) }}? Pengguna ini akan dapat login dan menggunakan hak aksesnya kembali.',
+                          confirmText: 'Ya, Aktifkan',
+                          cancelText: 'Batal',
+                          type: 'success',
+                          onConfirm: () => document.getElementById('toggle-user-form-{{ $u->id }}').submit()
+                        })"
+                        class="p-2 rounded-xl text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-colors cursor-pointer"
                         title="Aktifkan Akun"
+                        aria-label="Aktifkan Akun {{ $u->name }}"
                       >
                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />

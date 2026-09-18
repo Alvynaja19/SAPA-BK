@@ -1,6 +1,6 @@
 @extends('layouts.tailadmin')
 
-@section('title', "Detail Pengguna — {$user->name}")
+@section('title', "Detail Pengguna : {$user->name}")
 
 @section('content')
 <div class="space-y-6">
@@ -15,15 +15,37 @@
     </a>
 
     <!-- Status Toggle Action -->
-    <form method="POST" action="{{ route('admin.users.toggle', $user->id) }}">
+    <form id="toggle-detail-form" method="POST" action="{{ route('admin.users.toggle', $user->id) }}">
       @csrf
       @method('PATCH')
       @if($user->is_active)
-        <button type="submit" class="px-3.5 py-1.5 rounded-xl border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 dark:bg-rose-950/40 dark:border-rose-800 dark:text-rose-300 font-bold text-xs transition-colors">
+        <button
+          type="button"
+          onclick="showConfirmModal({
+            title: 'Nonaktifkan Akun Pengguna?',
+            message: 'Apakah Anda yakin ingin menonaktifkan akun {{ addslashes($user->name) }}? Pengguna ini tidak akan dapat login ke sistem hingga diaktifkan kembali.',
+            confirmText: 'Ya, Nonaktifkan',
+            cancelText: 'Batal',
+            type: 'warning',
+            onConfirm: () => document.getElementById('toggle-detail-form').submit()
+          })"
+          class="px-3.5 py-1.5 rounded-xl border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 dark:bg-rose-950/40 dark:border-rose-800 dark:text-rose-300 font-bold text-xs transition-colors cursor-pointer"
+        >
           Nonaktifkan Akun
         </button>
       @else
-        <button type="submit" class="px-3.5 py-1.5 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:border-emerald-800 dark:text-emerald-300 font-bold text-xs transition-colors">
+        <button
+          type="button"
+          onclick="showConfirmModal({
+            title: 'Aktifkan Akun Pengguna?',
+            message: 'Apakah Anda yakin ingin mengaktifkan akun {{ addslashes($user->name) }}? Pengguna ini akan dapat login dan menggunakan hak aksesnya kembali.',
+            confirmText: 'Ya, Aktifkan',
+            cancelText: 'Batal',
+            type: 'success',
+            onConfirm: () => document.getElementById('toggle-detail-form').submit()
+          })"
+          class="px-3.5 py-1.5 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:border-emerald-800 dark:text-emerald-300 font-bold text-xs transition-colors cursor-pointer"
+        >
           Aktifkan Akun
         </button>
       @endif
@@ -82,7 +104,7 @@
       </div>
       <div>
         <span class="text-gray-400 block mb-0.5">Kontak WhatsApp</span>
-        <span class="font-bold text-gray-800 dark:text-gray-200">{{ $user->no_hp ?? '—' }}</span>
+        <span class="font-bold text-gray-800 dark:text-gray-200">{{ $user->no_hp ?? '-' }}</span>
       </div>
       <div>
         <span class="text-gray-400 block mb-0.5">Status Akun</span>
