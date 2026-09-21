@@ -23,7 +23,7 @@
       <button type="button" onclick="fillCredentials('gurubk@sman4jember.sch.id', 'password')" class="preset-btn">
         Guru BK
       </button>
-      <button type="button" onclick="fillCredentials('admin@sman4jember.sch.id', 'password')" class="preset-btn">
+      <button type="button" onclick="fillCredentials('admin@gmail.com', 'Admin123456')" class="preset-btn">
         Admin
       </button>
     </div>

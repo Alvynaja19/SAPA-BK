@@ -21,13 +21,15 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // 1. Akun Administrator
-        $admin = User::create([
-            'name' => 'Administrator SAPA BK',
-            'email' => 'admin@sman4jember.sch.id',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-            'is_active' => true,
-        ]);
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@gmail.com'],
+            [
+                'name' => 'Administrator SAPA BK',
+                'password' => Hash::make('Admin123456'),
+                'role' => 'admin',
+                'is_active' => true,
+            ]
+        );
 
         // 2. Akun Guru BK (Guru BK A & Guru BK B untuk pengujian isolasi antrean)
         $guruBk = User::firstOrCreate(

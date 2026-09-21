@@ -38,10 +38,9 @@ class VerifySapaBk extends Command
         $this->line("• Total Artikel Edukasi: <fg=green>$articleCount</>");
         $this->line("• Total Kuesioner Asesmen: <fg=green>$questionnaireCount</>");
 
-        // 2. Verifikasi Akun Pengguna Kunci
         $siswa = User::where('email', 'siswa@sman4jember.sch.id')->first();
         $guru = User::where('email', 'gurubk@sman4jember.sch.id')->first();
-        $admin = User::where('email', 'admin@sman4jember.sch.id')->first();
+        $admin = User::whereIn('email', ['admin@gmail.com', 'admin@sman4jember.sch.id'])->first();
 
         if ($siswa && $guru && $admin) {
             $this->info('✓ Seluruh Akun Demo (Siswa, Guru BK, Admin) Berhasil Divalidasi.');
