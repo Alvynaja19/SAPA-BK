@@ -12,6 +12,7 @@ use App\Models\Questionnaire;
 use App\Models\QuestionnaireResult;
 use App\Models\Student;
 use App\Models\User;
+use App\Services\DashboardAnalyticsService;
 use App\Services\ExcelCsvReader;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,13 +23,17 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AdminController extends Controller
 {
-    public function dashboard(): View
+    public function dashboard(DashboardAnalyticsService $analytics): View
     {
         $stats = [
             'total_users' => User::count(),
             'total_siswa' => User::where('role', 'siswa')->count(),
             'total_guru_bk' => User::where('role', 'guru_bk')->count(),
             'total_admin' => User::where('role', 'admin')->count(),
+            'total_ai_sessions' => ChatSession::where(function ($q) {
+                $q->where('mode', 'ai')->orWhereNull('mode');
+            })->count(),
+            'total_live_sessions' => ChatSession::where('mode', 'guru_bk')->count(),
             'total_sessions' => ChatSession::count(),
             'total_messages' => ChatMessage::count(),
             'total_knowledge' => KnowledgeDocument::count(),
@@ -36,13 +41,23 @@ class AdminController extends Controller
             'total_articles' => Article::count(),
             'total_evaluations' => ChatEvaluation::count(),
             'good_evaluations' => ChatEvaluation::where('rating', 'good')->count(),
+            'active_live_sessions' => ChatSession::where('mode', 'guru_bk')->where('status', 'active')->count(),
         ];
 
+        $trendData = $analytics->getTrendData();
+        $popularTopics = $analytics->getPopularTopics();
+        $recentSessions = $analytics->getRecentSessions(10);
         $recentUsers = User::latest()->take(6)->get();
-        $recentSessions = ChatSession::with('user')->latest()->take(5)->get();
         $recentKnowledge = KnowledgeDocument::with('uploader')->latest()->take(4)->get();
 
-        return view('admin.dashboard', compact('stats', 'recentUsers', 'recentSessions', 'recentKnowledge'));
+        return view('admin.dashboard', compact(
+            'stats',
+            'trendData',
+            'popularTopics',
+            'recentSessions',
+            'recentUsers',
+            'recentKnowledge'
+        ));
     }
 
     public function users(Request $request): View

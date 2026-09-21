@@ -13,6 +13,7 @@ use App\Models\Questionnaire;
 use App\Models\QuestionnaireQuestion;
 use App\Models\QuestionnaireResult;
 use App\Models\User;
+use App\Services\DashboardAnalyticsService;
 use App\Services\RssArticleService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -23,21 +24,37 @@ use Illuminate\View\View;
 
 class GuruBkController extends Controller
 {
-    public function dashboard(): View
+    public function dashboard(DashboardAnalyticsService $analytics): View
     {
-        $totalSiswa = User::where('role', 'siswa')->count();
-        $totalPercakapan = ChatSession::count();
-        $totalEbook = Ebook::count();
-        $totalArtikel = Article::count();
-        $recentPercakapan = ChatSession::with('user')->latest()->take(6)->get();
+        $counselorId = Auth::id();
+
+        $stats = [
+            'total_siswa' => User::where('role', 'siswa')->count(),
+            'total_ai_sessions' => ChatSession::where(function ($q) {
+                $q->where('mode', 'ai')->orWhereNull('mode');
+            })->count(),
+            'total_live_sessions' => ChatSession::where('mode', 'guru_bk')->count(),
+            'my_live_sessions' => ChatSession::where('mode', 'guru_bk')->where('teacher_id', $counselorId)->count(),
+            'total_percakapan' => ChatSession::count(),
+            'total_ebook' => Ebook::count(),
+            'total_artikel' => Article::count(),
+            'active_queue' => ChatSession::where('teacher_id', $counselorId)
+                ->where('mode', 'guru_bk')
+                ->where('status', 'active')
+                ->count(),
+            'pending_evaluations_count' => ChatMessage::where('role', 'assistant')->doesntHave('evaluation')->count(),
+        ];
+
+        $trendData = $analytics->getTrendData($counselorId);
+        $popularTopics = $analytics->getPopularTopics();
+        $recentSessions = $analytics->getRecentSessions(10, $counselorId);
         $pendingEvaluations = ChatMessage::where('role', 'assistant')->doesntHave('evaluation')->latest()->take(5)->get();
 
         return view('bk.dashboard', compact(
-            'totalSiswa',
-            'totalPercakapan',
-            'totalEbook',
-            'totalArtikel',
-            'recentPercakapan',
+            'stats',
+            'trendData',
+            'popularTopics',
+            'recentSessions',
             'pendingEvaluations'
         ));
     }

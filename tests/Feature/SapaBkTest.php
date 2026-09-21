@@ -59,8 +59,14 @@ class SapaBkTest extends TestCase
         $guru = User::where('role', 'guru_bk')->first();
         if ($guru) {
             $this->actingAs($guru);
-            $this->get('/bk/dashboard')->assertStatus(200);
-            $this->get('/bk/siswa')->assertStatus(200);
+            $response = $this->get('/bk/dashboard');
+            $response->assertStatus(200);
+            $response->assertSee('Konsultasi Chatbot AI');
+            $response->assertSee('Live Chat Guru BK');
+            $response->assertSee('Tren Konsultasi Siswa');
+            $response->assertSee('Percakapan &amp; Konseling Terbaru', false);
+
+            $this->get('/bk/siswa')->assertRedirect(route('admin.users'));
             $this->get('/bk/percakapan')->assertStatus(200);
             $this->get('/bk/live-chat')->assertStatus(200);
             $this->get('/bk/ebook')->assertStatus(200);
@@ -77,7 +83,13 @@ class SapaBkTest extends TestCase
         $admin = User::where('role', 'admin')->first();
         if ($admin) {
             $this->actingAs($admin);
-            $this->get('/admin/dashboard')->assertStatus(200);
+            $response = $this->get('/admin/dashboard');
+            $response->assertStatus(200);
+            $response->assertSee('Konsultasi Chatbot AI');
+            $response->assertSee('Live Chat Guru BK');
+            $response->assertSee('Tren Konsultasi Siswa');
+            $response->assertSee('Percakapan &amp; Konseling Terbaru', false);
+
             $this->get('/admin/users')->assertStatus(200);
             $this->get('/admin/konfigurasi')->assertStatus(200);
             $this->get('/admin/log')->assertStatus(200);

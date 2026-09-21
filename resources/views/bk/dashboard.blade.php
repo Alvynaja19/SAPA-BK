@@ -1,174 +1,527 @@
 @extends('layouts.tailadmin')
 
-@section('title', 'Dashboard Guru BK : SAPA BK SMAN 4 Jember')
+@section('title', 'Dashboard Guru BK | SAPA BK SMAN 4 Jember')
 
 @section('content')
-<div class="space-y-6">
+<div class="space-y-6" x-data="counselorDashboard()">
 
-  <!-- Welcome Greeting Hero Banner -->
-  <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#1C2B18] via-[#205A26] to-[#2E7D34] text-white p-6 sm:p-10 shadow-xl shadow-[#2E7D34]/20 border border-[#B4DAB7]/20">
-    <div class="relative z-10 max-w-2xl space-y-3">
-      <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F4B400]/20 text-[#FBE9AE] text-xs font-semibold backdrop-blur-md border border-[#F4B400]/30">
-        <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true"></span>
-        <span>Portal Guru BK : SMA Negeri 4 Jember</span>
-      </span>
-      <h1 class="text-2xl sm:text-4xl font-black tracking-tight">
-        Selamat Datang, {{ auth()->user()->name }} 👋
+  <!-- Page Title Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <div>
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
+        Dashboard
       </h1>
-      <p class="text-xs sm:text-sm text-brand-100 leading-relaxed font-normal">
-        Pantau kebutuhan konseling siswa, tinjau kualitas jawaban asisten cerdas, kelola dokumen bimbingan, serta fasilitasi konsultasi daring dengan siswa SMA Negeri 4 Jember.
+      <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
+        Ringkasan aktivitas bimbingan konseling siswa, analitik Chatbot AI, dan sesi Live Chat Guru BK.
       </p>
-      <div class="pt-3 flex flex-wrap items-center gap-3">
-        <a href="{{ route('bk.knowledge') }}" class="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-xl bg-white text-[#205A26] font-bold text-xs shadow-lg hover:bg-brand-50 transition-all">
-          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-          </svg>
-          <span>Kelola Materi Knowledge Base</span>
-        </a>
-        <a href="{{ route('bk.live-chat') }}" class="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white font-semibold text-xs border border-white/20 backdrop-blur-md transition-all">
-          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-          </svg>
-          <span>Live Chat Konseling (08.00 - 15.00)</span>
-        </a>
-      </div>
+    </div>
+
+    <!-- Quick Status Badge -->
+    <div class="flex items-center gap-2">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40">
+        <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true"></span>
+        <span>Layanan Konseling Aktif</span>
+      </span>
     </div>
   </div>
 
-  <!-- Metric Statistics Cards -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+  <!-- 4 Top Metric Cards (Matches Mockup) -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
     
-    <div class="p-6 rounded-3xl bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 shadow-xs flex items-center justify-between">
-      <div class="space-y-1">
-        <span class="text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Siswa Terdaftar</span>
-        <h3 class="text-2xl font-black text-gray-900 dark:text-white">{{ $totalSiswa }}</h3>
-        <p class="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold">Peserta didik aktif</p>
-      </div>
-      <div class="h-12 w-12 rounded-2xl bg-brand-50 text-brand-700 dark:bg-brand-950/60 dark:text-brand-400 flex items-center justify-center shrink-0">
+    <!-- Card 1: Siswa Aktif (Soft Blue Icon) -->
+    <div class="bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 shadow-xs flex items-center gap-4">
+      <div class="h-12 w-12 rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 flex items-center justify-center shrink-0">
         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
         </svg>
       </div>
-    </div>
-
-    <div class="p-6 rounded-3xl bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 shadow-xs flex items-center justify-between">
-      <div class="space-y-1">
-        <span class="text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Sesi Percakapan AI</span>
-        <h3 class="text-2xl font-black text-gray-900 dark:text-white">{{ $totalPercakapan }}</h3>
-        <p class="text-[11px] text-[#1C6EB4] font-semibold">Konsultasi Chatbot AI</p>
-      </div>
-      <div class="h-12 w-12 rounded-2xl bg-[#D9E9F6] text-[#1C6EB4] dark:bg-blue-950/60 dark:text-blue-300 flex items-center justify-center shrink-0">
-        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 2a1.5 1.5 0 100 3 1.5 1.5 0 000-3zM12 5v3M4 11a3 3 0 013-3h10a3 3 0 013 3v6a3 3 0 01-3 3H7a3 3 0 01-3-3v-6zM2 13v2m20-2v2M9 13v2m6-2v2M10 17h4" />
-        </svg>
+      <div class="min-w-0 flex-1">
+        <div class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white leading-tight">
+          {{ number_format($stats['total_siswa'] ?? 0) }}
+        </div>
+        <div class="text-xs text-gray-500 dark:text-gray-400 font-medium truncate mt-0.5">
+          Siswa Bimbingan Aktif
+        </div>
       </div>
     </div>
 
-    <div class="p-6 rounded-3xl bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 shadow-xs flex items-center justify-between">
-      <div class="space-y-1">
-        <span class="text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">E-Book Bimbingan</span>
-        <h3 class="text-2xl font-black text-gray-900 dark:text-white">{{ $totalEbook }}</h3>
-        <p class="text-[11px] text-[#7A5200] dark:text-amber-300 font-semibold">Buku panduan digital</p>
-      </div>
-      <div class="h-12 w-12 rounded-2xl bg-[#FEFBF0] text-[#7A5200] dark:bg-amber-950/60 dark:text-amber-300 border border-[#FBE9AE]/80 dark:border-amber-800/40 flex items-center justify-center shrink-0">
+    <!-- Card 2: Konsultasi Chatbot AI (Soft Amber Icon) -->
+    <div class="bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 shadow-xs flex items-center gap-4">
+      <div class="h-12 w-12 rounded-xl bg-amber-50 text-amber-600 dark:bg-amber-950/60 dark:text-amber-400 flex items-center justify-center shrink-0">
         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
         </svg>
+      </div>
+      <div class="min-w-0 flex-1">
+        <div class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white leading-tight">
+          {{ number_format($stats['total_ai_sessions'] ?? 0) }}
+        </div>
+        <div class="text-xs text-gray-500 dark:text-gray-400 font-medium truncate mt-0.5">
+          Konsultasi Chatbot AI
+        </div>
       </div>
     </div>
 
-    <div class="p-6 rounded-3xl bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 shadow-xs flex items-center justify-between">
-      <div class="space-y-1">
-        <span class="text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Artikel Layanan</span>
-        <h3 class="text-2xl font-black text-gray-900 dark:text-white">{{ $totalArtikel }}</h3>
-        <p class="text-[11px] text-amber-700 dark:text-amber-400 font-semibold">Materi edukasi BK</p>
-      </div>
-      <div class="h-12 w-12 rounded-2xl bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400 flex items-center justify-center shrink-0">
+    <!-- Card 3: Live Chat Guru BK (Soft Red/Rose Icon) -->
+    <div class="bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 shadow-xs flex items-center gap-4">
+      <div class="h-12 w-12 rounded-xl bg-rose-50 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400 flex items-center justify-center shrink-0">
         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
         </svg>
+      </div>
+      <div class="min-w-0 flex-1">
+        <div class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white leading-tight">
+          {{ number_format($stats['total_live_sessions'] ?? 0) }}
+        </div>
+        <div class="text-xs text-gray-500 dark:text-gray-400 font-medium truncate mt-0.5">
+          Live Chat Guru BK
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4: Dokumen & Materi Bimbingan (Soft Emerald Icon) -->
+    <div class="bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 shadow-xs flex items-center gap-4">
+      <div class="h-12 w-12 rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400 flex items-center justify-center shrink-0">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+      </div>
+      <div class="min-w-0 flex-1">
+        <div class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white leading-tight">
+          {{ number_format(($stats['total_ebook'] ?? 0) + ($stats['total_artikel'] ?? 0)) }}
+        </div>
+        <div class="text-xs text-gray-500 dark:text-gray-400 font-medium truncate mt-0.5">
+          Materi Bimbingan (E-Book &amp; Artikel)
+        </div>
       </div>
     </div>
 
   </div>
 
-  <!-- Two Columns: Sesi Percakapan Terbaru & Antrean Evaluasi -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <!-- Wide Card: Tren Konsultasi (Chatbot AI vs Live Chat BK) -->
+  <div class="bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
     
-    <!-- Sesi Percakapan Terkini -->
-    <div class="rounded-3xl bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 shadow-xs overflow-hidden">
-      <div class="p-6 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
-        <div>
-          <h2 class="text-base font-bold text-gray-900 dark:text-white">Percakapan Siswa Terbaru</h2>
-          <p class="text-xs text-gray-600 dark:text-gray-400">Sesi bimbingan siswa yang baru saja berlangsung.</p>
+    <!-- Chart Header & Controls -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <!-- Title & Subtitle -->
+      <div class="space-y-1">
+        <div class="flex items-center gap-2">
+          <svg class="h-4 w-4 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg>
+          <h2 class="text-base font-bold text-gray-900 dark:text-white">Tren Konsultasi Siswa</h2>
         </div>
-        <a href="{{ route('bk.percakapan') }}" class="text-xs font-bold text-brand-700 hover:text-brand-800 dark:text-brand-400 p-2">
-          Lihat Semua
-        </a>
+        <p class="text-xs text-gray-500 dark:text-gray-400">
+          Perbandingan frekuensi penggunaan Chatbot AI vs Live Chat Guru BK
+        </p>
       </div>
 
-      <div class="divide-y divide-gray-100 dark:divide-gray-800 text-xs">
-        @forelse($recentPercakapan as $session)
-          <div class="p-4 sm:px-6 flex items-center justify-between gap-4 hover:bg-gray-50/50 dark:hover:bg-gray-800/40 transition-colors">
-            <div class="flex items-center gap-3 min-w-0">
-              <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-[#205A26] to-[#2E7D34] text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
-                {{ strtoupper(substr($session->user?->name ?? 'Tamu', 0, 2)) }}
-              </div>
-              <div class="min-w-0">
-                <span class="font-bold text-gray-900 dark:text-white block truncate">{{ $session->title }}</span>
-                <span class="text-[11px] text-gray-500 dark:text-gray-400 block truncate">
-                  {{ $session->user ? $session->user->name . ' (' . ($session->user->kelas ?? 'Siswa') . ')' : 'Pengunjung Tamu' }} &bull; {{ $session->created_at->diffForHumans() }}
-                </span>
-              </div>
-            </div>
-            <a href="{{ route('bk.percakapan.detail', $session->id) }}" class="min-h-[36px] px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-brand-50 hover:text-brand-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 text-xs font-semibold shrink-0 inline-flex items-center justify-center transition-colors">
-              Detail Sesi
-            </a>
+      <!-- Controls: Legend, Period Filter & Summary -->
+      <div class="flex flex-wrap items-center gap-4 sm:gap-6">
+        
+        <!-- Legend Indicator -->
+        <div class="flex items-center gap-3 text-xs">
+          <div class="flex items-center gap-1.5 font-medium text-gray-700 dark:text-gray-300">
+            <span class="inline-block w-3.5 h-1 rounded-full bg-emerald-600"></span>
+            <span>Chatbot AI</span>
           </div>
-        @empty
-          <div class="p-8 text-center text-gray-500 dark:text-gray-400 text-xs">Belum ada percakapan siswa.</div>
-        @endforelse
+          <div class="flex items-center gap-1.5 font-medium text-gray-700 dark:text-gray-300">
+            <span class="inline-block w-3.5 h-1 rounded-full bg-slate-700 dark:bg-slate-400"></span>
+            <span>Live Chat Guru BK</span>
+          </div>
+        </div>
+
+        <!-- Period Toggle (Minggu, Bulan, Tahun) -->
+        <div class="inline-flex p-1 rounded-xl bg-gray-100 dark:bg-gray-800 text-xs font-semibold text-gray-600 dark:text-gray-300">
+          <button
+            type="button"
+            @click="switchPeriod('week')"
+            :class="period === 'week' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
+            class="px-3 py-1.5 rounded-lg transition-all"
+          >
+            Minggu
+          </button>
+          <button
+            type="button"
+            @click="switchPeriod('month')"
+            :class="period === 'month' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
+            class="px-3 py-1.5 rounded-lg transition-all"
+          >
+            Bulan
+          </button>
+          <button
+            type="button"
+            @click="switchPeriod('year')"
+            :class="period === 'year' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
+            class="px-3 py-1.5 rounded-lg transition-all"
+          >
+            Tahun
+          </button>
+        </div>
+
+        <!-- Monthly Summary Comparison -->
+        <div class="hidden md:block text-right text-xs">
+          <div class="font-bold text-gray-900 dark:text-white">
+            {{ $trendData['summary']['total_current_month'] }} sesi bulan ini
+          </div>
+          <div class="text-[11px] text-gray-500 dark:text-gray-400">
+            @if($trendData['summary']['diff'] > 0)
+              <span class="text-emerald-600 dark:text-emerald-400 font-semibold">+{{ $trendData['summary']['pct_change'] }}% vs bln lalu</span>
+            @elseif($trendData['summary']['diff'] < 0)
+              <span class="text-rose-600 dark:text-rose-400 font-semibold">{{ $trendData['summary']['pct_change'] }}% vs bln lalu</span>
+            @else
+              <span>sama vs bln lalu</span>
+            @endif
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <!-- Antrean Evaluasi Chatbot AI -->
-    <div class="rounded-3xl bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 shadow-xs overflow-hidden">
-      <div class="p-6 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
-        <div>
-          <h2 class="text-base font-bold text-gray-900 dark:text-white">Menunggu Evaluasi Jawaban</h2>
-          <p class="text-xs text-gray-600 dark:text-gray-400">Tinjau akurasi jawaban asisten untuk menyempurnakan referensi materi.</p>
+    <!-- Chart Canvas -->
+    <div class="relative w-full h-[280px]">
+      <canvas id="counselingTrendChart" class="w-full h-full"></canvas>
+    </div>
+
+  </div>
+
+  <!-- Bottom Section: 2 Columns Grid (Table ~65% & Side Cards ~35%) -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    
+    <!-- Left Column: Percakapan & Konseling Terbaru (2 Columns on Large Screens) -->
+    <div class="lg:col-span-2 bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl shadow-xs overflow-hidden flex flex-col justify-between">
+      <div>
+        <div class="p-5 sm:px-6 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+          <div>
+            <h2 class="text-base font-bold text-gray-900 dark:text-white">Percakapan &amp; Konseling Terbaru</h2>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">10 sesi percakapan terakhir (Chatbot AI &amp; Live Chat)</p>
+          </div>
+          <a href="{{ route('bk.percakapan') }}" class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 hover:underline flex items-center gap-1">
+            <span>Lihat semua</span>
+            <span aria-hidden="true">&rarr;</span>
+          </a>
         </div>
-        <a href="{{ route('bk.evaluasi') }}" class="text-xs font-bold text-brand-700 hover:text-brand-800 dark:text-brand-400 p-2">
-          Semua Evaluasi
-        </a>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-gray-100 dark:border-gray-800 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider bg-gray-50/50 dark:bg-gray-800/30">
+                <th class="py-3.5 px-6">Anggota / Siswa</th>
+                <th class="py-3.5 px-6">Layanan</th>
+                <th class="py-3.5 px-6">Waktu</th>
+                <th class="py-3.5 px-6 text-center">Status</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-800 text-xs">
+              @forelse($recentSessions as $session)
+                <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/40 transition-colors">
+                  <!-- Siswa / Anggota -->
+                  <td class="py-3.5 px-6">
+                    <div class="font-bold text-gray-900 dark:text-white uppercase tracking-tight">
+                      {{ $session->user?->name ?? 'Siswa Tamu' }}
+                    </div>
+                    <div class="text-[11px] text-gray-500 dark:text-gray-400 font-mono mt-0.5">
+                      {{ $session->user?->nisn ? 'NISN: ' . $session->user->nisn : ($session->user?->kelas ? 'Kelas ' . $session->user->kelas : 'Sesi #' . $session->id) }}
+                    </div>
+                  </td>
+
+                  <!-- Layanan (Chatbot AI vs Live Chat) -->
+                  <td class="py-3.5 px-6 font-medium text-gray-800 dark:text-gray-200">
+                    @if($session->mode === 'guru_bk')
+                      <div class="flex items-center gap-1.5 text-slate-800 dark:text-slate-200 font-semibold">
+                        <span class="h-2 w-2 rounded-full bg-slate-700 dark:bg-slate-300"></span>
+                        <span>Live Chat Guru BK</span>
+                      </div>
+                      <div class="text-[11px] text-gray-500 dark:text-gray-400 truncate max-w-[180px]">
+                        {{ $session->title ?: 'Konsultasi Interaktif' }}
+                      </div>
+                    @else
+                      <div class="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 font-semibold">
+                        <span class="h-2 w-2 rounded-full bg-emerald-600"></span>
+                        <span>Chatbot AI</span>
+                      </div>
+                      <div class="text-[11px] text-gray-500 dark:text-gray-400 truncate max-w-[180px]">
+                        {{ $session->title ?: 'Tanya Jawab AI' }}
+                      </div>
+                    @endif
+                  </td>
+
+                  <!-- Waktu -->
+                  <td class="py-3.5 px-6 text-gray-600 dark:text-gray-400 whitespace-nowrap">
+                    <div>{{ $session->created_at->translatedFormat('d M Y') }}</div>
+                    <div class="text-[11px] text-gray-500 dark:text-gray-400 font-mono">{{ $session->created_at->format('H:i') }} WIB</div>
+                  </td>
+
+                  <!-- Status -->
+                  <td class="py-3.5 px-6 text-center">
+                    @if($session->status === 'active')
+                      <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300">
+                        Aktif
+                      </span>
+                    @else
+                      <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">
+                        Selesai
+                      </span>
+                    @endif
+                  </td>
+                </tr>
+              @empty
+                <tr>
+                  <td colspan="4" class="py-8 text-center text-gray-500 dark:text-gray-400 text-xs">
+                    Belum ada riwayat percakapan siswa.
+                  </td>
+                </tr>
+              @endforelse
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <div class="divide-y divide-gray-100 dark:divide-gray-800 text-xs">
-        @forelse($pendingEvaluations as $msg)
-          <div class="p-4 sm:px-6 space-y-2 hover:bg-gray-50/50 dark:hover:bg-gray-800/40 transition-colors">
-            <p class="text-gray-800 dark:text-gray-200 line-clamp-2 leading-relaxed">
-              "{{ $msg->content }}"
-            </p>
-            <div class="flex items-center justify-between pt-1">
-              <span class="text-[11px] text-gray-500 dark:text-gray-400">Model: {{ $msg->metadata['model'] ?? 'Gemini 2.0 Flash' }}</span>
-              <form method="POST" action="{{ route('bk.evaluasi.store', $msg->id) }}" class="flex items-center gap-2">
-                @csrf
-                <button type="submit" name="rating" value="good" class="min-h-[34px] px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:text-emerald-300 text-xs font-bold transition-colors inline-flex items-center justify-center">
-                  Sesuai
-                </button>
-                <button type="submit" name="rating" value="bad" class="min-h-[34px] px-3 py-1.5 rounded-lg bg-rose-50 text-rose-800 hover:bg-rose-100 dark:bg-rose-950/60 dark:text-rose-300 text-xs font-bold transition-colors inline-flex items-center justify-center">
-                  Perlu Perbaikan
-                </button>
-              </form>
-            </div>
-          </div>
-        @empty
-          <div class="p-8 text-center text-gray-500 dark:text-gray-400 text-xs">Semua respons asisten terkini telah selesai ditinjau.</div>
-        @endforelse
+      <div class="p-4 border-t border-gray-100 dark:border-gray-800 text-right">
+        <a href="{{ route('bk.percakapan') }}" class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 hover:underline">
+          Buka Seluruh Riwayat Percakapan &rarr;
+        </a>
       </div>
+    </div>
+
+    <!-- Right Column: 3 Stacked Cards (Topik Terpopuler, Antrean, Aksi Cepat) -->
+    <div class="space-y-5">
+      
+      <!-- Card 1: Topik Konseling Terpopuler (Star Icon) -->
+      <div class="bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 shadow-xs space-y-4">
+        <div class="flex items-center gap-2">
+          <span class="text-amber-500 text-base" aria-hidden="true">&#9733;</span>
+          <h3 class="text-sm font-bold text-gray-900 dark:text-white">Topik Terpopuler Minggu Ini</h3>
+        </div>
+
+        @if(count($popularTopics) > 0 && array_sum(array_column($popularTopics, 'count')) > 0)
+          <div class="space-y-3">
+            @foreach($popularTopics as $topic)
+              <div class="space-y-1">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-medium text-gray-700 dark:text-gray-300 truncate">{{ $topic['title'] }}</span>
+                  <span class="text-gray-500 dark:text-gray-400 font-mono">{{ $topic['count'] }} tanya</span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                  <div class="h-full rounded-full {{ $topic['color'] }}" style="width: {{ max(6, $topic['percentage']) }}%"></div>
+                </div>
+              </div>
+            @endforeach
+          </div>
+        @else
+          <div class="py-6 text-center text-xs text-gray-500 dark:text-gray-400">
+            Belum ada topik konseling minggu ini.
+          </div>
+        @endif
+      </div>
+
+      <!-- Card 2: Sesi Butuh Perhatian / Antrean Konseling -->
+      <div class="bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 shadow-xs space-y-3">
+        <h3 class="text-sm font-bold text-gray-900 dark:text-white">
+          Antrean &amp; Sesi Aktif
+        </h3>
+
+        @if(($stats['active_queue'] ?? 0) > 0 || ($stats['pending_evaluations_count'] ?? 0) > 0)
+          <div class="space-y-2.5 text-xs">
+            @if(($stats['active_queue'] ?? 0) > 0)
+              <div class="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/50 border border-blue-200/60 dark:border-blue-900/40 flex items-center justify-between">
+                <div>
+                  <span class="font-bold text-blue-900 dark:text-blue-200 block">{{ $stats['active_queue'] }} Siswa Menunggu</span>
+                  <span class="text-[11px] text-blue-700 dark:text-blue-300">Pada antrean live chat</span>
+                </div>
+                <a href="{{ route('bk.live-chat') }}" class="px-2.5 py-1 rounded-lg bg-blue-600 text-white font-semibold text-xs hover:bg-blue-700">
+                  Respon
+                </a>
+              </div>
+            @endif
+
+            @if(($stats['pending_evaluations_count'] ?? 0) > 0)
+              <div class="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/50 border border-amber-200/60 dark:border-amber-900/40 flex items-center justify-between">
+                <div>
+                  <span class="font-bold text-amber-900 dark:text-amber-200 block">{{ $stats['pending_evaluations_count'] }} Jawaban AI</span>
+                  <span class="text-[11px] text-amber-700 dark:text-amber-300">Perlu evaluasi Guru BK</span>
+                </div>
+                <a href="{{ route('bk.evaluasi') }}" class="px-2.5 py-1 rounded-lg bg-amber-600 text-white font-semibold text-xs hover:bg-amber-700">
+                  Tinjau
+                </a>
+              </div>
+            @endif
+          </div>
+        @else
+          <div class="py-6 text-center text-xs text-gray-500 dark:text-gray-400">
+            Tidak ada antrean tertunda &check;
+          </div>
+        @endif
+      </div>
+
+      <!-- Card 3: Aksi Cepat (Primary Green Button) -->
+      <div class="bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 shadow-xs space-y-3">
+        <h3 class="text-sm font-bold text-gray-900 dark:text-white">Aksi Cepat</h3>
+        
+        <div class="space-y-2">
+          <!-- Primary Green Action Button -->
+          <a
+            href="{{ route('bk.live-chat') }}"
+            class="w-full min-h-[42px] px-4 py-2.5 rounded-xl bg-[#205A26] hover:bg-[#16421c] text-white font-semibold text-xs inline-flex items-center justify-center gap-2 shadow-xs transition-colors"
+          >
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            <span>Buka Live Chat Konseling</span>
+          </a>
+
+          <!-- Secondary Action Button -->
+          <a
+            href="{{ route('bk.knowledge') }}"
+            class="w-full min-h-[40px] px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-750 text-gray-800 dark:text-gray-200 font-semibold text-xs inline-flex items-center justify-center gap-2 transition-colors"
+          >
+            <svg class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+            <span>Kelola Materi Knowledge Base</span>
+          </a>
+        </div>
+      </div>
+
     </div>
 
   </div>
 
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  function counselorDashboard() {
+    return {
+      period: 'month',
+      chartInstance: null,
+      trendData: @json($trendData),
+
+      init() {
+        this.$nextTick(() => {
+          this.initChart();
+        });
+      },
+
+      switchPeriod(newPeriod) {
+        this.period = newPeriod;
+        this.updateChart();
+      },
+
+      initChart() {
+        const ctx = document.getElementById('counselingTrendChart');
+        if (!ctx) return;
+
+        const isDark = document.documentElement.classList.contains('dark');
+        const activeData = this.trendData[this.period];
+
+        this.chartInstance = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: activeData.labels,
+            datasets: [
+              {
+                label: 'Chatbot AI',
+                data: activeData.ai,
+                borderColor: '#16a34a', // emerald-600
+                backgroundColor: 'rgba(22, 163, 74, 0.06)',
+                borderWidth: 2.2,
+                pointRadius: 2.5,
+                pointHoverRadius: 5,
+                pointBackgroundColor: '#16a34a',
+                tension: 0.35,
+                fill: true
+              },
+              {
+                label: 'Live Chat Guru BK',
+                data: activeData.live,
+                borderColor: isDark ? '#94a3b8' : '#334155', // slate-700
+                backgroundColor: 'rgba(51, 65, 85, 0.05)',
+                borderWidth: 2,
+                borderDash: [4, 4],
+                pointRadius: 2.5,
+                pointHoverRadius: 5,
+                pointBackgroundColor: isDark ? '#94a3b8' : '#334155',
+                tension: 0.35,
+                fill: false
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+              intersect: false,
+              mode: 'index'
+            },
+            plugins: {
+              legend: {
+                display: false
+              },
+              tooltip: {
+                backgroundColor: isDark ? '#0f172a' : '#1e293b',
+                titleColor: '#ffffff',
+                bodyColor: '#cbd5e1',
+                padding: 10,
+                cornerRadius: 8,
+                boxPadding: 4,
+                callbacks: {
+                  title: function(items) {
+                    return 'Periode: ' + items[0].label;
+                  },
+                  label: function(item) {
+                    return item.dataset.label + ': ' + item.raw + ' sesi';
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                grid: {
+                  color: isDark ? 'rgba(51, 65, 85, 0.3)' : 'rgba(226, 232, 240, 0.7)',
+                  drawBorder: false
+                },
+                ticks: {
+                  color: isDark ? '#94a3b8' : '#64748b',
+                  font: {
+                    size: 11,
+                    family: 'Plus Jakarta Sans'
+                  },
+                  maxTicksLimit: 12
+                }
+              },
+              y: {
+                beginAtZero: true,
+                suggestedMax: 5,
+                grid: {
+                  color: isDark ? 'rgba(51, 65, 85, 0.3)' : 'rgba(226, 232, 240, 0.7)',
+                  drawBorder: false
+                },
+                ticks: {
+                  precision: 0,
+                  color: isDark ? '#94a3b8' : '#64748b',
+                  font: {
+                    size: 11,
+                    family: 'Plus Jakarta Sans'
+                  }
+                }
+              }
+            }
+          }
+        });
+      },
+
+      updateChart() {
+        if (!this.chartInstance) return;
+        const activeData = this.trendData[this.period];
+        this.chartInstance.data.labels = activeData.labels;
+        this.chartInstance.data.datasets[0].data = activeData.ai;
+        this.chartInstance.data.datasets[1].data = activeData.live;
+        this.chartInstance.update();
+      }
+    };
+  }
+</script>
+@endpush
