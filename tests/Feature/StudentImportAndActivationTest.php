@@ -175,4 +175,27 @@ class StudentImportAndActivationTest extends TestCase
 
         $response->assertSessionHasErrors('nis_nisn');
     }
+
+    public function test_guru_bk_can_access_user_management_and_bk_siswa_redirects(): void
+    {
+        $guruBk = User::firstOrCreate(
+            ['email' => 'gurubk_test@sman4jember.sch.id'],
+            [
+                'name' => 'Guru BK Test',
+                'password' => bcrypt('password'),
+                'role' => 'guru_bk',
+                'is_active' => true,
+            ]
+        );
+
+        $this->actingAs($guruBk);
+
+        // Akses langsung ke admin.users
+        $response = $this->get(route('admin.users'));
+        $response->assertStatus(200);
+
+        // Akses ke bk.siswa redirect ke admin.users
+        $redirectResponse = $this->get(route('bk.siswa'));
+        $redirectResponse->assertRedirect(route('admin.users'));
+    }
 }

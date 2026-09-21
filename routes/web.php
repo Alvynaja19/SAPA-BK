@@ -70,7 +70,9 @@ Route::middleware('auth')->group(function () {
     // Rute Guru BK
     Route::middleware('role:guru_bk')->prefix('bk')->as('bk.')->group(function () {
         Route::get('/dashboard', [GuruBkController::class, 'dashboard'])->name('dashboard');
-        Route::get('/siswa', [GuruBkController::class, 'siswa'])->name('siswa');
+        Route::get('/siswa', function () {
+            return redirect()->route('admin.users');
+        })->name('siswa');
         Route::get('/percakapan', [GuruBkController::class, 'percakapan'])->name('percakapan');
         Route::get('/percakapan/{id}', [GuruBkController::class, 'detailPercakapan'])->name('percakapan.detail');
         Route::get('/live-chat', [GuruBkController::class, 'liveChat'])->name('live-chat');
@@ -108,15 +110,19 @@ Route::middleware('auth')->group(function () {
         Route::post('/faq', [GuruBkController::class, 'simpanFaq'])->name('faq.store');
     });
 
-    // Rute Administrator
-    Route::middleware('role:admin')->prefix('admin')->as('admin.')->group(function () {
-        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    // Rute Manajemen Pengguna (Akses: Admin & Guru BK)
+    Route::middleware('role:admin,guru_bk')->prefix('admin')->as('admin.')->group(function () {
         Route::get('/users', [AdminController::class, 'users'])->name('users');
         Route::post('/users', [AdminController::class, 'storeUser'])->name('users.store');
         Route::get('/users/{id}', [AdminController::class, 'userDetail'])->name('users.detail');
         Route::patch('/users/{id}/toggle', [AdminController::class, 'toggleUserStatus'])->name('users.toggle');
         Route::get('/siswa/template', [AdminController::class, 'downloadSiswaTemplate'])->name('siswa.template');
         Route::post('/siswa/import', [AdminController::class, 'importSiswa'])->name('siswa.import');
+    });
+
+    // Rute Khusus Administrator
+    Route::middleware('role:admin')->prefix('admin')->as('admin.')->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
         Route::get('/konfigurasi', [AdminController::class, 'konfigurasi'])->name('konfigurasi');
         Route::post('/konfigurasi', [AdminController::class, 'simpanKonfigurasi'])->name('konfigurasi.store');
         Route::get('/log', [AdminController::class, 'log'])->name('log');
