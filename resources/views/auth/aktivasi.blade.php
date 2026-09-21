@@ -67,7 +67,7 @@
         <p class="form-hint">Contoh: 0054321987 (NISN) atau 12345 (NIS sekolah).</p>
       </div>
 
-      <button type="submit" class="btn-primary">
+      <button type="submit" class="btn-submit">
         <span>Cari Data Siswa</span>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
@@ -156,7 +156,7 @@
         </div>
       </div>
 
-      <button type="submit" class="btn-primary">
+      <button type="submit" class="btn-submit">
         <span>Kirim Kode Verifikasi OTP</span>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
       </button>
@@ -198,7 +198,7 @@
         <p class="form-hint" style="text-align: center;">Periksa kotak masuk atau folder spam email Anda.</p>
       </div>
 
-      <button type="submit" class="btn-primary">
+      <button type="submit" class="btn-submit">
         <span>Verifikasi & Aktifkan Akun</span>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
       </button>
