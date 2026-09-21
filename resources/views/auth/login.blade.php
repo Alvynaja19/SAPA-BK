@@ -59,7 +59,7 @@
           required
           autofocus
           class="form-input"
-          placeholder="contoh: siswa@gmail.com"
+          placeholder="siswa@gmail.com"
         />
       </div>
     </div>

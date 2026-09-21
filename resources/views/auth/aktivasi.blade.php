@@ -112,7 +112,7 @@
             id="email"
             name="email"
             value="{{ old('email') }}"
-            placeholder="contoh: siswa@gmail.com"
+            placeholder="siswa@gmail.com"
             required
             class="form-input @error('email') is-invalid @enderror"
           />
