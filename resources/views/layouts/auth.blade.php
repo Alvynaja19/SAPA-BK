@@ -296,6 +296,9 @@
       color: var(--ink-faint);
       opacity: 0.8;
     }
+    .form-input[type="password"] {
+      padding-right: 42px;
+    }
 
     /* Toggle Password Button */
     .toggle-password {
