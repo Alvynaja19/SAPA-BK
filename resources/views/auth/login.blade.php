@@ -13,22 +13,6 @@
     <p class="auth-lede">Silakan masuk untuk mengakses riwayat percakapan, tes peminatan, dan layanan konseling siswa.</p>
   </div>
 
-  <!-- Quick Demo Login Presets -->
-  <div class="preset-box">
-    <span class="preset-label">Akses Cepat Akun Demo:</span>
-    <div class="preset-grid">
-      <button type="button" onclick="fillCredentials('siswa@sman4jember.sch.id', 'password')" class="preset-btn">
-        Siswa
-      </button>
-      <button type="button" onclick="fillCredentials('gurubk@sman4jember.sch.id', 'password')" class="preset-btn">
-        Guru BK
-      </button>
-      <button type="button" onclick="fillCredentials('admin@gmail.com', 'Admin123456')" class="preset-btn">
-        Admin
-      </button>
-    </div>
-  </div>
-
   <!-- Flash / Error Alerts -->
   @if (isset($errors) && $errors->any())
     <div class="alert-box alert-danger">
@@ -125,13 +109,4 @@
       <a href="{{ route('register') }}">Daftar Akun Baru</a>
     </div>
   </div>
-@endsection
-
-@section('scripts')
-<script>
-  function fillCredentials(email, pass) {
-    document.getElementById('email').value = email;
-    document.getElementById('password').value = pass;
-  }
-</script>
 @endsection

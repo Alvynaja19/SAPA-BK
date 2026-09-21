@@ -204,60 +204,6 @@
       line-height: 1.5;
     }
 
-    /* Preset Switcher Box */
-    .preset-box {
-      margin-bottom: 24px;
-      padding: 12px 14px;
-      background: var(--bg);
-      border: 1px solid var(--line);
-      border-radius: var(--radius-m);
-    }
-    .preset-label {
-      display: block;
-      font-size: 11.5px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-      color: var(--ink-soft);
-      margin-bottom: 8px;
-    }
-    .preset-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-    .preset-btn {
-      min-height: 40px;
-      padding: 8px 10px;
-      border-radius: var(--radius-s);
-      border: 1px solid var(--line);
-      background: var(--surface);
-      font-family: inherit;
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--ink);
-      cursor: pointer;
-      text-align: center;
-      transition: all .15s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    @media (max-width: 420px) {
-      .preset-grid {
-        grid-template-columns: 1fr;
-      }
-      .preset-btn {
-        min-height: 44px;
-      }
-    }
-    .preset-btn:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-      background: #FFFFFF;
-      transform: translateY(-1px);
-    }
-
     /* Alerts */
     .alert-box {
       margin-bottom: 22px;
