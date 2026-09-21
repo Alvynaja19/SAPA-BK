@@ -32,24 +32,30 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
+        $user = User::where('email', $credentials['email'])->first();
+
+        if (! $user) {
+            return back()->withErrors([
+                'email' => 'Akun dengan email ini belum terdaftar atau belum diaktivasi. Silakan lakukan aktivasi atau registrasi akun terlebih dahulu.',
+            ])->onlyInput('email');
+        }
+
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-
-            $user = Auth::user();
 
             if (! $user->is_active) {
                 Auth::logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
 
-                return back()->withErrors(['email' => 'Akun Anda tidak aktif. Silakan hubungi admin sekolah.']);
+                return back()->withErrors(['email' => 'Akun Anda sedang dinonaktifkan. Silakan hubungi admin sekolah.']);
             }
 
             return $this->redirectBasedOnRole($user);
         }
 
         return back()->withErrors([
-            'email' => 'Email atau kata sandi yang Anda masukkan salah.',
+            'email' => 'Kata sandi yang Anda masukkan salah. Silakan periksa kembali kata sandi Anda.',
         ])->onlyInput('email');
     }
 
