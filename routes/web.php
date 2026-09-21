@@ -115,6 +115,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/users', [AdminController::class, 'users'])->name('users');
         Route::post('/users', [AdminController::class, 'storeUser'])->name('users.store');
         Route::get('/users/{id}', [AdminController::class, 'userDetail'])->name('users.detail');
+        Route::put('/users/{id}', [AdminController::class, 'updateUser'])->name('users.update');
+        Route::delete('/users/{id}', [AdminController::class, 'destroyUser'])->name('users.destroy');
         Route::patch('/users/{id}/toggle', [AdminController::class, 'toggleUserStatus'])->name('users.toggle');
         Route::get('/siswa/template', [AdminController::class, 'downloadSiswaTemplate'])->name('siswa.template');
         Route::post('/siswa/import', [AdminController::class, 'importSiswa'])->name('siswa.import');

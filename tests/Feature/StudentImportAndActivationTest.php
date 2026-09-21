@@ -198,4 +198,81 @@ class StudentImportAndActivationTest extends TestCase
         $redirectResponse = $this->get(route('bk.siswa'));
         $redirectResponse->assertRedirect(route('admin.users'));
     }
+
+    public function test_admin_can_update_user(): void
+    {
+        $admin = $this->getAdminUser();
+        $this->actingAs($admin);
+
+        $targetUser = User::create([
+            'name' => 'Original Name',
+            'email' => 'original@sman4jember.sch.id',
+            'password' => bcrypt('password123'),
+            'role' => 'siswa',
+            'nisn' => '1234567890',
+            'kelas' => 'X MIPA 1',
+            'is_active' => true,
+        ]);
+
+        $response = $this->put(route('admin.users.update', $targetUser->id), [
+            'name' => 'Updated Name',
+            'email' => 'updated@sman4jember.sch.id',
+            'role' => 'siswa',
+            'nisn' => '1234567890',
+            'kelas' => 'XI MIPA 2',
+            'no_hp' => '081234567899',
+            'is_active' => 1,
+        ]);
+
+        $response->assertSessionHas('success');
+        $this->assertDatabaseHas('users', [
+            'id' => $targetUser->id,
+            'name' => 'Updated Name',
+            'email' => 'updated@sman4jember.sch.id',
+            'kelas' => 'XI MIPA 2',
+        ]);
+    }
+
+    public function test_admin_can_delete_user_and_cannot_delete_self(): void
+    {
+        $admin = $this->getAdminUser();
+        $this->actingAs($admin);
+
+        // 1. Tidak boleh menghapus akun sendiri
+        $selfDeleteResponse = $this->delete(route('admin.users.destroy', $admin->id));
+        $selfDeleteResponse->assertSessionHasErrors('error');
+        $this->assertDatabaseHas('users', ['id' => $admin->id]);
+
+        // 2. Bisa menghapus akun pengguna lain
+        $userToDelete = User::create([
+            'name' => 'To Delete',
+            'email' => 'todelete@sman4jember.sch.id',
+            'password' => bcrypt('password123'),
+            'role' => 'siswa',
+            'is_active' => true,
+        ]);
+
+        $deleteResponse = $this->delete(route('admin.users.destroy', $userToDelete->id));
+        $deleteResponse->assertRedirect(route('admin.users'));
+        $deleteResponse->assertSessionHas('success');
+        $this->assertDatabaseMissing('users', ['id' => $userToDelete->id]);
+    }
+
+    public function test_admin_and_guru_bk_can_view_user_detail(): void
+    {
+        $admin = $this->getAdminUser();
+        $this->actingAs($admin);
+
+        $targetUser = User::create([
+            'name' => 'Target Detail',
+            'email' => 'detail@sman4jember.sch.id',
+            'password' => bcrypt('password123'),
+            'role' => 'siswa',
+            'is_active' => true,
+        ]);
+
+        $response = $this->get(route('admin.users.detail', $targetUser->id));
+        $response->assertStatus(200);
+        $response->assertSee('Target Detail');
+    }
 }

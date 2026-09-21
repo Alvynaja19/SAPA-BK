@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Services\ExcelCsvReader;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -279,6 +280,94 @@ class AdminController extends Controller
         $statusText = $user->is_active ? 'diaktifkan' : 'dinonaktifkan';
 
         return back()->with('success', "Status akun pengguna ({$user->name}) berhasil {$statusText}!");
+    }
+
+    /**
+     * Memperbarui data akun pengguna (SRS F-06 / Edit User).
+     */
+    public function updateUser(Request $request, int $id): RedirectResponse
+    {
+        $user = User::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,'.$id,
+            'role' => 'required|in:guru_bk,admin,siswa',
+            'nisn' => 'nullable|string|max:20',
+            'kelas' => 'nullable|string|max:50',
+            'no_hp' => 'nullable|string|max:20',
+            'password' => 'nullable|string|min:8|confirmed',
+            'is_active' => 'nullable|boolean',
+        ]);
+
+        // Cegah mengubah role atau menonaktifkan satu-satunya administrator
+        if ($user->role === 'admin' && $validated['role'] !== 'admin' && User::where('role', 'admin')->count() <= 1) {
+            return back()->withErrors(['error' => 'Tidak dapat mengubah role satu-satunya akun Administrator.']);
+        }
+
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        $user->role = $validated['role'];
+        $user->nisn = $validated['nisn'] ?? null;
+        $user->kelas = $validated['kelas'] ?? null;
+        $user->no_hp = $validated['no_hp'] ?? null;
+
+        if (isset($validated['is_active'])) {
+            if ($user->role === 'admin' && ! $validated['is_active'] && User::where('role', 'admin')->where('is_active', true)->count() <= 1) {
+                return back()->withErrors(['error' => 'Tidak dapat menonaktifkan satu-satunya akun Administrator yang aktif.']);
+            }
+            $user->is_active = (bool) $validated['is_active'];
+        }
+
+        if (! empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
+        }
+
+        $user->save();
+
+        // Jika user ditautkan ke data master Student, sinkronkan juga
+        if ($user->student) {
+            $user->student->update([
+                'nama' => $user->name,
+                'nisn' => $user->nisn,
+                'kelas' => $user->kelas,
+                'no_hp' => $user->no_hp,
+            ]);
+        }
+
+        return back()->with('success', "Data akun pengguna ({$user->name}) berhasil diperbarui!");
+    }
+
+    /**
+     * Menghapus akun pengguna dari sistem (Delete User).
+     */
+    public function destroyUser(int $id): RedirectResponse
+    {
+        $user = User::findOrFail($id);
+
+        // Tidak boleh menghapus akun diri sendiri yang sedang login
+        if (Auth::id() === $user->id) {
+            return back()->withErrors(['error' => 'Anda tidak dapat menghapus akun Anda sendiri saat sedang login.']);
+        }
+
+        // Tidak boleh menghapus satu-satunya administrator
+        if ($user->role === 'admin' && User::where('role', 'admin')->count() <= 1) {
+            return back()->withErrors(['error' => 'Tidak dapat menghapus satu-satunya akun Administrator di sistem.']);
+        }
+
+        $userName = $user->name;
+
+        // Jika terhubung ke data master Student, lepaskan tautan agar data prapendaftaran tetap aman
+        if ($user->student) {
+            $user->student->update([
+                'user_id' => null,
+                'status' => 'terdaftar',
+            ]);
+        }
+
+        $user->delete();
+
+        return redirect()->route('admin.users')->with('success', "Akun pengguna ({$userName}) berhasil dihapus dari sistem!");
     }
 
     /**

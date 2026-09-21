@@ -3,7 +3,34 @@
 @section('title', 'Manajemen Pengguna : SAPA BK')
 
 @section('content')
-<div class="space-y-6" x-data="{ modalTambah: false, modalImport: false }">
+<div class="space-y-6" x-data="{
+  modalTambah: false,
+  modalImport: false,
+  modalEdit: false,
+  editUser: {
+    id: '',
+    name: '',
+    email: '',
+    role: 'siswa',
+    nisn: '',
+    kelas: '',
+    no_hp: '',
+    is_active: 1
+  },
+  openEditModal(user) {
+    this.editUser = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      nisn: user.nisn || '',
+      kelas: user.kelas || '',
+      no_hp: user.no_hp || '',
+      is_active: user.is_active ? 1 : 0
+    };
+    this.modalEdit = true;
+  }
+}">
 
   <!-- Page Header -->
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -191,18 +218,41 @@
 
               <!-- Actions -->
               <td class="py-4 px-6 text-right">
-                <div class="flex items-center justify-end gap-2">
+                <div class="flex items-center justify-end gap-1.5">
                   <!-- Detail Button -->
                   <a
                     href="{{ route('admin.users.detail', $u->id) }}"
                     class="p-2 rounded-xl text-gray-500 hover:text-brand-600 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-brand-400 transition-colors"
                     title="Lihat Detail Profil & Sesi"
+                    aria-label="Detail {{ $u->name }}"
                   >
                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
                   </a>
+
+                  <!-- Edit Button -->
+                  <button
+                    type="button"
+                    @click="openEditModal({{ json_encode([
+                      'id' => $u->id,
+                      'name' => $u->name,
+                      'email' => $u->email,
+                      'role' => $u->role,
+                      'nisn' => $u->nisn,
+                      'kelas' => $u->kelas,
+                      'no_hp' => $u->no_hp,
+                      'is_active' => (bool) $u->is_active,
+                    ]) }})"
+                    class="p-2 rounded-xl text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/50 transition-colors cursor-pointer"
+                    title="Edit Akun Pengguna"
+                    aria-label="Edit Akun {{ $u->name }}"
+                  >
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  </button>
 
                   <!-- Toggle Status Form -->
                   <form id="toggle-user-form-{{ $u->id }}" method="POST" action="{{ route('admin.users.toggle', $u->id) }}">
@@ -247,6 +297,30 @@
                         </svg>
                       </button>
                     @endif
+                  </form>
+
+                  <!-- Delete User Form -->
+                  <form id="delete-user-form-{{ $u->id }}" method="POST" action="{{ route('admin.users.destroy', $u->id) }}">
+                    @csrf
+                    @method('DELETE')
+                    <button
+                      type="button"
+                      onclick="showConfirmModal({
+                        title: 'Hapus Akun Pengguna?',
+                        message: 'Apakah Anda yakin ingin menghapus akun {{ addslashes($u->name) }} ({{ $u->email }})? Tindakan ini akan menghapus data akun secara permanen.',
+                        confirmText: 'Ya, Hapus Akun',
+                        cancelText: 'Batal',
+                        type: 'danger',
+                        onConfirm: () => document.getElementById('delete-user-form-{{ $u->id }}').submit()
+                      })"
+                      class="p-2 rounded-xl text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition-colors cursor-pointer"
+                      title="Hapus Akun Pengguna"
+                      aria-label="Hapus Akun {{ $u->name }}"
+                    >
+                      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
                   </form>
                 </div>
               </td>
@@ -483,6 +557,172 @@
           >
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
             <span>Mulai Impor Data</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Form Edit Data Pengguna -->
+  <div
+    x-show="modalEdit"
+    x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="transition ease-in duration-150"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/60 backdrop-blur-xs flex items-center justify-center p-4"
+    style="display: none;"
+  >
+    <div
+      @click.outside="modalEdit = false"
+      class="w-full max-w-lg rounded-3xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-2xl p-6 sm:p-8 space-y-6"
+    >
+      <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-4">
+        <div>
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white">Edit Akun Pengguna</h3>
+          <p class="text-xs text-gray-400">Perbarui informasi profil, hak akses, atau kata sandi akun.</p>
+        </div>
+        <button type="button" @click="modalEdit = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 cursor-pointer">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+
+      <form method="POST" :action="'{{ url('admin/users') }}/' + editUser.id" class="space-y-4">
+        @csrf
+        @method('PUT')
+
+        <!-- Nama Lengkap -->
+        <div>
+          <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Nama Lengkap & Gelar *</label>
+          <input
+            type="text"
+            name="name"
+            x-model="editUser.name"
+            required
+            class="w-full px-3.5 py-2.5 rounded-xl text-xs border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500"
+          />
+        </div>
+
+        <!-- Email & Role Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Alamat Email *</label>
+            <input
+              type="email"
+              name="email"
+              x-model="editUser.email"
+              required
+              class="w-full px-3.5 py-2.5 rounded-xl text-xs border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Role Akun *</label>
+            <select
+              name="role"
+              x-model="editUser.role"
+              required
+              class="w-full px-3.5 py-2.5 rounded-xl text-xs border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500"
+            >
+              <option value="guru_bk">Guru BK</option>
+              <option value="admin">Administrator</option>
+              <option value="siswa">Siswa</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- NISN & Kelas -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">NISN (Khusus Siswa)</label>
+            <input
+              type="text"
+              name="nisn"
+              x-model="editUser.nisn"
+              placeholder="0071234567"
+              class="w-full px-3.5 py-2.5 rounded-xl text-xs border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Kelas (Khusus Siswa)</label>
+            <input
+              type="text"
+              name="kelas"
+              x-model="editUser.kelas"
+              placeholder="XII MIPA 1"
+              class="w-full px-3.5 py-2.5 rounded-xl text-xs border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500"
+            />
+          </div>
+        </div>
+
+        <!-- No HP & Status -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">No. WhatsApp / HP</label>
+            <input
+              type="text"
+              name="no_hp"
+              x-model="editUser.no_hp"
+              placeholder="081234567890"
+              class="w-full px-3.5 py-2.5 rounded-xl text-xs border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Status Akun *</label>
+            <select
+              name="is_active"
+              x-model="editUser.is_active"
+              class="w-full px-3.5 py-2.5 rounded-xl text-xs border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500"
+            >
+              <option :value="1">Aktif</option>
+              <option :value="0">Nonaktif</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Ubah Password (Opsional) -->
+        <div class="pt-2 border-t border-gray-100 dark:border-gray-800">
+          <p class="text-[11px] font-bold text-gray-500 dark:text-gray-400 mb-2">Ganti Kata Sandi (Opsional, kosongkan jika tidak ingin diubah)</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Kata Sandi Baru</label>
+              <input
+                type="password"
+                name="password"
+                placeholder="Minimal 8 karakter"
+                class="w-full px-3.5 py-2.5 rounded-xl text-xs border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Ulangi Sandi Baru</label>
+              <input
+                type="password"
+                name="password_confirmation"
+                placeholder="Ulangi sandi baru"
+                class="w-full px-3.5 py-2.5 rounded-xl text-xs border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-end gap-3">
+          <button
+            type="button"
+            @click="modalEdit = false"
+            class="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
+          >
+            Batal
+          </button>
+          <button
+            type="submit"
+            class="px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-bold text-xs shadow-md shadow-brand-500/20 cursor-pointer"
+          >
+            Simpan Perubahan
           </button>
         </div>
       </form>
