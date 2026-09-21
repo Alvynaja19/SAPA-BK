@@ -919,7 +919,6 @@
             <span id="chat-title">{{ $activeAiSession ? $activeAiSession->title : 'SAPA BK : Asisten Konseling Cerdas' }}</span>
           </div>
           <div class="counselor-status">
-            <span class="status-dot-pulse"></span>
             <span id="header-status-desc">Core RAG Bimbingan SMAN 4 Jember &bull; Online 24 Jam</span>
           </div>
         </div>
@@ -948,7 +947,6 @@
     <!-- Banner Info Khusus Live Chat Guru BK -->
     <div class="live-counselor-banner hidden" id="live-chat-banner">
       <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-        <span class="status-dot-pulse"></span>
         <span id="live-banner-desc">
           @if($activeGuruSession && $activeGuruSession->status === 'active')
             <strong>Live Konseling Terhubung</strong>: Berdiskusi langsung dengan <strong>{{ $activeGuruSession->teacher?->name ?? 'Guru BK' }}</strong> (Jam Layanan: 08.00 - 15.00 WIB).
