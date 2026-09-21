@@ -83,39 +83,77 @@
     </div>
   </div>
 
+  <!-- Sub-Navigation: Akun Pengguna vs Data Siswa Pra-Pendaftaran -->
+  <div class="flex items-center gap-2 border-b border-gray-100 dark:border-gray-800 pb-3 flex-wrap">
+    <a
+      href="{{ route('admin.users', ['tab' => 'users', 'role' => request('role'), 'q' => request('q')]) }}"
+      class="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold transition-all {{ ($tab ?? 'users') === 'users' ? 'bg-brand-500 text-white shadow-sm shadow-brand-500/20' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800' }}"
+    >
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      </svg>
+      <span>Akun Pengguna Sistem</span>
+      <span class="px-2 py-0.5 rounded-full text-[10px] {{ ($tab ?? 'users') === 'users' ? 'bg-white/20 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400' }}">
+        {{ $users->total() }}
+      </span>
+    </a>
+
+    <a
+      href="{{ route('admin.users', ['tab' => 'prapendaftaran', 'role' => 'siswa', 'q' => request('q')]) }}"
+      class="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold transition-all {{ ($tab ?? 'users') === 'prapendaftaran' ? 'bg-brand-500 text-white shadow-sm shadow-brand-500/20' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800' }}"
+    >
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+      <span>Data Siswa Pra-Pendaftaran</span>
+      <span class="px-2 py-0.5 rounded-full text-[10px] {{ ($tab ?? 'users') === 'prapendaftaran' ? 'bg-white/20 text-white' : 'bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800/60' }}">
+        {{ $totalStudents }} Siswa ({{ $totalBelumAktivasi }} Menunggu Aktivasi)
+      </span>
+    </a>
+  </div>
+
   <!-- Filter & Search Toolbar -->
   <div class="p-4 sm:p-5 rounded-3xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
     
-    <!-- Role Filter Pills -->
-    <div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
-      <a
-        href="{{ route('admin.users', ['q' => request('q')]) }}"
-        class="px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors {{ !request('role') ? 'bg-brand-500 text-white shadow-xs' : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800' }}"
-      >
-        Semua Role
-      </a>
-      <a
-        href="{{ route('admin.users', ['role' => 'siswa', 'q' => request('q')]) }}"
-        class="px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors {{ request('role') === 'siswa' ? 'bg-brand-500 text-white shadow-xs' : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800' }}"
-      >
-        Siswa
-      </a>
-      <a
-        href="{{ route('admin.users', ['role' => 'guru_bk', 'q' => request('q')]) }}"
-        class="px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors {{ request('role') === 'guru_bk' ? 'bg-brand-500 text-white shadow-xs' : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800' }}"
-      >
-        Guru BK
-      </a>
-      <a
-        href="{{ route('admin.users', ['role' => 'admin', 'q' => request('q')]) }}"
-        class="px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors {{ request('role') === 'admin' ? 'bg-brand-500 text-white shadow-xs' : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800' }}"
-      >
-        Administrator
-      </a>
-    </div>
+    @if(($tab ?? 'users') === 'prapendaftaran')
+      <div class="flex items-center gap-2 text-xs font-bold text-gray-700 dark:text-gray-300">
+        <span class="h-2 w-2 rounded-full bg-brand-500"></span>
+        <span>Data Master Siswa (Hasil Import Excel/CSV)</span>
+        <span class="text-gray-400 font-normal">({{ $students->total() }} data ditemukan)</span>
+      </div>
+    @else
+      <!-- Role Filter Pills -->
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
+        <a
+          href="{{ route('admin.users', ['tab' => 'users', 'q' => request('q')]) }}"
+          class="px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors {{ !request('role') ? 'bg-brand-500 text-white shadow-xs' : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800' }}"
+        >
+          Semua Role
+        </a>
+        <a
+          href="{{ route('admin.users', ['tab' => 'users', 'role' => 'siswa', 'q' => request('q')]) }}"
+          class="px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors {{ request('role') === 'siswa' ? 'bg-brand-500 text-white shadow-xs' : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800' }}"
+        >
+          Siswa
+        </a>
+        <a
+          href="{{ route('admin.users', ['tab' => 'users', 'role' => 'guru_bk', 'q' => request('q')]) }}"
+          class="px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors {{ request('role') === 'guru_bk' ? 'bg-brand-500 text-white shadow-xs' : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800' }}"
+        >
+          Guru BK
+        </a>
+        <a
+          href="{{ route('admin.users', ['tab' => 'users', 'role' => 'admin', 'q' => request('q')]) }}"
+          class="px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors {{ request('role') === 'admin' ? 'bg-brand-500 text-white shadow-xs' : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800' }}"
+        >
+          Administrator
+        </a>
+      </div>
+    @endif
 
     <!-- Search Input Form -->
     <form method="GET" action="{{ route('admin.users') }}" class="flex items-center gap-2">
+      <input type="hidden" name="tab" value="{{ $tab ?? 'users' }}">
       @if(request('role'))
         <input type="hidden" name="role" value="{{ request('role') }}">
       @endif
@@ -129,7 +167,7 @@
           type="text"
           name="q"
           value="{{ request('q') }}"
-          placeholder="Cari nama / email / NISN..."
+          placeholder="{{ ($tab ?? 'users') === 'prapendaftaran' ? 'Cari nama / NIS / NISN / kelas...' : 'Cari nama / email / NISN...' }}"
           class="w-full pl-9 pr-4 py-2 rounded-xl text-xs border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-hidden focus:border-brand-500"
         />
       </div>
@@ -142,212 +180,345 @@
     </form>
   </div>
 
-  <!-- Users Table (TailAdmin Design) -->
-  <div class="rounded-3xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-xs overflow-hidden">
-    <div class="overflow-x-auto">
-      <table class="w-full text-left border-collapse">
-        <thead>
-          <tr class="border-b border-gray-100 dark:border-gray-800 text-[11px] font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider bg-gray-50/50 dark:bg-gray-800/30">
-            <th class="py-4 px-6">Identitas Pengguna</th>
-            <th class="py-4 px-6">Role</th>
-            <th class="py-4 px-6">NISN / Kelas / Kontak</th>
-            <th class="py-4 px-6">Status Akun</th>
-            <th class="py-4 px-6 text-right">Opsi Tindakan</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-100 dark:divide-gray-800 text-xs text-gray-600 dark:text-gray-300">
-          @forelse($users as $u)
-            <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/40 transition-colors">
-              <!-- Name & Email -->
-              <td class="py-4 px-6 font-medium text-gray-900 dark:text-white">
-                <div class="flex items-center gap-3">
-                  <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-[#205A26] to-[#2E7D34] text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
-                    {{ strtoupper(substr($u->name, 0, 2)) }}
+  @if(($tab ?? 'users') === 'prapendaftaran')
+    <!-- Master Siswa Pra-Pendaftaran Table -->
+    <div class="rounded-3xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-xs overflow-hidden">
+      <!-- Banner Info Master Siswa -->
+      <div class="p-4 sm:p-5 border-b border-gray-100 dark:border-gray-800 bg-brand-50/40 dark:bg-brand-950/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div class="flex items-center gap-2.5 text-brand-900 dark:text-brand-200">
+          <div class="h-8 w-8 rounded-xl bg-brand-500/10 text-brand-600 flex items-center justify-center shrink-0">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <span>
+            Data siswa di bawah ini diimpor dari file Excel/CSV. Siswa dapat langsung mengaktivasi akunnya melalui menu <strong>Aktivasi Siswa</strong> dengan memasukkan NIS atau NISN.
+          </span>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 font-bold text-[11px] border border-emerald-200 dark:border-emerald-800">
+            <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+            {{ $totalSudahAktivasi }} Teraktivasi
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 font-bold text-[11px] border border-amber-200 dark:border-amber-800">
+            <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+            {{ $totalBelumAktivasi }} Menunggu
+          </span>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-gray-100 dark:border-gray-800 text-[11px] font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider bg-gray-50/50 dark:bg-gray-800/30">
+              <th class="py-4 px-6">No</th>
+              <th class="py-4 px-6">Nama Lengkap Siswa</th>
+              <th class="py-4 px-6">NIS & NISN</th>
+              <th class="py-4 px-6">Kelas & JK</th>
+              <th class="py-4 px-6">No. WhatsApp / HP</th>
+              <th class="py-4 px-6">Status Aktivasi</th>
+              <th class="py-4 px-6 text-right">Opsi Tindakan</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800 text-xs text-gray-600 dark:text-gray-300">
+            @forelse($students as $idx => $st)
+              <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/40 transition-colors">
+                <td class="py-4 px-6 font-semibold text-gray-400">
+                  {{ $students->firstItem() + $idx }}
+                </td>
+                <td class="py-4 px-6 font-medium text-gray-900 dark:text-white">
+                  <div class="flex items-center gap-3">
+                    <div class="h-8 w-8 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-500 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
+                      {{ strtoupper(substr($st->nama, 0, 2)) }}
+                    </div>
+                    <div>
+                      <span class="font-bold text-gray-900 dark:text-white block">{{ $st->nama }}</span>
+                      @if($st->user)
+                        <span class="text-[11px] text-gray-400">{{ $st->user->email }}</span>
+                      @endif
+                    </div>
                   </div>
-                  <div>
-                    <a href="{{ route('admin.users.detail', $u->id) }}" class="font-bold hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
-                      {{ $u->name }}
-                    </a>
-                    <span class="block text-[11px] text-gray-400">{{ $u->email }}</span>
-                  </div>
-                </div>
-              </td>
-
-              <!-- Role Badge -->
-              <td class="py-4 px-6">
-                @php
-                  $badgeStyle = match($u->role) {
-                    'admin' => 'bg-[#FEFBF0] text-[#7A5200] border-[#FBE9AE] dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800',
-                    'guru_bk' => 'bg-[#EDF5EE] text-[#205A26] border-[#B4DAB7] dark:bg-brand-950/60 dark:text-brand-300 dark:border-brand-800',
-                    default => 'bg-[#D9E9F6] text-[#1C6EB4] border-[#B8D5ED] dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800'
-                  };
-                  $roleLabel = match($u->role) {
-                    'admin' => 'Administrator',
-                    'guru_bk' => 'Guru BK',
-                    default => 'Siswa'
-                  };
-                @endphp
-                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-bold border {{ $badgeStyle }}">
-                  {{ $roleLabel }}
-                </span>
-              </td>
-
-              <!-- Detail Data -->
-              <td class="py-4 px-6 text-gray-500 dark:text-gray-400">
-                @if($u->role === 'siswa')
-                  <div>NISN: <span class="font-semibold text-gray-700 dark:text-gray-200">{{ $u->nisn ?? '-' }}</span></div>
-                  <div>Kelas: <span class="font-semibold text-gray-700 dark:text-gray-200">{{ $u->kelas ?? '-' }}</span></div>
-                @else
-                  <div>No. HP: <span class="font-semibold text-gray-700 dark:text-gray-200">{{ $u->no_hp ?? '-' }}</span></div>
-                  <div class="text-[11px] text-gray-400">Staf Pendidikan</div>
-                @endif
-              </td>
-
-              <!-- Status -->
-              <td class="py-4 px-6">
-                @if($u->is_active)
-                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Aktif
-                  </span>
-                @else
-                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
-                    <span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span> Nonaktif
-                  </span>
-                @endif
-              </td>
-
-              <!-- Actions -->
-              <td class="py-4 px-6 text-right">
-                <div class="flex items-center justify-end gap-1.5">
-                  <!-- Detail Button -->
-                  <a
-                    href="{{ route('admin.users.detail', $u->id) }}"
-                    class="p-2 rounded-xl text-gray-500 hover:text-brand-600 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-brand-400 transition-colors"
-                    title="Lihat Detail Profil & Sesi"
-                    aria-label="Detail {{ $u->name }}"
-                  >
-                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                  </a>
-
-                  <!-- Edit Button -->
-                  <button
-                    type="button"
-                    @click="openEditModal({{ json_encode([
-                      'id' => $u->id,
-                      'name' => $u->name,
-                      'email' => $u->email,
-                      'role' => $u->role,
-                      'nisn' => $u->nisn,
-                      'kelas' => $u->kelas,
-                      'no_hp' => $u->no_hp,
-                      'is_active' => (bool) $u->is_active,
-                    ]) }})"
-                    class="p-2 rounded-xl text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/50 transition-colors cursor-pointer"
-                    title="Edit Akun Pengguna"
-                    aria-label="Edit Akun {{ $u->name }}"
-                  >
-                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                  </button>
-
-                  <!-- Toggle Status Form -->
-                  <form id="toggle-user-form-{{ $u->id }}" method="POST" action="{{ route('admin.users.toggle', $u->id) }}">
-                    @csrf
-                    @method('PATCH')
-                    @if($u->is_active)
-                      <button
-                        type="button"
-                        onclick="showConfirmModal({
-                          title: 'Nonaktifkan Akun Pengguna?',
-                          message: 'Apakah Anda yakin ingin menonaktifkan akun {{ addslashes($u->name) }}? Pengguna ini tidak akan dapat login ke sistem hingga diaktifkan kembali.',
-                          confirmText: 'Ya, Nonaktifkan',
-                          cancelText: 'Batal',
-                          type: 'warning',
-                          onConfirm: () => document.getElementById('toggle-user-form-{{ $u->id }}').submit()
-                        })"
-                        class="p-2 rounded-xl text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-950/50 transition-colors cursor-pointer"
-                        title="Nonaktifkan Akun"
-                        aria-label="Nonaktifkan Akun {{ $u->name }}"
-                      >
-                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                        </svg>
-                      </button>
-                    @else
-                      <button
-                        type="button"
-                        onclick="showConfirmModal({
-                          title: 'Aktifkan Akun Pengguna?',
-                          message: 'Apakah Anda yakin ingin mengaktifkan akun {{ addslashes($u->name) }}? Pengguna ini akan dapat login dan menggunakan hak aksesnya kembali.',
-                          confirmText: 'Ya, Aktifkan',
-                          cancelText: 'Batal',
-                          type: 'success',
-                          onConfirm: () => document.getElementById('toggle-user-form-{{ $u->id }}').submit()
-                        })"
-                        class="p-2 rounded-xl text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-colors cursor-pointer"
-                        title="Aktifkan Akun"
-                        aria-label="Aktifkan Akun {{ $u->name }}"
-                      >
-                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </button>
+                </td>
+                <td class="py-4 px-6">
+                  <div class="font-mono text-gray-800 dark:text-gray-200 font-semibold">NIS: {{ $st->nis ?? '-' }}</div>
+                  <div class="font-mono text-[11px] text-gray-400">NISN: {{ $st->nisn ?? '-' }}</div>
+                </td>
+                <td class="py-4 px-6">
+                  <div class="font-semibold text-gray-800 dark:text-gray-200">{{ $st->kelas ?? '-' }}</div>
+                  <div class="text-[11px] text-gray-400">{{ $st->jenis_kelamin === 'L' ? 'Laki-laki' : ($st->jenis_kelamin === 'P' ? 'Perempuan' : '-') }}</div>
+                </td>
+                <td class="py-4 px-6 font-mono text-gray-600 dark:text-gray-300">
+                  {{ $st->no_hp ?? '-' }}
+                </td>
+                <td class="py-4 px-6">
+                  @if($st->user_id)
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                      <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                      Sudah Teraktivasi
+                    </span>
+                    @if($st->user)
+                      <a href="{{ route('admin.users.detail', $st->user_id) }}" class="block text-[11px] text-brand-600 hover:underline mt-0.5 font-medium">
+                        Lihat Akun &rarr;
+                      </a>
                     @endif
-                  </form>
-
-                  <!-- Delete User Form -->
-                  <form id="delete-user-form-{{ $u->id }}" method="POST" action="{{ route('admin.users.destroy', $u->id) }}">
+                  @else
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                      <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+                      Menunggu Aktivasi Siswa
+                    </span>
+                  @endif
+                </td>
+                <td class="py-4 px-6 text-right">
+                  <form id="delete-student-form-{{ $st->id }}" method="POST" action="{{ route('admin.siswa.destroy', $st->id) }}" class="inline-block">
                     @csrf
                     @method('DELETE')
-                    <input type="hidden" name="redirect_to" value="{{ request()->fullUrl() }}">
-                    <input type="hidden" name="role" value="{{ request('role', $u->role) }}">
-                    @if(request('q'))
-                      <input type="hidden" name="q" value="{{ request('q') }}">
-                    @endif
                     <button
                       type="button"
                       onclick="showConfirmModal({
-                        title: 'Hapus Akun Pengguna?',
-                        message: 'Apakah Anda yakin ingin menghapus akun {{ addslashes($u->name) }} ({{ $u->email }})? Tindakan ini akan menghapus data akun secara permanen.',
-                        confirmText: 'Ya, Hapus Akun',
+                        title: 'Hapus Siswa Pra-Pendaftaran?',
+                        message: 'Apakah Anda yakin ingin menghapus data siswa {{ addslashes($st->nama) }}? Data ini akan dihapus dari daftar pra-pendaftaran sekolah.',
+                        confirmText: 'Ya, Hapus Data',
                         cancelText: 'Batal',
                         type: 'danger',
-                        onConfirm: () => document.getElementById('delete-user-form-{{ $u->id }}').submit()
+                        onConfirm: () => document.getElementById('delete-student-form-{{ $st->id }}').submit()
                       })"
                       class="p-2 rounded-xl text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition-colors cursor-pointer"
-                      title="Hapus Akun Pengguna"
-                      aria-label="Hapus Akun {{ $u->name }}"
+                      title="Hapus Data Siswa"
+                      aria-label="Hapus Data Siswa {{ $st->nama }}"
                     >
                       <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
                     </button>
                   </form>
-                </div>
-              </td>
-            </tr>
-          @empty
-            <tr>
-              <td colspan="5" class="py-12 text-center text-gray-400 text-xs">
-                Tidak ada pengguna yang cocok dengan kriteria filter.
-              </td>
-            </tr>
-          @endforelse
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Pagination -->
-    @if($users->hasPages())
-      <div class="p-6 border-t border-gray-100 dark:border-gray-800">
-        {{ $users->links() }}
+                </td>
+              </tr>
+            @empty
+              <tr>
+                <td colspan="7" class="py-12 text-center text-gray-400 text-xs">
+                  Belum ada data siswa pra-pendaftaran atau tidak cocok dengan pencarian. Silakan klik tombol <strong>Import Siswa</strong> untuk mengunggah file Excel/CSV.
+                </td>
+              </tr>
+            @endforelse
+          </tbody>
+        </table>
       </div>
-    @endif
-  </div>
+
+      <!-- Pagination Siswa Pra-Pendaftaran -->
+      @if($students->hasPages())
+        <div class="p-6 border-t border-gray-100 dark:border-gray-800">
+          {{ $students->links() }}
+        </div>
+      @endif
+    </div>
+  @else
+    <!-- Users Table (TailAdmin Design) -->
+    <div class="rounded-3xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-xs overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-gray-100 dark:border-gray-800 text-[11px] font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider bg-gray-50/50 dark:bg-gray-800/30">
+              <th class="py-4 px-6">Identitas Pengguna</th>
+              <th class="py-4 px-6">Role</th>
+              <th class="py-4 px-6">NISN / Kelas / Kontak</th>
+              <th class="py-4 px-6">Status Akun</th>
+              <th class="py-4 px-6 text-right">Opsi Tindakan</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800 text-xs text-gray-600 dark:text-gray-300">
+            @forelse($users as $u)
+              <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/40 transition-colors">
+                <!-- Name & Email -->
+                <td class="py-4 px-6 font-medium text-gray-900 dark:text-white">
+                  <div class="flex items-center gap-3">
+                    <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-[#205A26] to-[#2E7D34] text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
+                      {{ strtoupper(substr($u->name, 0, 2)) }}
+                    </div>
+                    <div>
+                      <a href="{{ route('admin.users.detail', $u->id) }}" class="font-bold hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
+                        {{ $u->name }}
+                      </a>
+                      <span class="block text-[11px] text-gray-400">{{ $u->email }}</span>
+                    </div>
+                  </div>
+                </td>
+
+                <!-- Role Badge -->
+                <td class="py-4 px-6">
+                  @php
+                    $badgeStyle = match($u->role) {
+                      'admin' => 'bg-[#FEFBF0] text-[#7A5200] border-[#FBE9AE] dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800',
+                      'guru_bk' => 'bg-[#EDF5EE] text-[#205A26] border-[#B4DAB7] dark:bg-brand-950/60 dark:text-brand-300 dark:border-brand-800',
+                      default => 'bg-[#D9E9F6] text-[#1C6EB4] border-[#B8D5ED] dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800'
+                    };
+                    $roleLabel = match($u->role) {
+                      'admin' => 'Administrator',
+                      'guru_bk' => 'Guru BK',
+                      default => 'Siswa'
+                    };
+                  @endphp
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-bold border {{ $badgeStyle }}">
+                    {{ $roleLabel }}
+                  </span>
+                </td>
+
+                <!-- Detail Data -->
+                <td class="py-4 px-6 text-gray-500 dark:text-gray-400">
+                  @if($u->role === 'siswa')
+                    <div>NISN: <span class="font-semibold text-gray-700 dark:text-gray-200">{{ $u->nisn ?? '-' }}</span></div>
+                    <div>Kelas: <span class="font-semibold text-gray-700 dark:text-gray-200">{{ $u->kelas ?? '-' }}</span></div>
+                  @else
+                    <div>No. HP: <span class="font-semibold text-gray-700 dark:text-gray-200">{{ $u->no_hp ?? '-' }}</span></div>
+                    <div class="text-[11px] text-gray-400">Staf Pendidikan</div>
+                  @endif
+                </td>
+
+                <!-- Status -->
+                <td class="py-4 px-6">
+                  @if($u->is_active)
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                      <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Aktif
+                    </span>
+                  @else
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+                      <span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span> Nonaktif
+                    </span>
+                  @endif
+                </td>
+
+                <!-- Actions -->
+                <td class="py-4 px-6 text-right">
+                  <div class="flex items-center justify-end gap-1.5">
+                    <!-- Detail Button -->
+                    <a
+                      href="{{ route('admin.users.detail', $u->id) }}"
+                      class="p-2 rounded-xl text-gray-500 hover:text-brand-600 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-brand-400 transition-colors"
+                      title="Lihat Detail Profil & Sesi"
+                      aria-label="Detail {{ $u->name }}"
+                    >
+                      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    </a>
+
+                    <!-- Edit Button -->
+                    <button
+                      type="button"
+                      @click="openEditModal({{ json_encode([
+                        'id' => $u->id,
+                        'name' => $u->name,
+                        'email' => $u->email,
+                        'role' => $u->role,
+                        'nisn' => $u->nisn,
+                        'kelas' => $u->kelas,
+                        'no_hp' => $u->no_hp,
+                        'is_active' => (bool) $u->is_active,
+                      ]) }})"
+                      class="p-2 rounded-xl text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/50 transition-colors cursor-pointer"
+                      title="Edit Akun Pengguna"
+                      aria-label="Edit Akun {{ $u->name }}"
+                    >
+                      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                    </button>
+
+                    <!-- Toggle Status Form -->
+                    <form id="toggle-user-form-{{ $u->id }}" method="POST" action="{{ route('admin.users.toggle', $u->id) }}">
+                      @csrf
+                      @method('PATCH')
+                      @if($u->is_active)
+                        <button
+                          type="button"
+                          onclick="showConfirmModal({
+                            title: 'Nonaktifkan Akun Pengguna?',
+                            message: 'Apakah Anda yakin ingin menonaktifkan akun {{ addslashes($u->name) }}? Pengguna ini tidak akan dapat login ke sistem hingga diaktifkan kembali.',
+                            confirmText: 'Ya, Nonaktifkan',
+                            cancelText: 'Batal',
+                            type: 'warning',
+                            onConfirm: () => document.getElementById('toggle-user-form-{{ $u->id }}').submit()
+                          })"
+                          class="p-2 rounded-xl text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-950/50 transition-colors cursor-pointer"
+                          title="Nonaktifkan Akun"
+                          aria-label="Nonaktifkan Akun {{ $u->name }}"
+                        >
+                          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                          </svg>
+                        </button>
+                      @else
+                        <button
+                          type="button"
+                          onclick="showConfirmModal({
+                            title: 'Aktifkan Akun Pengguna?',
+                            message: 'Apakah Anda yakin ingin mengaktifkan akun {{ addslashes($u->name) }}? Pengguna ini akan dapat login dan menggunakan hak aksesnya kembali.',
+                            confirmText: 'Ya, Aktifkan',
+                            cancelText: 'Batal',
+                            type: 'success',
+                            onConfirm: () => document.getElementById('toggle-user-form-{{ $u->id }}').submit()
+                          })"
+                          class="p-2 rounded-xl text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-colors cursor-pointer"
+                          title="Aktifkan Akun"
+                          aria-label="Aktifkan Akun {{ $u->name }}"
+                        >
+                          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </button>
+                      @endif
+                    </form>
+
+                    <!-- Delete User Form -->
+                    <form id="delete-user-form-{{ $u->id }}" method="POST" action="{{ route('admin.users.destroy', $u->id) }}">
+                      @csrf
+                      @method('DELETE')
+                      <input type="hidden" name="redirect_to" value="{{ request()->fullUrl() }}">
+                      <input type="hidden" name="role" value="{{ request('role', $u->role) }}">
+                      @if(request('q'))
+                        <input type="hidden" name="q" value="{{ request('q') }}">
+                      @endif
+                      <button
+                        type="button"
+                        onclick="showConfirmModal({
+                          title: 'Hapus Akun Pengguna?',
+                          message: 'Apakah Anda yakin ingin menghapus akun {{ addslashes($u->name) }} ({{ $u->email }})? Tindakan ini akan menghapus data akun secara permanen.',
+                          confirmText: 'Ya, Hapus Akun',
+                          cancelText: 'Batal',
+                          type: 'danger',
+                          onConfirm: () => document.getElementById('delete-user-form-{{ $u->id }}').submit()
+                        })"
+                        class="p-2 rounded-xl text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition-colors cursor-pointer"
+                        title="Hapus Akun Pengguna"
+                        aria-label="Hapus Akun {{ $u->name }}"
+                      >
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            @empty
+              <tr>
+                <td colspan="5" class="py-12 text-center text-gray-400 text-xs">
+                  Tidak ada pengguna yang cocok dengan kriteria filter.
+                </td>
+              </tr>
+            @endforelse
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      @if($users->hasPages())
+        <div class="p-6 border-t border-gray-100 dark:border-gray-800">
+          {{ $users->links() }}
+        </div>
+      @endif
+    </div>
+  @endif
 
   <!-- Modal Form Tambah Pengguna Baru (SRS F-06) -->
   <div
@@ -541,7 +712,7 @@
           <input
             type="file"
             name="file"
-            accept=".csv, .xlsx, .xls, text/csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+            accept=".csv,.xlsx,.xls"
             required
             class="w-full text-xs text-gray-500 dark:text-gray-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 dark:file:bg-brand-950/60 dark:file:text-brand-300 border border-gray-200 dark:border-gray-700 rounded-2xl p-2 bg-gray-50/50 dark:bg-gray-800"
           />

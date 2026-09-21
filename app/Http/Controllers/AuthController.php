@@ -164,19 +164,32 @@ class AuthController extends Controller
             'nis_nisn.required' => 'Silakan masukkan NIS atau NISN Anda.',
         ]);
 
-        $query = trim($validated['nis_nisn']);
+        $rawQuery = trim($validated['nis_nisn']);
+        $cleanQuery = preg_replace('/\.0+$/', '', $rawQuery);
+        $paddedNisn = (! empty($cleanQuery) && ctype_digit($cleanQuery) && strlen($cleanQuery) < 10)
+            ? str_pad($cleanQuery, 10, '0', STR_PAD_LEFT)
+            : $cleanQuery;
+        $unpaddedNisn = ltrim($cleanQuery, '0');
+
+        $searchVariants = array_values(array_unique(array_filter([
+            $rawQuery,
+            $cleanQuery,
+            $cleanQuery.'.0',
+            $paddedNisn,
+            $unpaddedNisn,
+        ])));
 
         // Cari siswa yang belum diaktivasi (user_id IS NULL)
-        $student = Student::where(function ($q) use ($query) {
-            $q->where('nis', $query)
-                ->orWhere('nisn', $query);
+        $student = Student::where(function ($q) use ($searchVariants) {
+            $q->whereIn('nis', $searchVariants)
+                ->orWhereIn('nisn', $searchVariants);
         })->whereNull('user_id')->first();
 
         if (! $student) {
             // Periksa apakah siswa sudah pernah diaktivasi
-            $alreadyActivated = Student::where(function ($q) use ($query) {
-                $q->where('nis', $query)
-                    ->orWhere('nisn', $query);
+            $alreadyActivated = Student::where(function ($q) use ($searchVariants) {
+                $q->whereIn('nis', $searchVariants)
+                    ->orWhereIn('nisn', $searchVariants);
             })->whereNotNull('user_id')->exists();
 
             if ($alreadyActivated) {
@@ -193,7 +206,7 @@ class AuthController extends Controller
         $request->session()->put('aktivasi_student', [
             'id' => $student->id,
             'nama' => $student->nama,
-            'nis' => $student->nis,
+            'nis' => preg_replace('/\.0+$/', '', (string) $student->nis),
             'nisn' => $student->nisn,
             'kelas' => $student->kelas,
         ]);

@@ -277,4 +277,72 @@ class StudentImportAndActivationTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Target Detail');
     }
+
+    public function test_import_csv_normalizes_float_decimals_and_pads_nisn(): void
+    {
+        $admin = $this->getAdminUser();
+        $this->actingAs($admin);
+
+        // Simulasi format kelas_12.csv dengan desimal .0 dan NISN tanpa leading zero
+        $csvContent = "No,Nama,KELAS,NIS,JK,NISN,Tempat Lahir,Tanggal Lahir,NIK,Agama,Alamat,HP\n".
+                      "1,AFIFAH FITRIYANI,XII-1,10674.0,P,77676331,KAB. TEGAL,2007-10-09,3328144910070001,Islam,\"JL. GATOT SUBROTO\",895370595700.0\n";
+
+        $file = UploadedFile::fake()->createWithContent('kelas_12.csv', $csvContent);
+
+        $response = $this->post(route('admin.siswa.import'), [
+            'file' => $file,
+        ]);
+
+        $response->assertRedirect(route('admin.users', ['role' => 'siswa', 'tab' => 'prapendaftaran']));
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseHas('students', [
+            'nama' => 'AFIFAH FITRIYANI',
+            'nis' => '10674',
+            'nisn' => '0077676331',
+            'kelas' => 'XII-1',
+            'jenis_kelamin' => 'P',
+            'no_hp' => '0895370595700',
+        ]);
+
+        // Logout admin agar bisa mengakses rute aktivasi yang memiliki middleware guest
+        auth()->logout();
+
+        // Siswa dapat lookup aktivasi menggunakan NIS murni '10674'
+        $lookupNis = $this->post(route('aktivasi.lookup'), [
+            'nis_nisn' => '10674',
+        ]);
+        $lookupNis->assertRedirect(route('aktivasi'));
+        $lookupNis->assertSessionHas('aktivasi_student');
+
+        // Siswa juga dapat lookup menggunakan NISN 8-digit tanpa leading zero '77676331'
+        $lookupNisn = $this->post(route('aktivasi.lookup'), [
+            'nis_nisn' => '77676331',
+        ]);
+        $lookupNisn->assertRedirect(route('aktivasi'));
+        $lookupNisn->assertSessionHas('aktivasi_student');
+    }
+
+    public function test_admin_can_view_and_delete_pra_pendaftaran_student(): void
+    {
+        $admin = $this->getAdminUser();
+        $this->actingAs($admin);
+
+        $student = Student::create([
+            'nama' => 'Siswa Pra Pendaftaran',
+            'nis' => '99887',
+            'nisn' => '0099887766',
+            'kelas' => 'XII-2',
+            'status' => 'terdaftar',
+        ]);
+
+        $response = $this->get(route('admin.users', ['tab' => 'prapendaftaran', 'role' => 'siswa']));
+        $response->assertStatus(200);
+        $response->assertSee('Siswa Pra Pendaftaran');
+
+        $deleteResponse = $this->delete(route('admin.siswa.destroy', $student->id));
+        $deleteResponse->assertRedirect(route('admin.users', ['role' => 'siswa', 'tab' => 'prapendaftaran']));
+        $deleteResponse->assertSessionHas('success');
+        $this->assertDatabaseMissing('students', ['id' => $student->id]);
+    }
 }

@@ -120,6 +120,7 @@ Route::middleware('auth')->group(function () {
         Route::patch('/users/{id}/toggle', [AdminController::class, 'toggleUserStatus'])->name('users.toggle');
         Route::get('/siswa/template', [AdminController::class, 'downloadSiswaTemplate'])->name('siswa.template');
         Route::post('/siswa/import', [AdminController::class, 'importSiswa'])->name('siswa.import');
+        Route::delete('/siswa/{id}', [AdminController::class, 'destroyStudent'])->name('siswa.destroy');
     });
 
     // Rute Khusus Administrator

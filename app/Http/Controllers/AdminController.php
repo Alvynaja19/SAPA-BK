@@ -49,6 +49,7 @@ class AdminController extends Controller
     {
         $roleFilter = $request->query('role');
         $search = $request->query('q');
+        $tab = $request->query('tab', ($roleFilter === 'siswa' && $request->has('tab')) ? $request->query('tab') : 'users');
 
         $query = User::query();
 
@@ -66,7 +67,31 @@ class AdminController extends Controller
 
         $users = $query->latest()->paginate(12)->withQueryString();
 
-        return view('admin.users', compact('users', 'roleFilter', 'search'));
+        // Data master siswa pra-pendaftaran
+        $studentsQuery = Student::with('user');
+        if ($search) {
+            $studentsQuery->where(function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                    ->orWhere('nis', 'like', "%{$search}%")
+                    ->orWhere('nisn', 'like', "%{$search}%")
+                    ->orWhere('kelas', 'like', "%{$search}%");
+            });
+        }
+        $students = $studentsQuery->latest()->paginate(15, ['*'], 'student_page')->withQueryString();
+        $totalStudents = Student::count();
+        $totalBelumAktivasi = Student::whereNull('user_id')->count();
+        $totalSudahAktivasi = Student::whereNotNull('user_id')->count();
+
+        return view('admin.users', compact(
+            'users',
+            'roleFilter',
+            'search',
+            'tab',
+            'students',
+            'totalStudents',
+            'totalBelumAktivasi',
+            'totalSudahAktivasi'
+        ));
     }
 
     /**
@@ -202,25 +227,51 @@ class AdminController extends Controller
 
         foreach ($rows as $row) {
             $nama = isset($colMap['nama'], $row[$colMap['nama']]) ? trim($row[$colMap['nama']]) : '';
-            $nisn = isset($colMap['nisn'], $row[$colMap['nisn']]) ? trim($row[$colMap['nisn']]) : '';
-            $nis = isset($colMap['nis'], $row[$colMap['nis']]) ? trim($row[$colMap['nis']]) : '';
+            $nisnRaw = isset($colMap['nisn'], $row[$colMap['nisn']]) ? trim($row[$colMap['nisn']]) : '';
+            $nisRaw = isset($colMap['nis'], $row[$colMap['nis']]) ? trim($row[$colMap['nis']]) : '';
             $kelas = isset($colMap['kelas'], $row[$colMap['kelas']]) ? trim($row[$colMap['kelas']]) : '';
             $jkRaw = isset($colMap['jenis_kelamin'], $row[$colMap['jenis_kelamin']]) ? strtoupper(trim($row[$colMap['jenis_kelamin']])) : '';
             $jk = in_array($jkRaw, ['L', 'P'], true) ? $jkRaw : null;
-            $noHp = isset($colMap['no_hp'], $row[$colMap['no_hp']]) ? trim($row[$colMap['no_hp']]) : '';
+            $noHpRaw = isset($colMap['no_hp'], $row[$colMap['no_hp']]) ? trim($row[$colMap['no_hp']]) : '';
+
+            // Normalisasi NIS: hapus desimal .0 dari export float pandas/Excel
+            $nis = preg_replace('/\.0+$/', '', $nisRaw);
+
+            // Normalisasi NISN: hapus .0 dan tambahkan padding 10 digit jika numeric < 10 digit
+            $nisn = preg_replace('/\.0+$/', '', $nisnRaw);
+            if (! empty($nisn) && ctype_digit($nisn) && strlen($nisn) < 10) {
+                $nisn = str_pad($nisn, 10, '0', STR_PAD_LEFT);
+            }
+
+            // Normalisasi No HP: hapus .0 dan pastikan awalan 0
+            $noHp = preg_replace('/\.0+$/', '', $noHpRaw);
+            if (! empty($noHp)) {
+                $digits = preg_replace('/[^\d]/', '', $noHp);
+                if (str_starts_with($digits, '8')) {
+                    $noHp = '0'.$digits;
+                } elseif (str_starts_with($digits, '628')) {
+                    $noHp = '0'.substr($digits, 2);
+                }
+            }
 
             // Lewati baris jika nama dan NIS/NISN kosong
             if (empty($nama) || (empty($nisn) && empty($nis))) {
                 continue;
             }
 
-            // Cari apakah data siswa sudah ada berdasarkan NISN atau NIS
+            // Cari apakah data siswa sudah ada berdasarkan NISN atau NIS (termasuk variasi format lama)
             $existingStudent = null;
             if (! empty($nisn)) {
                 $existingStudent = Student::where('nisn', $nisn)->first();
             }
             if (! $existingStudent && ! empty($nis)) {
                 $existingStudent = Student::where('nis', $nis)->first();
+            }
+            if (! $existingStudent && ! empty($nis)) {
+                $existingStudent = Student::where('nis', $nis.'.0')->first();
+            }
+            if (! $existingStudent && ! empty($nisn)) {
+                $existingStudent = Student::where('nisn', ltrim($nisn, '0'))->first();
             }
 
             if ($existingStudent) {
@@ -249,7 +300,21 @@ class AdminController extends Controller
 
         $total = $importedCount + $updatedCount;
 
-        return back()->with('success', "Proses impor selesai. Total {$total} data siswa diproses ({$importedCount} baru ditambahkan, {$updatedCount} diperbarui).");
+        return redirect()->route('admin.users', ['role' => 'siswa', 'tab' => 'prapendaftaran'])
+            ->with('success', "Proses impor selesai! Total {$total} data siswa diproses ({$importedCount} baru ditambahkan, {$updatedCount} diperbarui). Data siswa tersimpan di Master Pra-Pendaftaran dan siap diaktivasi mandiri oleh siswa.");
+    }
+
+    /**
+     * Menghapus data master siswa pra-pendaftaran.
+     */
+    public function destroyStudent(int|string $id): RedirectResponse
+    {
+        $student = Student::findOrFail($id);
+        $nama = $student->nama;
+        $student->delete();
+
+        return redirect()->route('admin.users', ['role' => 'siswa', 'tab' => 'prapendaftaran'])
+            ->with('success', "Data master siswa {$nama} berhasil dihapus dari pra-pendaftaran.");
     }
 
     public function userDetail(int $id): View
