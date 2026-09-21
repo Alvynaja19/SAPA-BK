@@ -243,7 +243,7 @@ class StudentImportAndActivationTest extends TestCase
         $selfDeleteResponse->assertSessionHasErrors('error');
         $this->assertDatabaseHas('users', ['id' => $admin->id]);
 
-        // 2. Bisa menghapus akun pengguna lain
+        // 2. Bisa menghapus akun pengguna lain dan tetap berada di tab role yang sama
         $userToDelete = User::create([
             'name' => 'To Delete',
             'email' => 'todelete@sman4jember.sch.id',
@@ -252,8 +252,10 @@ class StudentImportAndActivationTest extends TestCase
             'is_active' => true,
         ]);
 
-        $deleteResponse = $this->delete(route('admin.users.destroy', $userToDelete->id));
-        $deleteResponse->assertRedirect(route('admin.users'));
+        $deleteResponse = $this->delete(route('admin.users.destroy', $userToDelete->id), [
+            'role' => 'siswa',
+        ]);
+        $deleteResponse->assertRedirect(route('admin.users', ['role' => 'siswa']));
         $deleteResponse->assertSessionHas('success');
         $this->assertDatabaseMissing('users', ['id' => $userToDelete->id]);
     }

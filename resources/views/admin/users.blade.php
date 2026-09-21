@@ -303,6 +303,11 @@
                   <form id="delete-user-form-{{ $u->id }}" method="POST" action="{{ route('admin.users.destroy', $u->id) }}">
                     @csrf
                     @method('DELETE')
+                    <input type="hidden" name="redirect_to" value="{{ request()->fullUrl() }}">
+                    <input type="hidden" name="role" value="{{ request('role', $u->role) }}">
+                    @if(request('q'))
+                      <input type="hidden" name="q" value="{{ request('q') }}">
+                    @endif
                     <button
                       type="button"
                       onclick="showConfirmModal({

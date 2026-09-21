@@ -341,7 +341,7 @@ class AdminController extends Controller
     /**
      * Menghapus akun pengguna dari sistem (Delete User).
      */
-    public function destroyUser(int $id): RedirectResponse
+    public function destroyUser(Request $request, int $id): RedirectResponse
     {
         $user = User::findOrFail($id);
 
@@ -356,6 +356,7 @@ class AdminController extends Controller
         }
 
         $userName = $user->name;
+        $userRole = $user->role;
 
         // Jika terhubung ke data master Student, lepaskan tautan agar data prapendaftaran tetap aman
         if ($user->student) {
@@ -367,7 +368,25 @@ class AdminController extends Controller
 
         $user->delete();
 
-        return redirect()->route('admin.users')->with('success', "Akun pengguna ({$userName}) berhasil dihapus dari sistem!");
+        // 1. Jika ada parameter redirect_to dari form yang bukan merupakan halaman detail akun yang dihapus
+        if ($request->filled('redirect_to')) {
+            $targetUrl = $request->input('redirect_to');
+            if (! str_contains($targetUrl, "/admin/users/{$id}")) {
+                return redirect($targetUrl)->with('success', "Akun pengguna ({$userName}) berhasil dihapus dari sistem!");
+            }
+        }
+
+        // 2. Pertahankan filter role dan pencarian agar admin tetap berada di tab role yang sedang aktif
+        $roleFilter = $request->input('role', $userRole);
+        $queryParams = [];
+        if ($roleFilter && in_array($roleFilter, ['siswa', 'guru_bk', 'admin'], true)) {
+            $queryParams['role'] = $roleFilter;
+        }
+        if ($request->filled('q')) {
+            $queryParams['q'] = $request->input('q');
+        }
+
+        return redirect()->route('admin.users', $queryParams)->with('success', "Akun pengguna ({$userName}) berhasil dihapus dari sistem!");
     }
 
     /**

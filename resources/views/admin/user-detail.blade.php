@@ -69,6 +69,7 @@
       <form id="delete-detail-form" method="POST" action="{{ route('admin.users.destroy', $user->id) }}">
         @csrf
         @method('DELETE')
+        <input type="hidden" name="role" value="{{ $user->role }}">
         <button
           type="button"
           onclick="showConfirmModal({
