@@ -3,7 +3,7 @@
 @section('title', 'Manajemen Pengguna : SAPA BK')
 
 @section('content')
-<div class="space-y-6" x-data="{ modalTambah: false }">
+<div class="space-y-6" x-data="{ modalTambah: false, modalImport: false }">
 
   <!-- Page Header -->
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -16,17 +16,44 @@
       </p>
     </div>
 
-    <!-- Tambah Pengguna Button (SRS F-06: Buat Akun Guru BK / Admin secara manual) -->
-    <button
-      type="button"
-      @click="modalTambah = true"
-      class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-semibold text-xs shadow-md shadow-brand-500/20 transition-all self-start sm:self-auto"
-    >
-      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-      </svg>
-      <span>Tambah Pengguna Baru</span>
-    </button>
+    <!-- Action Buttons -->
+    <div class="flex items-center gap-2.5 self-start sm:self-auto flex-wrap">
+      <!-- Unduh Template Link -->
+      <a
+        href="{{ route('admin.siswa.template') }}"
+        class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700/60 text-gray-700 dark:text-gray-200 font-semibold text-xs shadow-xs transition-colors"
+        title="Unduh Template CSV"
+      >
+        <svg class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>
+        <span>Unduh Template CSV</span>
+      </a>
+
+      <!-- Import Siswa Button -->
+      <button
+        type="button"
+        @click="modalImport = true"
+        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-brand-200 dark:border-brand-800/60 bg-brand-50 dark:bg-brand-950/40 hover:bg-brand-100 dark:hover:bg-brand-900/50 text-brand-700 dark:text-brand-300 font-semibold text-xs shadow-xs transition-colors cursor-pointer"
+      >
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+        </svg>
+        <span>Import Siswa (Excel/CSV)</span>
+      </button>
+
+      <!-- Tambah Pengguna Button (SRS F-06) -->
+      <button
+        type="button"
+        @click="modalTambah = true"
+        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-semibold text-xs shadow-md shadow-brand-500/20 transition-all cursor-pointer"
+      >
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        <span>Tambah Pengguna Baru</span>
+      </button>
+    </div>
   </div>
 
   <!-- Filter & Search Toolbar -->
@@ -381,6 +408,81 @@
             class="px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-bold text-xs shadow-md shadow-brand-500/20"
           >
             Simpan Akun
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Form Import Data Siswa (Excel/CSV) -->
+  <div
+    x-show="modalImport"
+    x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="transition ease-in duration-150"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/60 backdrop-blur-xs flex items-center justify-center p-4"
+    style="display: none;"
+  >
+    <div
+      @click.outside="modalImport = false"
+      class="w-full max-w-lg rounded-3xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-2xl p-6 sm:p-8 space-y-6"
+    >
+      <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-4">
+        <div>
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white">Import Data Siswa</h3>
+          <p class="text-xs text-gray-400">Unggah file Excel (.xlsx, .xls) atau CSV (.csv) data siswa untuk prapendaftaran.</p>
+        </div>
+        <button type="button" @click="modalImport = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 cursor-pointer">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+
+      <!-- Info Box & Template Link -->
+      <div class="p-4 rounded-2xl bg-brand-50 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-800/60 text-xs text-brand-800 dark:text-brand-300 space-y-2">
+        <div class="flex items-center justify-between font-bold">
+          <span>Panduan Format Data</span>
+          <a href="{{ route('admin.siswa.template') }}" class="underline hover:text-brand-600 flex items-center gap-1">
+            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+            Unduh Template CSV
+          </a>
+        </div>
+        <p class="text-[11px] leading-relaxed text-brand-700 dark:text-brand-400">
+          Pastikan file memuat kolom header: <strong>Nama</strong>, <strong>NISN</strong>, <strong>NIS</strong>, <strong>Kelas</strong>, <strong>Jenis Kelamin (L/P)</strong>, dan <strong>No HP</strong>. Siswa yang diimpor dapat langsung mengaktivasi akunnya secara mandiri menggunakan NIS atau NISN.
+        </p>
+      </div>
+
+      <form method="POST" action="{{ route('admin.siswa.import') }}" enctype="multipart/form-data" class="space-y-4">
+        @csrf
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2">Pilih File Excel / CSV *</label>
+          <input
+            type="file"
+            name="file"
+            accept=".csv, .xlsx, .xls, text/csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+            required
+            class="w-full text-xs text-gray-500 dark:text-gray-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 dark:file:bg-brand-950/60 dark:file:text-brand-300 border border-gray-200 dark:border-gray-700 rounded-2xl p-2 bg-gray-50/50 dark:bg-gray-800"
+          />
+          <p class="text-[11px] text-gray-400 mt-1">Maksimum ukuran file: 5 MB.</p>
+        </div>
+
+        <div class="pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-end gap-3">
+          <button
+            type="button"
+            @click="modalImport = false"
+            class="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
+          >
+            Batal
+          </button>
+          <button
+            type="submit"
+            class="px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-bold text-xs shadow-md shadow-brand-500/20 inline-flex items-center gap-1.5 cursor-pointer"
+          >
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+            <span>Mulai Impor Data</span>
           </button>
         </div>
       </form>

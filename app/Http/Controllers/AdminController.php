@@ -10,11 +10,14 @@ use App\Models\Ebook;
 use App\Models\KnowledgeDocument;
 use App\Models\Questionnaire;
 use App\Models\QuestionnaireResult;
+use App\Models\Student;
 use App\Models\User;
+use App\Services\ExcelCsvReader;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AdminController extends Controller
 {
@@ -98,6 +101,154 @@ class AdminController extends Controller
         };
 
         return back()->with('success', "Akun {$roleTitle} ({$validated['name']}) berhasil dibuat!");
+    }
+
+    /**
+     * Mengunduh template CSV untuk import data master siswa.
+     */
+    public function downloadSiswaTemplate(): StreamedResponse
+    {
+        $headers = ['No', 'Nama', 'NISN', 'NIS', 'Kelas', 'Jenis Kelamin (L/P)', 'No HP'];
+        $examples = [
+            ['1', 'Ahmad Fauzi Pratama', '0054321987', '12345', 'XII MIPA 1', 'L', '082198765432'],
+            ['2', 'Siti Nurhaliza', '0054321988', '12346', 'XII MIPA 2', 'P', '082198765433'],
+        ];
+
+        $filename = 'template_import_siswa_sapa_bk.csv';
+
+        return response()->streamDownload(function () use ($headers, $examples) {
+            $file = fopen('php://output', 'w');
+            // Menulis UTF-8 BOM agar terbaca rapi saat dibuka di Microsoft Excel
+            fwrite($file, "\xEF\xBB\xBF");
+            fputcsv($file, $headers);
+            foreach ($examples as $row) {
+                fputcsv($file, $row);
+            }
+            fclose($file);
+        }, $filename, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+        ]);
+    }
+
+    /**
+     * Mengimpor data master siswa dari file Excel (.xlsx) atau CSV.
+     */
+    public function importSiswa(Request $request, ExcelCsvReader $reader): RedirectResponse
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:csv,txt,xlsx,xls|max:5120',
+        ], [
+            'file.required' => 'Silakan pilih file Excel atau CSV terlebih dahulu.',
+            'file.mimes' => 'Format file harus berupa CSV (.csv) atau Excel (.xlsx, .xls).',
+            'file.max' => 'Ukuran file maksimal adalah 5MB.',
+        ]);
+
+        try {
+            $file = $request->file('file');
+            $rows = $reader->read($file->getRealPath(), $file->getClientOriginalExtension());
+        } catch (\Throwable $e) {
+            return back()->withErrors(['error' => 'Gagal membaca file: '.$e->getMessage()]);
+        }
+
+        if (count($rows) <= 1) {
+            return back()->withErrors(['error' => 'File tidak berisi data atau hanya memuat baris judul.']);
+        }
+
+        // Baris pertama diasumsikan sebagai baris header
+        $headerRow = array_shift($rows);
+
+        // Pemetaan otomatis indeks kolom berdasarkan nama header
+        $colMap = [
+            'nama' => -1,
+            'nisn' => -1,
+            'nis' => -1,
+            'kelas' => -1,
+            'jenis_kelamin' => -1,
+            'no_hp' => -1,
+        ];
+
+        foreach ($headerRow as $idx => $headerText) {
+            $cleanHeader = strtolower(trim((string) $headerText));
+            if (str_contains($cleanHeader, 'nama')) {
+                $colMap['nama'] = $idx;
+            } elseif (str_contains($cleanHeader, 'nisn')) {
+                $colMap['nisn'] = $idx;
+            } elseif (str_contains($cleanHeader, 'kelamin') || str_contains($cleanHeader, 'jk')) {
+                $colMap['jenis_kelamin'] = $idx;
+            } elseif (str_contains($cleanHeader, 'kelas') || str_contains($cleanHeader, 'rombel')) {
+                $colMap['kelas'] = $idx;
+            } elseif (str_contains($cleanHeader, 'nis')) {
+                $colMap['nis'] = $idx;
+            } elseif (str_contains($cleanHeader, 'hp') || str_contains($cleanHeader, 'telepon') || str_contains($cleanHeader, 'kontak') || str_contains($cleanHeader, 'wa')) {
+                $colMap['no_hp'] = $idx;
+            }
+        }
+
+        // Fallback jika header tidak terdeteksi (mengikuti template default: No, Nama, NISN, NIS, Kelas, JK, No HP)
+        if ($colMap['nama'] === -1) {
+            $colMap = [
+                'nama' => 1,
+                'nisn' => 2,
+                'nis' => 3,
+                'kelas' => 4,
+                'jenis_kelamin' => 5,
+                'no_hp' => 6,
+            ];
+        }
+
+        $importedCount = 0;
+        $updatedCount = 0;
+
+        foreach ($rows as $row) {
+            $nama = isset($colMap['nama'], $row[$colMap['nama']]) ? trim($row[$colMap['nama']]) : '';
+            $nisn = isset($colMap['nisn'], $row[$colMap['nisn']]) ? trim($row[$colMap['nisn']]) : '';
+            $nis = isset($colMap['nis'], $row[$colMap['nis']]) ? trim($row[$colMap['nis']]) : '';
+            $kelas = isset($colMap['kelas'], $row[$colMap['kelas']]) ? trim($row[$colMap['kelas']]) : '';
+            $jkRaw = isset($colMap['jenis_kelamin'], $row[$colMap['jenis_kelamin']]) ? strtoupper(trim($row[$colMap['jenis_kelamin']])) : '';
+            $jk = in_array($jkRaw, ['L', 'P'], true) ? $jkRaw : null;
+            $noHp = isset($colMap['no_hp'], $row[$colMap['no_hp']]) ? trim($row[$colMap['no_hp']]) : '';
+
+            // Lewati baris jika nama dan NIS/NISN kosong
+            if (empty($nama) || (empty($nisn) && empty($nis))) {
+                continue;
+            }
+
+            // Cari apakah data siswa sudah ada berdasarkan NISN atau NIS
+            $existingStudent = null;
+            if (! empty($nisn)) {
+                $existingStudent = Student::where('nisn', $nisn)->first();
+            }
+            if (! $existingStudent && ! empty($nis)) {
+                $existingStudent = Student::where('nis', $nis)->first();
+            }
+
+            if ($existingStudent) {
+                $existingStudent->update(array_filter([
+                    'nama' => $nama,
+                    'nis' => $nis ?: $existingStudent->nis,
+                    'nisn' => $nisn ?: $existingStudent->nisn,
+                    'kelas' => $kelas ?: $existingStudent->kelas,
+                    'jenis_kelamin' => $jk ?: $existingStudent->jenis_kelamin,
+                    'no_hp' => $noHp ?: $existingStudent->no_hp,
+                ]));
+                $updatedCount++;
+            } else {
+                Student::create([
+                    'nama' => $nama,
+                    'nis' => $nis ?: null,
+                    'nisn' => $nisn ?: null,
+                    'kelas' => $kelas ?: null,
+                    'jenis_kelamin' => $jk,
+                    'no_hp' => $noHp ?: null,
+                    'status' => 'terdaftar',
+                ]);
+                $importedCount++;
+            }
+        }
+
+        $total = $importedCount + $updatedCount;
+
+        return back()->with('success', "Proses impor selesai. Total {$total} data siswa diproses ({$importedCount} baru ditambahkan, {$updatedCount} diperbarui).");
     }
 
     public function userDetail(int $id): View

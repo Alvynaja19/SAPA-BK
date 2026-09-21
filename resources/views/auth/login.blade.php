@@ -114,10 +114,16 @@
     </button>
   </form>
 
-  <!-- Switch to Register -->
-  <div class="auth-switch">
-    Belum memiliki akun siswa?
-    <a href="{{ route('register') }}">Daftar Akun Baru</a>
+  <!-- Switch to Register & Aktivasi -->
+  <div class="auth-switch" style="display: flex; flex-direction: column; gap: 6px;">
+    <div>
+      Siswa SMAN 4 Jember?
+      <a href="{{ route('aktivasi') }}" style="font-weight: 700; color: var(--primary);">Aktivasi Akun di Sini</a>
+    </div>
+    <div>
+      Belum memiliki akun?
+      <a href="{{ route('register') }}">Daftar Akun Baru</a>
+    </div>
   </div>
 @endsection
 

@@ -29,6 +29,13 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
+
+    // Aktivasi Akun Siswa (Pre-registered via NIS/NISN & Email OTP)
+    Route::get('/aktivasi', [AuthController::class, 'showAktivasiForm'])->name('aktivasi');
+    Route::post('/aktivasi/lookup', [AuthController::class, 'aktivasiLookup'])->name('aktivasi.lookup');
+    Route::post('/aktivasi/send-otp', [AuthController::class, 'aktivasiSendOtp'])->name('aktivasi.send-otp');
+    Route::post('/aktivasi/verify-otp', [AuthController::class, 'aktivasiVerifyOtp'])->name('aktivasi.verify-otp');
+    Route::post('/aktivasi/reset', [AuthController::class, 'aktivasiReset'])->name('aktivasi.reset');
 });
 
 Route::middleware('auth')->group(function () {
@@ -108,6 +115,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/users', [AdminController::class, 'storeUser'])->name('users.store');
         Route::get('/users/{id}', [AdminController::class, 'userDetail'])->name('users.detail');
         Route::patch('/users/{id}/toggle', [AdminController::class, 'toggleUserStatus'])->name('users.toggle');
+        Route::get('/siswa/template', [AdminController::class, 'downloadSiswaTemplate'])->name('siswa.template');
+        Route::post('/siswa/import', [AdminController::class, 'importSiswa'])->name('siswa.import');
         Route::get('/konfigurasi', [AdminController::class, 'konfigurasi'])->name('konfigurasi');
         Route::post('/konfigurasi', [AdminController::class, 'simpanKonfigurasi'])->name('konfigurasi.store');
         Route::get('/log', [AdminController::class, 'log'])->name('log');

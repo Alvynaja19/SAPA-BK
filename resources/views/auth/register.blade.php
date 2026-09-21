@@ -186,9 +186,15 @@
     </div>
   </form>
 
-  <!-- Switch to Login -->
-  <div class="auth-switch">
-    Sudah memiliki akun?
-    <a href="{{ route('login') }}">Masuk Sekarang</a>
+  <!-- Switch to Login & Aktivasi -->
+  <div class="auth-switch" style="display: flex; flex-direction: column; gap: 6px;">
+    <div>
+      Sudah terdaftar sebagai siswa SMAN 4 Jember?
+      <a href="{{ route('aktivasi') }}" style="font-weight: 700; color: var(--primary);">Aktivasi Akun di Sini</a>
+    </div>
+    <div>
+      Sudah memiliki akun aktif?
+      <a href="{{ route('login') }}">Masuk Sekarang</a>
+    </div>
   </div>
 @endsection

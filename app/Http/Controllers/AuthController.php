@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AccountVerificationMail;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class AuthController extends Controller
@@ -130,6 +135,217 @@ class AuthController extends Controller
         $user->save();
 
         return back()->with('success', 'Profil Anda berhasil diperbarui!');
+    }
+
+    /**
+     * Menampilkan halaman aktivasi akun siswa (Klaim Akun).
+     */
+    public function showAktivasiForm(Request $request): View|RedirectResponse
+    {
+        if (Auth::check()) {
+            return $this->redirectBasedOnRole(Auth::user());
+        }
+
+        $foundStudent = $request->session()->get('aktivasi_student');
+        $otpSent = $request->session()->get('aktivasi_otp_sent', false);
+        $otpEmail = $request->session()->get('aktivasi_otp_email');
+
+        return view('auth.aktivasi', compact('foundStudent', 'otpSent', 'otpEmail'));
+    }
+
+    /**
+     * Pencarian data siswa berdasarkan NIS atau NISN.
+     */
+    public function aktivasiLookup(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'nis_nisn' => 'required|string|max:30',
+        ], [
+            'nis_nisn.required' => 'Silakan masukkan NIS atau NISN Anda.',
+        ]);
+
+        $query = trim($validated['nis_nisn']);
+
+        // Cari siswa yang belum diaktivasi (user_id IS NULL)
+        $student = Student::where(function ($q) use ($query) {
+            $q->where('nis', $query)
+                ->orWhere('nisn', $query);
+        })->whereNull('user_id')->first();
+
+        if (! $student) {
+            // Periksa apakah siswa sudah pernah diaktivasi
+            $alreadyActivated = Student::where(function ($q) use ($query) {
+                $q->where('nis', $query)
+                    ->orWhere('nisn', $query);
+            })->whereNotNull('user_id')->exists();
+
+            if ($alreadyActivated) {
+                return back()->withErrors([
+                    'nis_nisn' => 'Akun dengan NIS/NISN tersebut sudah pernah diaktivasi. Silakan langsung masuk (login) menggunakan email Anda.',
+                ])->withInput();
+            }
+
+            return back()->withErrors([
+                'nis_nisn' => 'Data siswa dengan NIS/NISN tersebut tidak ditemukan dalam prapendaftaran sekolah. Harap periksa kembali atau hubungi admin sekolah.',
+            ])->withInput();
+        }
+
+        $request->session()->put('aktivasi_student', [
+            'id' => $student->id,
+            'nama' => $student->nama,
+            'nis' => $student->nis,
+            'nisn' => $student->nisn,
+            'kelas' => $student->kelas,
+        ]);
+
+        return redirect()->route('aktivasi')->with('success', "Data ditemukan atas nama {$student->nama} ({$student->kelas}). Silakan lengkapi email dan kata sandi Anda.");
+    }
+
+    /**
+     * Mengirim kode OTP verifikasi ke email siswa.
+     */
+    public function aktivasiSendOtp(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'student_id' => 'required|exists:students,id',
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+        ], [
+            'student_id.required' => 'Identitas siswa tidak valid.',
+            'email.required' => 'Alamat email wajib diisi.',
+            'email.unique' => 'Email tersebut sudah terdaftar pada akun lain. Silakan gunakan email lain.',
+            'password.required' => 'Kata sandi wajib diisi.',
+            'password.min' => 'Kata sandi minimal 8 karakter.',
+            'password.confirmed' => 'Konfirmasi kata sandi tidak cocok.',
+        ]);
+
+        $student = Student::where('id', $validated['student_id'])
+            ->whereNull('user_id')
+            ->firstOrFail();
+
+        $otp = (string) random_int(100000, 999999);
+        $cacheKey = 'sapa_aktivasi_otp_'.$student->id;
+
+        Cache::put($cacheKey, [
+            'student_id' => $student->id,
+            'email' => strtolower($validated['email']),
+            'password_hash' => Hash::make($validated['password']),
+            'otp_hash' => Hash::make($otp),
+            'attempts' => 0,
+            'expires_at' => now()->addMinutes(10)->toDateTimeString(),
+        ], now()->addMinutes(10));
+
+        try {
+            Mail::to($validated['email'])->send(new AccountVerificationMail($otp, $student->nama, 'activate'));
+        } catch (\Throwable $e) {
+            Cache::forget($cacheKey);
+
+            return back()->withErrors([
+                'email' => 'Gagal mengirimkan email verifikasi. Pastikan alamat email benar atau coba beberapa saat lagi.',
+            ])->withInput();
+        }
+
+        $request->session()->put('aktivasi_otp_sent', true);
+        $request->session()->put('aktivasi_otp_email', strtolower($validated['email']));
+
+        return redirect()->route('aktivasi')->with('success', "Kode verifikasi OTP 6 digit telah dikirim ke {$validated['email']}. Silakan periksa kotak masuk atau spam email Anda.");
+    }
+
+    /**
+     * Memverifikasi kode OTP dan mengaktifkan akun siswa.
+     */
+    public function aktivasiVerifyOtp(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'student_id' => 'required|exists:students,id',
+            'email' => 'required|email',
+            'otp' => 'required|string|size:6',
+        ], [
+            'otp.required' => 'Kode OTP wajib diisi.',
+            'otp.size' => 'Kode OTP harus terdiri dari 6 digit.',
+        ]);
+
+        $cacheKey = 'sapa_aktivasi_otp_'.$validated['student_id'];
+        $otpData = Cache::get($cacheKey);
+
+        if (! $otpData) {
+            return back()->withErrors(['otp' => 'Kode OTP sudah kadaluwarsa atau belum diminta. Silakan minta kode baru.']);
+        }
+
+        if (now()->greaterThan($otpData['expires_at'])) {
+            Cache::forget($cacheKey);
+
+            return back()->withErrors(['otp' => 'Kode OTP telah kadaluwarsa. Silakan minta kode verifikasi baru.']);
+        }
+
+        if (($otpData['attempts'] ?? 0) >= 5) {
+            Cache::forget($cacheKey);
+
+            return back()->withErrors(['otp' => 'Terlalu banyak percobaan kode OTP yang salah. Silakan minta kode baru.']);
+        }
+
+        if (! Hash::check($validated['otp'], $otpData['otp_hash'])) {
+            $otpData['attempts'] = ($otpData['attempts'] ?? 0) + 1;
+            Cache::put($cacheKey, $otpData, now()->addMinutes(10));
+
+            $sisa = 5 - $otpData['attempts'];
+
+            return back()->withErrors(['otp' => "Kode OTP tidak sesuai. Sisa kesempatan mencoba: {$sisa} kali."]);
+        }
+
+        $student = Student::where('id', $validated['student_id'])
+            ->whereNull('user_id')
+            ->firstOrFail();
+
+        if (User::where('email', $otpData['email'])->exists()) {
+            Cache::forget($cacheKey);
+
+            return back()->withErrors(['otp' => 'Email ini sudah terdaftar pada akun lain.']);
+        }
+
+        DB::beginTransaction();
+        try {
+            $user = User::create([
+                'name' => $student->nama,
+                'email' => $otpData['email'],
+                'email_verified_at' => now(),
+                'password' => $otpData['password_hash'],
+                'role' => 'siswa',
+                'nisn' => $student->nisn,
+                'kelas' => $student->kelas,
+                'no_hp' => $student->no_hp,
+                'is_active' => true,
+            ]);
+
+            $student->update([
+                'user_id' => $user->id,
+                'status' => 'aktif',
+            ]);
+
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            return back()->withErrors(['otp' => 'Terjadi kesalahan sistem saat mengaktivasi akun. Silakan coba kembali.']);
+        }
+
+        Cache::forget($cacheKey);
+        $request->session()->forget(['aktivasi_student', 'aktivasi_otp_sent', 'aktivasi_otp_email']);
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return redirect()->route('siswa.dashboard')->with('success', "Selamat datang di SAPA BK, {$student->nama}! Akun siswa Anda berhasil diaktivasi.");
+    }
+
+    /**
+     * Mereset form aktivasi akun siswa.
+     */
+    public function aktivasiReset(Request $request): RedirectResponse
+    {
+        $request->session()->forget(['aktivasi_student', 'aktivasi_otp_sent', 'aktivasi_otp_email']);
+
+        return redirect()->route('aktivasi');
     }
 
     protected function redirectBasedOnRole(User $user): RedirectResponse
