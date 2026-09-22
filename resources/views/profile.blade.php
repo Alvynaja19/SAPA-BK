@@ -530,22 +530,22 @@
             <span>Kelas {{ $user->kelas }}</span>
           </span>
         @endif
-        @if($user->nis)
-          <span class="quick-tag">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="13" y2="12"/></svg>
-            <span id="topTagNis">NIS: {{ $user->nis }}</span>
-          </span>
-        @endif
         @if($user->nisn)
           <span class="quick-tag">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="13" y2="12"/></svg>
-            <span>NISN: {{ $user->nisn }}</span>
+            <span>NISN: {{ preg_replace('/\.0+$/', '', (string)$user->nisn) }}</span>
+          </span>
+        @endif
+        @if($user->nis)
+          <span class="quick-tag">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="13" y2="12"/></svg>
+            <span id="topTagNis">NIS: {{ preg_replace('/\.0+$/', '', (string)$user->nis) }}</span>
           </span>
         @endif
         @if($user->no_hp)
           <span class="quick-tag">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            <span>{{ $user->no_hp }}</span>
+            <span>{{ preg_replace('/\.0+$/', '', (string)$user->no_hp) }}</span>
           </span>
         @endif
       </div>
@@ -610,7 +610,7 @@
       <p class="profil-section-desc">Pastikan nama, NIS, NISN, dan nomor kontak sesuai agar Guru BK dapat memberikan bimbingan belajar dan karir dengan optimal.</p>
 
       <div class="form-grid-2">
-        <!-- Nama Lengkap -->
+        <!-- Nama Lengkap (Kiri - Baris 1) -->
         <div class="form-group">
           <label class="form-label" for="inputName">Nama Lengkap</label>
           <div class="form-input-wrap">
@@ -619,7 +619,7 @@
           </div>
         </div>
 
-        <!-- Alamat Email (Terkunci) -->
+        <!-- Alamat Email (Kanan - Baris 1) -->
         <div class="form-group">
           <label class="form-label" for="inputEmail">Email Terdaftar (Terkunci)</label>
           <div class="form-input-wrap">
@@ -630,42 +630,43 @@
         </div>
 
         @if($user->isSiswa())
-          <!-- Nomor Induk Sekolah (NIS) -->
-          <div class="form-group">
-            <label class="form-label" for="inputNis">Nomor Induk Sekolah (NIS)</label>
-            <div class="form-input-wrap">
-              <svg class="form-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="13" y2="12"/></svg>
-              <input type="text" id="inputNis" name="nis" class="form-input" value="{{ old('nis', $user->nis) }}" placeholder="Contoh: 12345" />
-            </div>
-            <span class="form-hint">Nomor induk resmi siswa pada buku induk SMA Negeri 4 Jember.</span>
-          </div>
-
-          <!-- Nomor Induk Siswa Nasional (NISN) -->
+          <!-- Nomor Induk Siswa Nasional / NISN (Kiri - Baris 2) -->
           <div class="form-group">
             <label class="form-label" for="inputNisn">Nomor Induk Siswa Nasional (NISN)</label>
             <div class="form-input-wrap">
               <svg class="form-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="13" y2="12"/></svg>
-              <input type="text" id="inputNisn" name="nisn" class="form-input" value="{{ old('nisn', $user->nisn) }}" placeholder="Contoh: 0054321987" />
+              <input type="text" id="inputNisn" name="nisn" class="form-input" value="{{ old('nisn', preg_replace('/\.0+$/', '', (string)$user->nisn)) }}" placeholder="Contoh: 0054321987" />
             </div>
             <span class="form-hint">Nomor identitas siswa nasional dari Kementerian Pendidikan.</span>
           </div>
 
-          <!-- Kelas -->
+          <!-- Kelas & Rombel (Kanan - Baris 2) -->
           <div class="form-group">
             <label class="form-label" for="inputKelas">Kelas &amp; Rombel</label>
             <div class="form-input-wrap">
               <svg class="form-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
               <input type="text" id="inputKelas" name="kelas" class="form-input" value="{{ old('kelas', $user->kelas) }}" placeholder="Contoh: XII MIPA 1" />
             </div>
+            <span class="form-hint">Kelas bimbingan aktif di SMA Negeri 4 Jember.</span>
+          </div>
+
+          <!-- Nomor Induk Sekolah / NIS (Kiri - Baris 3) -->
+          <div class="form-group">
+            <label class="form-label" for="inputNis">Nomor Induk Sekolah (NIS)</label>
+            <div class="form-input-wrap">
+              <svg class="form-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="13" y2="12"/></svg>
+              <input type="text" id="inputNis" name="nis" class="form-input" value="{{ old('nis', preg_replace('/\.0+$/', '', (string)$user->nis)) }}" placeholder="Contoh: 12345" />
+            </div>
+            <span class="form-hint">Nomor induk resmi siswa pada buku induk SMA Negeri 4 Jember.</span>
           </div>
         @endif
 
-        <!-- Nomor Telepon / WhatsApp -->
+        <!-- Nomor Telepon / WhatsApp (Kanan - Baris 3) -->
         <div class="form-group {{ !$user->isSiswa() ? 'span-full' : '' }}">
           <label class="form-label" for="inputNoHp">Nomor Telepon / WhatsApp</label>
           <div class="form-input-wrap">
             <svg class="form-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            <input type="text" id="inputNoHp" name="no_hp" class="form-input" value="{{ old('no_hp', $user->no_hp) }}" placeholder="Contoh: 082198765432" />
+            <input type="text" id="inputNoHp" name="no_hp" class="form-input" value="{{ old('no_hp', preg_replace('/\.0+$/', '', (string)$user->no_hp)) }}" placeholder="Contoh: 082198765432" />
           </div>
           <span class="form-hint">Digunakan saat Guru BK membutuhkan konfirmasi jadwal konseling tatap muka.</span>
         </div>

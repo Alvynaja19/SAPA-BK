@@ -137,16 +137,16 @@ class AuthController extends Controller
 
         $user->name = $validated['name'];
         if (array_key_exists('nis', $validated)) {
-            $user->nis = $validated['nis'];
+            $user->nis = $validated['nis'] !== null ? preg_replace('/\.0+$/', '', trim($validated['nis'])) : null;
         }
         if (array_key_exists('nisn', $validated)) {
-            $user->nisn = $validated['nisn'];
+            $user->nisn = $validated['nisn'] !== null ? preg_replace('/\.0+$/', '', trim($validated['nisn'])) : null;
         }
         if (array_key_exists('kelas', $validated)) {
             $user->kelas = $validated['kelas'];
         }
         if (array_key_exists('no_hp', $validated)) {
-            $user->no_hp = $validated['no_hp'];
+            $user->no_hp = $validated['no_hp'] !== null ? preg_replace('/\.0+$/', '', trim($validated['no_hp'])) : null;
         }
 
         if (! empty($validated['password'])) {
