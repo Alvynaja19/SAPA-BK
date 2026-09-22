@@ -102,9 +102,15 @@
     .btn[disabled] { opacity: .5; cursor: not-allowed; }
 
     /* Focus Visible Accessibility */
-    a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+    a:focus-visible, button:focus-visible {
       outline: 3px solid var(--accent);
       outline-offset: 2px;
+    }
+    input:focus, textarea:focus, select:focus,
+    input:focus-visible, textarea:focus-visible, select:focus-visible {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.18);
     }
 
     .card {

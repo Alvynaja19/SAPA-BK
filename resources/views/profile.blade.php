@@ -299,8 +299,8 @@
   }
   .form-input:focus {
     border-color: var(--primary);
-    outline: 3px solid var(--accent);
-    outline-offset: 1px;
+    outline: none;
+    box-shadow: 0 0 0 3.5px rgba(21, 128, 61, 0.18);
   }
   .form-input:disabled {
     background: var(--bg);
