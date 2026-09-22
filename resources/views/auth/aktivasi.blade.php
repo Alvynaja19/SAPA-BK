@@ -90,7 +90,7 @@
         <form method="POST" action="{{ route('aktivasi.reset') }}">
           @csrf
           <button type="submit" style="background: none; border: 1px solid var(--line); border-radius: var(--radius-s); padding: 4px 10px; font-size: 11px; font-weight: 600; color: var(--ink-faint); cursor: pointer;">
-            Ganti NIS
+            Ganti NIS / NISN
           </button>
         </form>
       </div>

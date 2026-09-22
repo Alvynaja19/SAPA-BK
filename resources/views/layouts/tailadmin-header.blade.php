@@ -82,8 +82,12 @@
           @click.outside="open = false"
           class="flex items-center gap-3 p-1 rounded-xl hover:bg-gray-100/80 dark:hover:bg-gray-800 transition-colors focus:outline-hidden"
         >
-          <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-brand-700 to-brand-600 text-white font-bold flex items-center justify-center shadow-xs text-sm">
-            {{ strtoupper(substr($user->name ?? 'U', 0, 2)) }}
+          <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-brand-700 to-brand-600 text-white font-bold flex items-center justify-center shadow-xs text-sm overflow-hidden">
+            @if($user?->avatar)
+              <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="h-full w-full object-cover">
+            @else
+              {{ strtoupper(substr($user->name ?? 'U', 0, 2)) }}
+            @endif
           </div>
           <div class="hidden text-left lg:block">
             <span class="block text-xs font-bold text-gray-900 dark:text-white line-clamp-1 max-w-[130px]">{{ $user->name ?? 'User' }}</span>

@@ -19,7 +19,9 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'avatar',
         'nisn',
+        'nis',
         'kelas',
         'no_hp',
         'is_active',
@@ -37,6 +39,19 @@ class User extends Authenticatable
             'password' => 'hashed',
             'is_active' => 'boolean',
         ];
+    }
+
+    public function getAvatarUrlAttribute(): ?string
+    {
+        if (! $this->avatar) {
+            return null;
+        }
+
+        if (str_starts_with($this->avatar, 'http://') || str_starts_with($this->avatar, 'https://')) {
+            return $this->avatar;
+        }
+
+        return asset('storage/'.$this->avatar);
     }
 
     public function isSiswa(): bool

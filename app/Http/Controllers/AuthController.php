@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class AuthController extends Controller
@@ -117,20 +119,33 @@ class AuthController extends Controller
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'nis' => ['nullable', 'string', 'max:30'],
             'nisn' => ['nullable', 'string', 'max:20'],
             'kelas' => ['nullable', 'string', 'max:50'],
             'no_hp' => ['nullable', 'string', 'max:20'],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
+            'captured_avatar' => ['nullable', 'string'],
+            'remove_avatar' => ['nullable', 'boolean'],
+        ], [
+            'avatar.image' => 'Berkas foto profil harus berupa gambar.',
+            'avatar.mimes' => 'Format foto profil yang didukung adalah JPEG, PNG, JPG, atau WEBP.',
+            'avatar.max' => 'Ukuran foto profil maksimal adalah 2MB.',
+            'password.min' => 'Kata sandi minimal 8 karakter.',
+            'password.confirmed' => 'Konfirmasi kata sandi tidak cocok.',
         ]);
 
         $user->name = $validated['name'];
-        if (isset($validated['nisn'])) {
+        if (array_key_exists('nis', $validated)) {
+            $user->nis = $validated['nis'];
+        }
+        if (array_key_exists('nisn', $validated)) {
             $user->nisn = $validated['nisn'];
         }
-        if (isset($validated['kelas'])) {
+        if (array_key_exists('kelas', $validated)) {
             $user->kelas = $validated['kelas'];
         }
-        if (isset($validated['no_hp'])) {
+        if (array_key_exists('no_hp', $validated)) {
             $user->no_hp = $validated['no_hp'];
         }
 
@@ -138,7 +153,49 @@ class AuthController extends Controller
             $user->password = Hash::make($validated['password']);
         }
 
+        // Tangani unggah foto profil (berkas atau jepretan kamera)
+        if ($request->hasFile('avatar')) {
+            if ($user->avatar && ! str_starts_with($user->avatar, 'http://') && ! str_starts_with($user->avatar, 'https://')) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+            $path = $request->file('avatar')->store('avatars', 'public');
+            $user->avatar = $path;
+        } elseif ($request->filled('captured_avatar')) {
+            $capturedData = $request->input('captured_avatar');
+            if (preg_match('/^data:image\/(\w+);base64,/', $capturedData, $matches)) {
+                $imageType = strtolower($matches[1]);
+                if (in_array($imageType, ['jpeg', 'jpg', 'png', 'webp'])) {
+                    $imageData = substr($capturedData, strpos($capturedData, ',') + 1);
+                    $decodedImage = base64_decode($imageData);
+                    if ($decodedImage !== false) {
+                        if ($user->avatar && ! str_starts_with($user->avatar, 'http://') && ! str_starts_with($user->avatar, 'https://')) {
+                            Storage::disk('public')->delete($user->avatar);
+                        }
+                        $filename = 'avatars/'.Str::uuid().'.'.$imageType;
+                        Storage::disk('public')->put($filename, $decodedImage);
+                        $user->avatar = $filename;
+                    }
+                }
+            }
+        } elseif ($request->boolean('remove_avatar')) {
+            if ($user->avatar && ! str_starts_with($user->avatar, 'http://') && ! str_starts_with($user->avatar, 'https://')) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+            $user->avatar = null;
+        }
+
         $user->save();
+
+        // Sinkronisasi data ke data induk Student jika ada
+        if ($user->isSiswa()) {
+            Student::where('user_id', $user->id)->update([
+                'nama' => $user->name,
+                'nis' => $user->nis,
+                'nisn' => $user->nisn,
+                'kelas' => $user->kelas,
+                'no_hp' => $user->no_hp,
+            ]);
+        }
 
         return back()->with('success', 'Profil Anda berhasil diperbarui!');
     }
@@ -330,6 +387,7 @@ class AuthController extends Controller
                 'email_verified_at' => now(),
                 'password' => $otpData['password_hash'],
                 'role' => 'siswa',
+                'nis' => $student->nis,
                 'nisn' => $student->nisn,
                 'kelas' => $student->kelas,
                 'no_hp' => $student->no_hp,

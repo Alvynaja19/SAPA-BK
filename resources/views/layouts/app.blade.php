@@ -268,6 +268,7 @@
       font-weight: 700;
       font-size: 13.5px;
       flex-shrink: 0;
+      overflow: hidden;
     }
     .side-user-name {
       font-size: 13.5px;
@@ -380,6 +381,7 @@
       font-size: 13.5px;
       text-decoration: none;
       flex-shrink: 0;
+      overflow: hidden;
       transition: transform .12s ease;
     }
     .topbar-user-avatar:hover {
@@ -756,7 +758,11 @@
     <div class="side-foot">
       <div class="side-user">
         <div class="side-user-avatar">
-          {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+          @if(auth()->user()->avatar)
+            <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+          @else
+            {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+          @endif
         </div>
         <div>
           <div class="side-user-name">{{ auth()->user()->name }}</div>
@@ -787,10 +793,22 @@
       <div class="topbar-user">
         <div class="topbar-user-text" style="text-align: right;">
           <div class="topbar-user-name">{{ auth()->user()->name }}</div>
-          <div class="topbar-user-role">NISN: {{ auth()->user()->nisn ?? '-' }}</div>
+          <div class="topbar-user-role">
+            @if(auth()->user()->nis && auth()->user()->nisn)
+              NIS: {{ auth()->user()->nis }} &bull; NISN: {{ auth()->user()->nisn }}
+            @elseif(auth()->user()->nis)
+              NIS: {{ auth()->user()->nis }}
+            @else
+              NISN: {{ auth()->user()->nisn ?? '-' }}
+            @endif
+          </div>
         </div>
         <a href="{{ route('profile') }}" class="topbar-user-avatar" title="Lihat Profil Saya" aria-label="Profil Siswa">
-          {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+          @if(auth()->user()->avatar)
+            <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+          @else
+            {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+          @endif
         </a>
       </div>
     </header>

@@ -140,6 +140,7 @@ class StudentImportAndActivationTest extends TestCase
             'email' => 'rina.amelia@example.com',
             'name' => 'Rina Amelia',
             'role' => 'siswa',
+            'nis' => '12400',
             'nisn' => '0088899900',
         ]);
 
