@@ -98,89 +98,171 @@
 
   </div>
 
-  <!-- Wide Card: Tren Konsultasi (Chatbot AI vs Live Chat BK) -->
-  <div class="bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
-    
-    <!-- Chart Header & Controls -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-      <!-- Title & Subtitle -->
-      <div class="space-y-1">
-        <div class="flex items-center gap-2">
-          <svg class="h-4 w-4 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-          </svg>
-          <h2 class="text-base font-bold text-gray-900 dark:text-white">Tren Konsultasi Siswa</h2>
+  <!-- Grid 2 Kolom: Tren Konsultasi Siswa (Chatbot AI dan Live Chat Guru BK Terpisah) -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+    <!-- Card 1: Tren Konsultasi Siswa: Chatbot AI -->
+    <div class="bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4 flex flex-col justify-between">
+      <div>
+        <!-- Card Header & Controls -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-100 dark:border-gray-800">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400">
+                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </span>
+              <h2 class="text-base font-bold text-gray-900 dark:text-white">Tren Konsultasi Siswa: Chatbot AI</h2>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400">
+              Aktivitas tanya jawab mandiri siswa bersama asisten AI
+            </p>
+          </div>
+
+          <!-- Monthly Summary Indicator -->
+          <div class="text-left sm:text-right text-xs">
+            <div class="font-bold text-gray-900 dark:text-white">
+              {{ $trendData['summary']['ai']['total_current_month'] ?? 0 }} sesi bulan ini
+            </div>
+            <div class="text-[11px] text-gray-500 dark:text-gray-400">
+              @php
+                $aiDiff = $trendData['summary']['ai']['diff'] ?? 0;
+                $aiPct = $trendData['summary']['ai']['pct_change'] ?? 0;
+              @endphp
+              @if($aiDiff > 0)
+                <span class="text-emerald-600 dark:text-emerald-400 font-semibold">+{{ $aiPct }}% vs bln lalu</span>
+              @elseif($aiDiff < 0)
+                <span class="text-rose-600 dark:text-rose-400 font-semibold">{{ $aiPct }}% vs bln lalu</span>
+              @else
+                <span>sama vs bln lalu</span>
+              @endif
+            </div>
+          </div>
         </div>
-        <p class="text-xs text-gray-500 dark:text-gray-400">
-          Perbandingan frekuensi penggunaan Chatbot AI vs Live Chat Guru BK
-        </p>
+
+        <!-- Filter & Legend Bar -->
+        <div class="flex items-center justify-between pt-3 text-xs">
+          <div class="flex items-center gap-2 text-gray-600 dark:text-gray-300 font-medium">
+            <span class="inline-block w-3 h-1 rounded-full bg-emerald-600"></span>
+            <span>Volume Sesi AI</span>
+          </div>
+          <!-- Period Toggle -->
+          <div class="inline-flex p-0.5 rounded-lg bg-gray-100 dark:bg-gray-800 text-xs font-semibold text-gray-600 dark:text-gray-300">
+            <button
+              type="button"
+              @click="switchPeriod('week')"
+              :class="period === 'week' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
+              class="px-2.5 py-1 rounded-md transition-all"
+            >
+              Minggu
+            </button>
+            <button
+              type="button"
+              @click="switchPeriod('month')"
+              :class="period === 'month' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
+              class="px-2.5 py-1 rounded-md transition-all"
+            >
+              Bulan
+            </button>
+            <button
+              type="button"
+              @click="switchPeriod('year')"
+              :class="period === 'year' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
+              class="px-2.5 py-1 rounded-md transition-all"
+            >
+              Tahun
+            </button>
+          </div>
+        </div>
       </div>
 
-      <!-- Controls: Legend, Period Filter & Summary -->
-      <div class="flex flex-wrap items-center gap-4 sm:gap-6">
-        
-        <!-- Legend Indicator -->
-        <div class="flex items-center gap-3 text-xs">
-          <div class="flex items-center gap-1.5 font-medium text-gray-700 dark:text-gray-300">
-            <span class="inline-block w-3.5 h-1 rounded-full bg-emerald-600"></span>
-            <span>Chatbot AI</span>
-          </div>
-          <div class="flex items-center gap-1.5 font-medium text-gray-700 dark:text-gray-300">
-            <span class="inline-block w-3.5 h-1 rounded-full bg-slate-700 dark:bg-slate-400"></span>
-            <span>Live Chat Guru BK</span>
-          </div>
-        </div>
-
-        <!-- Period Toggle (Minggu, Bulan, Tahun) -->
-        <div class="inline-flex p-1 rounded-xl bg-gray-100 dark:bg-gray-800 text-xs font-semibold text-gray-600 dark:text-gray-300">
-          <button
-            type="button"
-            @click="switchPeriod('week')"
-            :class="period === 'week' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
-            class="px-3 py-1.5 rounded-lg transition-all"
-          >
-            Minggu
-          </button>
-          <button
-            type="button"
-            @click="switchPeriod('month')"
-            :class="period === 'month' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
-            class="px-3 py-1.5 rounded-lg transition-all"
-          >
-            Bulan
-          </button>
-          <button
-            type="button"
-            @click="switchPeriod('year')"
-            :class="period === 'year' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
-            class="px-3 py-1.5 rounded-lg transition-all"
-          >
-            Tahun
-          </button>
-        </div>
-
-        <!-- Monthly Summary Comparison -->
-        <div class="hidden md:block text-right text-xs">
-          <div class="font-bold text-gray-900 dark:text-white">
-            {{ $trendData['summary']['total_current_month'] }} sesi bulan ini
-          </div>
-          <div class="text-[11px] text-gray-500 dark:text-gray-400">
-            @if($trendData['summary']['diff'] > 0)
-              <span class="text-emerald-600 dark:text-emerald-400 font-semibold">+{{ $trendData['summary']['pct_change'] }}% vs bln lalu</span>
-            @elseif($trendData['summary']['diff'] < 0)
-              <span class="text-rose-600 dark:text-rose-400 font-semibold">{{ $trendData['summary']['pct_change'] }}% vs bln lalu</span>
-            @else
-              <span>sama vs bln lalu</span>
-            @endif
-          </div>
-        </div>
-
+      <!-- Chart Canvas -->
+      <div class="relative w-full h-[240px] pt-2">
+        <canvas id="bkAiTrendChart" class="w-full h-full"></canvas>
       </div>
     </div>
 
-    <!-- Chart Canvas -->
-    <div class="relative w-full h-[280px]">
-      <canvas id="counselingTrendChart" class="w-full h-full"></canvas>
+    <!-- Card 2: Tren Konsultasi Siswa: Live Chat Guru BK -->
+    <div class="bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4 flex flex-col justify-between">
+      <div>
+        <!-- Card Header & Controls -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-100 dark:border-gray-800">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="flex h-6 w-6 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+              </span>
+              <h2 class="text-base font-bold text-gray-900 dark:text-white">Tren Konsultasi Siswa: Live Chat Guru BK</h2>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400">
+              Aktivitas sesi bimbingan langsung bersama Guru BK
+            </p>
+          </div>
+
+          <!-- Monthly Summary Indicator -->
+          <div class="text-left sm:text-right text-xs">
+            <div class="font-bold text-gray-900 dark:text-white">
+              {{ $trendData['summary']['live']['total_current_month'] ?? 0 }} sesi bulan ini
+            </div>
+            <div class="text-[11px] text-gray-500 dark:text-gray-400">
+              @php
+                $liveDiff = $trendData['summary']['live']['diff'] ?? 0;
+                $livePct = $trendData['summary']['live']['pct_change'] ?? 0;
+              @endphp
+              @if($liveDiff > 0)
+                <span class="text-emerald-600 dark:text-emerald-400 font-semibold">+{{ $livePct }}% vs bln lalu</span>
+              @elseif($liveDiff < 0)
+                <span class="text-rose-600 dark:text-rose-400 font-semibold">{{ $livePct }}% vs bln lalu</span>
+              @else
+                <span>sama vs bln lalu</span>
+              @endif
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter & Legend Bar -->
+        <div class="flex items-center justify-between pt-3 text-xs">
+          <div class="flex items-center gap-2 text-gray-600 dark:text-gray-300 font-medium">
+            <span class="inline-block w-3 h-1 rounded-full bg-slate-700 dark:bg-slate-400"></span>
+            <span>Volume Sesi Guru BK</span>
+          </div>
+          <!-- Period Toggle -->
+          <div class="inline-flex p-0.5 rounded-lg bg-gray-100 dark:bg-gray-800 text-xs font-semibold text-gray-600 dark:text-gray-300">
+            <button
+              type="button"
+              @click="switchPeriod('week')"
+              :class="period === 'week' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
+              class="px-2.5 py-1 rounded-md transition-all"
+            >
+              Minggu
+            </button>
+            <button
+              type="button"
+              @click="switchPeriod('month')"
+              :class="period === 'month' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
+              class="px-2.5 py-1 rounded-md transition-all"
+            >
+              Bulan
+            </button>
+            <button
+              type="button"
+              @click="switchPeriod('year')"
+              :class="period === 'year' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
+              class="px-2.5 py-1 rounded-md transition-all"
+            >
+              Tahun
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart Canvas -->
+      <div class="relative w-full h-[240px] pt-2">
+        <canvas id="bkLiveTrendChart" class="w-full h-full"></canvas>
+      </div>
     </div>
 
   </div>
@@ -396,130 +478,156 @@
   function counselorDashboard() {
     return {
       period: 'month',
-      chartInstance: null,
+      aiChartInstance: null,
+      liveChartInstance: null,
       trendData: @json($trendData),
 
       init() {
         this.$nextTick(() => {
-          this.initChart();
+          this.initCharts();
         });
       },
 
       switchPeriod(newPeriod) {
         this.period = newPeriod;
-        this.updateChart();
+        this.updateCharts();
       },
 
-      initChart() {
-        const ctx = document.getElementById('counselingTrendChart');
-        if (!ctx) return;
-
+      initCharts() {
         const isDark = document.documentElement.classList.contains('dark');
         const activeData = this.trendData[this.period];
+        const gridColor = isDark ? 'rgba(51, 65, 85, 0.3)' : 'rgba(226, 232, 240, 0.7)';
+        const tickColor = isDark ? '#94a3b8' : '#64748b';
 
-        this.chartInstance = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: activeData.labels,
-            datasets: [
-              {
-                label: 'Chatbot AI',
-                data: activeData.ai,
-                borderColor: '#16a34a', // emerald-600
-                backgroundColor: 'rgba(22, 163, 74, 0.06)',
-                borderWidth: 2.2,
-                pointRadius: 2.5,
-                pointHoverRadius: 5,
-                pointBackgroundColor: '#16a34a',
-                tension: 0.35,
-                fill: true
-              },
-              {
-                label: 'Live Chat Guru BK',
-                data: activeData.live,
-                borderColor: isDark ? '#94a3b8' : '#334155', // slate-700
-                backgroundColor: 'rgba(51, 65, 85, 0.05)',
-                borderWidth: 2,
-                borderDash: [4, 4],
-                pointRadius: 2.5,
-                pointHoverRadius: 5,
-                pointBackgroundColor: isDark ? '#94a3b8' : '#334155',
-                tension: 0.35,
-                fill: false
-              }
-            ]
+        // 1. Inisialisasi Grafik Tren Chatbot AI
+        const aiCtx = document.getElementById('bkAiTrendChart');
+        if (aiCtx) {
+          this.aiChartInstance = new Chart(aiCtx, {
+            type: 'line',
+            data: {
+              labels: activeData.labels,
+              datasets: [
+                {
+                  label: 'Chatbot AI',
+                  data: activeData.ai,
+                  borderColor: '#16a34a', // emerald-600
+                  backgroundColor: 'rgba(22, 163, 74, 0.08)',
+                  borderWidth: 2.2,
+                  pointRadius: 2.5,
+                  pointHoverRadius: 5,
+                  pointBackgroundColor: '#16a34a',
+                  tension: 0.35,
+                  fill: true
+                }
+              ]
+            },
+            options: this.getChartOptions(isDark, gridColor, tickColor, 'Chatbot AI')
+          });
+        }
+
+        // 2. Inisialisasi Grafik Tren Live Chat Guru BK
+        const liveCtx = document.getElementById('bkLiveTrendChart');
+        if (liveCtx) {
+          this.liveChartInstance = new Chart(liveCtx, {
+            type: 'line',
+            data: {
+              labels: activeData.labels,
+              datasets: [
+                {
+                  label: 'Live Chat Guru BK',
+                  data: activeData.live,
+                  borderColor: isDark ? '#94a3b8' : '#334155', // slate-700
+                  backgroundColor: isDark ? 'rgba(148, 163, 184, 0.08)' : 'rgba(51, 65, 85, 0.06)',
+                  borderWidth: 2.2,
+                  pointRadius: 2.5,
+                  pointHoverRadius: 5,
+                  pointBackgroundColor: isDark ? '#94a3b8' : '#334155',
+                  tension: 0.35,
+                  fill: true
+                }
+              ]
+            },
+            options: this.getChartOptions(isDark, gridColor, tickColor, 'Live Chat Guru BK')
+          });
+        }
+      },
+
+      getChartOptions(isDark, gridColor, tickColor, datasetName) {
+        return {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            intersect: false,
+            mode: 'index'
           },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: {
-              intersect: false,
-              mode: 'index'
+          plugins: {
+            legend: {
+              display: false
             },
-            plugins: {
-              legend: {
-                display: false
-              },
-              tooltip: {
-                backgroundColor: isDark ? '#0f172a' : '#1e293b',
-                titleColor: '#ffffff',
-                bodyColor: '#cbd5e1',
-                padding: 10,
-                cornerRadius: 8,
-                boxPadding: 4,
-                callbacks: {
-                  title: function(items) {
-                    return 'Periode: ' + items[0].label;
-                  },
-                  label: function(item) {
-                    return item.dataset.label + ': ' + item.raw + ' sesi';
-                  }
+            tooltip: {
+              backgroundColor: isDark ? '#0f172a' : '#1e293b',
+              titleColor: '#ffffff',
+              bodyColor: '#cbd5e1',
+              padding: 10,
+              cornerRadius: 8,
+              boxPadding: 4,
+              callbacks: {
+                title: function(items) {
+                  return 'Periode: ' + items[0].label;
+                },
+                label: function(item) {
+                  return datasetName + ': ' + item.raw + ' sesi';
                 }
               }
-            },
-            scales: {
-              x: {
-                grid: {
-                  color: isDark ? 'rgba(51, 65, 85, 0.3)' : 'rgba(226, 232, 240, 0.7)',
-                  drawBorder: false
-                },
-                ticks: {
-                  color: isDark ? '#94a3b8' : '#64748b',
-                  font: {
-                    size: 11,
-                    family: 'Plus Jakarta Sans'
-                  },
-                  maxTicksLimit: 12
-                }
+            }
+          },
+          scales: {
+            x: {
+              grid: {
+                color: gridColor,
+                drawBorder: false
               },
-              y: {
-                beginAtZero: true,
-                suggestedMax: 5,
-                grid: {
-                  color: isDark ? 'rgba(51, 65, 85, 0.3)' : 'rgba(226, 232, 240, 0.7)',
-                  drawBorder: false
+              ticks: {
+                color: tickColor,
+                font: {
+                  size: 11,
+                  family: 'Plus Jakarta Sans'
                 },
-                ticks: {
-                  precision: 0,
-                  color: isDark ? '#94a3b8' : '#64748b',
-                  font: {
-                    size: 11,
-                    family: 'Plus Jakarta Sans'
-                  }
+                maxTicksLimit: 10
+              }
+            },
+            y: {
+              beginAtZero: true,
+              suggestedMax: 5,
+              grid: {
+                color: gridColor,
+                drawBorder: false
+              },
+              ticks: {
+                precision: 0,
+                color: tickColor,
+                font: {
+                  size: 11,
+                  family: 'Plus Jakarta Sans'
                 }
               }
             }
           }
-        });
+        };
       },
 
-      updateChart() {
-        if (!this.chartInstance) return;
+      updateCharts() {
         const activeData = this.trendData[this.period];
-        this.chartInstance.data.labels = activeData.labels;
-        this.chartInstance.data.datasets[0].data = activeData.ai;
-        this.chartInstance.data.datasets[1].data = activeData.live;
-        this.chartInstance.update();
+        if (this.aiChartInstance) {
+          this.aiChartInstance.data.labels = activeData.labels;
+          this.aiChartInstance.data.datasets[0].data = activeData.ai;
+          this.aiChartInstance.update();
+        }
+        if (this.liveChartInstance) {
+          this.liveChartInstance.data.labels = activeData.labels;
+          this.liveChartInstance.data.datasets[0].data = activeData.live;
+          this.liveChartInstance.update();
+        }
       }
     };
   }

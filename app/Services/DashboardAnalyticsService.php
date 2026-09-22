@@ -142,13 +142,27 @@ class DashboardAnalyticsService
             }
         }
 
-        // Perhitungan Perbandingan Bulan Ini vs Bulan Lalu
+        // Perhitungan Perbandingan Bulan Ini vs Bulan Lalu (Total, AI, dan Live Chat)
         $totalCurrentMonth = $currentMonthSessions->count();
         $totalLastMonth = $lastMonthSessions->count();
         $diffFromLastMonth = $totalCurrentMonth - $totalLastMonth;
         $pctChange = $totalLastMonth > 0
             ? round((($totalCurrentMonth - $totalLastMonth) / $totalLastMonth) * 100)
             : ($totalCurrentMonth > 0 ? 100 : 0);
+
+        $aiCurrentMonth = $currentMonthSessions->filter(fn ($s) => $s->mode !== 'guru_bk')->count();
+        $aiLastMonth = $lastMonthSessions->filter(fn ($s) => $s->mode !== 'guru_bk')->count();
+        $diffAi = $aiCurrentMonth - $aiLastMonth;
+        $pctChangeAi = $aiLastMonth > 0
+            ? round((($aiCurrentMonth - $aiLastMonth) / $aiLastMonth) * 100)
+            : ($aiCurrentMonth > 0 ? 100 : 0);
+
+        $liveCurrentMonth = $currentMonthSessions->filter(fn ($s) => $s->mode === 'guru_bk')->count();
+        $liveLastMonth = $lastMonthSessions->filter(fn ($s) => $s->mode === 'guru_bk')->count();
+        $diffLive = $liveCurrentMonth - $liveLastMonth;
+        $pctChangeLive = $liveLastMonth > 0
+            ? round((($liveCurrentMonth - $liveLastMonth) / $liveLastMonth) * 100)
+            : ($liveCurrentMonth > 0 ? 100 : 0);
 
         return [
             'month' => [
@@ -172,6 +186,18 @@ class DashboardAnalyticsService
                 'diff' => $diffFromLastMonth,
                 'pct_change' => $pctChange,
                 'current_month_name' => $now->translatedFormat('F Y'),
+                'ai' => [
+                    'total_current_month' => $aiCurrentMonth,
+                    'total_last_month' => $aiLastMonth,
+                    'diff' => $diffAi,
+                    'pct_change' => $pctChangeAi,
+                ],
+                'live' => [
+                    'total_current_month' => $liveCurrentMonth,
+                    'total_last_month' => $liveLastMonth,
+                    'diff' => $diffLive,
+                    'pct_change' => $pctChangeLive,
+                ],
             ],
         ];
     }
