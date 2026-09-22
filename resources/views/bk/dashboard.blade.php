@@ -99,48 +99,51 @@
   </div>
 
   <!-- Wide Card: Tren Konsultasi Siswa (Chatbot AI & Live Chat Guru BK Terpadu) -->
-  <div class="bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 sm:p-6 shadow-xs space-y-5">
+  <div class="bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-4 sm:p-5 shadow-xs space-y-3.5">
     
     <!-- Chart Header & Controls -->
-    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-gray-100 dark:border-gray-800">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-100 dark:border-gray-800">
       
       <!-- Title & Subtitle -->
-      <div class="space-y-1">
-        <div class="flex items-center gap-2.5">
-          <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400">
-            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+      <div class="space-y-0.5">
+        <div class="flex items-center gap-2">
+          <span class="flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400">
+            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
             </svg>
           </span>
-          <h2 class="text-base font-bold text-gray-900 dark:text-white">Tren Konsultasi Siswa</h2>
+          <h2 class="text-sm sm:text-base font-bold text-gray-900 dark:text-white">Tren Konsultasi Siswa</h2>
         </div>
         <p class="text-xs text-gray-500 dark:text-gray-400">
-          Dinamika frekuensi konsultasi siswa: Chatbot AI vs Live Chat Guru BK
+          Chatbot AI vs Live Chat Guru BK
         </p>
       </div>
 
-      <!-- Controls: Legend & Period Toggle -->
-      <div class="flex flex-wrap items-center gap-4 sm:gap-6">
+      <!-- Controls: Legend with Sesi Count & Period Toggle -->
+      <div class="flex flex-wrap items-center gap-3 sm:gap-5">
         
-        <!-- Legend Indicator -->
-        <div class="flex items-center gap-4 text-xs font-medium text-gray-700 dark:text-gray-300">
+        <!-- Legend & Counts -->
+        <div class="flex items-center gap-3.5 text-xs font-medium text-gray-700 dark:text-gray-300">
           <div class="flex items-center gap-1.5">
-            <span class="inline-block w-3.5 h-1.5 rounded-full bg-emerald-600"></span>
-            <span>Chatbot AI</span>
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+            <span>Chatbot AI: <strong class="text-gray-900 dark:text-white">{{ $trendData['summary']['ai']['total_current_month'] ?? 0 }}</strong></span>
           </div>
           <div class="flex items-center gap-1.5">
-            <span class="inline-block w-3.5 h-1.5 rounded-full bg-slate-700 dark:bg-slate-400"></span>
-            <span>Live Chat Guru BK</span>
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-slate-700 dark:bg-slate-400"></span>
+            <span>Live Chat: <strong class="text-gray-900 dark:text-white">{{ $trendData['summary']['live']['total_current_month'] ?? 0 }}</strong></span>
+          </div>
+          <div class="hidden md:flex items-center gap-1.5 text-gray-500 dark:text-gray-400 border-l border-gray-200 dark:border-gray-700 pl-3">
+            <span>Total: <strong class="text-gray-900 dark:text-white">{{ $trendData['summary']['total_current_month'] }}</strong></span>
           </div>
         </div>
 
         <!-- Period Toggle (Minggu, Bulan, Tahun) -->
-        <div class="inline-flex p-1 rounded-xl bg-gray-100 dark:bg-gray-800 text-xs font-semibold text-gray-600 dark:text-gray-300">
+        <div class="inline-flex p-0.5 rounded-lg bg-gray-100 dark:bg-gray-800 text-xs font-semibold text-gray-600 dark:text-gray-300">
           <button
             type="button"
             @click="switchPeriod('week')"
             :class="period === 'week' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
-            class="px-3 py-1.5 rounded-lg transition-all"
+            class="px-2.5 py-1 rounded-md transition-all"
           >
             Minggu
           </button>
@@ -148,7 +151,7 @@
             type="button"
             @click="switchPeriod('month')"
             :class="period === 'month' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
-            class="px-3 py-1.5 rounded-lg transition-all"
+            class="px-2.5 py-1 rounded-md transition-all"
           >
             Bulan
           </button>
@@ -156,7 +159,7 @@
             type="button"
             @click="switchPeriod('year')"
             :class="period === 'year' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
-            class="px-3 py-1.5 rounded-lg transition-all"
+            class="px-2.5 py-1 rounded-md transition-all"
           >
             Tahun
           </button>
@@ -165,90 +168,8 @@
       </div>
     </div>
 
-    <!-- Monthly Summary Bar (Rapi & Komprehensif) -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3 sm:p-4 rounded-xl bg-gray-50/70 dark:bg-gray-800/40 border border-gray-100 dark:border-gray-800/80 text-xs">
-      <!-- Total Gabungan -->
-      <div class="flex items-center justify-between sm:justify-start sm:gap-3 border-b sm:border-b-0 sm:border-r border-gray-200/60 dark:border-gray-700/60 pb-2 sm:pb-0 sm:pr-4">
-        <div>
-          <span class="text-gray-500 dark:text-gray-400 text-[11px] block">Total Sesi Bulan Ini</span>
-          <span class="font-bold text-gray-900 dark:text-white text-sm">
-            {{ $trendData['summary']['total_current_month'] }} sesi
-          </span>
-        </div>
-        <div class="text-right sm:text-left">
-          @if($trendData['summary']['diff'] > 0)
-            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400">
-              +{{ $trendData['summary']['pct_change'] }}% vs bln lalu
-            </span>
-          @elseif($trendData['summary']['diff'] < 0)
-            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-400">
-              {{ $trendData['summary']['pct_change'] }}% vs bln lalu
-            </span>
-          @else
-            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
-              sama vs bln lalu
-            </span>
-          @endif
-        </div>
-      </div>
-
-      <!-- Sesi Chatbot AI -->
-      <div class="flex items-center justify-between sm:justify-start sm:gap-3 border-b sm:border-b-0 sm:border-r border-gray-200/60 dark:border-gray-700/60 pb-2 sm:pb-0 sm:pr-4">
-        <div>
-          <div class="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-[11px]">
-            <span class="h-1.5 w-1.5 rounded-full bg-emerald-600"></span>
-            <span>Chatbot AI</span>
-          </div>
-          <span class="font-bold text-gray-900 dark:text-white text-sm">
-            {{ $trendData['summary']['ai']['total_current_month'] ?? 0 }} sesi
-          </span>
-        </div>
-        <div class="text-right sm:text-left">
-          @php
-            $aiDiff = $trendData['summary']['ai']['diff'] ?? 0;
-            $aiPct = $trendData['summary']['ai']['pct_change'] ?? 0;
-          @endphp
-          @if($aiDiff > 0)
-            <span class="text-emerald-600 dark:text-emerald-400 font-semibold text-[11px]">+{{ $aiPct }}%</span>
-          @elseif($aiDiff < 0)
-            <span class="text-rose-600 dark:text-rose-400 font-semibold text-[11px]">{{ $aiPct }}%</span>
-          @else
-            <span class="text-gray-500 dark:text-gray-400 text-[11px]">0%</span>
-          @endif
-          <span class="text-[10px] text-gray-400 dark:text-gray-500 block">vs bln lalu</span>
-        </div>
-      </div>
-
-      <!-- Sesi Live Chat Guru BK -->
-      <div class="flex items-center justify-between sm:justify-start sm:gap-3">
-        <div>
-          <div class="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-[11px]">
-            <span class="h-1.5 w-1.5 rounded-full bg-slate-700 dark:bg-slate-300"></span>
-            <span>Live Chat Guru BK</span>
-          </div>
-          <span class="font-bold text-gray-900 dark:text-white text-sm">
-            {{ $trendData['summary']['live']['total_current_month'] ?? 0 }} sesi
-          </span>
-        </div>
-        <div class="text-right sm:text-left">
-          @php
-            $liveDiff = $trendData['summary']['live']['diff'] ?? 0;
-            $livePct = $trendData['summary']['live']['pct_change'] ?? 0;
-          @endphp
-          @if($liveDiff > 0)
-            <span class="text-emerald-600 dark:text-emerald-400 font-semibold text-[11px]">+{{ $livePct }}%</span>
-          @elseif($liveDiff < 0)
-            <span class="text-rose-600 dark:text-rose-400 font-semibold text-[11px]">{{ $livePct }}%</span>
-          @else
-            <span class="text-gray-500 dark:text-gray-400 text-[11px]">0%</span>
-          @endif
-          <span class="text-[10px] text-gray-400 dark:text-gray-500 block">vs bln lalu</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Chart Canvas -->
-    <div class="relative w-full h-[280px]">
+    <!-- Chart Canvas (Kompak) -->
+    <div class="relative w-full h-[200px]">
       <canvas id="counselingTrendChart" class="w-full h-full"></canvas>
     </div>
 
