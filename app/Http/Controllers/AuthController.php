@@ -29,18 +29,48 @@ class AuthController extends Controller
 
     public function login(Request $request): RedirectResponse
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+        $validated = $request->validate([
+            'email' => ['required', 'string'],
+            'password' => ['required', 'string'],
+        ], [
+            'email.required' => 'Silakan masukkan email, NIS, atau NISN Anda.',
+            'password.required' => 'Silakan masukkan kata sandi Anda.',
         ]);
 
-        $user = User::where('email', $credentials['email'])->first();
+        $loginInput = trim($validated['email']);
+        $cleanQuery = preg_replace('/\.0+$/', '', $loginInput);
+        $paddedQuery = (! empty($cleanQuery) && ctype_digit($cleanQuery) && strlen($cleanQuery) < 10)
+            ? str_pad($cleanQuery, 10, '0', STR_PAD_LEFT)
+            : $cleanQuery;
+        $unpaddedQuery = ltrim($cleanQuery, '0');
+
+        $searchVariants = array_values(array_unique(array_filter([
+            $loginInput,
+            strtolower($loginInput),
+            $cleanQuery,
+            $cleanQuery.'.0',
+            $paddedQuery,
+            $unpaddedQuery,
+        ])));
+
+        // Cari pengguna berdasarkan Email (case-insensitive), NIS, atau NISN
+        $user = User::where(function ($q) use ($searchVariants, $loginInput) {
+            $q->whereIn('email', [strtolower($loginInput), $loginInput])
+                ->orWhereRaw('LOWER(email) = ?', [strtolower($loginInput)])
+                ->orWhereIn('nis', $searchVariants)
+                ->orWhereIn('nisn', $searchVariants);
+        })->first();
 
         if (! $user) {
             return back()->withErrors([
-                'email' => 'Akun dengan email ini belum terdaftar atau belum diaktivasi. Silakan lakukan aktivasi atau registrasi akun terlebih dahulu.',
+                'email' => 'Akun dengan email, NIS, atau NISN tersebut belum terdaftar atau belum diaktivasi. Silakan periksa kembali atau lakukan aktivasi akun.',
             ])->onlyInput('email');
         }
+
+        $credentials = [
+            'email' => $user->email,
+            'password' => $validated['password'],
+        ];
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();

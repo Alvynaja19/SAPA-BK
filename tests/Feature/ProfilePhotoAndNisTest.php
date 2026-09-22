@@ -162,4 +162,42 @@ class ProfilePhotoAndNisTest extends TestCase
         $lookupResponse->assertSessionHas('aktivasi_student');
         $this->assertEquals('Dimas Prakoso', session('aktivasi_student')['nama']);
     }
+
+    public function test_student_can_login_with_email_nis_or_nisn(): void
+    {
+        $student = User::factory()->create([
+            'email' => 'siswa.sukses@sman4jember.sch.id',
+            'password' => bcrypt('password123'),
+            'role' => 'siswa',
+            'nis' => '14001',
+            'nisn' => '0012345678',
+            'is_active' => true,
+        ]);
+
+        // Login dengan email huruf besar dan spasi (simulasi keyboard HP)
+        $responseEmail = $this->post(route('login'), [
+            'email' => '  Siswa.Sukses@sman4jember.sch.id  ',
+            'password' => 'password123',
+        ]);
+        $responseEmail->assertRedirect(route('siswa.dashboard'));
+        $this->assertAuthenticatedAs($student);
+        auth()->logout();
+
+        // Login dengan NISN
+        $responseNisn = $this->post(route('login'), [
+            'email' => '0012345678',
+            'password' => 'password123',
+        ]);
+        $responseNisn->assertRedirect(route('siswa.dashboard'));
+        $this->assertAuthenticatedAs($student);
+        auth()->logout();
+
+        // Login dengan NIS
+        $responseNis = $this->post(route('login'), [
+            'email' => '14001',
+            'password' => 'password123',
+        ]);
+        $responseNis->assertRedirect(route('siswa.dashboard'));
+        $this->assertAuthenticatedAs($student);
+    }
 }
