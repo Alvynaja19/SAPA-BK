@@ -853,15 +853,29 @@
 
   function capturePhoto() {
     if (!cameraStream || !cameraVideo.videoWidth) return;
-    const width = cameraVideo.videoWidth;
-    const height = cameraVideo.videoHeight;
+    const maxDim = 800;
+    let width = cameraVideo.videoWidth;
+    let height = cameraVideo.videoHeight;
+
+    if (width > height) {
+      if (width > maxDim) {
+        height = Math.round((height * maxDim) / width);
+        width = maxDim;
+      }
+    } else {
+      if (height > maxDim) {
+        width = Math.round((width * maxDim) / height);
+        height = maxDim;
+      }
+    }
+
     cameraCanvas.width = width;
     cameraCanvas.height = height;
 
     const ctx = cameraCanvas.getContext('2d');
     ctx.drawImage(cameraVideo, 0, 0, width, height);
 
-    const dataUrl = cameraCanvas.toDataURL('image/jpeg', 0.9);
+    const dataUrl = cameraCanvas.toDataURL('image/jpeg', 0.85);
     cameraCapturedImg.src = dataUrl;
     cameraCapturedImg.style.display = 'block';
     cameraVideo.style.display = 'none';
@@ -900,27 +914,53 @@
   function handleFileSelect(input) {
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      if (file.size > 2 * 1024 * 1024) {
-        alert('Ukuran berkas melebihi batas maksimal 2MB. Silakan pilih foto dengan ukuran lebih kecil.');
-        input.value = '';
-        return;
-      }
       const reader = new FileReader();
       reader.onload = function(e) {
-        capturedAvatarInput.value = '';
-        removeAvatarInput.value = '0';
+        const img = new Image();
+        img.onload = function() {
+          const maxDim = 800;
+          let width = img.width;
+          let height = img.height;
 
-        formAvatarImg.src = e.target.result;
-        formAvatarImg.style.display = 'block';
-        if (formAvatarInitials) formAvatarInitials.style.display = 'none';
+          if (width > height) {
+            if (width > maxDim) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            }
+          } else {
+            if (height > maxDim) {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
 
-        if (topAvatarImg) {
-          topAvatarImg.src = e.target.result;
-          topAvatarImg.style.display = 'block';
-        }
-        if (topAvatarInitials) topAvatarInitials.style.display = 'none';
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
 
-        if (btnRemoveAvatar) btnRemoveAvatar.style.display = 'inline-flex';
+          // Kompresi otomatis gambar ke JPEG kualitas 85% (~100KB-150KB)
+          // Menghindari error 413 Request Entity Too Large di Nginx
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+          capturedAvatarInput.value = compressedDataUrl;
+          input.value = '';
+          removeAvatarInput.value = '0';
+
+          formAvatarImg.src = compressedDataUrl;
+          formAvatarImg.style.display = 'block';
+          if (formAvatarInitials) formAvatarInitials.style.display = 'none';
+
+          if (topAvatarImg) {
+            topAvatarImg.src = compressedDataUrl;
+            topAvatarImg.style.display = 'block';
+          }
+          if (topAvatarInitials) topAvatarInitials.style.display = 'none';
+
+          if (btnRemoveAvatar) btnRemoveAvatar.style.display = 'inline-flex';
+        };
+        img.src = e.target.result;
       };
       reader.readAsDataURL(file);
     }
