@@ -129,7 +129,7 @@
             <span>Chatbot AI: <strong class="text-gray-900 dark:text-white">{{ $trendData['summary']['ai']['total_current_month'] ?? 0 }}</strong></span>
           </div>
           <div class="flex items-center gap-1.5">
-            <span class="inline-block w-2.5 h-2.5 rounded-full bg-slate-700 dark:bg-slate-400"></span>
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-blue-600 dark:bg-blue-400"></span>
             <span>Live Chat: <strong class="text-gray-900 dark:text-white">{{ $trendData['summary']['live']['total_current_month'] ?? 0 }}</strong></span>
           </div>
           <div class="hidden md:flex items-center gap-1.5 text-gray-500 dark:text-gray-400 border-l border-gray-200 dark:border-gray-700 pl-3">
@@ -429,13 +429,13 @@
               {
                 label: 'Live Chat Guru BK',
                 data: activeData.live,
-                borderColor: isDark ? '#94a3b8' : '#334155', // slate-700
-                backgroundColor: isDark ? 'rgba(148, 163, 184, 0.06)' : 'rgba(51, 65, 85, 0.04)',
+                borderColor: isDark ? '#60a5fa' : '#2563eb', // blue-400 : blue-600
+                backgroundColor: isDark ? 'rgba(96, 165, 250, 0.08)' : 'rgba(37, 99, 235, 0.06)',
                 borderWidth: 2.2,
                 borderDash: [4, 4],
                 pointRadius: 2.5,
                 pointHoverRadius: 5,
-                pointBackgroundColor: isDark ? '#94a3b8' : '#334155',
+                pointBackgroundColor: isDark ? '#60a5fa' : '#2563eb',
                 tension: 0.35,
                 fill: true
               }
