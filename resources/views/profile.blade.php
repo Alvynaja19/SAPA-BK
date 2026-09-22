@@ -251,12 +251,13 @@
   .form-grid-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    row-gap: 16px;
+    column-gap: 20px;
   }
   .form-group {
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 6px;
   }
   .form-group.span-full {
     grid-column: 1 / -1;
@@ -617,6 +618,7 @@
             <svg class="form-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             <input type="text" id="inputName" name="name" class="form-input" value="{{ old('name', $user->name) }}" required autocomplete="name" />
           </div>
+          <span class="form-hint">Nama lengkap siswa sesuai buku induk atau dokumen resmi.</span>
         </div>
 
         <!-- Alamat Email (Kanan - Baris 1) -->
@@ -626,7 +628,7 @@
             <svg class="form-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             <input type="email" id="inputEmail" class="form-input" value="{{ $user->email }}" disabled />
           </div>
-          <span class="form-hint">Email sekolah terhubung dengan sistem autentikasi dan akun bimbingan.</span>
+          <span class="form-hint">Email sekolah terhubung dengan autentikasi akun bimbingan.</span>
         </div>
 
         @if($user->isSiswa())
