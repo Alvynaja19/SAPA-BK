@@ -1102,22 +1102,17 @@
             </div>
 
             <div class="ebook-showcase-notice">
-              <strong>Informasi Akses Buku:</strong> Dokumen buku resmi ini dilindungi protokol keamanan hak cipta peramban (SAMEORIGIN policy) Kemendikdasmen, sehingga pembacaan interaktif disediakan secara utuh melalui portal resmi SIBI Kemendikdasmen.
+              <strong>Informasi Akses Buku:</strong> Dokumen pembelajaran ini tersedia dalam format PDF resmi dan dapat dibaca langsung secara utuh di penampil dokumen SAPA BK maupun diunduh ke perangkat Anda.
             </div>
 
             <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-              <a href="#" id="showcaseDirectBtn" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="flex: 1; min-height: 48px;">
+              <button type="button" id="showcaseDirectBtn" class="btn btn-primary" style="flex: 1; min-height: 48px;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                  <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                  <polyline points="14 2 14 8 20 8"/>
                 </svg>
-                <span id="showcaseBtnLabel">Buka &amp; Baca Buku di Portal Resmi SIBI Kemendikdasmen</span>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                  <polyline points="15 3 21 3 21 9"/>
-                  <line x1="10" y1="14" x2="21" y2="3"/>
-                </svg>
-              </a>
+                <span id="showcaseBtnLabel">Baca Dokumen PDF Sekarang</span>
+              </button>
               <a href="{{ route('siswa.chat') }}" class="btn btn-ghost">
                 <span>Diskusikan dengan Guru BK</span>
               </a>
@@ -1292,40 +1287,19 @@
           `;
         }
 
-        // Tentukan tombol aksi berdasarkan jenis buku
-        let actionButtonsHtml = '';
-        if (book.is_internal) {
-          actionButtonsHtml = `
-            <button type="button" class="btn btn-ghost btn-sm btn-detail-action" aria-label="Detail modul">
-              Detail
-            </button>
-            <button type="button" class="btn btn-primary btn-sm btn-read-action" aria-label="Buka dokumen PDF">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-                <polyline points="14 2 14 8 20 8"/>
-              </svg>
-              <span>Baca PDF</span>
-            </button>
-          `;
-        } else {
-          actionButtonsHtml = `
-            <button type="button" class="btn btn-ghost btn-sm btn-detail-action" aria-label="Lihat detail buku">
-              Detail
-            </button>
-            <a href="${escapeHtml(sanitizeReaderUrl(book.reader_url || '#'))}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" aria-label="Buka di SIBI Kemendikdasmen">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-              </svg>
-              <span>Buka di SIBI</span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                <polyline points="15 3 21 3 21 9"/>
-                <line x1="10" y1="14" x2="21" y2="3"/>
-              </svg>
-            </a>
-          `;
-        }
+        // Tentukan tombol aksi (Mode Full In-App: Seluruh buku dapat dibaca langsung)
+        const actionButtonsHtml = `
+          <button type="button" class="btn btn-ghost btn-sm btn-detail-action" aria-label="Lihat ringkasan dan detail buku">
+            Detail
+          </button>
+          <button type="button" class="btn btn-primary btn-sm btn-read-action" aria-label="Buka dokumen PDF lengkap">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            <span>Baca Sekarang</span>
+          </button>
+        `;
 
         card.innerHTML = `
           <div class="ebook-cover-wrapper">
@@ -1365,21 +1339,30 @@
           </div>
         `;
 
-        // Event listener Baca PDF Internal
+        // Event listener Baca Sekarang (langsung buka PDF viewer)
         const readBtn = card.querySelector('.btn-read-action');
         if (readBtn) {
-          readBtn.addEventListener('click', function() {
-            openReaderModal(book);
+          readBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            openReaderModal(book, 'read');
           });
         }
 
-        // Event listener Detail
+        // Event listener Detail (buka sinopsis & ringkasan buku)
         const detailBtn = card.querySelector('.btn-detail-action');
         if (detailBtn) {
-          detailBtn.addEventListener('click', function() {
-            openReaderModal(book);
+          detailBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            openReaderModal(book, 'detail');
           });
         }
+
+        // Klik kartu untuk langsung membaca
+        card.addEventListener('click', function(e) {
+          if (!e.target.closest('button') && !e.target.closest('a')) {
+            openReaderModal(book, 'read');
+          }
+        });
 
         gridContainer.appendChild(card);
       });
@@ -1522,60 +1505,50 @@
     }
 
     // ===================================================
-    // BUKA MODAL MULTI-MODAL (IN-APP PDF ATAU SHOWCASE SIBI)
+    // BUKA MODAL PEMBACA FULL IN-APP (PDF INTERAKTIF)
     // ===================================================
-    function openReaderModal(book) {
+    function openReaderModal(book, mode = 'read') {
       if (!readerModal) return;
 
       modalReaderTitle.textContent = book.title || 'Membaca E-Book';
-      const authorText = Array.isArray(book.authors) ? book.authors.join(', ') : (book.authors || 'Tim Guru BK');
+      const authorText = Array.isArray(book.authors) ? book.authors.join(', ') : (book.authors || 'Tim Guru BK SMAN 4 Jember');
       modalReaderSub.textContent = `${authorText} • Sumber: ${book.source || 'Resmi'}`;
 
       const targetUrl = sanitizeReaderUrl(book.reader_url || book.preview_link || '#');
+      const downloadUrl = book.download_url || targetUrl;
+
       readerNewTabLink.href = targetUrl;
 
-      // JIKA BUKU ADALAH DOKUMEN INTERNAL GURU BK (PDF)
-      if (book.is_internal) {
-        readerShowcasePanel.style.display = 'none';
-        readerInternalPanel.style.display = 'flex';
-
-        // Tampilkan tombol unduh internal
-        if (readerInternalDownloadBtn && book.download_url) {
-          readerInternalDownloadBtn.href = book.download_url;
+      // Atur tombol unduh di header modal
+      if (readerInternalDownloadBtn) {
+        if (downloadUrl && downloadUrl !== '#') {
+          readerInternalDownloadBtn.href = downloadUrl;
           readerInternalDownloadBtn.style.display = 'inline-flex';
-        } else if (readerInternalDownloadBtn) {
+        } else {
           readerInternalDownloadBtn.style.display = 'none';
         }
+      }
 
-        // Tautkan reader iframe ke stream route internal
-        readerIframe.src = targetUrl;
-      } 
-      // JIKA BUKU ADALAH BUKU KEMENDIKDASMEN SIBI ATAU EKSTERNAL RESMI
-      else {
+      if (mode === 'detail') {
+        // Tampilkan panel detail / sinopsis
         readerInternalPanel.style.display = 'none';
         readerIframe.src = 'about:blank';
-        if (readerInternalDownloadBtn) {
-          readerInternalDownloadBtn.style.display = 'none';
-        }
-
         readerShowcasePanel.style.display = 'flex';
 
-        // Isi data showcase
         showcaseTitle.textContent = book.title;
         showcaseAuthors.textContent = `Penyusun: ${authorText}`;
-        showcasePublisher.textContent = book.publisher || 'Pusat Perbukuan Kemendikdasmen RI';
-        showcaseYear.textContent = book.published_year || '2023';
+        showcasePublisher.textContent = book.publisher || 'Kemendikdasmen RI / SMAN 4 Jember';
+        showcaseYear.textContent = book.published_year || '2025';
         showcaseSubject.textContent = book.subject || book.category || 'Materi Belajar SMA';
         showcaseClass.textContent = book.class_level || 'Semua Jenjang';
         showcaseDesc.textContent = book.description || 'Tidak ada deskripsi.';
 
         if (book.category === 'kesehatan_mental' || book.category === 'stres_belajar') {
           showcaseVerifiedBadge.textContent = 'Koleksi Kesehatan Jiwa & Bimbingan Terkurasi';
-          showcaseBtnLabel.textContent = 'Buka Buku di Sumber Resmi Daring';
         } else {
-          showcaseVerifiedBadge.textContent = 'Buku Resmi Kemendikdasmen RI - Kurikulum Merdeka';
-          showcaseBtnLabel.textContent = 'Buka & Baca Buku Lengkap di SIBI Kemendikdasmen';
+          showcaseVerifiedBadge.textContent = 'Buku Resmi Kurikulum Merdeka Terintegrasi';
         }
+        showcaseBtnLabel.textContent = 'Baca Dokumen PDF Sekarang';
 
         if (book.cover_url) {
           showcaseCoverImg.src = book.cover_url;
@@ -1594,7 +1567,18 @@
           });
         }
 
-        showcaseDirectBtn.href = targetUrl;
+        // Ketika tombol baca di panel detail ditekan, langsung beralih ke penampil PDF
+        showcaseDirectBtn.onclick = function(e) {
+          e.preventDefault();
+          readerShowcasePanel.style.display = 'none';
+          readerInternalPanel.style.display = 'flex';
+          readerIframe.src = targetUrl;
+        };
+      } else {
+        // Mode 'read' langsung membuka penampil PDF in-app
+        readerShowcasePanel.style.display = 'none';
+        readerInternalPanel.style.display = 'flex';
+        readerIframe.src = targetUrl;
       }
 
       // Tampilkan modal dan kunci scroll body

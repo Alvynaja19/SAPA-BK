@@ -22,6 +22,8 @@ Route::get('/ebook', [FrontendController::class, 'ebooks'])->name('ebook.index')
 Route::get('/ebook/{id}', [FrontendController::class, 'ebookDetail'])->name('ebook.detail')->whereNumber('id');
 Route::get('/ebook/stream/{id}', [SiswaController::class, 'streamPdf'])->name('ebook.stream')->whereNumber('id');
 Route::get('/ebook/unduh/{id}', [SiswaController::class, 'unduhPdf'])->name('ebook.download')->whereNumber('id');
+Route::get('/ebook/curated-stream/{id}', [SiswaController::class, 'streamCuratedPdf'])->name('ebook.curated.stream');
+Route::get('/ebook/curated-unduh/{id}', [SiswaController::class, 'unduhCuratedPdf'])->name('ebook.curated.download');
 Route::get('/artikel', [FrontendController::class, 'articles'])->name('article.index');
 Route::get('/artikel/{slug}', [FrontendController::class, 'articleDetail'])->name('article.detail');
 Route::get('/faq', [FrontendController::class, 'faqs'])->name('faq');

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Ebook;
 use App\Models\User;
+use App\Services\CuratedEbookCatalog;
 use App\Services\GoogleBooksService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
@@ -226,5 +227,41 @@ class GoogleBooksIntegrationTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertHeader('Content-Type', 'application/pdf');
+    }
+
+    public function test_student_can_stream_curated_sma_book_in_app(): void
+    {
+        $student = $this->getStudentUser();
+        $this->actingAs($student);
+
+        // Uji stream buku Biologi Kelas XI kurasi
+        $response = $this->get(route('ebook.curated.stream', 'curated-sma-bio-11'));
+
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'application/pdf');
+    }
+
+    public function test_student_can_download_curated_sma_book(): void
+    {
+        $student = $this->getStudentUser();
+        $this->actingAs($student);
+
+        // Uji unduh buku Matematika Kelas XII kurasi
+        $response = $this->get(route('ebook.curated.download', 'curated-sma-mat-12'));
+
+        $response->assertStatus(200);
+        $this->assertTrue(str_contains($response->headers->get('Content-Disposition') ?? '', 'attachment'));
+    }
+
+    public function test_curated_books_have_in_app_reader_type(): void
+    {
+        $books = CuratedEbookCatalog::all();
+        $this->assertNotEmpty($books);
+
+        foreach ($books as $book) {
+            $this->assertEquals('in_app', $book['reader_type']);
+            $this->assertTrue($book['is_internal']);
+            $this->assertStringContainsString('/ebook/curated-stream/', $book['reader_url']);
+        }
     }
 }

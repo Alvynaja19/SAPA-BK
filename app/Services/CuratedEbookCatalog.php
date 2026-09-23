@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Route;
+
 class CuratedEbookCatalog
 {
     /**
-     * Mengambil seluruh daftar buku kurasi lokal.
+     * Mengambil seluruh daftar buku kurasi lokal (Mode Full In-App).
      *
      * @return array<int, array<string, mixed>>
      */
@@ -15,6 +17,33 @@ class CuratedEbookCatalog
             self::mentalHealthBooks(),
             self::smaStudyBooks()
         );
+    }
+
+    /**
+     * Memastikan setiap buku kurasi memiliki rute streaming dan unduh in-app resmi SAPA BK.
+     *
+     * @param  array<int, array<string, mixed>>  $books
+     * @return array<int, array<string, mixed>>
+     */
+    protected static function attachInAppReaderUrls(array $books): array
+    {
+        return array_map(function (array $book): array {
+            $id = $book['id'];
+            $streamUrl = function_exists('route') && Route::has('ebook.curated.stream')
+                ? route('ebook.curated.stream', $id)
+                : url('/ebook/curated-stream/'.$id);
+
+            $downloadUrl = function_exists('route') && Route::has('ebook.curated.download')
+                ? route('ebook.curated.download', $id)
+                : url('/ebook/curated-unduh/'.$id);
+
+            $book['reader_type'] = 'in_app';
+            $book['is_internal'] = true;
+            $book['reader_url'] = $streamUrl;
+            $book['download_url'] = $downloadUrl;
+
+            return $book;
+        }, $books);
     }
 
     /**
@@ -79,7 +108,7 @@ class CuratedEbookCatalog
      */
     public static function mentalHealthBooks(): array
     {
-        return [
+        return self::attachInAppReaderUrls([
             [
                 'id' => 'curated-km-01',
                 'title' => 'Panduan Pengelolaan Stres dan Regulasi Emosi Siswa SMA',
@@ -156,7 +185,7 @@ class CuratedEbookCatalog
                 'language' => 'Indonesia',
                 'badges' => ['Kelas 12', 'Strategi Belajar'],
             ],
-        ];
+        ]);
     }
 
     /**
@@ -166,7 +195,7 @@ class CuratedEbookCatalog
      */
     public static function smaStudyBooks(): array
     {
-        return [
+        return self::attachInAppReaderUrls([
             // KELAS X
             [
                 'id' => 'curated-sma-mat-10',
@@ -343,6 +372,6 @@ class CuratedEbookCatalog
                 'language' => 'Indonesia',
                 'badges' => ['Buku Resmi', 'Kelas XII', 'Kurikulum Merdeka'],
             ],
-        ];
+        ]);
     }
 }
