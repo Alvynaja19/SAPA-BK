@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Ebook;
 use App\Models\User;
 use App\Services\GoogleBooksService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -182,9 +183,29 @@ class GoogleBooksIntegrationTest extends TestCase
         $response->assertSee('Perpustakaan E-Book &amp; Modul Siswa', false);
         $response->assertSee('ebookSearchInput');
         $response->assertSee('ebookReaderModal');
-        $response->assertSee('ebookDetailModal');
+        $response->assertSee('readerInternalPanel');
+        $response->assertSee('readerShowcasePanel');
         $response->assertSee('Semua Koleksi');
         $response->assertSee('Materi Belajar SMA');
         $response->assertSee('Kesehatan Mental &amp; Remaja', false);
+    }
+
+    public function test_student_can_stream_internal_pdf(): void
+    {
+        $student = $this->getStudentUser();
+        $this->actingAs($student);
+
+        $ebook = Ebook::create([
+            'title' => 'Modul Bimbingan Karir Khusus',
+            'description' => 'Panduan karir bagi siswa SMA',
+            'file_path' => 'ebooks/eksplorasi_karir.pdf',
+            'is_public' => true,
+            'uploaded_by' => $student->id,
+        ]);
+
+        $response = $this->get(route('ebook.stream', $ebook->id));
+
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'application/pdf');
     }
 }

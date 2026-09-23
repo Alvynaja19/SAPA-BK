@@ -214,7 +214,9 @@ class SiswaController extends Controller
                 'is_internal' => true,
                 'is_public' => (bool) $eb->is_public,
                 'reader_type' => 'in_app',
-                'reader_url' => Storage::url($eb->file_path),
+                'reader_url' => route('ebook.stream', $eb->id),
+                'download_url' => route('ebook.download', $eb->id),
+                'real_id' => $eb->id,
                 'source' => 'Guru BK SMAN 4 Jember',
                 'language' => 'Indonesia',
                 'badges' => [$eb->is_public ? 'Akses Terbuka' : 'Eksklusif SMAN 4', 'Modul Guru BK'],
@@ -233,6 +235,81 @@ class SiswaController extends Controller
         $ebooks = Ebook::latest()->paginate(12);
 
         return view('siswa.ebook', compact('internalEbooks', 'curatedBooks', 'stats', 'ebooks'));
+    }
+
+    /**
+     * Mengalirkan berkas PDF modul internal secara langsung ke peramban.
+     */
+    public function streamPdf(int $id)
+    {
+        $ebook = Ebook::findOrFail($id);
+
+        if (! $ebook->is_public && ! Auth::check()) {
+            abort(403, 'Akses modul ini memerlukan login.');
+        }
+
+        $filePath = $this->resolveEbookPath($ebook->file_path);
+
+        if (! $filePath) {
+            return response()->view('siswa.ebook-missing', [
+                'ebook' => $ebook,
+            ], 404);
+        }
+
+        $filename = basename($ebook->file_path);
+
+        return response()->file($filePath, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$filename.'"',
+            'Cache-Control' => 'public, max-age=86400',
+        ]);
+    }
+
+    /**
+     * Mengunduh berkas PDF modul internal.
+     */
+    public function unduhPdf(int $id)
+    {
+        $ebook = Ebook::findOrFail($id);
+
+        if (! $ebook->is_public && ! Auth::check()) {
+            abort(403, 'Akses unduhan modul ini memerlukan login.');
+        }
+
+        $filePath = $this->resolveEbookPath($ebook->file_path);
+
+        if (! $filePath) {
+            return back()->with('error', 'Berkas modul belum tersedia secara fisik di server.');
+        }
+
+        $cleanTitle = preg_replace('/[^a-zA-Z0-9_\-\.]/', '_', $ebook->title);
+
+        return response()->download($filePath, $cleanTitle.'.pdf');
+    }
+
+    /**
+     * Mencari path absolut berkas fisik e-book di berbagai kemungkinan lokasi penyimpanan.
+     */
+    protected function resolveEbookPath(?string $relativePath): ?string
+    {
+        if (empty($relativePath)) {
+            return null;
+        }
+
+        $candidates = [
+            storage_path('app/public/'.$relativePath),
+            storage_path('app/'.$relativePath),
+            public_path('storage/'.$relativePath),
+            base_path('storage/app/public/'.$relativePath),
+        ];
+
+        foreach ($candidates as $candidate) {
+            if (file_exists($candidate) && is_file($candidate)) {
+                return $candidate;
+            }
+        }
+
+        return null;
     }
 
     public function tes(): View
