@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -72,23 +73,64 @@ class AuthController extends Controller
             'password' => $validated['password'],
         ];
 
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
-            $request->session()->regenerate();
-
-            if (! $user->is_active) {
-                Auth::logout();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
-
-                return back()->withErrors(['email' => 'Akun Anda sedang dinonaktifkan. Silakan hubungi admin sekolah.']);
-            }
-
-            return $this->redirectBasedOnRole($user);
+        if (! Auth::validate($credentials)) {
+            return back()->withErrors([
+                'email' => 'Kata sandi yang Anda masukkan salah. Silakan periksa kembali kata sandi Anda.',
+            ])->onlyInput('email');
         }
 
-        return back()->withErrors([
-            'email' => 'Kata sandi yang Anda masukkan salah. Silakan periksa kembali kata sandi Anda.',
-        ])->onlyInput('email');
+        if (! $user->is_active) {
+            return back()->withErrors(['email' => 'Akun Anda sedang dinonaktifkan. Silakan hubungi admin sekolah.']);
+        }
+
+        // Cek apakah akun sedang aktif di perangkat lain
+        $activeSessionOnOtherDevice = null;
+        if (Schema::hasTable('sessions')) {
+            $sessionLifetimeMinutes = (int) config('session.lifetime', 120);
+            $activeThreshold = time() - ($sessionLifetimeMinutes * 60);
+
+            // Bersihkan sesi yang sudah kedaluwarsa untuk akun ini
+            DB::table('sessions')
+                ->where('user_id', $user->id)
+                ->where('last_activity', '<', $activeThreshold)
+                ->delete();
+
+            // Cek apakah ada sesi lain yang masih aktif pada perangkat berbeda
+            $activeSessionOnOtherDevice = DB::table('sessions')
+                ->where('user_id', $user->id)
+                ->where('id', '!=', $request->session()->getId())
+                ->where('last_activity', '>=', $activeThreshold)
+                ->orderByDesc('last_activity')
+                ->first();
+        }
+
+        // Opsi 2: Tolak login jika terdeteksi aktif di perangkat lain dan belum konfirmasi force_logout
+        if ($activeSessionOnOtherDevice && ! $request->boolean('force_logout')) {
+            $lastActiveMinutes = max(1, (int) round((time() - $activeSessionOnOtherDevice->last_activity) / 60));
+            $ipText = ! empty($activeSessionOnOtherDevice->ip_address) ? " (IP: {$activeSessionOnOtherDevice->ip_address})" : '';
+
+            return back()->withErrors([
+                'email' => "Akun ini sedang aktif di perangkat lain{$ipText}, terakhir aktif sekitar {$lastActiveMinutes} menit yang lalu. Demi keamanan privasi bimbingan konseling, 1 akun tidak dapat diakses di dua perangkat secara bersamaan. Harap logout terlebih dahulu dari perangkat tersebut atau gunakan opsi keluarkan akun di bawah.",
+            ])->with('has_concurrent_session', true)->onlyInput('email');
+        }
+
+        // Hapus sesi lain milik pengguna ini jika force_logout aktif atau tidak ada sesi bentrok
+        if (Schema::hasTable('sessions')) {
+            DB::table('sessions')
+                ->where('user_id', $user->id)
+                ->where('id', '!=', $request->session()->getId())
+                ->delete();
+        }
+
+        // Rotasi remember_token agar auto-login sesi lama di perangkat lain hangus
+        $user->forceFill([
+            'remember_token' => Str::random(60),
+        ])->save();
+
+        Auth::login($user, $request->boolean('remember'));
+        $request->session()->regenerate();
+
+        return $this->redirectBasedOnRole($user);
     }
 
     public function showRegisterForm(): View|RedirectResponse

@@ -99,6 +99,20 @@
       </label>
     </div>
 
+    @if (session('has_concurrent_session'))
+      <div style="background: var(--accent-soft); border: 1px solid var(--accent); border-radius: var(--radius-s); padding: 12px 14px; margin-bottom: 18px;">
+        <label class="checkbox-label" style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; color: var(--accent-ink);">
+          <input type="checkbox" name="force_logout" value="1" id="force_logout" checked style="margin-top: 3px;" />
+          <span style="font-size: 13px; font-weight: 600; line-height: 1.4;">
+            Keluarkan akun dari perangkat lain dan lanjutkan masuk di perangkat ini
+          </span>
+        </label>
+        <p style="font-size: 12px; color: var(--accent-ink); margin: 6px 0 0 26px; line-height: 1.4; opacity: 0.9;">
+          Perangkat sebelumnya akan otomatis keluar (logout) demi menjaga privasi dan keamanan akun Anda.
+        </p>
+      </div>
+    @endif
+
     <button type="submit" class="btn-submit">
       <span>Masuk Sekarang</span>
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
