@@ -999,6 +999,41 @@
     document.addEventListener('keydown', handleKeydown);
     modal.addEventListener('click', handleBackdropClick);
   };
+
+  // Real-time Session Guard: otomatis logout tanpa refresh halaman jika akun aktif di perangkat lain
+  (function() {
+    let isTerminated = false;
+    function verifySessionStatus() {
+      if (isTerminated) return;
+      fetch("{{ route('auth.session-status') }}", {
+        headers: {
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        cache: 'no-store'
+      })
+      .then(function(res) {
+        if (res.status === 401 || !res.ok) {
+          isTerminated = true;
+          window.location.href = "{{ route('login') }}?reason=session_terminated";
+        }
+      })
+      .catch(function() {
+        // Abaikan kegagalan jaringan sementara
+      });
+    }
+
+    // Polling setiap 4 detik untuk responsivitas instan
+    setInterval(verifySessionStatus, 4000);
+
+    // Cek seketika saat pengguna kembali ke tab ini
+    window.addEventListener('focus', verifySessionStatus);
+    document.addEventListener('visibilitychange', function() {
+      if (document.visibilityState === 'visible') {
+        verifySessionStatus();
+      }
+    });
+  })();
 </script>
 @stack('scripts')
 </body>

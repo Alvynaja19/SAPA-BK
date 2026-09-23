@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\AccountVerificationMail;
 use App\Models\Student;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -180,6 +181,65 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('home')->with('success', 'Anda telah berhasil logout.');
+    }
+
+    /**
+     * Memeriksa status sesi pengguna saat ini secara real-time.
+     * Mengembalikan 401 jika sesi telah dibatalkan atau dihapus oleh perangkat lain.
+     */
+    public function sessionStatus(Request $request): JsonResponse
+    {
+        if (! Auth::check()) {
+            return response()->json([
+                'authenticated' => false,
+                'message' => 'Sesi Anda telah berakhir atau diputus.',
+            ], 401);
+        }
+
+        $user = Auth::user();
+
+        if (! $user->is_active) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return response()->json([
+                'authenticated' => false,
+                'message' => 'Akun Anda sedang dinonaktifkan.',
+            ], 401);
+        }
+
+        // Jika tabel sessions digunakan, pastikan baris sesi saat ini belum ditimpa oleh perangkat lain
+        if (Schema::hasTable('sessions')) {
+            $sessionId = $request->session()->getId();
+
+            $currentSessionExists = DB::table('sessions')
+                ->where('id', $sessionId)
+                ->where('user_id', $user->id)
+                ->exists();
+
+            $hasOtherActiveSessions = DB::table('sessions')
+                ->where('user_id', $user->id)
+                ->where('id', '!=', $sessionId)
+                ->exists();
+
+            // Jika sesi saat ini tidak ditemukan namun akun memiliki sesi lain di database,
+            // berarti sesi perangkat ini telah dikeluarkan oleh perangkat baru
+            if (! $currentSessionExists && $hasOtherActiveSessions) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return response()->json([
+                    'authenticated' => false,
+                    'message' => 'Sesi Anda telah diputus karena akun telah aktif di perangkat lain.',
+                ], 401);
+            }
+        }
+
+        return response()->json([
+            'authenticated' => true,
+        ]);
     }
 
     public function profile(): View

@@ -14,7 +14,21 @@
   </div>
 
   <!-- Flash / Error Alerts -->
-  @if (session('concurrent_session_blocked'))
+  @if (request('reason') === 'session_terminated')
+    <div class="alert-box" style="background: var(--accent-soft); border: 1px solid var(--accent); color: var(--accent-ink); padding: 14px 16px; margin-bottom: 22px; border-radius: var(--radius-m); display: flex; gap: 12px; align-items: flex-start;">
+      <div class="alert-icon" style="color: var(--accent); flex-shrink: 0; margin-top: 2px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+      </div>
+      <div>
+        <strong style="font-size: 14px; font-weight: 700; display: block; margin-bottom: 4px; color: var(--accent-ink);">
+          Sesi Otomatis Berakhir
+        </strong>
+        <p style="font-size: 13px; line-height: 1.45; margin: 0; color: var(--accent-ink);">
+          Akun Anda telah otomatis keluar dari perangkat ini karena akun ini telah masuk di perangkat lain. Silakan login kembali jika ingin menggunakan perangkat ini.
+        </p>
+      </div>
+    </div>
+  @elseif (session('concurrent_session_blocked'))
     <div class="alert-box" style="background: var(--accent-soft); border: 1px solid var(--accent); color: var(--accent-ink); padding: 14px 16px; margin-bottom: 22px; border-radius: var(--radius-m); display: flex; gap: 12px; align-items: flex-start;">
       <div class="alert-icon" style="color: var(--accent); flex-shrink: 0; margin-top: 2px;">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>

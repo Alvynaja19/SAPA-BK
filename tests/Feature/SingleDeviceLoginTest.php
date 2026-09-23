@@ -170,4 +170,50 @@ class SingleDeviceLoginTest extends TestCase
             'id' => $expiredSessionId,
         ]);
     }
+
+    public function test_session_status_returns_authenticated_true_when_session_is_valid(): void
+    {
+        $user = $this->createStudentUser();
+        $this->actingAs($user);
+
+        $response = $this->getJson(route('auth.session-status'));
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'authenticated' => true,
+        ]);
+    }
+
+    public function test_session_status_returns_401_when_session_is_terminated_by_another_device(): void
+    {
+        $user = $this->createStudentUser();
+        $this->actingAs($user);
+
+        // Simulasikan perangkat lain login dan mencatatkan sesi baru di database
+        $otherDeviceSessionId = Str::random(40);
+        DB::table('sessions')->insert([
+            'id' => $otherDeviceSessionId,
+            'user_id' => $user->id,
+            'ip_address' => '127.0.0.1',
+            'user_agent' => 'Perangkat Lain',
+            'payload' => serialize(['dummy' => 'payload']),
+            'last_activity' => time(),
+        ]);
+
+        $response = $this->getJson(route('auth.session-status'));
+
+        $response->assertStatus(401);
+        $response->assertJson([
+            'authenticated' => false,
+        ]);
+    }
+
+    public function test_session_terminated_reason_is_displayed_on_login_page(): void
+    {
+        $response = $this->get('/login?reason=session_terminated');
+
+        $response->assertStatus(200);
+        $response->assertSee('Sesi Otomatis Berakhir');
+        $response->assertSee('Akun Anda telah otomatis keluar dari perangkat ini');
+    }
 }

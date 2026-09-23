@@ -38,6 +38,9 @@ Route::middleware('guest')->group(function () {
     Route::post('/aktivasi/reset', [AuthController::class, 'aktivasiReset'])->name('aktivasi.reset');
 });
 
+// Pemeriksaan Status Sesi Real-time (Auto-Logout jika sesi dihentikan di perangkat lain)
+Route::get('/auth/session-status', [AuthController::class, 'sessionStatus'])->name('auth.session-status');
+
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/profil', [AuthController::class, 'profile'])->name('profile');
