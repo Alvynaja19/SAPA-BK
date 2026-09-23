@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Api\ChatApiController;
+use App\Http\Controllers\Api\EbookApiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\GuruBkController;
@@ -68,6 +69,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/session', [ChatApiController::class, 'createSession'])->name('api.chat.session');
         Route::get('/history/{id}', [ChatApiController::class, 'history'])->name('api.chat.history');
         Route::delete('/session/{id}', [ChatApiController::class, 'deleteSession'])->name('api.chat.session.delete');
+    });
+
+    // API E-Book Daring (Google Books API & Katalog Kurasi SMA)
+    Route::prefix('api/ebooks')->as('api.ebooks.')->group(function () {
+        Route::get('/search', [EbookApiController::class, 'search'])->name('search');
+        Route::get('/categories', [EbookApiController::class, 'categories'])->name('categories');
+        Route::get('/detail/{id}', [EbookApiController::class, 'detail'])->name('detail');
     });
 
     // Rute Guru BK

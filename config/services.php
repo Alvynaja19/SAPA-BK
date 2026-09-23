@@ -39,4 +39,9 @@ return [
         'url' => env('AI_SERVICE_URL', 'http://127.0.0.1:8001'),
     ],
 
+    'google_books' => [
+        'key' => env('GOOGLE_BOOKS_API_KEY'),
+        'endpoint' => env('GOOGLE_BOOKS_ENDPOINT', 'https://www.googleapis.com/books/v1/volumes'),
+    ],
+
 ];
