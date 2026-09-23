@@ -170,4 +170,21 @@ class GoogleBooksIntegrationTest extends TestCase
             ],
         ]);
     }
+
+    public function test_student_can_render_ebook_portal_page(): void
+    {
+        $student = $this->getStudentUser();
+        $this->actingAs($student);
+
+        $response = $this->get(route('siswa.ebook'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Perpustakaan E-Book &amp; Modul Siswa', false);
+        $response->assertSee('ebookSearchInput');
+        $response->assertSee('ebookReaderModal');
+        $response->assertSee('ebookDetailModal');
+        $response->assertSee('Semua Koleksi');
+        $response->assertSee('Materi Belajar SMA');
+        $response->assertSee('Kesehatan Mental &amp; Remaja', false);
+    }
 }

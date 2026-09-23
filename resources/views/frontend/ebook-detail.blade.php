@@ -53,21 +53,21 @@
           </div>
 
           <div style="padding-top: 20px; border-top: 1px solid var(--line); display: flex; gap: 14px; flex-wrap: wrap;">
-            <button type="button" onclick="alert('Fitur pratinjau dokumen dibuka dalam jendela simulasi dokumen.');" class="btn btn-primary">
+            <a href="{{ asset('storage/' . $ebook->file_path) }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
                 <circle cx="12" cy="12" r="3"/>
               </svg>
               <span>Baca Online</span>
-            </button>
-            <button type="button" onclick="alert('Unduhan dokumen modul sedang disiapkan.');" class="btn btn-ghost">
+            </a>
+            <a href="{{ asset('storage/' . $ebook->file_path) }}" download class="btn btn-ghost">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                 <polyline points="7 10 12 15 17 10"/>
                 <line x1="12" x2="12" y1="15" y2="3"/>
               </svg>
               <span>Unduh Modul (PDF)</span>
-            </button>
+            </a>
             <a href="{{ auth()->check() ? route('siswa.chat') : route('login') }}" class="btn btn-accent">
               <span>Diskusikan Modul Ini</span>
             </a>
