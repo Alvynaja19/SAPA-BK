@@ -30,10 +30,10 @@ class GoogleBooksService
             $cleanQuery = 'kesehatan mental remaja';
         }
 
-        // Cache hasil query selama 24 jam untuk menghemat kuota API Google
-        $cacheKey = 'google_books_'.md5(strtolower($cleanQuery).'_'.$maxResults.'_'.$startIndex.'_'.$lang);
+        // Cache hasil query selama 24 jam untuk menghemat kuota API Google (v5: domain kemendikdasmen)
+        $cacheKey = 'google_books_v5_'.md5(strtolower($cleanQuery).'_'.$maxResults.'_'.$startIndex.'_'.$lang);
 
-        return Cache::remember($cacheKey, 86400, function () use ($cleanQuery, $maxResults, $startIndex, $lang) {
+        $result = Cache::remember($cacheKey, 86400, function () use ($cleanQuery, $maxResults, $startIndex, $lang) {
             try {
                 $params = [
                     'q' => $cleanQuery,
@@ -97,6 +97,12 @@ class GoogleBooksService
                 'books' => $curatedResults,
             ];
         });
+
+        if (! empty($result['books']) && is_array($result['books'])) {
+            $result['books'] = array_map(fn (array $b) => $this->sanitizeBookUrls($b), $result['books']);
+        }
+
+        return $result;
     }
 
     /**
@@ -106,16 +112,17 @@ class GoogleBooksService
      */
     public function getByCategory(string $category, int $maxResults = 15): array
     {
-        // Kategori buku materi pelajaran SMA langsung diarahkan ke sumber resmi Kemendikbud
+        // Kategori buku materi pelajaran SMA langsung diarahkan ke sumber resmi Kemendikdasmen
         if ($category === 'materi_sma') {
             $books = CuratedEbookCatalog::smaStudyBooks();
+            $books = array_map(fn (array $b) => $this->sanitizeBookUrls($b), array_slice($books, 0, $maxResults));
 
             return [
                 'success' => true,
                 'source' => 'kemdikbud_sibi',
                 'total' => count($books),
                 'category' => $category,
-                'books' => array_slice($books, 0, $maxResults),
+                'books' => $books,
             ];
         }
 
@@ -140,12 +147,14 @@ class GoogleBooksService
     public function getDetail(string $id): ?array
     {
         if (str_starts_with($id, 'curated-')) {
-            return CuratedEbookCatalog::find($id);
+            $detail = CuratedEbookCatalog::find($id);
+
+            return $detail ? $this->sanitizeBookUrls($detail) : null;
         }
 
-        $cacheKey = 'google_book_detail_'.md5($id);
+        $cacheKey = 'google_book_detail_v5_'.md5($id);
 
-        return Cache::remember($cacheKey, 86400, function () use ($id) {
+        $book = Cache::remember($cacheKey, 86400, function () use ($id) {
             try {
                 $params = [];
                 if (! empty($this->apiKey)) {
@@ -168,6 +177,35 @@ class GoogleBooksService
 
             return null;
         });
+
+        return $book ? $this->sanitizeBookUrls($book) : null;
+    }
+
+    /**
+     * Memastikan URL pembaca resmi selalu menggunakan domain resmi SIBI Kemendikdasmen aktif.
+     *
+     * @param  array<string, mixed>  $book
+     * @return array<string, mixed>
+     */
+    public function sanitizeBookUrls(array $book): array
+    {
+        if (! empty($book['reader_url'])) {
+            $book['reader_url'] = str_replace(
+                ['static.buku.kemdikbud.go.id', 'buku.kemdikbud.go.id'],
+                'buku.kemendikdasmen.go.id',
+                $book['reader_url']
+            );
+        }
+
+        if (! empty($book['preview_link'])) {
+            $book['preview_link'] = str_replace(
+                ['static.buku.kemdikbud.go.id', 'buku.kemdikbud.go.id'],
+                'buku.kemendikdasmen.go.id',
+                $book['preview_link']
+            );
+        }
+
+        return $book;
     }
 
     /**

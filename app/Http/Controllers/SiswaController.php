@@ -223,7 +223,17 @@ class SiswaController extends Controller
             ];
         })->values()->all();
 
-        $curatedBooks = CuratedEbookCatalog::all();
+        $curatedBooks = array_map(function (array $book): array {
+            if (! empty($book['reader_url'])) {
+                $book['reader_url'] = str_replace(
+                    ['static.buku.kemdikbud.go.id', 'buku.kemdikbud.go.id'],
+                    'buku.kemendikdasmen.go.id',
+                    $book['reader_url']
+                );
+            }
+
+            return $book;
+        }, CuratedEbookCatalog::all());
 
         $stats = [
             'total_all' => count($curatedBooks) + count($internalEbooks),

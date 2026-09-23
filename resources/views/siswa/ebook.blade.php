@@ -1065,14 +1065,14 @@
       ></iframe>
     </div>
 
-    <!-- PANEL 2: SHOWCASE & RESMI PORTAL (UNTUK BUKU KEMDIKBUD SIBI & EKSTERNAL) -->
+    <!-- PANEL 2: SHOWCASE & RESMI PORTAL (UNTUK BUKU KEMENDIKDASMEN SIBI & EKSTERNAL) -->
     <div id="readerShowcasePanel" class="ebook-showcase-box" style="display: none;">
       <div class="ebook-showcase-card">
         <div class="ebook-showcase-badge-strip">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polyline points="20 6 9 17 4 12"/>
           </svg>
-          <span id="showcaseVerifiedBadge">Buku Resmi Kemendikbudristek RI - Kurikulum Merdeka</span>
+          <span id="showcaseVerifiedBadge">Buku Resmi Kemendikdasmen RI - Kurikulum Merdeka</span>
         </div>
 
         <div class="ebook-showcase-grid">
@@ -1102,7 +1102,7 @@
             </div>
 
             <div class="ebook-showcase-notice">
-              <strong>Informasi Akses Buku:</strong> Dokumen buku resmi ini dilindungi protokol keamanan hak cipta peramban (SAMEORIGIN policy) Kemendikbudristek, sehingga pembacaan interaktif disediakan secara utuh melalui portal resmi SIBI Kemdikbud.
+              <strong>Informasi Akses Buku:</strong> Dokumen buku resmi ini dilindungi protokol keamanan hak cipta peramban (SAMEORIGIN policy) Kemendikdasmen, sehingga pembacaan interaktif disediakan secara utuh melalui portal resmi SIBI Kemendikdasmen.
             </div>
 
             <div style="display: flex; gap: 12px; flex-wrap: wrap;">
@@ -1111,7 +1111,7 @@
                   <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
                   <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
                 </svg>
-                <span id="showcaseBtnLabel">Buka &amp; Baca Buku di Portal Resmi SIBI</span>
+                <span id="showcaseBtnLabel">Buka &amp; Baca Buku di Portal Resmi SIBI Kemendikdasmen</span>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
                   <polyline points="15 3 21 3 21 9"/>
@@ -1136,8 +1136,20 @@
   (function() {
     'use strict';
 
+    // Helper: Sanitasi URL resmi ke domain SIBI Kemendikdasmen aktif
+    function sanitizeReaderUrl(url) {
+      if (!url || typeof url !== 'string') return '#';
+      return url
+        .replace(/static\.buku\.kemdikbud\.go\.id/g, 'buku.kemendikdasmen.go.id')
+        .replace(/buku\.kemdikbud\.go\.id/g, 'buku.kemendikdasmen.go.id');
+    }
+
     // Inisialisasi Data dari Server (Katalog Kurasi + Modul Internal SMAN 4)
-    const initialCuratedBooks = @json($curatedBooks ?? []);
+    const rawCuratedBooks = @json($curatedBooks ?? []);
+    const initialCuratedBooks = rawCuratedBooks.map(function(b) {
+      if (b && b.reader_url) b.reader_url = sanitizeReaderUrl(b.reader_url);
+      return b;
+    });
     const initialInternalEbooks = @json($internalEbooks ?? []);
 
     // Gabungkan seluruh koleksi dasar
@@ -1300,7 +1312,7 @@
             <button type="button" class="btn btn-ghost btn-sm btn-detail-action" aria-label="Lihat detail buku">
               Detail
             </button>
-            <a href="${escapeHtml(book.reader_url || '#')}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" aria-label="Buka di SIBI Kemdikbud">
+            <a href="${escapeHtml(sanitizeReaderUrl(book.reader_url || '#'))}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" aria-label="Buka di SIBI Kemendikdasmen">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
                 <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
@@ -1464,7 +1476,11 @@
       })
       .then(data => {
         if (errorState) errorState.style.display = 'none';
-        const apiBooks = data.books || [];
+        const rawApiBooks = data.books || [];
+        const apiBooks = rawApiBooks.map(function(apiB) {
+          if (apiB && apiB.reader_url) apiB.reader_url = sanitizeReaderUrl(apiB.reader_url);
+          return apiB;
+        });
 
         // Gabungkan buku internal yang cocok secara lokal agar modul sekolah tetap muncul di hasil pencarian teratas
         const localMatches = filterLocalBooks();
@@ -1515,7 +1531,7 @@
       const authorText = Array.isArray(book.authors) ? book.authors.join(', ') : (book.authors || 'Tim Guru BK');
       modalReaderSub.textContent = `${authorText} • Sumber: ${book.source || 'Resmi'}`;
 
-      const targetUrl = book.reader_url || book.preview_link || '#';
+      const targetUrl = sanitizeReaderUrl(book.reader_url || book.preview_link || '#');
       readerNewTabLink.href = targetUrl;
 
       // JIKA BUKU ADALAH DOKUMEN INTERNAL GURU BK (PDF)
@@ -1534,7 +1550,7 @@
         // Tautkan reader iframe ke stream route internal
         readerIframe.src = targetUrl;
       } 
-      // JIKA BUKU ADALAH BUKU KEMDIKBUD SIBI ATAU EKSTERNAL RESMI
+      // JIKA BUKU ADALAH BUKU KEMENDIKDASMEN SIBI ATAU EKSTERNAL RESMI
       else {
         readerInternalPanel.style.display = 'none';
         readerIframe.src = 'about:blank';
@@ -1547,7 +1563,7 @@
         // Isi data showcase
         showcaseTitle.textContent = book.title;
         showcaseAuthors.textContent = `Penyusun: ${authorText}`;
-        showcasePublisher.textContent = book.publisher || 'Kemendikbudristek RI';
+        showcasePublisher.textContent = book.publisher || 'Pusat Perbukuan Kemendikdasmen RI';
         showcaseYear.textContent = book.published_year || '2023';
         showcaseSubject.textContent = book.subject || book.category || 'Materi Belajar SMA';
         showcaseClass.textContent = book.class_level || 'Semua Jenjang';
@@ -1557,8 +1573,8 @@
           showcaseVerifiedBadge.textContent = 'Koleksi Kesehatan Jiwa & Bimbingan Terkurasi';
           showcaseBtnLabel.textContent = 'Buka Buku di Sumber Resmi Daring';
         } else {
-          showcaseVerifiedBadge.textContent = 'Buku Resmi Kemendikbudristek RI - Kurikulum Merdeka';
-          showcaseBtnLabel.textContent = 'Buka & Baca Buku Lengkap di SIBI Kemdikbud';
+          showcaseVerifiedBadge.textContent = 'Buku Resmi Kemendikdasmen RI - Kurikulum Merdeka';
+          showcaseBtnLabel.textContent = 'Buka & Baca Buku Lengkap di SIBI Kemendikdasmen';
         }
 
         if (book.cover_url) {
