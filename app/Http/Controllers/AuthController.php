@@ -83,38 +83,7 @@ class AuthController extends Controller
             return back()->withErrors(['email' => 'Akun Anda sedang dinonaktifkan. Silakan hubungi admin sekolah.']);
         }
 
-        // Cek apakah akun sedang aktif di perangkat lain
-        $activeSessionOnOtherDevice = null;
-        if (Schema::hasTable('sessions')) {
-            $sessionLifetimeMinutes = (int) config('session.lifetime', 120);
-            $activeThreshold = time() - ($sessionLifetimeMinutes * 60);
-
-            // Bersihkan sesi yang sudah kedaluwarsa untuk akun ini
-            DB::table('sessions')
-                ->where('user_id', $user->id)
-                ->where('last_activity', '<', $activeThreshold)
-                ->delete();
-
-            // Cek apakah ada sesi lain yang masih aktif pada perangkat berbeda
-            $activeSessionOnOtherDevice = DB::table('sessions')
-                ->where('user_id', $user->id)
-                ->where('id', '!=', $request->session()->getId())
-                ->where('last_activity', '>=', $activeThreshold)
-                ->orderByDesc('last_activity')
-                ->first();
-        }
-
-        // Opsi 2: Tolak login jika terdeteksi aktif di perangkat lain dan belum konfirmasi force_logout
-        if ($activeSessionOnOtherDevice && ! $request->boolean('force_logout')) {
-            $lastActiveMinutes = max(1, (int) round((time() - $activeSessionOnOtherDevice->last_activity) / 60));
-            $ipText = ! empty($activeSessionOnOtherDevice->ip_address) ? " (IP: {$activeSessionOnOtherDevice->ip_address})" : '';
-
-            return back()->withErrors([
-                'email' => "Akun ini sedang aktif di perangkat lain{$ipText}, terakhir aktif sekitar {$lastActiveMinutes} menit yang lalu. Demi keamanan privasi bimbingan konseling, 1 akun tidak dapat diakses di dua perangkat secara bersamaan. Harap logout terlebih dahulu dari perangkat tersebut atau gunakan opsi keluarkan akun di bawah.",
-            ])->with('has_concurrent_session', true)->onlyInput('email');
-        }
-
-        // Hapus sesi lain milik pengguna ini jika force_logout aktif atau tidak ada sesi bentrok
+        // Opsi 1: Otomatis keluarkan sesi di perangkat lain saat login di perangkat baru
         if (Schema::hasTable('sessions')) {
             DB::table('sessions')
                 ->where('user_id', $user->id)
