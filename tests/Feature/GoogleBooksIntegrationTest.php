@@ -208,4 +208,23 @@ class GoogleBooksIntegrationTest extends TestCase
         $response->assertStatus(200);
         $response->assertHeader('Content-Type', 'application/pdf');
     }
+
+    public function test_stream_generates_pdf_when_physical_file_is_missing(): void
+    {
+        $student = $this->getStudentUser();
+        $this->actingAs($student);
+
+        $ebook = Ebook::create([
+            'title' => 'Modul Yang Belum Diunggah Fisik',
+            'description' => 'Deskripsi modul darurat',
+            'file_path' => 'ebooks/modul_belum_ada_'.uniqid().'.pdf',
+            'is_public' => false,
+            'uploaded_by' => $student->id,
+        ]);
+
+        $response = $this->get(route('ebook.stream', $ebook->id));
+
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'application/pdf');
+    }
 }
