@@ -63,25 +63,55 @@
   <div class="rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-5 shadow-xs">
     <form method="GET" action="{{ route('bk.percakapan') }}" class="space-y-4">
       
-      <!-- Baris 1: Pencarian Siswa / Topik Percakapan (Lebar Penuh & Ikon Proporsional) -->
+      <!-- Baris 1: Pencarian Siswa / Topik Percakapan (Lebar Penuh, Ikon Otomatis Hilang Saat Mengetik) -->
       <div class="space-y-1.5">
         <label for="filterSearchAi" class="block text-xs font-bold text-gray-700 dark:text-gray-300">
           Pencarian Siswa / Topik Percakapan
         </label>
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+        <div
+          x-data="{ 
+            query: '{{ addslashes(request('q', '')) }}',
+            isFocused: false 
+          }"
+          class="relative"
+        >
+          <!-- Ikon Kaca Pembesar (Otomatis Hilang Saat Sedang Mengetik / Fokus / Kolom Terisi) -->
+          <div
+            x-show="!query && !isFocused"
+            x-transition.opacity.duration.150ms
+            style="left: 0.875rem;"
+            class="absolute inset-y-0 flex items-center pointer-events-none text-gray-400 dark:text-gray-500"
+          >
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
+
           <input
             id="filterSearchAi"
             type="text"
             name="q"
-            value="{{ request('q') }}"
+            x-model="query"
+            @focus="isFocused = true"
+            @blur="isFocused = false"
+            :style="(query || isFocused) ? 'padding-left: 1rem; padding-right: 2.5rem;' : 'padding-left: 2.85rem; padding-right: 2.5rem;'"
             placeholder="Cari nama siswa, kelas, NISN, atau judul topik percakapan..."
-            class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 text-gray-900 dark:text-white placeholder-gray-400 text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500 transition-all min-h-[42px]"
+            class="w-full py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 text-gray-900 dark:text-white placeholder-gray-400 text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500 transition-all min-h-[42px]"
           />
+
+          <!-- Tombol Hapus Kata Kunci (Tampil Jika Ada Input) -->
+          <button
+            type="button"
+            x-show="query"
+            x-transition.opacity.duration.150ms
+            @click="query = ''; $nextTick(() => document.getElementById('filterSearchAi').focus())"
+            class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 cursor-pointer"
+            title="Hapus kata kunci"
+          >
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
       </div>
 
