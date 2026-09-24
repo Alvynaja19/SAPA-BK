@@ -73,7 +73,7 @@
   /* Summary Counter Strip */
   .ebook-summary-strip {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 16px;
   }
   .ebook-summary-card {
@@ -389,6 +389,14 @@
   .ebook-tag-badge.badge-merdeka {
     background: rgba(21, 128, 61, 0.88);
     border-color: rgba(220, 252, 231, 0.4);
+  }
+  .ebook-tag-badge.badge-kemenkes-unicef {
+    background: rgba(13, 148, 136, 0.92);
+    border-color: rgba(204, 251, 241, 0.45);
+  }
+  .ebook-tag-badge.badge-open-library {
+    background: rgba(79, 70, 229, 0.92);
+    border-color: rgba(224, 231, 255, 0.45);
   }
   .ebook-tag-badge.badge-mental {
     background: rgba(180, 83, 9, 0.88);
@@ -852,18 +860,19 @@
         <span>Total Koleksi Siap Baca</span>
       </div>
       <div class="ebook-summary-val" id="summaryTotalVal">{{ $stats['total_all'] ?? count($curatedBooks) }}</div>
-      <div class="ebook-summary-desc">Modul kurasi dan buku pelajaran</div>
+      <div class="ebook-summary-desc">Modul kurasi, buku SMA, dan modul BK</div>
     </div>
 
     <div class="ebook-summary-card">
       <div class="ebook-summary-label">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="m9 12 2 2 4-4"/>
         </svg>
-        <span>Kesehatan Jiwa &amp; Emosi</span>
+        <span>Kemenkes &amp; UNICEF</span>
       </div>
-      <div class="ebook-summary-val">{{ $stats['total_mental_health'] ?? 4 }}</div>
-      <div class="ebook-summary-desc">Regulasi cemas dan resiliensi diri</div>
+      <div class="ebook-summary-val">{{ $stats['total_kemenkes_unicef'] ?? 4 }}</div>
+      <div class="ebook-summary-desc">Modul anti-perundungan &amp; jiwa remaja</div>
     </div>
 
     <div class="ebook-summary-card">
@@ -889,6 +898,19 @@
       <div class="ebook-summary-val">{{ $stats['total_internal'] ?? count($internalEbooks) }}</div>
       <div class="ebook-summary-desc">Panduan resmi konselor sekolah</div>
     </div>
+
+    <div class="ebook-summary-card">
+      <div class="ebook-summary-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+        <span>Open Library Dunia</span>
+      </div>
+      <div class="ebook-summary-val">&infin;</div>
+      <div class="ebook-summary-desc">Arsip digital Internet Archive</div>
+    </div>
   </section>
 
   <!-- Controls Panel: Live Search and Category Navigation -->
@@ -903,7 +925,7 @@
         type="search" 
         id="ebookSearchInput" 
         class="ebook-search-input" 
-        placeholder="Cari judul buku, topik emosi, mata pelajaran, atau penulis..." 
+        placeholder="Cari judul buku, modul Kemenkes, Open Library, mata pelajaran, atau penulis..." 
         aria-label="Pencarian koleksi e-book"
         autocomplete="off"
       />
@@ -924,6 +946,23 @@
           <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
         </svg>
         <span>Semua Koleksi</span>
+      </button>
+
+      <button type="button" class="ebook-filter-pill" data-category="kemenkes_unicef">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="m9 12 2 2 4-4"/>
+        </svg>
+        <span>Kemenkes &amp; UNICEF</span>
+      </button>
+
+      <button type="button" class="ebook-filter-pill" data-category="open_library">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+        <span>Open Library (Dunia)</span>
       </button>
 
       <button type="button" class="ebook-filter-pill" data-category="kesehatan_mental">
@@ -1247,7 +1286,15 @@
         // Badge Penanda
         let badgeClass = 'badge-merdeka';
         let badgeText = 'Kurikulum Merdeka';
-        if (book.category === 'kesehatan_mental' || book.category === 'stres_belajar') {
+        const srcText = ((book.source || '') + ' ' + (book.publisher || '') + ' ' + (Array.isArray(book.badges) ? book.badges.join(' ') : '')).toLowerCase();
+
+        if (srcText.includes('kemenkes') || srcText.includes('unicef') || book.category === 'kemenkes_unicef') {
+          badgeClass = 'badge-kemenkes-unicef';
+          badgeText = 'Kemenkes & UNICEF';
+        } else if (book.source === 'Open Library' || srcText.includes('open library') || book.category === 'open_library' || book.category === 'literasi_global') {
+          badgeClass = 'badge-open-library';
+          badgeText = 'Open Library';
+        } else if (book.category === 'kesehatan_mental' || book.category === 'stres_belajar') {
           badgeClass = 'badge-mental';
           badgeText = 'Kesehatan Mental';
         } else if (book.is_internal || book.category === 'modul_internal') {
@@ -1397,6 +1444,13 @@
       if (currentCategory !== 'semua') {
         if (currentCategory === 'modul_internal') {
           filtered = filtered.filter(b => b.is_internal || b.category === 'modul_internal');
+        } else if (currentCategory === 'kemenkes_unicef') {
+          filtered = filtered.filter(b => {
+            const src = ((b.source || '') + ' ' + (b.publisher || '') + ' ' + (Array.isArray(b.badges) ? b.badges.join(' ') : '')).toLowerCase();
+            return src.includes('kemenkes') || src.includes('unicef');
+          });
+        } else if (currentCategory === 'open_library') {
+          filtered = filtered.filter(b => b.source === 'Open Library' || b.category === 'literasi_global');
         } else if (currentCategory === 'materi_sma') {
           filtered = filtered.filter(b => b.category === 'materi_sma');
         } else if (currentCategory === 'kesehatan_mental') {
@@ -1430,8 +1484,8 @@
     function performSearch() {
       const q = currentQuery.trim();
 
-      // Jika query kosong, gunakan koleksi lokal terkurasi
-      if (q === '') {
+      // Jika query kosong dan bukan Open Library, gunakan koleksi lokal terkurasi
+      if (q === '' && currentCategory !== 'open_library') {
         renderBooks(filterLocalBooks());
         return;
       }
@@ -1442,6 +1496,11 @@
       let url = `/api/ebooks/search?q=${encodeURIComponent(q)}`;
       if (currentCategory !== 'semua') {
         url += `&category=${encodeURIComponent(currentCategory)}`;
+        if (currentCategory === 'open_library') {
+          url += `&source=open_library`;
+        } else if (currentCategory === 'kemenkes_unicef') {
+          url += `&source=kemenkes_unicef`;
+        }
       }
       if (currentClass !== 'semua') {
         url += `&class_level=${encodeURIComponent(currentClass)}`;
@@ -1543,12 +1602,23 @@
         showcaseClass.textContent = book.class_level || 'Semua Jenjang';
         showcaseDesc.textContent = book.description || 'Tidak ada deskripsi.';
 
-        if (book.category === 'kesehatan_mental' || book.category === 'stres_belajar') {
+        const srcLower = ((book.source || '') + ' ' + (book.publisher || '')).toLowerCase();
+        if (srcLower.includes('kemenkes') || srcLower.includes('unicef') || book.category === 'kemenkes_unicef') {
+          showcaseVerifiedBadge.textContent = 'Modul Resmi Kesehatan Jiwa Remaja: Kemenkes RI & UNICEF';
+          showcaseBtnLabel.textContent = 'Baca Dokumen PDF Sekarang';
+        } else if (book.source === 'Open Library' || book.category === 'open_library' || book.category === 'literasi_global') {
+          showcaseVerifiedBadge.textContent = 'Koleksi Terbuka Internet Archive & Open Library';
+          showcaseBtnLabel.textContent = book.reader_type === 'archive_embed' ? 'Buka Pembaca Digital Internet Archive' : 'Buka Halaman Buku Open Library';
+        } else if (book.category === 'kesehatan_mental' || book.category === 'stres_belajar') {
           showcaseVerifiedBadge.textContent = 'Koleksi Kesehatan Jiwa & Bimbingan Terkurasi';
+          showcaseBtnLabel.textContent = 'Baca Dokumen PDF Sekarang';
+        } else if (book.is_internal || book.category === 'modul_internal') {
+          showcaseVerifiedBadge.textContent = 'Modul Resmi Konselor SMAN 4 Jember';
+          showcaseBtnLabel.textContent = 'Baca Dokumen PDF Sekarang';
         } else {
           showcaseVerifiedBadge.textContent = 'Buku Resmi Kurikulum Merdeka Terintegrasi';
+          showcaseBtnLabel.textContent = 'Baca Dokumen PDF Sekarang';
         }
-        showcaseBtnLabel.textContent = 'Baca Dokumen PDF Sekarang';
 
         if (book.cover_url) {
           showcaseCoverImg.src = book.cover_url;
@@ -1567,15 +1637,23 @@
           });
         }
 
-        // Ketika tombol baca di panel detail ditekan, langsung beralih ke penampil PDF
+        // Ketika tombol baca di panel detail ditekan
         showcaseDirectBtn.onclick = function(e) {
           e.preventDefault();
+          if (book.reader_type === 'open_library_external' && targetUrl) {
+            window.open(targetUrl, '_blank', 'noopener,noreferrer');
+            return;
+          }
           readerShowcasePanel.style.display = 'none';
           readerInternalPanel.style.display = 'flex';
           readerIframe.src = targetUrl;
         };
       } else {
-        // Mode 'read' langsung membuka penampil PDF in-app
+        // Mode 'read' langsung membuka penampil PDF atau web reader
+        if (book.reader_type === 'open_library_external' && targetUrl) {
+          window.open(targetUrl, '_blank', 'noopener,noreferrer');
+          return;
+        }
         readerShowcasePanel.style.display = 'none';
         readerInternalPanel.style.display = 'flex';
         readerIframe.src = targetUrl;

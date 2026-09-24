@@ -20,6 +20,20 @@ class CuratedEbookCatalog
     }
 
     /**
+     * Mengambil koleksi modul resmi dari Kementerian Kesehatan RI dan UNICEF Indonesia.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public static function kemenkesUnicefBooks(): array
+    {
+        return array_values(array_filter(self::mentalHealthBooks(), function (array $book): bool {
+            $source = $book['source'] ?? '';
+
+            return str_contains($source, 'Kemenkes') || str_contains($source, 'UNICEF');
+        }));
+    }
+
+    /**
      * Memastikan setiap buku kurasi memiliki rute streaming dan unduh in-app resmi SAPA BK.
      *
      * @param  array<int, array<string, mixed>>  $books
@@ -143,9 +157,66 @@ class CuratedEbookCatalog
                 'is_curated' => true,
                 'reader_type' => 'external_portal',
                 'reader_url' => 'https://ayosehat.kemkes.go.id/',
-                'source' => 'Kemenkes RI & UNICEF',
+                'source' => 'Kemenkes RI & UNICEF Indonesia',
                 'language' => 'Indonesia',
-                'badges' => ['Resmi Kemenkes', 'Literasi Jiwa'],
+                'badges' => ['Kemenkes & UNICEF', 'Resmi Kemenkes'],
+            ],
+            [
+                'id' => 'curated-km-roots',
+                'title' => 'Panduan Program Roots Indonesia: Pencegahan Perundungan & Bullying di Sekolah',
+                'authors' => ['UNICEF Indonesia', 'Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi'],
+                'publisher' => 'UNICEF Indonesia & Kemendikbudristek',
+                'category' => 'kesehatan_mental',
+                'subject' => 'Anti Perundungan & Iklim Sekolah Aman',
+                'class_level' => null,
+                'description' => 'Modul resmi program Roots Indonesia yang diadopsi di SMA secara nasional. Memandu agen perubahan sebaya (peer agents) dalam mengenali bentuk perundungan fisik, verbal, relasional, dan siber (cyberbullying), serta cara membangun iklim pertemanan sekolah yang saling mendukung dan bebas kekerasan.',
+                'cover_url' => 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=600&q=80',
+                'page_count' => 128,
+                'published_year' => '2024',
+                'is_curated' => true,
+                'reader_type' => 'external_portal',
+                'reader_url' => 'https://ayosehat.kemkes.go.id/',
+                'source' => 'UNICEF Indonesia & Kemendikbudristek',
+                'language' => 'Indonesia',
+                'badges' => ['UNICEF Indonesia', 'Anti Perundungan'],
+            ],
+            [
+                'id' => 'curated-km-pfa',
+                'title' => 'Pertolongan Pertama Psikologis (Psychological First Aid / PFA) bagi Remaja Sebaya',
+                'authors' => ['Direktorat Kesehatan Jiwa Kemenkes RI', 'Badan Kesehatan Dunia (WHO)'],
+                'publisher' => 'Kementerian Kesehatan Republik Indonesia',
+                'category' => 'kesehatan_mental',
+                'subject' => 'Pertolongan Pertama Emosional & Konseling Sebaya',
+                'class_level' => null,
+                'description' => 'Panduan praktis pertolongan pertama emosi saat teman sebaya mengalami tekanan mental berat atau peristiwa traumatis. Mengulas prinsip dasar Lihat, Dengar, Hubungkan (Look, Listen, Link), teknik mendengar empatik tanpa menghakimi, dan jalur koordinasi dengan Guru BK sekolah.',
+                'cover_url' => 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80',
+                'page_count' => 88,
+                'published_year' => '2024',
+                'is_curated' => true,
+                'reader_type' => 'external_portal',
+                'reader_url' => 'https://ayosehat.kemkes.go.id/',
+                'source' => 'Kemenkes RI & WHO',
+                'language' => 'Indonesia',
+                'badges' => ['Kemenkes RI', 'Pertolongan Emosi'],
+            ],
+            [
+                'id' => 'curated-km-pkhs',
+                'title' => 'Modul Keterampilan Hidup Sehat (PKHS) Remaja: Resiliensi dan Manajemen Emosi',
+                'authors' => ['Kementerian Kesehatan RI', 'UNICEF Indonesia'],
+                'publisher' => 'Kemenkes RI & UNICEF Indonesia',
+                'category' => 'kesehatan_mental',
+                'subject' => 'Kecakapan Hidup & Regulasi Diri',
+                'class_level' => null,
+                'description' => 'Panduan pengembangan 10 kecakapan psikososial (Life Skills) remaja SMA. Membahas keterampilan berpikir kritis dalam menyaring informasi, komunikasi asertif, resolusi konflik pertemanan secara damai, serta strategi menjaga kesehatan fisik dan mental secara seimbang.',
+                'cover_url' => 'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=600&q=80',
+                'page_count' => 140,
+                'published_year' => '2024',
+                'is_curated' => true,
+                'reader_type' => 'external_portal',
+                'reader_url' => 'https://ayosehat.kemkes.go.id/',
+                'source' => 'Kemenkes RI & UNICEF Indonesia',
+                'language' => 'Indonesia',
+                'badges' => ['Kemenkes & UNICEF', 'Kecakapan Hidup'],
             ],
             [
                 'id' => 'curated-km-03',

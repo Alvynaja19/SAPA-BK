@@ -228,6 +228,7 @@ class SiswaController extends Controller
         $stats = [
             'total_all' => count($curatedBooks) + count($internalEbooks),
             'total_mental_health' => count(CuratedEbookCatalog::mentalHealthBooks()),
+            'total_kemenkes_unicef' => count(CuratedEbookCatalog::kemenkesUnicefBooks()),
             'total_materi_sma' => count(CuratedEbookCatalog::smaStudyBooks()),
             'total_internal' => count($internalEbooks),
         ];

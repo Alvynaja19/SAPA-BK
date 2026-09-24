@@ -44,4 +44,9 @@ return [
         'endpoint' => env('GOOGLE_BOOKS_ENDPOINT', 'https://www.googleapis.com/books/v1/volumes'),
     ],
 
+    'open_library' => [
+        'search_endpoint' => env('OPEN_LIBRARY_SEARCH_ENDPOINT', 'https://openlibrary.org/search.json'),
+        'works_endpoint' => env('OPEN_LIBRARY_WORKS_ENDPOINT', 'https://openlibrary.org/works'),
+    ],
+
 ];
