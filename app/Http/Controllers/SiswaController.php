@@ -120,7 +120,10 @@ class SiswaController extends Controller
             ->with(['messages' => function ($q) {
                 $q->latest()->take(1);
             }])
-            ->where('user_id', $user->id);
+            ->where('user_id', $user->id)
+            ->where(function ($q) {
+                $q->where('mode', 'ai')->orWhereNull('mode');
+            });
 
         $search = trim((string) $request->query('q', ''));
         if ($search !== '') {
@@ -132,34 +135,25 @@ class SiswaController extends Controller
             });
         }
 
-        $modeFilter = $request->query('mode', 'all');
-        if ($modeFilter === 'guru_bk') {
-            $query->where('mode', 'guru_bk');
-        } elseif ($modeFilter === 'ai') {
-            $query->where(function ($q) {
-                $q->where('mode', 'ai')->orWhereNull('mode');
-            });
-        }
-
         $sessions = $query->latest()->paginate(10)->withQueryString();
-        $totalSessions = ChatSession::where('user_id', $user->id)->count();
-        $totalAiSessions = ChatSession::where('user_id', $user->id)
+        $totalSessions = ChatSession::where('user_id', $user->id)
             ->where(function ($q) {
                 $q->where('mode', 'ai')->orWhereNull('mode');
             })
             ->count();
-        $totalGuruSessions = ChatSession::where('user_id', $user->id)
-            ->where('mode', 'guru_bk')
-            ->count();
-        $lastSession = ChatSession::where('user_id', $user->id)->latest()->first();
+        $totalAiSessions = $totalSessions;
+        $lastSession = ChatSession::where('user_id', $user->id)
+            ->where(function ($q) {
+                $q->where('mode', 'ai')->orWhereNull('mode');
+            })
+            ->latest()
+            ->first();
 
         return view('siswa.riwayat', compact(
             'sessions',
             'search',
-            'modeFilter',
             'totalSessions',
             'totalAiSessions',
-            'totalGuruSessions',
             'lastSession'
         ));
     }

@@ -657,16 +657,17 @@
 <div class="riwayat-container">
 
   <!-- Editorial Page Header -->
+  <!-- Editorial Page Header -->
   <div class="riwayat-header">
     <div class="riwayat-header-info">
       <div class="riwayat-breadcrumb">
         <span>Bimbingan Konseling</span>
         <span>/</span>
-        <span>Catatan Percakapan Siswa</span>
+        <span>Riwayat Chatbot AI</span>
       </div>
-      <h2>Buku Riwayat Konsultasi Siswa</h2>
+      <h2>Riwayat Percakapan Chatbot AI</h2>
       <p>
-        Arsip rekaman resmi dialog bimbingan konseling di SAPA BK SMA Negeri 4 Jember, terbagi antara percakapan mandiri bersama Chatbot AI dan sesi interaktif langsung bersama Guru BK piket.
+        Arsip rekaman bimbingan mandiri siswa bersama Asisten Cerdas AI (Gemini) di SAPA BK SMAN 4 Jember.
       </p>
     </div>
     <div class="riwayat-header-actions">
@@ -676,7 +677,7 @@
         </svg>
         <span>Tanya Chatbot AI</span>
       </a>
-      <a href="{{ route('siswa.chat', ['mode' => 'live']) }}" class="btn btn-ghost" title="Konsultasi langsung dengan Guru BK piket">
+      <a href="{{ route('siswa.chat', ['mode' => 'live']) }}" class="btn btn-ghost" style="border-color: #1C6EB4; color: #1C6EB4;" title="Konsultasi langsung dengan Guru BK piket">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
           <circle cx="9" cy="7" r="4"></circle>
@@ -688,39 +689,39 @@
     </div>
   </div>
 
-
-
-  <!-- Counseling Ledger Summary Strip (3 Columns: AI vs Live Chat vs Privacy) -->
+  <!-- Counseling Ledger Summary Strip (3 Columns: AI vs Aktivitas Terakhir vs Privasi) -->
   <div class="riwayat-ledger-strip">
     <!-- Tile 1: Chatbot AI -->
     <div class="ledger-tile">
       <div class="ledger-tile-top">
-        <span class="ledger-tile-label">Chatbot AI (Mandiri)</span>
+        <span class="ledger-tile-label">Total Percakapan AI</span>
         <div class="ledger-tile-icon icon-ai">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
           </svg>
         </div>
       </div>
       <div class="ledger-tile-value">{{ $totalAiSessions ?? 0 }} Sesi</div>
-      <span class="ledger-tile-hint">Konseling mandiri 24/7 dengan basis materi RAG</span>
+      <span class="ledger-tile-hint">Konsultasi mandiri 24/7 berbasis materi bimbingan RAG</span>
     </div>
 
-    <!-- Tile 2: Live Chat Guru BK -->
+    <!-- Tile 2: Sesi Terakhir -->
     <div class="ledger-tile">
       <div class="ledger-tile-top">
-        <span class="ledger-tile-label">Live Chat Guru BK</span>
+        <span class="ledger-tile-label">Sesi Konsultasi Terakhir</span>
         <div class="ledger-tile-icon icon-guru">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-            <circle cx="9" cy="7" r="4"></circle>
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
           </svg>
         </div>
       </div>
-      <div class="ledger-tile-value" style="color: #1C6EB4;">{{ $totalGuruSessions ?? 0 }} Sesi</div>
-      <span class="ledger-tile-hint">Dialog privat bersama Tim Konselor SMAN 4 Jember</span>
+      <div class="ledger-tile-value" style="font-size: 19px;">
+        {{ $lastSession ? $lastSession->created_at->translatedFormat('d M Y') : 'Belum Ada' }}
+      </div>
+      <span class="ledger-tile-hint">
+        {{ $lastSession ? $lastSession->created_at->diffForHumans() : 'Mulai percakapan pertama Anda' }}
+      </span>
     </div>
 
     <!-- Tile 3: Kode Etik ABKIN -->
@@ -728,7 +729,7 @@
       <div class="ledger-tile-top">
         <span class="ledger-tile-label">Standar Perlindungan</span>
         <div class="ledger-tile-icon icon-shield">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
           </svg>
@@ -739,44 +740,10 @@
     </div>
   </div>
 
-  <!-- Mode Filter Tabs & Search Controls -->
+  <!-- Search Controls -->
   <div class="mode-filter-container">
-    <!-- Category Tabs -->
-    <div class="mode-tabs" role="tablist" aria-label="Filter Mode Konsultasi">
-      <a href="{{ route('siswa.riwayat', array_merge(request()->except('page', 'mode'), ['mode' => 'all'])) }}" 
-         class="mode-tab {{ (!request('mode') || request('mode') === 'all') ? 'active' : '' }}">
-        <span>Semua Riwayat</span>
-        <span class="tab-badge-count">{{ $totalSessions ?? 0 }}</span>
-      </a>
-
-      <a href="{{ route('siswa.riwayat', array_merge(request()->except('page', 'mode'), ['mode' => 'ai'])) }}" 
-         class="mode-tab {{ request('mode') === 'ai' ? 'active' : '' }}">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-        </svg>
-        <span>Chatbot AI (24/7)</span>
-        <span class="tab-badge-count">{{ $totalAiSessions ?? 0 }}</span>
-      </a>
-
-      <a href="{{ route('siswa.riwayat', array_merge(request()->except('page', 'mode'), ['mode' => 'guru_bk'])) }}" 
-         class="mode-tab {{ request('mode') === 'guru_bk' ? 'active-guru' : '' }}">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-          <circle cx="9" cy="7" r="4"></circle>
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-        </svg>
-        <span>Live Chat Guru BK</span>
-        <span class="tab-badge-count">{{ $totalGuruSessions ?? 0 }}</span>
-      </a>
-    </div>
-
-    <!-- Search Form (Preserves Mode) -->
-    <form action="{{ route('siswa.riwayat') }}" method="GET" class="filter-form">
-      @if(request('mode'))
-        <input type="hidden" name="mode" value="{{ request('mode') }}" />
-      @endif
-      <div class="search-input-wrap">
+    <form action="{{ route('siswa.riwayat') }}" method="GET" class="filter-form" style="width: 100%;">
+      <div class="search-input-wrap" style="flex: 1;">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/>
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -785,76 +752,59 @@
           type="text" 
           name="q" 
           value="{{ $search ?? '' }}" 
-          placeholder="Cari topik bimbingan atau kata kunci..." 
+          placeholder="Cari topik percakapan atau kata kunci bimbingan AI..." 
           class="search-input"
-          aria-label="Cari riwayat bimbingan"
+          aria-label="Cari riwayat bimbingan AI"
         />
       </div>
       <button type="submit" class="btn btn-ghost btn-sm">
         <span>Cari</span>
       </button>
+      @if(!empty($search))
+        <a href="{{ route('siswa.riwayat') }}" class="btn btn-ghost btn-sm" style="color: var(--ink-faint);">
+          <span>Reset</span>
+        </a>
+      @endif
     </form>
   </div>
 
   @if(!empty($search))
     <div class="search-feedback-bar">
-      <span>Menampilkan hasil pencarian: <strong>"{{ $search }}"</strong> pada kategori <strong>{{ request('mode') === 'guru_bk' ? 'Live Chat Guru BK' : (request('mode') === 'ai' ? 'Chatbot AI' : 'Semua Sesi') }}</strong></span>
-      <a href="{{ route('siswa.riwayat', request()->except('q', 'page')) }}" class="reset-link">Reset Pencarian</a>
+      <span>Menampilkan hasil pencarian: <strong>"{{ $search }}"</strong></span>
+      <a href="{{ route('siswa.riwayat') }}" class="reset-link">Reset Pencarian</a>
     </div>
   @endif
 
   <!-- Ledger Session Card -->
   <div class="ledger-card">
     <div class="ledger-card-header">
-      <span class="ledger-card-title">
-        @if(request('mode') === 'guru_bk')
-          Daftar Rekaman Sesi Live Chat Guru BK
-        @elseif(request('mode') === 'ai')
-          Daftar Rekaman Percakapan Chatbot AI
-        @else
-          Seluruh Rekaman Sesi Konsultasi
-        @endif
-      </span>
+      <span class="ledger-card-title">Daftar Rekaman Percakapan Chatbot AI</span>
       <span class="ledger-card-count">{{ $sessions->total() }} Sesi Ditampilkan</span>
     </div>
 
     <div class="ledger-list">
       @forelse($sessions as $s)
         @php
-          $isGuru = ($s->mode === 'guru_bk');
           $latestMsg = $s->messages->first();
           $createdDate = $s->created_at ?? now();
         @endphp
-        <div class="ledger-row {{ $isGuru ? 'row-guru' : 'row-ai' }}">
+        <div class="ledger-row row-ai">
           <div class="ledger-main-area">
             <!-- Calendar Date Badge -->
-            <div class="date-calendar-badge {{ $isGuru ? 'badge-border-guru' : 'badge-border-ai' }}">
+            <div class="date-calendar-badge badge-border-ai">
               <span class="date-badge-day">{{ $createdDate->format('d') }}</span>
-              <span class="date-badge-month" style="{{ $isGuru ? 'color: #1C6EB4;' : '' }}">{{ $createdDate->translatedFormat('M') }}</span>
+              <span class="date-badge-month">{{ $createdDate->translatedFormat('M') }}</span>
               <span class="date-badge-year">{{ $createdDate->format('Y') }}</span>
             </div>
 
             <!-- Content Group -->
             <div class="ledger-content-wrap">
-              <!-- Channel / Mode Tag -->
-              @if($isGuru)
-                <span class="tag-channel tag-channel-guru">
-                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="9" cy="7" r="4"></circle>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                  </svg>
-                  <span>Live Chat Guru BK</span>
-                </span>
-              @else
-                <span class="tag-channel tag-channel-ai">
-                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                  </svg>
-                  <span>Chatbot AI (24/7)</span>
-                </span>
-              @endif
+              <span class="tag-channel tag-channel-ai">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>Chatbot AI (24/7)</span>
+              </span>
 
               <h3 class="ledger-topic-title">
                 <a href="{{ route('siswa.chat.session', $s->id) }}">
@@ -888,84 +838,53 @@
                   <span>{{ $s->messages_count }} Pesan Dialog</span>
                 </span>
                 <span>&bull;</span>
-                @if($isGuru)
-                  <span class="tag-pill tag-pill-active" style="color: #1C6EB4; border-color: rgba(28, 110, 180, 0.25);">Konseling Langsung Guru BK</span>
-                @else
-                  <span class="tag-pill tag-pill-active">Asisten Mandiri RAG</span>
-                @endif
+                <span class="tag-pill tag-pill-active">Asisten Mandiri RAG</span>
               </div>
             </div>
           </div>
 
           <!-- Actions -->
           <div class="ledger-actions">
-            <a href="{{ route('siswa.chat.session', $s->id) }}" class="btn btn-ghost btn-sm" style="{{ $isGuru ? 'border-color: #1C6EB4; color: #1C6EB4;' : '' }}">
+            <a href="{{ route('siswa.chat.session', $s->id) }}" class="btn btn-ghost btn-sm">
               <span>Buka Percakapan</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
             </a>
 
-            @if(!$isGuru)
-              <form id="delete-form-{{ $s->id }}" action="{{ route('siswa.riwayat.delete', $s->id) }}" method="POST" style="display: inline-block;">
-                @csrf
-                @method('DELETE')
-                <button type="button" 
-                        class="btn-delete-session" 
-                        onclick="confirmDeleteRiwayat({{ $s->id }}, '{{ addslashes($s->title) }}')"
-                        title="Hapus arsip percakapan Chatbot AI" 
-                        aria-label="Hapus arsip percakapan {{ $s->title }}">
-                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="3 6 5 6 21 6"/>
-                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                  </svg>
-                </button>
-              </form>
-            @else
-              <span class="badge-locked-guru" title="Rekaman resmi bimbingan konseling bersama Guru BK terlindungi sesuai kode etik ABKIN dan tidak dapat dihapus siswa.">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1C6EB4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            <form id="delete-form-{{ $s->id }}" action="{{ route('siswa.riwayat.delete', $s->id) }}" method="POST" style="display: inline-block;">
+              @csrf
+              @method('DELETE')
+              <button type="button" 
+                      class="btn-delete-session" 
+                      onclick="confirmDeleteRiwayat({{ $s->id }}, '{{ addslashes($s->title) }}')"
+                      title="Hapus arsip percakapan Chatbot AI" 
+                      aria-label="Hapus arsip percakapan {{ $s->title }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                 </svg>
-                <span>Arsip Resmi</span>
-              </span>
-            @endif
+              </button>
+            </form>
           </div>
         </div>
       @empty
         <div class="empty-ledger">
           <div class="empty-icon-shield">
-            @if(request('mode') === 'guru_bk')
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: #1C6EB4;">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-              </svg>
-            @else
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-              </svg>
-            @endif
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
           </div>
 
           @if(!empty($search))
             <h3 class="empty-title">Topik Konsultasi Tidak Ditemukan</h3>
             <p class="empty-desc">
-              Tidak ditemukan catatan bimbingan yang cocok dengan kata kunci <strong>"{{ $search }}"</strong> pada kategori ini.
+              Tidak ditemukan catatan bimbingan yang cocok dengan kata kunci <strong>"{{ $search }}"</strong>.
             </p>
             <a href="{{ route('siswa.riwayat') }}" class="btn btn-primary">
               Tampilkan Semua Riwayat
             </a>
-          @elseif(request('mode') === 'guru_bk')
-            <h3 class="empty-title">Belum Ada Riwayat Live Chat Guru BK</h3>
-            <p class="empty-desc">
-              Anda belum memiliki arsip percakapan langsung bersama Guru BK piket. Sampaikan pertanyaan seputar penjurusan atau permasalahan belajar secara privat kapan saja.
-            </p>
-            <a href="{{ route('siswa.chat', ['mode' => 'live']) }}" class="btn btn-primary" style="background: #1C6EB4;">
-              Mulai Live Chat Guru BK
-            </a>
-          @elseif(request('mode') === 'ai')
+          @else
             <h3 class="empty-title">Belum Ada Riwayat Chatbot AI</h3>
             <p class="empty-desc">
               Anda belum memiliki arsip percakapan dengan asisten mandiri. Tanyakan informasi seputar materi bimbingan dan pilihan studi secara instan 24 jam.
@@ -973,19 +892,6 @@
             <a href="{{ route('siswa.chat') }}" class="btn btn-primary">
               Mulai Konsultasi Chatbot AI
             </a>
-          @else
-            <h3 class="empty-title">Belum Ada Riwayat Konsultasi</h3>
-            <p class="empty-desc">
-              Anda belum memiliki catatan percakapan bimbingan tersimpan. Mulai percakapan pertama Anda sekarang.
-            </p>
-            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-              <a href="{{ route('siswa.chat') }}" class="btn btn-primary">
-                Tanya Chatbot AI
-              </a>
-              <a href="{{ route('siswa.chat', ['mode' => 'live']) }}" class="btn btn-ghost" style="border-color: #1C6EB4; color: #1C6EB4;">
-                Live Chat Guru BK
-              </a>
-            </div>
           @endif
         </div>
       @endforelse
