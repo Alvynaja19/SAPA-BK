@@ -1035,6 +1035,9 @@
     });
   })();
 </script>
+<!-- Pusher & Laravel Echo untuk WebSocket Real-time Reverb -->
+<script src="https://js.pusher.com/8.4.0-rc2/pusher.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.16.1/dist/echo.iife.js"></script>
 @stack('scripts')
 </body>
 </html>

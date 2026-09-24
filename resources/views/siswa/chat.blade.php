@@ -1088,7 +1088,7 @@
       @if($activeGuruSession)
         @foreach($activeGuruSession->messages as $msg)
           @if($msg->role === 'user')
-            <div class="bubble-row user">
+            <div class="bubble-row user" data-msg-id="{{ $msg->id }}">
               <div class="bubble-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</div>
               <div class="bubble-body">
                 <div class="bubble-card">
@@ -1098,7 +1098,7 @@
               </div>
             </div>
           @else
-            <div class="bubble-row counselor">
+            <div class="bubble-row counselor" data-msg-id="{{ $msg->id }}">
               <div class="bubble-avatar">BK</div>
               <div class="bubble-body">
                 <div class="bubble-card">
@@ -1206,6 +1206,13 @@
   let activeGuruSessionId = "{{ $activeGuruSession?->id ?? '' }}";
   let currentGuruSessionStatus = "{{ $activeGuruSession?->status ?? 'none' }}";
   let hasActiveLiveSession = {{ (isset($guruSessions) && $guruSessions->where('status', 'active')->count() > 0) ? 'true' : 'false' }};
+
+  // Lacak seluruh ID pesan live chat yang sudah ditampilkan di layar
+  const knownLiveMsgIds = new Set();
+  document.querySelectorAll('#messages-stream-live [data-msg-id]').forEach(el => {
+    const id = parseInt(el.getAttribute('data-msg-id'), 10);
+    if (!isNaN(id)) knownLiveMsgIds.add(id);
+  });
 
   // Elemen DOM Stream
   const streamAi = document.getElementById('messages-stream-ai');
@@ -1541,6 +1548,7 @@
             if (bannerDesc && data.teacher) {
               bannerDesc.innerHTML = `<strong>Live Konseling Terhubung</strong>: Berdiskusi langsung dengan <strong>${escapeHtml(data.teacher.name)}</strong>.`;
             }
+            listenLiveChatChannel(data.session_id);
           }
           if (data.status === 'closed') {
             currentGuruSessionStatus = 'closed';
@@ -1548,7 +1556,13 @@
             chatInput.placeholder = 'Sesi konseling ini telah diakhiri oleh Guru BK.';
             sendBtn.disabled = true;
           }
-          appendMessage('live', 'counselor', data.assistant_message.content);
+          if (data.user_message && data.user_message.id) {
+            knownLiveMsgIds.add(data.user_message.id);
+          }
+          if (data.assistant_message && data.assistant_message.id) {
+            knownLiveMsgIds.add(data.assistant_message.id);
+          }
+          appendMessage('live', 'counselor', data.assistant_message.content, null, data.assistant_message.id);
         } else {
           if (!activeAiSessionId && data.session_id) {
             activeAiSessionId = data.session_id;
@@ -1572,7 +1586,7 @@
     scrollStreamToBottom(targetMode);
   }
 
-  // Polling update berkala saat siswa berada dalam mode live chat
+  // Polling update berkala saat siswa berada dalam mode live chat (Fallback Real-Time Cerdas)
   async function pollStudentLiveChat() {
     if (currentMode !== 'live' || !activeGuruSessionId) return;
 
@@ -1594,21 +1608,111 @@
             bannerDesc.innerHTML = '<strong>Sesi Konseling Selesai</strong>: Ruang obrolan telah ditutup oleh Guru BK.';
           }
         }
+
+        // Sinkronisasi pesan masuk otomatis dari Guru BK tanpa refresh
+        if (session.messages && Array.isArray(session.messages)) {
+          let hasNewMessage = false;
+          session.messages.forEach(m => {
+            if (!knownLiveMsgIds.has(m.id)) {
+              const timeStr = m.created_at ? new Date(m.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB' : null;
+              appendMessage('live', m.role, m.content, m.metadata, m.id, timeStr);
+              hasNewMessage = true;
+            }
+          });
+          if (hasNewMessage) {
+            scrollStreamToBottom('live');
+          }
+        }
       }
     } catch (e) {
       // Silent error
     }
   }
 
-  setInterval(pollStudentLiveChat, 4000);
+  // Interval polling 2 detik sebagai jaminan real-time andal
+  setInterval(pollStudentLiveChat, 2000);
+
+  // Inisialisasi WebSocket Laravel Reverb via Echo
+  let activeEchoChannel = null;
+  function listenLiveChatChannel(sessionId) {
+    if (!window.Echo || !sessionId) return;
+    try {
+      if (activeEchoChannel && activeEchoChannel !== sessionId) {
+        window.Echo.leave(`chat.session.${activeEchoChannel}`);
+      }
+      activeEchoChannel = sessionId;
+      window.Echo.private(`chat.session.${sessionId}`)
+        .listen('.message.sent', (event) => {
+          if (event && event.message) {
+            const m = event.message;
+            if (!knownLiveMsgIds.has(m.id)) {
+              appendMessage('live', m.role, m.content, m.metadata, m.id, m.time);
+              scrollStreamToBottom('live');
+            }
+          }
+        })
+        .listen('.session.closed', (event) => {
+          currentGuruSessionStatus = 'closed';
+          hasActiveLiveSession = false;
+          chatInput.disabled = true;
+          chatInput.placeholder = 'Sesi konseling ini telah diakhiri oleh Guru BK.';
+          sendBtn.disabled = true;
+          const bannerDesc = document.getElementById('live-banner-desc');
+          if (bannerDesc) {
+            bannerDesc.innerHTML = '<strong>Sesi Konseling Selesai</strong>: Ruang obrolan telah ditutup oleh Guru BK.';
+          }
+        });
+    } catch (err) {
+      console.warn('Reverb listener fallback to polling:', err);
+    }
+  }
+
+  try {
+    if (typeof Pusher !== 'undefined' && typeof Echo !== 'undefined') {
+      window.Pusher = Pusher;
+      window.Echo = new Echo({
+        broadcaster: 'reverb',
+        key: '{{ env('REVERB_APP_KEY', 'sapabk-reverb-key') }}',
+        wsHost: '{{ env('REVERB_HOST', 'localhost') }}',
+        wsPort: {{ (int) env('REVERB_PORT', 8080) }},
+        wssPort: {{ (int) env('REVERB_PORT', 8080) }},
+        forceTLS: {{ env('REVERB_SCHEME', 'http') === 'https' ? 'true' : 'false' }},
+        enabledTransports: ['ws', 'wss'],
+        authEndpoint: '/broadcasting/auth',
+        auth: {
+          headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+          }
+        }
+      });
+
+      if (activeGuruSessionId) {
+        listenLiveChatChannel(activeGuruSessionId);
+      }
+    }
+  } catch (err) {
+    console.warn('Inisialisasi Echo ditangguhkan ke polling fallback:', err);
+  }
 
   // Menyisipkan bubble ke stream yang dituju secara presisi
-  function appendMessage(streamMode, role, content, metadata = null) {
+  function appendMessage(streamMode, role, content, metadata = null, msgId = null, customTime = null) {
+    if (streamMode === 'live' && msgId && knownLiveMsgIds.has(msgId)) {
+      if (streamLive && streamLive.querySelector(`[data-msg-id="${msgId}"]`)) {
+        return;
+      }
+    }
+    if (streamMode === 'live' && msgId) {
+      knownLiveMsgIds.add(msgId);
+    }
+
     const targetStream = (streamMode === 'live') ? streamLive : streamAi;
     const targetIndicator = (streamMode === 'live') ? typingIndicatorLive : typingIndicatorAi;
 
     const row = document.createElement('div');
-    const nowTime = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
+    if (msgId) {
+      row.setAttribute('data-msg-id', msgId);
+    }
+    const nowTime = customTime || (new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB');
 
     if (role === 'user') {
       row.className = 'bubble-row user';

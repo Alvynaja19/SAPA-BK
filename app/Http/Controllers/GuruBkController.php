@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\LiveChatMessageSent;
+use App\Events\LiveChatSessionClosed;
 use App\Models\Article;
 use App\Models\ChatEvaluation;
 use App\Models\ChatMessage;
@@ -223,14 +225,23 @@ class GuruBkController extends Controller
 
         $session->touch();
 
+        $messageData = [
+            'id' => $message->id,
+            'role' => 'counselor',
+            'content' => $message->content,
+            'time' => $message->created_at ? $message->created_at->format('H:i').' WIB' : 'Baru saja',
+            'sender_id' => $counselorId,
+        ];
+
+        try {
+            broadcast(new LiveChatMessageSent($session->id, $messageData, $session->status));
+        } catch (\Throwable) {
+            // Abaikan kegagalan socket agar respons HTTP tetap sukses jika server reverb belum berjalan
+        }
+
         return response()->json([
             'success' => true,
-            'message' => [
-                'id' => $message->id,
-                'role' => 'counselor',
-                'content' => $message->content,
-                'time' => $message->created_at ? $message->created_at->format('H:i').' WIB' : 'Baru saja',
-            ],
+            'message' => $messageData,
         ]);
     }
 
@@ -247,6 +258,12 @@ class GuruBkController extends Controller
             'closed_at' => now(),
             'closed_by' => $counselorId,
         ]);
+
+        try {
+            broadcast(new LiveChatSessionClosed($session->id, Auth::user()->name));
+        } catch (\Throwable) {
+            // Abaikan
+        }
 
         return response()->json([
             'success' => true,

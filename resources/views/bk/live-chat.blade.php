@@ -184,6 +184,7 @@
 
     updateStatusBadge(status);
     fetchSessionMessages(sessionId, name);
+    listenToSessionChannel(sessionId);
   }
 
   function updateStatusBadge(status) {
@@ -442,8 +443,76 @@
     return text.replace(/[&<>"']/g, m => map[m]);
   }
 
-  // Jalankan polling antrean setiap 4 detik
+  // Jalankan polling antrean setiap 4 detik sebagai fallback andal
   setInterval(pollQueue, 4000);
+
+  // Inisialisasi WebSocket Laravel Reverb via Echo untuk Guru BK
+  let activeEchoChannel = null;
+  function listenToSessionChannel(sessionId) {
+    if (!window.Echo || !sessionId) return;
+    try {
+      if (activeEchoChannel && activeEchoChannel !== sessionId) {
+        window.Echo.leave(`chat.session.${activeEchoChannel}`);
+      }
+      activeEchoChannel = sessionId;
+      window.Echo.private(`chat.session.${sessionId}`)
+        .listen('.message.sent', (event) => {
+          if (event && event.message && event.message.role === 'user') {
+            appendSingleStudentMessage(event.message, activeStudentName);
+          }
+        });
+    } catch (err) {
+      console.warn('Echo listener in live chat deferred to polling:', err);
+    }
+  }
+
+  function appendSingleStudentMessage(m, studentName) {
+    const container = document.getElementById('chat-messages-container');
+    if (!container) return;
+    const initial = (studentName ? studentName.substring(0, 1) : 'S').toUpperCase();
+    const bubble = document.createElement('div');
+    bubble.className = 'flex items-start gap-3 max-w-xl';
+    bubble.innerHTML = `
+      <div class="h-8 w-8 rounded-xl bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs font-bold flex items-center justify-center shrink-0">
+        ${initial}
+      </div>
+      <div class="space-y-1">
+        <div class="p-4 rounded-2xl rounded-tl-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs sm:text-sm shadow-xs border border-gray-100 dark:border-gray-700/60 leading-relaxed">
+          ${escapeHtml(m.content).replace(/\n/g, '<br>')}
+        </div>
+        <span class="text-[10px] text-gray-400 pl-1">${m.time || ''}</span>
+      </div>
+    `;
+    container.appendChild(bubble);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  try {
+    if (typeof Pusher !== 'undefined' && typeof Echo !== 'undefined') {
+      window.Pusher = Pusher;
+      window.Echo = new Echo({
+        broadcaster: 'reverb',
+        key: '{{ env('REVERB_APP_KEY', 'sapabk-reverb-key') }}',
+        wsHost: '{{ env('REVERB_HOST', 'localhost') }}',
+        wsPort: {{ (int) env('REVERB_PORT', 8080) }},
+        wssPort: {{ (int) env('REVERB_PORT', 8080) }},
+        forceTLS: {{ env('REVERB_SCHEME', 'http') === 'https' ? 'true' : 'false' }},
+        enabledTransports: ['ws', 'wss'],
+        authEndpoint: '/broadcasting/auth',
+        auth: {
+          headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+          }
+        }
+      });
+
+      if (currentSessionId) {
+        listenToSessionChannel(currentSessionId);
+      }
+    }
+  } catch (err) {
+    console.warn('Reverb WebSocket deferred to polling:', err);
+  }
 
   // Scroll otomatis ke bawah saat pertama dimuat
   const chatBox = document.getElementById('chat-messages-container');

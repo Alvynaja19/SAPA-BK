@@ -112,14 +112,33 @@
 
           <!-- Actions -->
           <div class="flex items-center gap-2 shrink-0 self-end md:self-start">
+            @php
+              $safeOptions = [];
+              if (is_array($soal->options)) {
+                foreach ($soal->options as $k => $opt) {
+                  if (is_array($opt)) {
+                    $safeOptions[] = [
+                      'value' => (string) ($opt['value'] ?? $k),
+                      'label' => (string) ($opt['label'] ?? '')
+                    ];
+                  } else {
+                    $safeOptions[] = [
+                      'value' => is_string($k) ? $k : 'Opsi ' . ($k + 1),
+                      'label' => (string) $opt
+                    ];
+                  }
+                }
+              }
+              $soalPayload = [
+                'id' => $soal->id,
+                'question_text' => $soal->question_text,
+                'order' => $soal->order ?? ($index + 1),
+                'options' => $safeOptions,
+              ];
+            @endphp
             <button
               type="button"
-              @click="editSoal = {
-                id: {{ $soal->id }},
-                question_text: '{{ addslashes($soal->question_text) }}',
-                order: {{ $soal->order ?? ($index + 1) }},
-                options: {{ json_encode($soal->options ?? []) }}
-              }; modalEdit = true"
+              @click="editSoal = {{ json_encode($soalPayload) }}; modalEdit = true"
               class="px-3 py-1.5 rounded-xl border border-gray-200 hover:border-brand-300 dark:border-gray-700 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:text-brand-600 flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>

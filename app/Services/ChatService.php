@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\LiveChatMessageSent;
 use App\Models\ChatMessage;
 use App\Models\ChatSession;
 use App\Models\Ebook;
@@ -92,6 +93,18 @@ class ChatService
 
         // 3. Jika mode Live Chat Guru BK, catat konfirmasi penerimaan konseling
         if ($normalizedMode === 'guru_bk') {
+            try {
+                broadcast(new LiveChatMessageSent($session->id, [
+                    'id' => $userMessage->id,
+                    'role' => 'user',
+                    'content' => $userMessage->content,
+                    'time' => $userMessage->created_at ? $userMessage->created_at->format('H:i').' WIB' : 'Baru saja',
+                    'sender_id' => $user?->id,
+                ], $session->status));
+            } catch (\Throwable) {
+                // Abaikan jika reverb offline
+            }
+
             $teacher = $session->teacher ?? ($session->teacher_id ? User::find($session->teacher_id) : null);
             $counselorName = $teacher?->name ?? 'Guru BK SMAN 4 Jember';
 
