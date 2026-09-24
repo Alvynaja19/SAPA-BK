@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Api\ChatApiController;
-use App\Http\Controllers\Api\EbookApiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\GuruBkController;
@@ -22,8 +21,6 @@ Route::get('/ebook', [FrontendController::class, 'ebooks'])->name('ebook.index')
 Route::get('/ebook/{id}', [FrontendController::class, 'ebookDetail'])->name('ebook.detail')->whereNumber('id');
 Route::get('/ebook/stream/{id}', [SiswaController::class, 'streamPdf'])->name('ebook.stream')->whereNumber('id');
 Route::get('/ebook/unduh/{id}', [SiswaController::class, 'unduhPdf'])->name('ebook.download')->whereNumber('id');
-Route::get('/ebook/curated-stream/{id}', [SiswaController::class, 'streamCuratedPdf'])->name('ebook.curated.stream');
-Route::get('/ebook/curated-unduh/{id}', [SiswaController::class, 'unduhCuratedPdf'])->name('ebook.curated.download');
 Route::get('/artikel', [FrontendController::class, 'articles'])->name('article.index');
 Route::get('/artikel/{slug}', [FrontendController::class, 'articleDetail'])->name('article.detail');
 Route::get('/faq', [FrontendController::class, 'faqs'])->name('faq');
@@ -73,13 +70,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/session', [ChatApiController::class, 'createSession'])->name('api.chat.session');
         Route::get('/history/{id}', [ChatApiController::class, 'history'])->name('api.chat.history');
         Route::delete('/session/{id}', [ChatApiController::class, 'deleteSession'])->name('api.chat.session.delete');
-    });
-
-    // API E-Book Daring (Google Books API & Katalog Kurasi SMA)
-    Route::prefix('api/ebooks')->as('api.ebooks.')->group(function () {
-        Route::get('/search', [EbookApiController::class, 'search'])->name('search');
-        Route::get('/categories', [EbookApiController::class, 'categories'])->name('categories');
-        Route::get('/detail/{id}', [EbookApiController::class, 'detail'])->name('detail');
     });
 
     // Rute Guru BK

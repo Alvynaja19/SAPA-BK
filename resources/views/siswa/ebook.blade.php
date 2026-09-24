@@ -1,24 +1,21 @@
 @extends('layouts.app')
 
-@section('title', 'Perpustakaan E-Book & Modul Siswa : SAPA BK SMAN 4 Jember')
-@section('page_title', 'Perpustakaan Digital Siswa')
+@section('title', 'Perpustakaan E-Book & Modul : SAPA BK SMAN 4 Jember')
+@section('page_title', 'Perpustakaan Modul Digital')
 
 @push('styles')
 <style>
-  /* ===================================================
-     SAPA BK - PERPUSTAKAAN DIGITAL & E-BOOK SISWA
-     Antislop: No em dash, WCAG AA contrast, Vanilla CSS
-     =================================================== */
-
-  .ebook-portal-container {
+  /* Container Utama */
+  .ebook-container {
     display: flex;
     flex-direction: column;
     gap: 24px;
-    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
-  /* Editorial Header */
-  .ebook-portal-header {
+  /* Header Section */
+  .ebook-header {
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: var(--radius-l);
@@ -30,10 +27,10 @@
     flex-wrap: wrap;
     gap: 20px;
   }
-  .ebook-portal-header-info {
+  .ebook-header-text {
     max-width: 680px;
   }
-  .ebook-portal-breadcrumb {
+  .ebook-badge-top {
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
@@ -44,19 +41,19 @@
     align-items: center;
     gap: 6px;
   }
-  .ebook-portal-header h2 {
+  .ebook-header h2 {
     font-size: 24px;
     font-weight: 600;
     color: var(--ink);
     line-height: 1.25;
   }
-  .ebook-portal-header p {
+  .ebook-header p {
     color: var(--ink-soft);
     font-size: 14.5px;
     margin-top: 6px;
     line-height: 1.55;
   }
-  .ebook-portal-badge {
+  .ebook-header-badge {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -66,17 +63,17 @@
     border-radius: 99px;
     font-size: 13px;
     font-weight: 600;
-    border: 1px solid rgba(21,128,61,0.22);
+    border: 1px solid rgba(21, 128, 61, 0.22);
     min-height: 44px;
   }
 
-  /* Summary Counter Strip */
-  .ebook-summary-strip {
+  /* Stat Summary Strip */
+  .ebook-stats-strip {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 16px;
   }
-  .ebook-summary-card {
+  .ebook-stat-card {
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: var(--radius-m);
@@ -85,9 +82,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 100px;
   }
-  .ebook-summary-label {
+  .ebook-stat-label {
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
@@ -95,9 +91,9 @@
     color: var(--ink-faint);
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
   }
-  .ebook-summary-val {
+  .ebook-stat-val {
     font-family: 'Fraunces', Georgia, serif;
     font-size: 28px;
     font-weight: 600;
@@ -105,32 +101,30 @@
     line-height: 1;
     margin-top: 8px;
   }
-  .ebook-summary-desc {
+  .ebook-stat-desc {
     font-size: 12px;
     color: var(--ink-soft);
     margin-top: 4px;
   }
 
-  /* Controls Panel: Search & Filters */
-  .ebook-controls-panel {
+  /* Filter & Search Bar */
+  .ebook-toolbar {
     background: var(--surface);
     border: 1px solid var(--line);
-    border-radius: var(--radius-l);
-    padding: 20px 24px;
+    border-radius: var(--radius-m);
+    padding: 18px 20px;
     box-shadow: var(--shadow-card);
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
   }
-
-  /* Search Input Wrapper */
-  .ebook-search-wrapper {
+  .ebook-search-box {
     position: relative;
     display: flex;
     align-items: center;
     width: 100%;
   }
-  .ebook-search-icon {
+  .ebook-search-box svg.search-icon {
     position: absolute;
     left: 16px;
     color: var(--ink-faint);
@@ -145,13 +139,12 @@
     border: 1.5px solid var(--line);
     background: var(--bg);
     color: var(--ink);
-    transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+    transition: border-color .15s ease, box-shadow .15s ease;
   }
   .ebook-search-input:focus {
     outline: none;
     border-color: var(--primary);
-    background: #FFFFFF;
-    box-shadow: 0 0 0 3px rgba(21,128,61,0.15);
+    box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.12);
   }
   .ebook-search-clear {
     position: absolute;
@@ -161,139 +154,71 @@
     color: var(--ink-faint);
     cursor: pointer;
     padding: 8px;
-    border-radius: 50%;
+    min-width: 44px;
+    min-height: 44px;
     display: none;
     align-items: center;
     justify-content: center;
-    min-width: 32px;
-    min-height: 32px;
+    border-radius: var(--radius-s);
   }
   .ebook-search-clear:hover {
     color: var(--ink);
-    background: var(--line);
-  }
-  .ebook-search-clear.visible {
-    display: flex;
   }
 
-  /* Filter Navigation Tabs */
-  .ebook-filter-scroll {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    scrollbar-width: thin;
-    -webkit-overflow-scrolling: touch;
-  }
-  .ebook-filter-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 44px;
-    padding: 10px 18px;
-    border-radius: 99px;
-    font-size: 13.5px;
-    font-weight: 500;
-    color: var(--ink-soft);
-    background: var(--bg-alt);
-    border: 1px solid var(--line);
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all .15s ease;
-  }
-  .ebook-filter-pill:hover {
-    background: #E4ECE3;
-    color: var(--ink);
-    border-color: #CAD5C8;
-  }
-  .ebook-filter-pill.active {
-    background: var(--primary);
-    color: #FFFFFF;
-    border-color: var(--primary);
-    box-shadow: 0 2px 6px rgba(21,128,61,0.25);
-    font-weight: 600;
-  }
-
-  /* Sub-Filter Jenjang Kelas */
-  .ebook-subfilter-bar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    padding-top: 14px;
-    border-top: 1px dashed var(--line);
-  }
-  .ebook-subfilter-label {
-    font-size: 12.5px;
-    font-weight: 600;
-    color: var(--ink-faint);
-    text-transform: uppercase;
-    letter-spacing: .05em;
-  }
-  .ebook-class-pill {
-    display: inline-flex;
-    align-items: center;
-    min-height: 38px;
-    padding: 6px 14px;
-    border-radius: var(--radius-s);
-    font-size: 13px;
-    font-weight: 500;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    color: var(--ink-soft);
-    cursor: pointer;
-    transition: all .15s ease;
-  }
-  .ebook-class-pill:hover {
-    border-color: var(--primary);
-    color: var(--primary);
-  }
-  .ebook-class-pill.active {
-    background: var(--primary-soft);
-    border-color: var(--primary);
-    color: var(--primary);
-    font-weight: 600;
-  }
-
-  /* Status Bar */
-  .ebook-status-bar {
+  .ebook-tabs-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 12px;
-    font-size: 13.5px;
-    color: var(--ink-faint);
   }
-  .ebook-result-count strong {
-    color: var(--ink);
+  .ebook-filter-pills {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
   }
-  .ebook-reset-btn {
-    background: transparent;
-    border: none;
-    color: var(--primary);
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: underline;
-    font-size: 13px;
-    padding: 6px 8px;
+  .ebook-pill-btn {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
+    min-height: 44px;
+    padding: 8px 16px;
+    border-radius: 99px;
+    border: 1.5px solid var(--line);
+    background: var(--bg);
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .15s ease;
   }
-  .ebook-reset-btn:hover {
-    color: var(--primary-hover);
+  .ebook-pill-btn:hover {
+    border-color: var(--ink-faint);
+    color: var(--ink);
+  }
+  .ebook-pill-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #FFFFFF;
+    font-weight: 600;
+  }
+  .ebook-count-indicator {
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .ebook-count-indicator strong {
+    color: var(--ink);
   }
 
-  /* Books Grid */
+  /* Grid Modul */
   .ebook-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    gap: 22px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
   }
 
-  /* Single Book Card */
+  /* Kartu Modul */
   .ebook-card-item {
     background: var(--surface);
     border: 1px solid var(--line);
@@ -302,216 +227,147 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-    height: 100%;
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
   }
   .ebook-card-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 16px rgba(15,29,19,0.08), 0 14px 28px -6px rgba(15,29,19,0.14);
-    border-color: #B4C4B8;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    border-color: rgba(21, 128, 61, 0.3);
   }
 
-  /* Book Cover Area */
-  .ebook-cover-wrapper {
-    height: 220px;
+  /* Cover Modul */
+  .ebook-card-cover {
+    width: 100%;
+    height: 170px;
     position: relative;
-    background: #1C2E25;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .ebook-cover-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform .25s ease;
-  }
-  .ebook-card-item:hover .ebook-cover-img {
-    transform: scale(1.04);
-  }
-  .ebook-cover-fallback {
-    width: 100%;
-    height: 100%;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 20px 22px;
-    background: linear-gradient(135deg, #1B3832 0%, #24463F 65%, #0F211C 100%);
-    color: #FFFFFF;
-    position: relative;
+    overflow: hidden;
   }
-  .ebook-cover-fallback::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 12px;
-    bottom: 0;
-    width: 2px;
-    background: rgba(255,255,255,0.18);
-  }
-  .ebook-fallback-title {
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 1.35;
-    color: #FFFFFF;
-  }
+  .ebook-cover-color-1 { background: linear-gradient(135deg, #14532D 0%, #166534 100%); }
+  .ebook-cover-color-2 { background: linear-gradient(135deg, #065F46 0%, #047857 100%); }
+  .ebook-cover-color-3 { background: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 100%); }
+  .ebook-cover-color-4 { background: linear-gradient(135deg, #431407 0%, #7C2D12 100%); }
 
-  /* Badge Overlay */
-  .ebook-badge-overlay {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    right: 12px;
+  .ebook-cover-top {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    gap: 8px;
-    z-index: 2;
+    align-items: center;
   }
-  .ebook-tag-badge {
+  .ebook-badge-access {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     font-size: 11px;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: .05em;
-    padding: 5px 10px;
-    border-radius: 6px;
-    background: rgba(15, 29, 19, 0.78);
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(255,255,255,0.25);
+    letter-spacing: .04em;
+    padding: 4px 10px;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, 0.2);
     color: #FFFFFF;
-    max-width: 160px;
-    white-space: nowrap;
+    backdrop-filter: blur(4px);
+  }
+  .ebook-cover-icon {
+    color: rgba(255, 255, 255, 0.35);
+  }
+  .ebook-cover-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #FFFFFF;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .ebook-tag-badge.badge-merdeka {
-    background: rgba(21, 128, 61, 0.88);
-    border-color: rgba(220, 252, 231, 0.4);
-  }
-  .ebook-tag-badge.badge-kemenkes-unicef {
-    background: rgba(13, 148, 136, 0.92);
-    border-color: rgba(204, 251, 241, 0.45);
-  }
-  .ebook-tag-badge.badge-open-library {
-    background: rgba(79, 70, 229, 0.92);
-    border-color: rgba(224, 231, 255, 0.45);
-  }
-  .ebook-tag-badge.badge-mental {
-    background: rgba(180, 83, 9, 0.88);
-    border-color: rgba(254, 243, 199, 0.4);
-  }
-  .ebook-tag-badge.badge-internal {
-    background: rgba(30, 58, 138, 0.88);
-    border-color: rgba(219, 234, 254, 0.4);
   }
 
-  /* Card Body */
+  /* Body Kartu */
   .ebook-card-body {
     padding: 18px 20px;
     display: flex;
     flex-direction: column;
     flex: 1;
     justify-content: space-between;
-    gap: 14px;
   }
-  .ebook-card-category {
-    font-size: 11.5px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: .06em;
-    color: var(--primary);
-  }
-  .ebook-card-title {
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--ink);
-    line-height: 1.35;
-    margin-top: 4px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .ebook-meta-authors {
+  .ebook-meta-author {
     font-size: 12.5px;
     color: var(--ink-faint);
-    margin-top: 6px;
+    margin-bottom: 8px;
     display: flex;
     align-items: center;
     gap: 6px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
-  .ebook-card-synopsis {
-    font-size: 13px;
+  .ebook-card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.35;
+    margin-bottom: 10px;
+  }
+  .ebook-card-desc {
+    font-size: 13.5px;
     color: var(--ink-soft);
     line-height: 1.55;
-    margin-top: 8px;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    margin-bottom: 18px;
   }
 
-  /* Card Footer Actions */
-  .ebook-card-footer {
-    padding-top: 14px;
-    border-top: 1px solid var(--line);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-  }
-  .ebook-card-meta-detail {
-    font-size: 12px;
-    color: var(--ink-faint);
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
+  /* Aksi Kartu */
   .ebook-card-actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
   }
-
-  /* Skeleton Loading */
-  .ebook-skeleton-card {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-m);
-    height: 420px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-  .ebook-skeleton-cover {
-    height: 220px;
-    background: linear-gradient(90deg, #EDF2EC 25%, #E1E8DF 50%, #EDF2EC 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-  }
-  .ebook-skeleton-body {
-    padding: 18px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  .ebook-btn-read {
     flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 8px 16px;
+    background: var(--primary);
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--radius-s);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color .15s ease;
   }
-  .ebook-skeleton-line {
-    height: 14px;
-    border-radius: 4px;
-    background: linear-gradient(90deg, #EDF2EC 25%, #E1E8DF 50%, #EDF2EC 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
+  .ebook-btn-read:hover {
+    background: var(--primary-dark, #166534);
+    color: #FFFFFF;
   }
-  @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+  .ebook-btn-dl {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px;
+    background: var(--bg);
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-s);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all .15s ease;
+  }
+  .ebook-btn-dl:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+    background: var(--surface);
   }
 
   /* Empty State */
@@ -524,8 +380,8 @@
     grid-column: 1 / -1;
   }
   .ebook-empty-icon {
-    width: 60px;
-    height: 60px;
+    width: 56px;
+    height: 56px;
     margin: 0 auto 16px;
     border-radius: 50%;
     background: var(--bg-alt);
@@ -535,32 +391,43 @@
     justify-content: center;
   }
   .ebook-empty-state h3 {
-    font-size: 20px;
+    font-size: 18px;
     color: var(--ink);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
   .ebook-empty-state p {
     font-size: 14px;
     color: var(--ink-soft);
-    max-width: 480px;
-    margin: 0 auto 20px;
-    line-height: 1.6;
+    max-width: 420px;
+    margin: 0 auto 16px;
+    line-height: 1.5;
+  }
+  .ebook-reset-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 8px 18px;
+    background: var(--primary);
+    color: #FFFFFF;
+    border-radius: var(--radius-s);
+    font-size: 13.5px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
   }
 
-  /* ===================================================
-     MODAL PEMBACA & HUB PUSTAKA (MULTI-MODAL READER)
-     =================================================== */
+  /* Modal Pembaca PDF */
   .ebook-modal-overlay {
     position: fixed;
     inset: 0;
-    z-index: 2000;
+    z-index: 9999;
     display: none;
     align-items: center;
     justify-content: center;
     background: rgba(15, 29, 19, 0.82);
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(4px);
     padding: 16px;
-    transition: opacity .2s ease;
   }
   .ebook-modal-overlay.is-active {
     display: flex;
@@ -569,60 +436,44 @@
     background: var(--surface);
     border-radius: var(--radius-l);
     width: 100%;
-    max-width: 1100px;
-    height: 92vh;
+    max-width: 1050px;
+    height: 90vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
     border: 1px solid var(--line);
-    animation: modalSlideUp .22s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  @keyframes modalSlideUp {
-    from {
-      opacity: 0;
-      transform: translateY(24px) scale(0.98);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  }
-
-  /* Modal Header */
-  .ebook-reader-header {
+  .ebook-modal-header {
     background: #0F1D13;
     color: #FFFFFF;
-    padding: 14px 22px;
+    padding: 14px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.12);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   }
-  .ebook-reader-title-area {
+  .ebook-modal-title-box {
     display: flex;
     align-items: center;
     gap: 12px;
     min-width: 0;
   }
-  .ebook-reader-icon {
-    width: 38px;
-    height: 38px;
+  .ebook-modal-icon {
+    width: 36px;
+    height: 36px;
     border-radius: 8px;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
     color: #86EFAC;
+    flex-shrink: 0;
   }
-  .ebook-reader-meta {
-    min-width: 0;
-  }
-  .ebook-reader-title {
+  .ebook-modal-title {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: 16.5px;
+    font-size: 16px;
     font-weight: 600;
     color: #FFFFFF;
     line-height: 1.25;
@@ -630,21 +481,18 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .ebook-reader-sub {
+  .ebook-modal-sub {
     font-size: 12px;
-    color: #CBD5E1;
+    color: #94A3B8;
     margin-top: 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
-  .ebook-reader-actions {
+  .ebook-modal-actions {
     display: flex;
     align-items: center;
     gap: 8px;
     flex-shrink: 0;
   }
-  .ebook-reader-btn {
+  .ebook-modal-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -655,281 +503,137 @@
     font-size: 13px;
     font-weight: 600;
     color: #FFFFFF;
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     cursor: pointer;
     text-decoration: none;
-    transition: background-color .15s ease, border-color .15s ease;
+    transition: background-color .15s ease;
   }
-  .ebook-reader-btn:hover {
-    background: rgba(255,255,255,0.22);
-    border-color: rgba(255,255,255,0.35);
+  .ebook-modal-btn:hover {
+    background: rgba(255, 255, 255, 0.22);
   }
-  .ebook-reader-btn.close {
-    background: rgba(239, 68, 68, 0.2);
+  .ebook-modal-btn.close {
+    background: rgba(239, 68, 68, 0.25);
     border-color: rgba(239, 68, 68, 0.4);
     color: #FECACA;
     min-width: 44px;
     padding: 8px;
   }
-  .ebook-reader-btn.close:hover {
-    background: rgba(239, 68, 68, 0.35);
+  .ebook-modal-btn.close:hover {
+    background: rgba(239, 68, 68, 0.45);
     color: #FFFFFF;
   }
 
-  /* Internal PDF Viewer Frame Container */
-  .ebook-internal-frame-box {
+  .ebook-modal-frame {
     flex: 1;
-    position: relative;
-    background: #525659;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  .ebook-reader-iframe {
     width: 100%;
     height: 100%;
     border: none;
-    display: block;
-    flex: 1;
+    background: #525659;
   }
 
-  /* External Educational Showcase Hub */
-  .ebook-showcase-box {
-    flex: 1;
-    overflow-y: auto;
-    padding: clamp(20px, 3.5vw, 40px);
-    background: var(--bg);
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-  .ebook-showcase-card {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-m);
-    padding: clamp(20px, 3vw, 36px);
-    box-shadow: var(--shadow-card);
-  }
-  .ebook-showcase-badge-strip {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--primary-soft);
-    color: var(--primary);
-    padding: 6px 14px;
-    border-radius: 99px;
-    font-size: 12.5px;
-    font-weight: 600;
-    margin-bottom: 16px;
-  }
-  .ebook-showcase-grid {
-    display: grid;
-    grid-template-columns: 260px 1fr;
-    gap: 32px;
-    align-items: start;
-  }
-  .ebook-showcase-cover {
-    width: 100%;
-    aspect-ratio: 3/4;
-    border-radius: var(--radius-s);
-    object-fit: cover;
-    box-shadow: 0 12px 30px rgba(15,29,19,0.18);
-    border: 1px solid var(--line);
-  }
-  .ebook-showcase-title {
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: clamp(20px, 2.5vw, 26px);
-    font-weight: 600;
-    color: var(--ink);
-    line-height: 1.3;
-    margin-bottom: 8px;
-  }
-  .ebook-showcase-author {
-    font-size: 14px;
-    color: var(--ink-faint);
-    margin-bottom: 16px;
-  }
-  .ebook-showcase-meta-table {
-    background: var(--bg-alt);
-    border-radius: var(--radius-s);
-    padding: 14px 18px;
-    margin-bottom: 20px;
-    font-size: 13.5px;
-    color: var(--ink-soft);
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
-  .ebook-showcase-notice {
-    background: #EFF6FF;
-    border: 1px solid #BFDBFE;
-    border-radius: var(--radius-s);
-    padding: 14px 18px;
-    font-size: 13px;
-    color: #1E3A8A;
-    line-height: 1.55;
-    margin-bottom: 22px;
-  }
-
-  /* Responsive Design */
-  @media (max-width: 992px) {
-    .ebook-summary-strip {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-    .ebook-showcase-grid {
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
-    .ebook-showcase-cover {
-      max-width: 200px;
-      margin: 0 auto;
-    }
-  }
-
-  @media (max-width: 680px) {
-    .ebook-summary-strip {
-      grid-template-columns: 1fr;
-    }
-    .ebook-portal-header {
+  @media (max-width: 768px) {
+    .ebook-header {
       padding: 18px 16px;
-    }
-    .ebook-controls-panel {
-      padding: 16px;
     }
     .ebook-grid {
       grid-template-columns: 1fr;
-      gap: 16px;
     }
     .ebook-modal-dialog {
-      width: 100vw;
-      height: 100vh;
+      height: 98vh;
       border-radius: 0;
     }
     .ebook-modal-overlay {
       padding: 0;
-    }
-    .ebook-reader-header {
-      padding: 10px 14px;
-    }
-    .ebook-reader-title {
-      font-size: 14px;
     }
   }
 </style>
 @endpush
 
 @section('content')
-<div class="ebook-portal-container">
+<div class="ebook-container">
 
-  <!-- Editorial Header -->
-  <header class="ebook-portal-header">
-    <div class="ebook-portal-header-info">
-      <div class="ebook-portal-breadcrumb">
+  <!-- Header Section -->
+  <header class="ebook-header">
+    <div class="ebook-header-text">
+      <div class="ebook-badge-top">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
         </svg>
-        <span>Pustaka Digital Bimbingan Konseling</span>
+        <span>Pustaka Modul Digital</span>
       </div>
       <h2>Perpustakaan E-Book &amp; Modul Siswa</h2>
       <p>
-        Akses buku teks resmi Kurikulum Merdeka Kemendikbudristek, panduan kesehatan mental remaja, manajemen stres belajar, serta modul bimbingan resmi SMAN 4 Jember yang dapat dibaca langsung secara online.
+        Koleksi modul resmi Bimbingan dan Konseling SMA Negeri 4 Jember untuk mendukung persiapan studi lanjut, penentuan karir, regulasi emosional, dan komunikasi sehat di sekolah.
       </p>
     </div>
     <div>
-      <div class="ebook-portal-badge">
+      <div class="ebook-header-badge">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           <path d="m9 12 2 2 4-4"/>
         </svg>
-        <span>Koleksi Terverifikasi &amp; Daring</span>
+        <span>Modul Resmi Guru BK</span>
       </div>
     </div>
   </header>
 
   <!-- Summary Metric Strip -->
-  <section class="ebook-summary-strip" aria-label="Statistik Koleksi Pustaka">
-    <div class="ebook-summary-card">
-      <div class="ebook-summary-label">
+  <section class="ebook-stats-strip" aria-label="Statistik Koleksi Modul">
+    <div class="ebook-stat-card">
+      <div class="ebook-stat-label">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
           <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
         </svg>
-        <span>Total Koleksi Siap Baca</span>
+        <span>Total Modul Tersedia</span>
       </div>
-      <div class="ebook-summary-val" id="summaryTotalVal">{{ $stats['total_all'] ?? count($curatedBooks) }}</div>
-      <div class="ebook-summary-desc">Modul kurasi, buku SMA, dan modul BK</div>
+      <div class="ebook-stat-val">{{ $stats['total'] ?? $ebooks->count() }}</div>
+      <div class="ebook-stat-desc">Dapat dibaca langsung secara online</div>
     </div>
 
-    <div class="ebook-summary-card">
-      <div class="ebook-summary-label">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          <path d="m9 12 2 2 4-4"/>
-        </svg>
-        <span>Kemenkes &amp; UNICEF</span>
-      </div>
-      <div class="ebook-summary-val">{{ $stats['total_kemenkes_unicef'] ?? 4 }}</div>
-      <div class="ebook-summary-desc">Modul anti-perundungan &amp; jiwa remaja</div>
-    </div>
-
-    <div class="ebook-summary-card">
-      <div class="ebook-summary-label">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-          <path d="M6 12v5c3 3 9 3 12 0v-5"/>
-        </svg>
-        <span>Buku Pelajaran SMA</span>
-      </div>
-      <div class="ebook-summary-val">{{ $stats['total_materi_sma'] ?? 9 }}</div>
-      <div class="ebook-summary-desc">Kemendikbud Kelas X, XI, XII</div>
-    </div>
-
-    <div class="ebook-summary-card">
-      <div class="ebook-summary-label">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-          <polyline points="14 2 14 8 20 8"/>
-        </svg>
-        <span>Modul Guru BK SMAN 4</span>
-      </div>
-      <div class="ebook-summary-val">{{ $stats['total_internal'] ?? count($internalEbooks) }}</div>
-      <div class="ebook-summary-desc">Panduan resmi konselor sekolah</div>
-    </div>
-
-    <div class="ebook-summary-card">
-      <div class="ebook-summary-label">
+    <div class="ebook-stat-card">
+      <div class="ebook-stat-label">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="10"/>
           <line x1="2" y1="12" x2="22" y2="12"/>
           <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
         </svg>
-        <span>Open Library Dunia</span>
+        <span>Akses Terbuka</span>
       </div>
-      <div class="ebook-summary-val">&infin;</div>
-      <div class="ebook-summary-desc">Arsip digital Internet Archive</div>
+      <div class="ebook-stat-val">{{ $stats['public'] ?? 0 }}</div>
+      <div class="ebook-stat-desc">Terbuka untuk publik dan tamu</div>
+    </div>
+
+    <div class="ebook-stat-card">
+      <div class="ebook-stat-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        <span>Eksklusif Siswa SMAN 4</span>
+      </div>
+      <div class="ebook-stat-val">{{ $stats['internal'] ?? 0 }}</div>
+      <div class="ebook-stat-desc">Materi khusus peserta didik terdaftar</div>
     </div>
   </section>
 
-  <!-- Controls Panel: Live Search and Category Navigation -->
-  <section class="ebook-controls-panel" aria-label="Pencarian dan Filter E-Book">
-    <!-- Live Search Input -->
-    <div class="ebook-search-wrapper">
-      <svg class="ebook-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <!-- Filter & Search Toolbar -->
+  <section class="ebook-toolbar" aria-label="Alat Pencarian dan Filter Modul">
+    <div class="ebook-search-box">
+      <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="11" cy="11" r="8"/>
         <line x1="21" y1="21" x2="16.65" y2="16.65"/>
       </svg>
       <input 
         type="search" 
-        id="ebookSearchInput" 
+        id="modulSearchInput" 
         class="ebook-search-input" 
-        placeholder="Cari judul buku, modul Kemenkes, Open Library, mata pelajaran, atau penulis..." 
-        aria-label="Pencarian koleksi e-book"
+        placeholder="Cari judul modul, topik bimbingan, atau kata kunci..." 
+        aria-label="Pencarian modul digital"
         autocomplete="off"
       />
-      <button type="button" id="ebookSearchClear" class="ebook-search-clear" aria-label="Bersihkan pencarian">
+      <button type="button" id="modulSearchClear" class="ebook-search-clear" aria-label="Bersihkan pencarian">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"/>
           <line x1="6" y1="6" x2="18" y2="18"/>
@@ -937,134 +641,146 @@
       </button>
     </div>
 
-    <!-- Category Filter Tabs -->
-    <nav class="ebook-filter-scroll" aria-label="Kategori Koleksi">
-      <button type="button" class="ebook-filter-pill active" data-category="semua">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="2" y1="12" x2="22" y2="12"/>
-          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-        </svg>
-        <span>Semua Koleksi</span>
-      </button>
-
-      <button type="button" class="ebook-filter-pill" data-category="kemenkes_unicef">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          <path d="m9 12 2 2 4-4"/>
-        </svg>
-        <span>Kemenkes &amp; UNICEF</span>
-      </button>
-
-      <button type="button" class="ebook-filter-pill" data-category="open_library">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="2" y1="12" x2="22" y2="12"/>
-          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-        </svg>
-        <span>Open Library (Dunia)</span>
-      </button>
-
-      <button type="button" class="ebook-filter-pill" data-category="kesehatan_mental">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
-        </svg>
-        <span>Kesehatan Mental &amp; Remaja</span>
-      </button>
-
-      <button type="button" class="ebook-filter-pill" data-category="materi_sma">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-          <path d="M6 12v5c3 3 9 3 12 0v-5"/>
-        </svg>
-        <span>Materi Belajar SMA</span>
-      </button>
-
-      <button type="button" class="ebook-filter-pill" data-category="modul_internal">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-          <polyline points="14 2 14 8 20 8"/>
-        </svg>
-        <span>Modul Guru BK SMAN 4</span>
-      </button>
-
-      <button type="button" class="ebook-filter-pill" data-category="stres_belajar">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/>
-          <polyline points="12 6 12 12 16 14"/>
-        </svg>
-        <span>Manajemen Stres &amp; Waktu</span>
-      </button>
-
-      <button type="button" class="ebook-filter-pill" data-category="karir_kuliah">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/>
-          <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
-        </svg>
-        <span>Bimbingan Karir &amp; Kuliah</span>
-      </button>
-    </nav>
-
-    <!-- Sub-Filter Jenjang Kelas (Muncul saat Materi Belajar SMA dipilih) -->
-    <div class="ebook-subfilter-bar" id="classSubfilterBar" style="display: none;">
-      <span class="ebook-subfilter-label">Pilih Jenjang Kelas:</span>
-      <button type="button" class="ebook-class-pill active" data-class="semua">Semua Jenjang</button>
-      <button type="button" class="ebook-class-pill" data-class="Kelas X">Kelas X</button>
-      <button type="button" class="ebook-class-pill" data-class="Kelas XI">Kelas XI</button>
-      <button type="button" class="ebook-class-pill" data-class="Kelas XII">Kelas XII</button>
-    </div>
-
-    <!-- Status Bar: Result Count and Reset Action -->
-    <div class="ebook-status-bar">
-      <div class="ebook-result-count" id="ebookResultCount">
-        Menampilkan <strong id="visibleCountText">{{ count($curatedBooks) + count($internalEbooks) }}</strong> buku dan modul referensi
+    <div class="ebook-tabs-row">
+      <div class="ebook-filter-pills" role="tablist">
+        <button type="button" class="ebook-pill-btn active" data-filter="all">
+          Semua Modul
+        </button>
+        <button type="button" class="ebook-pill-btn" data-filter="public">
+          Akses Terbuka
+        </button>
+        <button type="button" class="ebook-pill-btn" data-filter="internal">
+          Eksklusif Siswa
+        </button>
       </div>
-      <button type="button" id="ebookResetFilterBtn" class="ebook-reset-btn" style="display: none;">
-        <span>Reset Filter &amp; Pencarian</span>
-      </button>
+
+      <div class="ebook-count-indicator">
+        Menampilkan <strong id="visibleCountText">{{ $ebooks->count() }}</strong> dari {{ $ebooks->count() }} modul
+      </div>
     </div>
   </section>
 
-  <!-- Books Grid Container -->
-  <main class="ebook-grid" id="ebookGridContainer" aria-label="Daftar Modul dan Buku Daring">
-    {{-- Cards will be populated dynamically from JavaScript --}}
-  </main>
+  <!-- Grid Modul Siswa -->
+  <main class="ebook-grid" id="modulGrid">
+    @forelse($ebooks as $index => $eb)
+      @php
+        $colorClass = 'ebook-cover-color-' . (($index % 4) + 1);
+        $accessType = $eb->is_public ? 'public' : 'internal';
+        $accessLabel = $eb->is_public ? 'Akses Terbuka' : 'Eksklusif Siswa';
+        $authorName = $eb->uploader?->name ?? 'Tim Guru BK SMAN 4 Jember';
+      @endphp
+      <article 
+        class="ebook-card-item" 
+        data-title="{{ strtolower($eb->title) }}" 
+        data-desc="{{ strtolower($eb->description ?? '') }}" 
+        data-access="{{ $accessType }}"
+      >
+        <div class="ebook-card-cover {{ $colorClass }}">
+          <div class="ebook-cover-top">
+            <span class="ebook-badge-access">
+              {{ $accessLabel }}
+            </span>
+            <div class="ebook-cover-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
+              </svg>
+            </div>
+          </div>
+          <h3 class="ebook-cover-title">{{ $eb->title }}</h3>
+        </div>
 
-  <!-- Error Notification State -->
-  <div id="ebookErrorState" style="display: none; background: #FEF2F2; border: 1px solid #FECACA; border-radius: var(--radius-m); padding: 18px 24px; text-align: center; color: #991B1B;">
-    <p style="font-size: 14.5px; font-weight: 500;">
-      Terjadi kendala saat memuat data dari server. Menampilkan koleksi tersimpan lokal.
-    </p>
-    <button type="button" id="ebookRetryBtn" class="btn btn-ghost btn-sm" style="margin-top: 10px; color: #991B1B; border-color: #991B1B;">
-      Muat Ulang Koleksi
-    </button>
-  </div>
+        <div class="ebook-card-body">
+          <div>
+            <div class="ebook-meta-author">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <span>{{ $authorName }}</span>
+            </div>
+            <h4 class="ebook-card-title">{{ $eb->title }}</h4>
+            <p class="ebook-card-desc">
+              {{ $eb->description ?? 'Modul pembelajaran bimbingan konseling untuk pengayaan akademik dan kesiapan karir siswa SMAN 4 Jember.' }}
+            </p>
+          </div>
+
+          <div class="ebook-card-actions">
+            <button 
+              type="button" 
+              class="ebook-btn-read open-reader-btn" 
+              data-id="{{ $eb->id }}" 
+              data-title="{{ $eb->title }}" 
+              data-stream-url="{{ route('ebook.stream', $eb->id) }}" 
+              data-download-url="{{ route('ebook.download', $eb->id) }}"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <span>Baca Modul</span>
+            </button>
+            <a 
+              href="{{ route('ebook.download', $eb->id) }}" 
+              class="ebook-btn-dl" 
+              title="Unduh PDF Modul" 
+              aria-label="Unduh berkas PDF untuk {{ $eb->title }}"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" x2="12" y1="15" y2="3"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </article>
+    @empty
+      <div class="ebook-empty-state">
+        <div class="ebook-empty-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
+          </svg>
+        </div>
+        <h3>Belum Ada Modul Tersedia</h3>
+        <p>Bahan ajar dan modul konseling akan segera diunggah oleh Guru BK SMAN 4 Jember.</p>
+      </div>
+    @endforelse
+
+    <!-- Empty Filter Result Card -->
+    <div id="filterEmptyCard" class="ebook-empty-state" style="display: none;">
+      <div class="ebook-empty-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </div>
+      <h3>Modul Tidak Ditemukan</h3>
+      <p>Tidak ada modul yang cocok dengan kata kunci atau filter yang Anda pilih.</p>
+      <button type="button" id="resetFilterAction" class="ebook-reset-link">
+        Reset Pencarian
+      </button>
+    </div>
+  </main>
 
 </div>
 
-<!-- ===================================================
-     MODAL PEMBACA & HUB PUSTAKA DIGITAL (MULTI-MODAL)
-     =================================================== -->
-<div class="ebook-modal-overlay" id="ebookReaderModal" role="dialog" aria-modal="true" aria-labelledby="modalReaderTitle">
+<!-- Modal Pembaca Dokumen PDF -->
+<div class="ebook-modal-overlay" id="pdfReaderModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="ebook-modal-dialog">
-    <!-- Header Pembaca -->
-    <div class="ebook-reader-header">
-      <div class="ebook-reader-title-area">
-        <div class="ebook-reader-icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+    <div class="ebook-modal-header">
+      <div class="ebook-modal-title-box">
+        <div class="ebook-modal-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
           </svg>
         </div>
-        <div class="ebook-reader-meta">
-          <h3 class="ebook-reader-title" id="modalReaderTitle">Judul Buku</h3>
-          <div class="ebook-reader-sub" id="modalReaderSub">Penerbit Resmi &bull; Pembaca Digital</div>
+        <div>
+          <div class="ebook-modal-title" id="modalTitle">Judul Modul</div>
+          <div class="ebook-modal-sub">Dokumen Resmi Bimbingan Konseling SMAN 4 Jember</div>
         </div>
       </div>
-
-      <div class="ebook-reader-actions">
-        <!-- Tombol Unduh PDF Internal -->
-        <a href="#" id="readerInternalDownloadBtn" class="ebook-reader-btn" style="display: none;" download>
+      <div class="ebook-modal-actions">
+        <a href="#" id="modalDownloadBtn" class="ebook-modal-btn" title="Unduh Berkas PDF">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
             <polyline points="7 10 12 15 17 10"/>
@@ -1072,704 +788,163 @@
           </svg>
           <span>Unduh PDF</span>
         </a>
-
-        <!-- Buka di Tab Baru -->
-        <a href="#" id="readerNewTabLink" target="_blank" rel="noopener noreferrer" class="ebook-reader-btn" title="Buka di tab peramban baru">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-            <polyline points="15 3 21 3 21 9"/>
-            <line x1="10" y1="14" x2="21" y2="3"/>
-          </svg>
-          <span class="btn-text">Buka Tab Baru</span>
-        </a>
-
-        <!-- Tombol Tutup -->
-        <button type="button" id="readerCloseBtn" class="ebook-reader-btn close" aria-label="Tutup jendela pembaca">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <button type="button" id="modalCloseBtn" class="ebook-modal-btn close" aria-label="Tutup Pembaca Modul">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"/>
             <line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
         </button>
       </div>
     </div>
-
-    <!-- PANEL 1: IN-APP PDF VIEWER (UNTUK MODUL INTERNAL GURU BK) -->
-    <div id="readerInternalPanel" class="ebook-internal-frame-box" style="display: none;">
-      <iframe 
-        id="readerIframe" 
-        class="ebook-reader-iframe" 
-        src="about:blank" 
-        title="Pembaca Dokumen PDF Sekolah"
-        allow="fullscreen"
-      ></iframe>
-    </div>
-
-    <!-- PANEL 2: SHOWCASE & RESMI PORTAL (UNTUK BUKU KEMENDIKDASMEN SIBI & EKSTERNAL) -->
-    <div id="readerShowcasePanel" class="ebook-showcase-box" style="display: none;">
-      <div class="ebook-showcase-card">
-        <div class="ebook-showcase-badge-strip">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
-          <span id="showcaseVerifiedBadge">Buku Resmi Kemendikdasmen RI - Kurikulum Merdeka</span>
-        </div>
-
-        <div class="ebook-showcase-grid">
-          <div>
-            <img id="showcaseCoverImg" src="" alt="Sampul Buku" class="ebook-showcase-cover" />
-            <div id="showcaseBadgeList" style="margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px;"></div>
-          </div>
-
-          <div>
-            <h3 id="showcaseTitle" class="ebook-showcase-title">Judul Buku</h3>
-            <div id="showcaseAuthors" class="ebook-showcase-author">Penyusun</div>
-
-            <div class="ebook-showcase-meta-table">
-              <div><strong>Penerbit:</strong> <span id="showcasePublisher">-</span></div>
-              <div><strong>Tahun Rilis:</strong> <span id="showcaseYear">-</span></div>
-              <div><strong>Mata Pelajaran:</strong> <span id="showcaseSubject">-</span></div>
-              <div><strong>Jenjang:</strong> <span id="showcaseClass">-</span></div>
-            </div>
-
-            <div style="margin-bottom: 20px;">
-              <h4 style="font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 6px;">
-                Sinopsis &amp; Pokok Bahasan Materi:
-              </h4>
-              <p id="showcaseDesc" style="font-size: 13.5px; color: var(--ink-soft); line-height: 1.65; max-height: 160px; overflow-y: auto;">
-                Deskripsi
-              </p>
-            </div>
-
-            <div class="ebook-showcase-notice">
-              <strong>Informasi Akses Buku:</strong> Dokumen pembelajaran ini tersedia dalam format PDF resmi dan dapat dibaca langsung secara utuh di penampil dokumen SAPA BK maupun diunduh ke perangkat Anda.
-            </div>
-
-            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-              <button type="button" id="showcaseDirectBtn" class="btn btn-primary" style="flex: 1; min-height: 48px;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-                  <polyline points="14 2 14 8 20 8"/>
-                </svg>
-                <span id="showcaseBtnLabel">Baca Dokumen PDF Sekarang</span>
-              </button>
-              <a href="{{ route('siswa.chat') }}" class="btn btn-ghost">
-                <span>Diskusikan dengan Guru BK</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
+    <iframe id="pdfFrame" class="ebook-modal-frame" title="Penampil Dokumen PDF Modul"></iframe>
   </div>
 </div>
 @endsection
 
 @push('scripts')
 <script>
-  (function() {
-    'use strict';
+document.addEventListener('DOMContentLoaded', function () {
+  const searchInput = document.getElementById('modulSearchInput');
+  const searchClear = document.getElementById('modulSearchClear');
+  const filterPills = document.querySelectorAll('.ebook-pill-btn');
+  const cards = document.querySelectorAll('.ebook-card-item');
+  const countIndicator = document.getElementById('visibleCountText');
+  const emptyCard = document.getElementById('filterEmptyCard');
+  const resetBtn = document.getElementById('resetFilterAction');
 
-    // Helper: Sanitasi URL resmi ke domain SIBI Kemendikdasmen aktif
-    function sanitizeReaderUrl(url) {
-      if (!url || typeof url !== 'string') return '#';
-      return url
-        .replace(/static\.buku\.kemdikbud\.go\.id/g, 'buku.kemendikdasmen.go.id')
-        .replace(/buku\.kemdikbud\.go\.id/g, 'buku.kemendikdasmen.go.id');
-    }
+  let currentFilter = 'all';
+  let searchQuery = '';
 
-    // Inisialisasi Data dari Server (Katalog Kurasi + Modul Internal SMAN 4)
-    const rawCuratedBooks = @json($curatedBooks ?? []);
-    const initialCuratedBooks = rawCuratedBooks.map(function(b) {
-      if (b && b.reader_url) b.reader_url = sanitizeReaderUrl(b.reader_url);
-      return b;
-    });
-    const initialInternalEbooks = @json($internalEbooks ?? []);
+  function applyFilter() {
+    let visibleCount = 0;
+    const q = searchQuery.toLowerCase().trim();
 
-    // Gabungkan seluruh koleksi dasar
-    let allBooks = [...initialInternalEbooks, ...initialCuratedBooks];
-    let currentCategory = 'semua';
-    let currentClass = 'semua';
-    let currentQuery = '';
-    let debounceTimer = null;
+    cards.forEach(card => {
+      const title = card.getAttribute('data-title') || '';
+      const desc = card.getAttribute('data-desc') || '';
+      const access = card.getAttribute('data-access') || '';
 
-    // DOM Elements
-    const searchInput = document.getElementById('ebookSearchInput');
-    const searchClear = document.getElementById('ebookSearchClear');
-    const categoryPills = document.querySelectorAll('.ebook-filter-pill');
-    const classSubfilterBar = document.getElementById('classSubfilterBar');
-    const classPills = document.querySelectorAll('.ebook-class-pill');
-    const gridContainer = document.getElementById('ebookGridContainer');
-    const visibleCountText = document.getElementById('visibleCountText');
-    const resetFilterBtn = document.getElementById('ebookResetFilterBtn');
-    const errorState = document.getElementById('ebookErrorState');
-    const retryBtn = document.getElementById('ebookRetryBtn');
+      const matchesFilter = (currentFilter === 'all') || (access === currentFilter);
+      const matchesSearch = !q || title.includes(q) || desc.includes(q);
 
-    // Reader Modal Elements
-    const readerModal = document.getElementById('ebookReaderModal');
-    const modalReaderTitle = document.getElementById('modalReaderTitle');
-    const modalReaderSub = document.getElementById('modalReaderSub');
-    const readerNewTabLink = document.getElementById('readerNewTabLink');
-    const readerCloseBtn = document.getElementById('readerCloseBtn');
-    const readerInternalDownloadBtn = document.getElementById('readerInternalDownloadBtn');
-
-    // Panels inside Modal
-    const readerInternalPanel = document.getElementById('readerInternalPanel');
-    const readerIframe = document.getElementById('readerIframe');
-    const readerShowcasePanel = document.getElementById('readerShowcasePanel');
-
-    // Showcase Elements
-    const showcaseCoverImg = document.getElementById('showcaseCoverImg');
-    const showcaseTitle = document.getElementById('showcaseTitle');
-    const showcaseAuthors = document.getElementById('showcaseAuthors');
-    const showcasePublisher = document.getElementById('showcasePublisher');
-    const showcaseYear = document.getElementById('showcaseYear');
-    const showcaseSubject = document.getElementById('showcaseSubject');
-    const showcaseClass = document.getElementById('showcaseClass');
-    const showcaseDesc = document.getElementById('showcaseDesc');
-    const showcaseBadgeList = document.getElementById('showcaseBadgeList');
-    const showcaseDirectBtn = document.getElementById('showcaseDirectBtn');
-    const showcaseBtnLabel = document.getElementById('showcaseBtnLabel');
-    const showcaseVerifiedBadge = document.getElementById('showcaseVerifiedBadge');
-
-    // Helper: Escape HTML
-    function escapeHtml(str) {
-      if (!str) return '';
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
-
-    // Render Kartu Buku ke dalam Grid
-    function renderBooks(books) {
-      gridContainer.innerHTML = '';
-      visibleCountText.textContent = books.length;
-
-      // Cek apakah tombol reset perlu ditampilkan
-      const isFiltered = (currentCategory !== 'semua') || (currentClass !== 'semua') || (currentQuery.trim() !== '');
-      if (resetFilterBtn) {
-        resetFilterBtn.style.display = isFiltered ? 'inline-flex' : 'none';
-      }
-
-      if (books.length === 0) {
-        gridContainer.innerHTML = `
-          <div class="ebook-empty-state">
-            <div class="ebook-empty-icon" aria-hidden="true">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"/>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-              </svg>
-            </div>
-            <h3>Tidak Ada E-Book yang Cocok</h3>
-            <p>
-              Tidak ditemukan buku yang sesuai dengan kata kunci atau filter yang Anda pilih. Silakan gunakan kata kunci lain seperti "Matematika", "Stres", "Cemas", atau reset filter.
-            </p>
-            <button type="button" class="btn btn-primary btn-sm" id="emptyStateResetBtn">
-              Reset Pencarian &amp; Filter
-            </button>
-          </div>
-        `;
-        const emptyReset = document.getElementById('emptyStateResetBtn');
-        if (emptyReset) {
-          emptyReset.addEventListener('click', resetAllFilters);
-        }
-        return;
-      }
-
-      books.forEach((book) => {
-        const card = document.createElement('article');
-        card.className = 'ebook-card-item';
-
-        // Badge Penanda
-        let badgeClass = 'badge-merdeka';
-        let badgeText = 'Kurikulum Merdeka';
-        const srcText = ((book.source || '') + ' ' + (book.publisher || '') + ' ' + (Array.isArray(book.badges) ? book.badges.join(' ') : '')).toLowerCase();
-
-        if (srcText.includes('kemenkes') || srcText.includes('unicef') || book.category === 'kemenkes_unicef') {
-          badgeClass = 'badge-kemenkes-unicef';
-          badgeText = 'Kemenkes & UNICEF';
-        } else if (book.source === 'Open Library' || srcText.includes('open library') || book.category === 'open_library' || book.category === 'literasi_global') {
-          badgeClass = 'badge-open-library';
-          badgeText = 'Open Library';
-        } else if (book.category === 'kesehatan_mental' || book.category === 'stres_belajar') {
-          badgeClass = 'badge-mental';
-          badgeText = 'Kesehatan Mental';
-        } else if (book.is_internal || book.category === 'modul_internal') {
-          badgeClass = 'badge-internal';
-          badgeText = 'Modul Guru BK';
-        } else if (book.badges && book.badges.length > 0) {
-          badgeText = book.badges[0];
-        }
-
-        const classBadge = book.class_level ? `<span class="ebook-tag-badge">${escapeHtml(book.class_level)}</span>` : '';
-        const authorText = Array.isArray(book.authors) ? book.authors.join(', ') : (book.authors || 'Tim Guru BK SMAN 4');
-        const descText = book.description || 'Modul bimbingan dan referensi belajar komprehensif bagi peserta didik.';
-        const pageText = book.page_count ? `${book.page_count} Hal` : (book.source || 'Daring');
-
-        // Cover HTML: Image with fallback
-        let coverHtml = '';
-        if (book.cover_url) {
-          coverHtml = `
-            <img 
-              src="${escapeHtml(book.cover_url)}" 
-              alt="Sampul ${escapeHtml(book.title)}" 
-              class="ebook-cover-img" 
-              loading="lazy" 
-              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-            />
-            <div class="ebook-cover-fallback" style="display: none;">
-              <span class="ebook-fallback-title">${escapeHtml(book.title)}</span>
-              <span style="font-size: 11px; opacity: 0.85;">${escapeHtml(authorText)}</span>
-            </div>
-          `;
-        } else {
-          coverHtml = `
-            <div class="ebook-cover-fallback">
-              <span class="ebook-fallback-title">${escapeHtml(book.title)}</span>
-              <span style="font-size: 11px; opacity: 0.85;">${escapeHtml(authorText)}</span>
-            </div>
-          `;
-        }
-
-        // Tentukan tombol aksi (Mode Full In-App: Seluruh buku dapat dibaca langsung)
-        const actionButtonsHtml = `
-          <button type="button" class="btn btn-ghost btn-sm btn-detail-action" aria-label="Lihat ringkasan dan detail buku">
-            Detail
-          </button>
-          <button type="button" class="btn btn-primary btn-sm btn-read-action" aria-label="Buka dokumen PDF lengkap">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-              <polyline points="14 2 14 8 20 8"/>
-            </svg>
-            <span>Baca Sekarang</span>
-          </button>
-        `;
-
-        card.innerHTML = `
-          <div class="ebook-cover-wrapper">
-            <div class="ebook-badge-overlay">
-              <span class="ebook-tag-badge ${badgeClass}">${escapeHtml(badgeText)}</span>
-              ${classBadge}
-            </div>
-            ${coverHtml}
-          </div>
-
-          <div class="ebook-card-body">
-            <div>
-              <div class="ebook-card-category">${escapeHtml(book.subject || book.category || 'Referensi')}</div>
-              <h3 class="ebook-card-title" title="${escapeHtml(book.title)}">${escapeHtml(book.title)}</h3>
-              <div class="ebook-meta-authors">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                  <circle cx="12" cy="7" r="4"/>
-                </svg>
-                <span>${escapeHtml(authorText)}</span>
-              </div>
-              <p class="ebook-card-synopsis">${escapeHtml(descText)}</p>
-            </div>
-
-            <div class="ebook-card-footer">
-              <div class="ebook-card-meta-detail">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-                  <polyline points="14 2 14 8 20 8"/>
-                </svg>
-                <span>${escapeHtml(pageText)}</span>
-              </div>
-              <div class="ebook-card-actions">
-                ${actionButtonsHtml}
-              </div>
-            </div>
-          </div>
-        `;
-
-        // Event listener Baca Sekarang (langsung buka PDF viewer)
-        const readBtn = card.querySelector('.btn-read-action');
-        if (readBtn) {
-          readBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            openReaderModal(book, 'read');
-          });
-        }
-
-        // Event listener Detail (buka sinopsis & ringkasan buku)
-        const detailBtn = card.querySelector('.btn-detail-action');
-        if (detailBtn) {
-          detailBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            openReaderModal(book, 'detail');
-          });
-        }
-
-        // Klik kartu untuk langsung membaca
-        card.addEventListener('click', function(e) {
-          if (!e.target.closest('button') && !e.target.closest('a')) {
-            openReaderModal(book, 'read');
-          }
-        });
-
-        gridContainer.appendChild(card);
-      });
-    }
-
-    // Tampilkan Skeleton Sesaat ketika memuat dari API
-    function showSkeleton() {
-      gridContainer.innerHTML = '';
-      for (let i = 0; i < 6; i++) {
-        const skel = document.createElement('div');
-        skel.className = 'ebook-skeleton-card';
-        skel.innerHTML = `
-          <div class="ebook-skeleton-cover"></div>
-          <div class="ebook-skeleton-body">
-            <div class="ebook-skeleton-line" style="width: 40%;"></div>
-            <div class="ebook-skeleton-line" style="width: 85%; height: 18px;"></div>
-            <div class="ebook-skeleton-line" style="width: 60%;"></div>
-            <div class="ebook-skeleton-line" style="width: 100%; margin-top: 10px;"></div>
-            <div class="ebook-skeleton-line" style="width: 90%;"></div>
-            <div class="ebook-skeleton-line" style="width: 50%; margin-top: auto;"></div>
-          </div>
-        `;
-        gridContainer.appendChild(skel);
-      }
-    }
-
-    // Filter Lokal Berdasarkan Kategori dan Jenjang Kelas
-    function filterLocalBooks() {
-      let filtered = allBooks;
-
-      // Filter Kategori
-      if (currentCategory !== 'semua') {
-        if (currentCategory === 'modul_internal') {
-          filtered = filtered.filter(b => b.is_internal || b.category === 'modul_internal');
-        } else if (currentCategory === 'kemenkes_unicef') {
-          filtered = filtered.filter(b => {
-            const src = ((b.source || '') + ' ' + (b.publisher || '') + ' ' + (Array.isArray(b.badges) ? b.badges.join(' ') : '')).toLowerCase();
-            return src.includes('kemenkes') || src.includes('unicef');
-          });
-        } else if (currentCategory === 'open_library') {
-          filtered = filtered.filter(b => b.source === 'Open Library' || b.category === 'literasi_global');
-        } else if (currentCategory === 'materi_sma') {
-          filtered = filtered.filter(b => b.category === 'materi_sma');
-        } else if (currentCategory === 'kesehatan_mental') {
-          filtered = filtered.filter(b => b.category === 'kesehatan_mental');
-        } else if (currentCategory === 'stres_belajar') {
-          filtered = filtered.filter(b => b.category === 'stres_belajar' || (b.category === 'kesehatan_mental' && b.id === 'curated-km-04'));
-        } else if (currentCategory === 'karir_kuliah') {
-          filtered = filtered.filter(b => b.category === 'karir_kuliah' || (b.category === 'kesehatan_mental' && b.id === 'curated-km-04'));
-        }
-      }
-
-      // Filter Jenjang Kelas
-      if (currentClass !== 'semua') {
-        filtered = filtered.filter(b => b.class_level === currentClass);
-      }
-
-      // Filter Query Pencarian Lokal
-      if (currentQuery.trim() !== '') {
-        const q = currentQuery.toLowerCase().trim();
-        filtered = filtered.filter(b => {
-          const authors = Array.isArray(b.authors) ? b.authors.join(' ') : (b.authors || '');
-          const searchStr = `${b.title || ''} ${authors} ${b.description || ''} ${b.subject || ''} ${b.publisher || ''}`.toLowerCase();
-          return searchStr.includes(q);
-        });
-      }
-
-      return filtered;
-    }
-
-    // Melakukan Pencarian Daring via API
-    function performSearch() {
-      const q = currentQuery.trim();
-
-      // Jika query kosong dan bukan Open Library, gunakan koleksi lokal terkurasi
-      if (q === '' && currentCategory !== 'open_library') {
-        renderBooks(filterLocalBooks());
-        return;
-      }
-
-      showSkeleton();
-
-      // Panggil endpoint /api/ebooks/search
-      let url = `/api/ebooks/search?q=${encodeURIComponent(q)}`;
-      if (currentCategory !== 'semua') {
-        url += `&category=${encodeURIComponent(currentCategory)}`;
-        if (currentCategory === 'open_library') {
-          url += `&source=open_library`;
-        } else if (currentCategory === 'kemenkes_unicef') {
-          url += `&source=kemenkes_unicef`;
-        }
-      }
-      if (currentClass !== 'semua') {
-        url += `&class_level=${encodeURIComponent(currentClass)}`;
-      }
-
-      fetch(url, {
-        headers: {
-          'Accept': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest'
-        }
-      })
-      .then(res => {
-        if (!res.ok) throw new Error('Network error');
-        return res.json();
-      })
-      .then(data => {
-        if (errorState) errorState.style.display = 'none';
-        const rawApiBooks = data.books || [];
-        const apiBooks = rawApiBooks.map(function(apiB) {
-          if (apiB && apiB.reader_url) apiB.reader_url = sanitizeReaderUrl(apiB.reader_url);
-          return apiB;
-        });
-
-        // Gabungkan buku internal yang cocok secara lokal agar modul sekolah tetap muncul di hasil pencarian teratas
-        const localMatches = filterLocalBooks();
-        const mergedBooks = [...localMatches];
-
-        apiBooks.forEach(apiB => {
-          if (!mergedBooks.some(m => m.id === apiB.id)) {
-            mergedBooks.push(apiB);
-          }
-        });
-
-        renderBooks(mergedBooks);
-      })
-      .catch(err => {
-        console.warn('API Search failed, using local fallback:', err);
-        if (errorState) errorState.style.display = 'block';
-        renderBooks(filterLocalBooks());
-      });
-    }
-
-    // Reset Seluruh Filter dan Pencarian
-    function resetAllFilters() {
-      currentCategory = 'semua';
-      currentClass = 'semua';
-      currentQuery = '';
-      if (searchInput) searchInput.value = '';
-      if (searchClear) searchClear.classList.remove('visible');
-
-      categoryPills.forEach(p => p.classList.remove('active'));
-      const defaultPill = document.querySelector('.ebook-filter-pill[data-category="semua"]');
-      if (defaultPill) defaultPill.classList.add('active');
-
-      if (classSubfilterBar) classSubfilterBar.style.display = 'none';
-      classPills.forEach(p => p.classList.remove('active'));
-      const defaultClassPill = document.querySelector('.ebook-class-pill[data-class="semua"]');
-      if (defaultClassPill) defaultClassPill.classList.add('active');
-
-      renderBooks(filterLocalBooks());
-    }
-
-    // ===================================================
-    // BUKA MODAL PEMBACA FULL IN-APP (PDF INTERAKTIF)
-    // ===================================================
-    function openReaderModal(book, mode = 'read') {
-      if (!readerModal) return;
-
-      modalReaderTitle.textContent = book.title || 'Membaca E-Book';
-      const authorText = Array.isArray(book.authors) ? book.authors.join(', ') : (book.authors || 'Tim Guru BK SMAN 4 Jember');
-      modalReaderSub.textContent = `${authorText} • Sumber: ${book.source || 'Resmi'}`;
-
-      const targetUrl = sanitizeReaderUrl(book.reader_url || book.preview_link || '#');
-      const downloadUrl = book.download_url || targetUrl;
-
-      readerNewTabLink.href = targetUrl;
-
-      // Atur tombol unduh di header modal
-      if (readerInternalDownloadBtn) {
-        if (downloadUrl && downloadUrl !== '#') {
-          readerInternalDownloadBtn.href = downloadUrl;
-          readerInternalDownloadBtn.style.display = 'inline-flex';
-        } else {
-          readerInternalDownloadBtn.style.display = 'none';
-        }
-      }
-
-      if (mode === 'detail') {
-        // Tampilkan panel detail / sinopsis
-        readerInternalPanel.style.display = 'none';
-        readerIframe.src = 'about:blank';
-        readerShowcasePanel.style.display = 'flex';
-
-        showcaseTitle.textContent = book.title;
-        showcaseAuthors.textContent = `Penyusun: ${authorText}`;
-        showcasePublisher.textContent = book.publisher || 'Kemendikdasmen RI / SMAN 4 Jember';
-        showcaseYear.textContent = book.published_year || '2025';
-        showcaseSubject.textContent = book.subject || book.category || 'Materi Belajar SMA';
-        showcaseClass.textContent = book.class_level || 'Semua Jenjang';
-        showcaseDesc.textContent = book.description || 'Tidak ada deskripsi.';
-
-        const srcLower = ((book.source || '') + ' ' + (book.publisher || '')).toLowerCase();
-        if (srcLower.includes('kemenkes') || srcLower.includes('unicef') || book.category === 'kemenkes_unicef') {
-          showcaseVerifiedBadge.textContent = 'Modul Resmi Kesehatan Jiwa Remaja: Kemenkes RI & UNICEF';
-          showcaseBtnLabel.textContent = 'Baca Dokumen PDF Sekarang';
-        } else if (book.source === 'Open Library' || book.category === 'open_library' || book.category === 'literasi_global') {
-          showcaseVerifiedBadge.textContent = 'Koleksi Terbuka Internet Archive & Open Library';
-          showcaseBtnLabel.textContent = book.reader_type === 'archive_embed' ? 'Buka Pembaca Digital Internet Archive' : 'Buka Halaman Buku Open Library';
-        } else if (book.category === 'kesehatan_mental' || book.category === 'stres_belajar') {
-          showcaseVerifiedBadge.textContent = 'Koleksi Kesehatan Jiwa & Bimbingan Terkurasi';
-          showcaseBtnLabel.textContent = 'Baca Dokumen PDF Sekarang';
-        } else if (book.is_internal || book.category === 'modul_internal') {
-          showcaseVerifiedBadge.textContent = 'Modul Resmi Konselor SMAN 4 Jember';
-          showcaseBtnLabel.textContent = 'Baca Dokumen PDF Sekarang';
-        } else {
-          showcaseVerifiedBadge.textContent = 'Buku Resmi Kurikulum Merdeka Terintegrasi';
-          showcaseBtnLabel.textContent = 'Baca Dokumen PDF Sekarang';
-        }
-
-        if (book.cover_url) {
-          showcaseCoverImg.src = book.cover_url;
-          showcaseCoverImg.style.display = 'block';
-        } else {
-          showcaseCoverImg.style.display = 'none';
-        }
-
-        showcaseBadgeList.innerHTML = '';
-        if (book.badges && Array.isArray(book.badges)) {
-          book.badges.forEach(b => {
-            const badgeSpan = document.createElement('span');
-            badgeSpan.className = 'ebook-tag-badge badge-merdeka';
-            badgeSpan.textContent = b;
-            showcaseBadgeList.appendChild(badgeSpan);
-          });
-        }
-
-        // Ketika tombol baca di panel detail ditekan
-        showcaseDirectBtn.onclick = function(e) {
-          e.preventDefault();
-          if (book.reader_type === 'open_library_external' && targetUrl) {
-            window.open(targetUrl, '_blank', 'noopener,noreferrer');
-            return;
-          }
-          readerShowcasePanel.style.display = 'none';
-          readerInternalPanel.style.display = 'flex';
-          readerIframe.src = targetUrl;
-        };
+      if (matchesFilter && matchesSearch) {
+        card.style.display = 'flex';
+        visibleCount++;
       } else {
-        // Mode 'read' langsung membuka penampil PDF atau web reader
-        if (book.reader_type === 'open_library_external' && targetUrl) {
-          window.open(targetUrl, '_blank', 'noopener,noreferrer');
-          return;
-        }
-        readerShowcasePanel.style.display = 'none';
-        readerInternalPanel.style.display = 'flex';
-        readerIframe.src = targetUrl;
+        card.style.display = 'none';
       }
+    });
 
-      // Tampilkan modal dan kunci scroll body
-      readerModal.classList.add('is-active');
-      document.body.style.overflow = 'hidden';
+    if (countIndicator) {
+      countIndicator.textContent = visibleCount;
     }
 
-    function closeReaderModal() {
-      if (!readerModal) return;
-      readerModal.classList.remove('is-active');
-      readerIframe.src = 'about:blank';
-      document.body.style.overflow = '';
+    if (emptyCard) {
+      emptyCard.style.display = (visibleCount === 0 && cards.length > 0) ? 'block' : 'none';
     }
+  }
 
-    // ===================================================
-    // EVENT LISTENERS
-    // ===================================================
+  if (searchInput) {
+    searchInput.addEventListener('input', function () {
+      searchQuery = this.value;
+      if (searchClear) {
+        searchClear.style.display = searchQuery ? 'flex' : 'none';
+      }
+      applyFilter();
+    });
+  }
 
-    // Search Input Event
-    if (searchInput) {
-      searchInput.addEventListener('input', function() {
-        currentQuery = this.value;
-        if (searchClear) {
-          if (currentQuery.length > 0) {
-            searchClear.classList.add('visible');
-          } else {
-            searchClear.classList.remove('visible');
-          }
-        }
+  if (searchClear) {
+    searchClear.addEventListener('click', function () {
+      if (searchInput) {
+        searchInput.value = '';
+        searchQuery = '';
+        this.style.display = 'none';
+        searchInput.focus();
+        applyFilter();
+      }
+    });
+  }
 
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => {
-          performSearch();
-        }, 320);
-      });
-    }
+  filterPills.forEach(pill => {
+    pill.addEventListener('click', function () {
+      filterPills.forEach(p => p.classList.remove('active'));
+      this.classList.add('active');
+      currentFilter = this.getAttribute('data-filter') || 'all';
+      applyFilter();
+    });
+  });
 
-    // Search Clear Button
-    if (searchClear) {
-      searchClear.addEventListener('click', function() {
-        if (searchInput) searchInput.value = '';
-        currentQuery = '';
-        searchClear.classList.remove('visible');
-        performSearch();
-      });
-    }
-
-    // Category Tabs Event
-    categoryPills.forEach(pill => {
-      pill.addEventListener('click', function() {
-        categoryPills.forEach(p => p.classList.remove('active'));
-        this.classList.add('active');
-        currentCategory = this.dataset.category;
-
-        // Toggle subfilter bar jenjang kelas untuk Materi SMA
-        if (currentCategory === 'materi_sma') {
-          if (classSubfilterBar) classSubfilterBar.style.display = 'flex';
+  if (resetBtn) {
+    resetBtn.addEventListener('click', function () {
+      if (searchInput) {
+        searchInput.value = '';
+        searchQuery = '';
+      }
+      if (searchClear) {
+        searchClear.style.display = 'none';
+      }
+      currentFilter = 'all';
+      filterPills.forEach(p => {
+        if (p.getAttribute('data-filter') === 'all') {
+          p.classList.add('active');
         } else {
-          if (classSubfilterBar) classSubfilterBar.style.display = 'none';
-          currentClass = 'semua';
-          classPills.forEach(cp => cp.classList.remove('active'));
-          const defaultCp = document.querySelector('.ebook-class-pill[data-class="semua"]');
-          if (defaultCp) defaultCp.classList.add('active');
+          p.classList.remove('active');
         }
-
-        performSearch();
       });
+      applyFilter();
     });
+  }
 
-    // Class Subfilter Event
-    classPills.forEach(pill => {
-      pill.addEventListener('click', function() {
-        classPills.forEach(p => p.classList.remove('active'));
-        this.classList.add('active');
-        currentClass = this.dataset.class;
-        performSearch();
-      });
+  // Modal Pembaca Dokumen
+  const modal = document.getElementById('pdfReaderModal');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalDownload = document.getElementById('modalDownloadBtn');
+  const pdfFrame = document.getElementById('pdfFrame');
+  const modalClose = document.getElementById('modalCloseBtn');
+
+  function openReader(streamUrl, downloadUrl, title) {
+    if (!modal || !pdfFrame) return;
+    if (modalTitle) modalTitle.textContent = title;
+    if (modalDownload) modalDownload.href = downloadUrl;
+    pdfFrame.src = streamUrl;
+    modal.classList.add('is-active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeReader() {
+    if (!modal || !pdfFrame) return;
+    modal.classList.remove('is-active');
+    pdfFrame.src = 'about:blank';
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.open-reader-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const streamUrl = this.getAttribute('data-stream-url');
+      const downloadUrl = this.getAttribute('data-download-url');
+      const title = this.getAttribute('data-title');
+      openReader(streamUrl, downloadUrl, title);
     });
+  });
 
-    // Reset Filter Button
-    if (resetFilterBtn) {
-      resetFilterBtn.addEventListener('click', resetAllFilters);
-    }
+  if (modalClose) {
+    modalClose.addEventListener('click', closeReader);
+  }
 
-    // Retry Button
-    if (retryBtn) {
-      retryBtn.addEventListener('click', performSearch);
-    }
-
-    // Reader Modal Close Events
-    if (readerCloseBtn) {
-      readerCloseBtn.addEventListener('click', closeReaderModal);
-    }
-    if (readerModal) {
-      readerModal.addEventListener('click', function(e) {
-        if (e.target === readerModal) {
-          closeReaderModal();
-        }
-      });
-    }
-
-    // Keyboard ESC to close modal
-    window.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        if (readerModal && readerModal.classList.contains('is-active')) {
-          closeReaderModal();
-        }
+  if (modal) {
+    modal.addEventListener('click', function (e) {
+      if (e.target === modal) {
+        closeReader();
       }
     });
+  }
 
-    // First initial render
-    renderBooks(allBooks);
-
-  })();
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modal && modal.classList.contains('is-active')) {
+      closeReader();
+    }
+  });
+});
 </script>
 @endpush

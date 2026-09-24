@@ -189,38 +189,6 @@ class EbookPdfGenerator
     }
 
     /**
-     * Membangun berkas PDF untuk buku kurasi (Kemenkes, UNICEF, Kemendikbud SIBI, ABKIN).
-     *
-     * @param  array<string, mixed>  $book
-     */
-    public static function generateForCuratedBook(array $book, string $targetPath): bool
-    {
-        $dir = dirname($targetPath);
-        if (! is_dir($dir)) {
-            @mkdir($dir, 0775, true);
-        }
-        @chmod($dir, 0775);
-
-        $pdfContent = self::generate([
-            'title' => $book['title'] ?? 'Buku Kurasi SAPA BK',
-            'subtitle' => $book['subject'] ?? ($book['category'] ?? 'Referensi Belajar SMA'),
-            'authors' => $book['authors'] ?? ['Penyusun Terverifikasi'],
-            'publisher' => $book['publisher'] ?? 'Pusat Perbukuan Resmi',
-            'published_year' => $book['published_year'] ?? date('Y'),
-            'category' => $book['category'] ?? 'Bimbingan Konseling',
-            'class_level' => $book['class_level'] ?? 'Semua Jenjang',
-            'source' => $book['source'] ?? 'SAPA BK Terkurasi',
-            'description' => $book['description'] ?? 'Dokumen literasi terverifikasi untuk siswa SMA Negeri 4 Jember.',
-        ]);
-
-        try {
-            return @file_put_contents($targetPath, $pdfContent) !== false;
-        } catch (\Throwable) {
-            return false;
-        }
-    }
-
-    /**
      * Membangun berkas PDF untuk model internal Ebook database.
      */
     public static function generateForInternalEbook(Ebook $ebook, string $targetPath): bool

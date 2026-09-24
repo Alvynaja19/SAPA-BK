@@ -7,13 +7,11 @@ use App\Models\Ebook;
 use App\Models\Questionnaire;
 use App\Models\QuestionnaireResult;
 use App\Models\User;
-use App\Services\CuratedEbookCatalog;
 use App\Services\EbookPdfGenerator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class SiswaController extends Controller
@@ -197,120 +195,15 @@ class SiswaController extends Controller
 
     public function ebookAkses(): View
     {
-        $allInternal = Ebook::latest()->get();
-        $internalEbooks = $allInternal->map(function (Ebook $eb) {
-            return [
-                'id' => 'internal-'.$eb->id,
-                'title' => $eb->title,
-                'authors' => ['Tim Guru BK SMAN 4 Jember'],
-                'publisher' => 'SMAN 4 Jember',
-                'category' => 'modul_internal',
-                'subject' => 'Bimbingan Konseling Sekolah',
-                'class_level' => null,
-                'description' => $eb->description ?? 'Modul pembelajaran bimbingan konseling untuk pengayaan akademik dan kesiapan karir siswa SMAN 4 Jember.',
-                'cover_url' => $eb->cover_path ? Storage::url($eb->cover_path) : null,
-                'page_count' => null,
-                'published_year' => $eb->created_at ? $eb->created_at->format('Y') : date('Y'),
-                'is_curated' => false,
-                'is_internal' => true,
-                'is_public' => (bool) $eb->is_public,
-                'reader_type' => 'in_app',
-                'reader_url' => route('ebook.stream', $eb->id),
-                'download_url' => route('ebook.download', $eb->id),
-                'real_id' => $eb->id,
-                'source' => 'Guru BK SMAN 4 Jember',
-                'language' => 'Indonesia',
-                'badges' => [$eb->is_public ? 'Akses Terbuka' : 'Eksklusif SMAN 4', 'Modul Guru BK'],
-            ];
-        })->values()->all();
-
-        $curatedBooks = CuratedEbookCatalog::all();
+        $ebooks = Ebook::with('uploader')->latest()->get();
 
         $stats = [
-            'total_all' => count($curatedBooks) + count($internalEbooks),
-            'total_mental_health' => count(CuratedEbookCatalog::mentalHealthBooks()),
-            'total_kemenkes_unicef' => count(CuratedEbookCatalog::kemenkesUnicefBooks()),
-            'total_materi_sma' => count(CuratedEbookCatalog::smaStudyBooks()),
-            'total_internal' => count($internalEbooks),
+            'total' => $ebooks->count(),
+            'public' => $ebooks->where('is_public', true)->count(),
+            'internal' => $ebooks->where('is_public', false)->count(),
         ];
 
-        $ebooks = Ebook::latest()->paginate(12);
-
-        return view('siswa.ebook', compact('internalEbooks', 'curatedBooks', 'stats', 'ebooks'));
-    }
-
-    /**
-     * Mengalirkan berkas PDF buku kurasi resmi (Materi SMA & Kesehatan Mental) langsung ke peramban.
-     */
-    public function streamCuratedPdf(string $id)
-    {
-        $book = CuratedEbookCatalog::find($id);
-        if (! $book) {
-            abort(404, 'Buku kurasi tidak ditemukan.');
-        }
-
-        $dir = storage_path('app/public/ebooks/curated');
-        $filePath = $dir.'/'.$id.'.pdf';
-
-        if (! file_exists($filePath) || filesize($filePath) < 50) {
-            $generatedPath = $this->generateCuratedFallbackPdf($book);
-            if ($generatedPath && file_exists($generatedPath)) {
-                $filePath = $generatedPath;
-            } else {
-                abort(404, 'Dokumen buku belum tersedia secara fisik di server.');
-            }
-        }
-
-        $cleanTitle = preg_replace('/[^a-zA-Z0-9_\-\.]/', '_', $book['title'] ?? 'buku_kurasi').'.pdf';
-
-        return response()->file($filePath, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="'.$cleanTitle.'"',
-            'Accept-Ranges' => 'bytes',
-            'Cache-Control' => 'public, max-age=86400',
-        ]);
-    }
-
-    /**
-     * Mengunduh berkas PDF buku kurasi resmi.
-     */
-    public function unduhCuratedPdf(string $id)
-    {
-        $book = CuratedEbookCatalog::find($id);
-        if (! $book) {
-            abort(404, 'Buku kurasi tidak ditemukan.');
-        }
-
-        $dir = storage_path('app/public/ebooks/curated');
-        $filePath = $dir.'/'.$id.'.pdf';
-
-        if (! file_exists($filePath) || filesize($filePath) < 50) {
-            $filePath = $this->generateCuratedFallbackPdf($book);
-        }
-
-        $cleanTitle = preg_replace('/[^a-zA-Z0-9_\-\.]/', '_', $book['title'] ?? 'buku_kurasi').'.pdf';
-
-        return response()->download($filePath, $cleanTitle);
-    }
-
-    /**
-     * Menghasilkan dokumen PDF edukatif resmi terstruktur untuk buku kurasi jika berkas fisik belum diunggah.
-     *
-     * @param  array<string, mixed>  $book
-     */
-    protected function generateCuratedFallbackPdf(array $book): ?string
-    {
-        $dir = storage_path('app/public/ebooks/curated');
-        if (! is_dir($dir)) {
-            @mkdir($dir, 0775, true);
-        }
-
-        $id = $book['id'] ?? 'buku_kurasi';
-        $destPath = $dir.'/'.$id.'.pdf';
-
-        $ok = EbookPdfGenerator::generateForCuratedBook($book, $destPath);
-
-        return $ok && file_exists($destPath) ? $destPath : null;
+        return view('siswa.ebook', compact('ebooks', 'stats'));
     }
 
     /**
