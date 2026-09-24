@@ -30,6 +30,8 @@ class RefreshEbookPdfs extends Command
     {
         $this->info('Memulai regenerasi berkas PDF resmi e-book...');
 
+        $failedCount = 0;
+
         // 1. Modul Internal Guru BK dari Database
         $ebooks = Ebook::all();
         $this->info("Memproses {$ebooks->count()} modul internal...");
@@ -39,11 +41,17 @@ class RefreshEbookPdfs extends Command
                 $filename .= '.pdf';
             }
             $targetPath = storage_path("app/public/ebooks/{$filename}");
-            $ok = EbookPdfGenerator::generateForInternalEbook($ebook, $targetPath);
-            if ($ok) {
-                $this->line("  [OK] Modul Internal: {$ebook->title} -> {$filename}");
-            } else {
-                $this->error("  [FAIL] Gagal membuat modul internal: {$ebook->title}");
+            try {
+                $ok = EbookPdfGenerator::generateForInternalEbook($ebook, $targetPath);
+                if ($ok) {
+                    $this->line("  [OK] Modul Internal: {$ebook->title} -> {$filename}");
+                } else {
+                    $failedCount++;
+                    $this->error("  [FAIL] Izin tulis ditolak untuk modul: {$ebook->title}");
+                }
+            } catch (\Throwable $e) {
+                $failedCount++;
+                $this->error("  [FAIL] Error: {$e->getMessage()}");
             }
         }
 
@@ -53,12 +61,28 @@ class RefreshEbookPdfs extends Command
         foreach ($curatedBooks as $book) {
             $id = $book['id'];
             $targetPath = storage_path("app/public/ebooks/curated/{$id}.pdf");
-            $ok = EbookPdfGenerator::generateForCuratedBook($book, $targetPath);
-            if ($ok) {
-                $this->line("  [OK] Kurasi: {$book['title']} -> {$id}.pdf");
-            } else {
-                $this->error("  [FAIL] Gagal membuat buku kurasi: {$id}");
+            try {
+                $ok = EbookPdfGenerator::generateForCuratedBook($book, $targetPath);
+                if ($ok) {
+                    $this->line("  [OK] Kurasi: {$book['title']} -> {$id}.pdf");
+                } else {
+                    $failedCount++;
+                    $this->error("  [FAIL] Izin tulis ditolak untuk buku: {$book['title']}");
+                }
+            } catch (\Throwable $e) {
+                $failedCount++;
+                $this->error("  [FAIL] Error: {$e->getMessage()}");
             }
+        }
+
+        if ($failedCount > 0) {
+            $this->warn("\nAda {$failedCount} berkas yang gagal ditulis karena kendala izin akses direktori server.");
+            $this->warn('Silakan jalankan perintah perbaikan izin akses berikut di terminal server:');
+            $this->line('  sudo chown -R ubuntu:www-data storage bootstrap/cache');
+            $this->line('  sudo chmod -R 775 storage bootstrap/cache');
+            $this->line('Lalu jalankan kembali: php artisan ebook:refresh-pdf');
+
+            return Command::FAILURE;
         }
 
         $this->info('Seluruh berkas PDF berhasil diperbaiki dan siap dibaca!');

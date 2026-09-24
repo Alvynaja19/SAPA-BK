@@ -199,6 +199,7 @@ class EbookPdfGenerator
         if (! is_dir($dir)) {
             @mkdir($dir, 0775, true);
         }
+        @chmod($dir, 0775);
 
         $pdfContent = self::generate([
             'title' => $book['title'] ?? 'Buku Kurasi SAPA BK',
@@ -212,7 +213,11 @@ class EbookPdfGenerator
             'description' => $book['description'] ?? 'Dokumen literasi terverifikasi untuk siswa SMA Negeri 4 Jember.',
         ]);
 
-        return file_put_contents($targetPath, $pdfContent) !== false;
+        try {
+            return @file_put_contents($targetPath, $pdfContent) !== false;
+        } catch (\Throwable) {
+            return false;
+        }
     }
 
     /**
@@ -224,6 +229,7 @@ class EbookPdfGenerator
         if (! is_dir($dir)) {
             @mkdir($dir, 0775, true);
         }
+        @chmod($dir, 0775);
 
         $pdfContent = self::generate([
             'title' => $ebook->title ?? 'Modul Bimbingan Guru BK',
@@ -237,6 +243,10 @@ class EbookPdfGenerator
             'description' => $ebook->description ?? 'Modul bimbingan konseling untuk pendampingan akademik, sosial, dan karir peserta didik.',
         ]);
 
-        return file_put_contents($targetPath, $pdfContent) !== false;
+        try {
+            return @file_put_contents($targetPath, $pdfContent) !== false;
+        } catch (\Throwable) {
+            return false;
+        }
     }
 }
