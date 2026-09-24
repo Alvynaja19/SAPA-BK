@@ -107,7 +107,10 @@
             <form
               method="POST"
               action="{{ route('bk.tes.destroy', $q->id) }}"
-              onsubmit="return confirm('Apakah Anda yakin ingin menghapus kuesioner ini beserta seluruh butir soal dan rekap hasil siswa terkait? Tindakan ini tidak dapat dibatalkan.');"
+              data-confirm="Apakah Anda yakin ingin menghapus kuesioner ini beserta seluruh butir soal dan rekap hasil siswa terkait? Tindakan ini tidak dapat dibatalkan."
+              data-confirm-title="Hapus Kuesioner?"
+              data-confirm-type="danger"
+              data-confirm-btn="Ya, Hapus Kuesioner"
               class="inline-block"
             >
               @csrf

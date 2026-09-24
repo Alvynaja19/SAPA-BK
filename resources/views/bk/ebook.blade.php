@@ -133,7 +133,7 @@
                     >
                       Buka
                     </a>
-                    <form method="POST" action="{{ route('bk.ebook.destroy', $eb->id) }}" onsubmit="return confirm('Hapus e-book ini?')">
+                    <form method="POST" action="{{ route('bk.ebook.destroy', $eb->id) }}" data-confirm="Apakah Anda yakin ingin menghapus e-book ini dari modul resmi?" data-confirm-title="Hapus Modul E-Book?" data-confirm-type="danger" data-confirm-btn="Ya, Hapus E-Book">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition-colors">

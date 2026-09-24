@@ -21,7 +21,7 @@
     if (this.opsiTambah.length > 2) {
       this.opsiTambah.splice(index, 1);
     } else {
-      alert('Minimal harus menyediakan 2 pilihan jawaban.');
+      window.showToast('Minimal harus menyediakan 2 pilihan jawaban.', 'warning');
     }
   },
   tambahOpsiEdit() {
@@ -33,7 +33,7 @@
     if (this.editSoal.options.length > 2) {
       this.editSoal.options.splice(index, 1);
     } else {
-      alert('Minimal harus menyediakan 2 pilihan jawaban.');
+      window.showToast('Minimal harus menyediakan 2 pilihan jawaban.', 'warning');
     }
   }
 }">
@@ -148,7 +148,10 @@
             <form
               method="POST"
               action="{{ route('bk.tes.soal.destroy', [$questionnaire->id, $soal->id]) }}"
-              onsubmit="return confirm('Apakah Anda yakin ingin menghapus butir pertanyaan ini?');"
+              data-confirm="Apakah Anda yakin ingin menghapus butir pertanyaan ini?"
+              data-confirm-title="Hapus Butir Pertanyaan?"
+              data-confirm-type="danger"
+              data-confirm-btn="Ya, Hapus Soal"
               class="inline-block"
             >
               @csrf

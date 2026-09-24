@@ -368,7 +368,7 @@
     </div>
   </div>
 
-  <!-- TailAdmin Custom Confirm Modal (SAPA BK) -->
+  <!-- TailAdmin Custom Confirm & Alert Modal (SAPA BK) -->
   <div
     id="customConfirmModal"
     class="tailadmin-confirm-backdrop"
@@ -411,9 +411,13 @@
     </div>
   </div>
 
-  <!-- Global Confirm Modal Script -->
+  <!-- TailAdmin Modern Floating Toast Container -->
+  <div id="tailadminToastContainer" class="fixed top-5 right-5 z-[999999] flex flex-col gap-2.5 max-w-sm w-full pointer-events-none px-4 sm:px-0" aria-live="polite"></div>
+
+  <!-- Global Confirm, Alert & Toast Scripts -->
   <script>
     window.showConfirmModal = function(options) {
+      options = options || {};
       const modal = document.getElementById('customConfirmModal');
       if (!modal) {
         if (typeof options.onConfirm === 'function') options.onConfirm();
@@ -430,13 +434,23 @@
       titleEl.textContent = options.title || 'Konfirmasi Tindakan';
       descEl.textContent = options.message || 'Apakah Anda yakin ingin melanjutkan tindakan ini?';
       cancelBtn.textContent = options.cancelText || 'Batal';
-      actionBtn.textContent = options.confirmText || 'Lanjutkan';
+      actionBtn.textContent = options.confirmText || (options.isAlert ? 'Mengerti' : 'Lanjutkan');
 
-      const type = options.type || 'warning';
+      if (options.isAlert) {
+        cancelBtn.style.display = 'none';
+        actionBtn.classList.remove('flex-1');
+        actionBtn.classList.add('w-full');
+      } else {
+        cancelBtn.style.display = '';
+        actionBtn.classList.add('flex-1');
+        actionBtn.classList.remove('w-full');
+      }
+
+      const type = options.type || (options.isAlert ? 'info' : 'warning');
 
       // Reset classes
       iconWrap.className = 'h-14 w-14 rounded-2xl mx-auto mb-4 flex items-center justify-center transition-colors ';
-      actionBtn.className = 'flex-1 min-h-[44px] px-4 py-2.5 rounded-xl font-semibold text-xs sm:text-sm text-white shadow-md transition-all focus:outline-hidden focus:ring-2 focus:ring-offset-2 cursor-pointer ';
+      actionBtn.className = (options.isAlert ? 'w-full ' : 'flex-1 ') + 'min-h-[44px] px-4 py-2.5 rounded-xl font-semibold text-xs sm:text-sm text-white shadow-md transition-all focus:outline-hidden focus:ring-2 focus:ring-offset-2 cursor-pointer ';
 
       if (type === 'danger') {
         iconWrap.className += 'bg-rose-50 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400 border border-rose-200/60 dark:border-rose-800/40';
@@ -458,7 +472,7 @@
       }
 
       modal.classList.add('is-open');
-      cancelBtn.focus();
+      (options.isAlert ? actionBtn : cancelBtn).focus();
 
       function closeModal() {
         modal.classList.remove('is-open');
@@ -469,6 +483,9 @@
         closeModal();
         if (typeof options.onConfirm === 'function') {
           options.onConfirm();
+        }
+        if (typeof options.onOk === 'function') {
+          options.onOk();
         }
       }
 
@@ -495,6 +512,113 @@
       actionBtn.addEventListener('click', handleAction);
       document.addEventListener('keydown', handleKeydown);
       modal.addEventListener('click', handleBackdropClick);
+    };
+
+    window.showAlertModal = function(options) {
+      if (typeof options === 'string') {
+        options = { message: options };
+      }
+      options = options || {};
+      window.showConfirmModal({
+        title: options.title || 'Informasi',
+        message: options.message || '',
+        type: options.type || 'info',
+        confirmText: options.confirmText || options.buttonText || 'Mengerti',
+        isAlert: true,
+        onConfirm: options.onOk || options.onConfirm
+      });
+    };
+
+    window.showToast = function(message, type, duration) {
+      type = type || 'info';
+      duration = duration !== undefined ? duration : 3500;
+      const container = document.getElementById('tailadminToastContainer');
+      if (!container) {
+        console.log(`[Toast ${type}]: ${message}`);
+        return;
+      }
+
+      const toast = document.createElement('div');
+      let bgStyle = 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 shadow-xl';
+      let iconSvg = '';
+
+      if (type === 'success') {
+        bgStyle = 'bg-emerald-50 dark:bg-emerald-950/90 border-emerald-200 dark:border-emerald-800/60 text-emerald-900 dark:text-emerald-100 shadow-emerald-900/10';
+        iconSvg = '<svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+      } else if (type === 'error' || type === 'danger') {
+        bgStyle = 'bg-rose-50 dark:bg-rose-950/90 border-rose-200 dark:border-rose-800/60 text-rose-900 dark:text-rose-100 shadow-rose-900/10';
+        iconSvg = '<svg class="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>';
+      } else if (type === 'warning') {
+        bgStyle = 'bg-amber-50 dark:bg-amber-950/90 border-amber-200 dark:border-amber-800/60 text-amber-900 dark:text-amber-100 shadow-amber-900/10';
+        iconSvg = '<svg class="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+      } else {
+        bgStyle = 'bg-blue-50 dark:bg-blue-950/90 border-blue-200 dark:border-blue-800/60 text-blue-900 dark:text-blue-100 shadow-blue-900/10';
+        iconSvg = '<svg class="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+      }
+
+      toast.className = `pointer-events-auto flex items-start gap-3 p-3.5 sm:p-4 rounded-2xl border shadow-lg transition-all duration-300 transform -translate-y-2 opacity-0 ${bgStyle}`;
+      toast.innerHTML = `
+        <div class="mt-0.5">${iconSvg}</div>
+        <div class="flex-1 text-xs sm:text-sm font-medium leading-relaxed">${message}</div>
+        <button type="button" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors p-1 cursor-pointer shrink-0" aria-label="Tutup notifikasi">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      `;
+
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('-translate-y-2', 'opacity-0');
+        toast.classList.add('translate-y-0', 'opacity-100');
+      });
+
+      const closeBtn = toast.querySelector('button');
+      let timer = null;
+
+      function dismiss() {
+        if (timer) clearTimeout(timer);
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('-translate-y-2', 'opacity-0');
+        setTimeout(() => {
+          if (toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 300);
+      }
+
+      if (closeBtn) closeBtn.addEventListener('click', dismiss);
+      if (duration > 0) {
+        timer = setTimeout(dismiss, duration);
+      }
+    };
+
+    // Auto-intercept forms with data-confirm
+    document.addEventListener('submit', function(e) {
+      const form = e.target;
+      if (!form || !form.dataset) return;
+      const confirmMsg = form.dataset.confirm;
+      if (confirmMsg && !form._isConfirmed) {
+        e.preventDefault();
+        window.showConfirmModal({
+          title: form.dataset.confirmTitle || 'Konfirmasi Tindakan',
+          message: confirmMsg,
+          type: form.dataset.confirmType || 'danger',
+          confirmText: form.dataset.confirmBtn || 'Ya, Lanjutkan',
+          cancelText: 'Batal',
+          onConfirm: function() {
+            form._isConfirmed = true;
+            form.submit();
+          }
+        });
+      }
+    });
+
+    // Override browser native alert to use custom modal
+    window.alert = function(msg) {
+      window.showAlertModal({
+        title: 'Perhatian',
+        message: String(msg),
+        type: 'warning',
+        buttonText: 'Mengerti'
+      });
     };
 
     // Real-time Session Guard: otomatis logout tanpa refresh halaman jika akun aktif di perangkat lain
@@ -531,6 +655,7 @@
         }
       });
     })();
+  </script>
   <!-- Pusher & Laravel Echo untuk WebSocket Real-time Reverb -->
   <script src="https://js.pusher.com/8.4.0-rc2/pusher.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.16.1/dist/echo.iife.js"></script>

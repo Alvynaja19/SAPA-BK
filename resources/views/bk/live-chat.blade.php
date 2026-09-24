@@ -315,60 +315,68 @@
 
       const res = await response.json();
       if (!res.success) {
-        alert(res.message || 'Gagal mengirim pesan.');
+        window.showToast(res.message || 'Gagal mengirim pesan.', 'error');
       } else {
         const timeSpan = bubble.querySelector('span');
         if (timeSpan) timeSpan.innerText = res.message.time + ' • Terkirim';
       }
     } catch (err) {
       console.error(err);
-      alert('Terjadi kendala jaringan saat mengirim pesan.');
+      window.showToast('Terjadi kendala jaringan saat mengirim pesan.', 'error');
     }
   }
 
-  async function closeCurrentSession() {
+  function closeCurrentSession() {
     if (!currentSessionId || currentSessionStatus === 'closed') return;
 
-    const confirmed = confirm('Apakah Anda yakin ingin menyelesaikan dan mengakhiri sesi konseling dengan ' + (activeStudentName || 'siswa ini') + '? Setelah ditutup, sesi akan berstatus closed dan chat terkunci.');
-    if (!confirmed) return;
+    window.showConfirmModal({
+      title: 'Akhiri Sesi Konseling?',
+      message: 'Apakah Anda yakin ingin menyelesaikan dan mengakhiri sesi konseling dengan ' + (activeStudentName || 'siswa ini') + '? Setelah ditutup, sesi akan berstatus closed dan chat terkunci.',
+      type: 'warning',
+      confirmText: 'Ya, Akhiri Sesi',
+      cancelText: 'Batal',
+      onConfirm: async function() {
+        try {
+          const response = await fetch(`/bk/live-chat/api/session/${currentSessionId}/close`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+          });
 
-    try {
-      const response = await fetch(`/bk/live-chat/api/session/${currentSessionId}/close`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'X-CSRF-TOKEN': '{{ csrf_token() }}'
+          const res = await response.json();
+          if (res.success) {
+            currentSessionStatus = 'closed';
+            updateStatusBadge('closed');
+
+            // Hapus atau perbarui kartu siswa dari antrean aktif
+            const card = document.getElementById(`student-card-${currentSessionId}`);
+            if (card) {
+              card.remove();
+            }
+
+            // Cek jika antrean kosong
+            const listContainer = document.getElementById('student-list-container');
+            if (listContainer && listContainer.querySelectorAll('.student-card').length === 0) {
+              listContainer.innerHTML = `
+                <div id="queue-empty-notice" class="p-6 text-center text-xs text-gray-400 dark:text-gray-500">
+                  Belum ada antrean siswa konseling aktif saat ini.
+                </div>
+              `;
+            }
+
+            window.showToast('Sesi konseling telah berhasil diselesaikan.', 'success');
+          } else {
+            window.showToast(res.message || 'Gagal mengakhiri konseling.', 'error');
+          }
+        } catch (err) {
+          console.error(err);
+          window.showToast('Terjadi kendala saat mengakhiri sesi.', 'error');
         }
-      });
-
-      const res = await response.json();
-      if (res.success) {
-        currentSessionStatus = 'closed';
-        updateStatusBadge('closed');
-
-        // Hapus atau perbarui kartu siswa dari antrean aktif
-        const card = document.getElementById(`student-card-${currentSessionId}`);
-        if (card) {
-          card.remove();
-        }
-
-        // Cek jika antrean kosong
-        const listContainer = document.getElementById('student-list-container');
-        if (listContainer && listContainer.querySelectorAll('.student-card').length === 0) {
-          listContainer.innerHTML = `
-            <div id="queue-empty-notice" class="p-6 text-center text-xs text-gray-400 dark:text-gray-500">
-              Belum ada antrean siswa konseling aktif saat ini.
-            </div>
-          `;
-        }
-      } else {
-        alert(res.message || 'Gagal mengakhiri konseling.');
       }
-    } catch (err) {
-      console.error(err);
-      alert('Terjadi kendala saat mengakhiri sesi.');
-    }
+    });
   }
 
   // Polling Real-Time Antrean Siswa Konseling (setiap 4 detik)

@@ -1250,7 +1250,11 @@
   function startNewSession(mode) {
     if (mode === 'live') {
       if (hasActiveLiveSession) {
-        alert('Anda masih memiliki 1 sesi konseling aktif dengan Guru BK. Harap selesaikan sesi konseling tersebut sebelum memulai konsultasi baru.');
+        showAlertModal({
+          title: 'Sesi Masih Aktif',
+          message: 'Anda masih memiliki 1 sesi konseling aktif dengan Guru BK. Harap selesaikan sesi konseling tersebut sebelum memulai konsultasi baru.',
+          type: 'info'
+        });
         return;
       }
       window.location.href = "{{ route('siswa.chat') }}?mode=live&new=1";
@@ -1392,15 +1396,16 @@
             if (activeAiSessionId == sessionId) {
               window.location.href = "{{ route('siswa.chat') }}?new=1";
             }
+            showToast('Percakapan AI berhasil dihapus.', 'success');
           } else {
-            alert(data.message || 'Gagal menghapus percakapan.');
+            showToast(data.message || 'Gagal menghapus percakapan.', 'error');
             if (rowEl) {
               rowEl.style.opacity = '1';
               rowEl.style.pointerEvents = 'auto';
             }
           }
         } catch (err) {
-          alert('Terjadi kendala jaringan saat menghapus sesi percakapan.');
+          showToast('Terjadi kendala jaringan saat menghapus sesi percakapan.', 'error');
           if (rowEl) {
             rowEl.style.opacity = '1';
             rowEl.style.pointerEvents = 'auto';
@@ -1499,7 +1504,7 @@
     const targetMode = currentMode;
 
     if (targetMode === 'live' && currentGuruSessionStatus === 'closed') {
-      alert('Sesi konseling ini telah diakhiri oleh Guru BK. Silakan klik Konsultasi Guru BK Baru untuk memulai bimbingan baru.');
+      showToast('Sesi konseling ini telah diakhiri oleh Guru BK. Silakan klik Konsultasi Guru BK Baru untuk memulai bimbingan baru.', 'warning');
       return;
     }
 

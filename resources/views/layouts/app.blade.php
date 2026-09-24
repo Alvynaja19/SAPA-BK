@@ -523,6 +523,94 @@
       outline: 2px solid var(--warn);
       outline-offset: 2px;
     }
+    .confirm-btn-action.btn-action-primary {
+      background: var(--primary);
+      box-shadow: 0 2px 8px rgba(21, 128, 61, 0.3);
+    }
+    .confirm-btn-action.btn-action-primary:hover {
+      background: var(--primary-hover);
+    }
+    .confirm-btn-action.btn-action-info {
+      background: #2563EB;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+    }
+    .confirm-btn-action.btn-action-info:hover {
+      background: #1D4ED8;
+    }
+
+    /* Toast Notification System */
+    .app-toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 380px;
+      width: calc(100% - 40px);
+      pointer-events: none;
+    }
+    .app-toast-item {
+      pointer-events: auto;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 13px 16px;
+      border-radius: 16px;
+      background: #FFFFFF;
+      border: 1.5px solid var(--line);
+      box-shadow: 0 12px 30px -8px rgba(27, 42, 36, 0.22);
+      transition: all .25s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(-8px);
+      opacity: 0;
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: var(--ink);
+    }
+    .app-toast-item.is-visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .app-toast-item.toast-success {
+      border-color: rgba(22, 101, 52, 0.3);
+      background: #F0FDF4;
+      color: #14532D;
+    }
+    .app-toast-item.toast-error,
+    .app-toast-item.toast-danger {
+      border-color: rgba(185, 28, 28, 0.3);
+      background: #FEF2F2;
+      color: #7F1D1D;
+    }
+    .app-toast-item.toast-warning {
+      border-color: rgba(180, 83, 9, 0.3);
+      background: #FFFBEB;
+      color: #78350F;
+    }
+    .app-toast-item.toast-info {
+      border-color: rgba(29, 78, 216, 0.3);
+      background: #EFF6FF;
+      color: #1E3A8A;
+    }
+    .app-toast-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px;
+      color: inherit;
+      opacity: 0.6;
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity .15s ease;
+      min-width: 24px;
+      min-height: 24px;
+    }
+    .app-toast-close:hover {
+      opacity: 1;
+    }
 
     .content {
       padding: 28px;
@@ -885,7 +973,7 @@
 
 </div>
 
-<!-- SAPA BK CUSTOM CONFIRM MODAL -->
+<!-- SAPA BK CUSTOM CONFIRM & ALERT MODAL -->
 <div id="customConfirmModal" class="confirm-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle" aria-describedby="confirmModalDesc">
   <div class="confirm-modal-box">
     <div class="confirm-modal-icon-wrap" id="confirmModalIcon">
@@ -897,15 +985,18 @@
       </svg>
     </div>
     <div class="confirm-modal-content">
-      <h3 id="confirmModalTitle" class="confirm-modal-title">Hapus Arsip Percakapan AI?</h3>
-      <p id="confirmModalDesc" class="confirm-modal-desc">Seluruh riwayat obrolan dan respons asisten pada sesi ini akan dihapus secara permanen dari akun Anda.</p>
+      <h3 id="confirmModalTitle" class="confirm-modal-title">Konfirmasi Tindakan</h3>
+      <p id="confirmModalDesc" class="confirm-modal-desc">Apakah Anda yakin ingin melanjutkan tindakan ini?</p>
     </div>
     <div class="confirm-modal-actions">
       <button type="button" id="confirmModalCancelBtn" class="confirm-btn-cancel">Batal</button>
-      <button type="button" id="confirmModalActionBtn" class="confirm-btn-action">Hapus Percakapan</button>
+      <button type="button" id="confirmModalActionBtn" class="confirm-btn-action">Lanjutkan</button>
     </div>
   </div>
 </div>
+
+<!-- SAPA BK Toast Notification Container -->
+<div id="appToastContainer" class="app-toast-container" aria-live="polite"></div>
 
 <!-- Drawer toggle & Global Modal scripts -->
 <script>
@@ -944,24 +1035,63 @@
   })();
 
   window.showConfirmModal = function(options) {
+    options = options || {};
     const modal = document.getElementById('customConfirmModal');
     const titleEl = document.getElementById('confirmModalTitle');
     const descEl = document.getElementById('confirmModalDesc');
     const cancelBtn = document.getElementById('confirmModalCancelBtn');
     const actionBtn = document.getElementById('confirmModalActionBtn');
+    const iconWrap = document.getElementById('confirmModalIcon');
 
     if (!modal) {
-      if (options.onConfirm) options.onConfirm();
+      if (typeof options.onConfirm === 'function') options.onConfirm();
       return;
     }
 
     titleEl.innerText = options.title || 'Konfirmasi Tindakan';
     descEl.innerText = options.message || 'Apakah Anda yakin ingin melanjutkan tindakan ini?';
     cancelBtn.innerText = options.cancelText || 'Batal';
-    actionBtn.innerText = options.confirmText || 'Lanjutkan';
+    actionBtn.innerText = options.confirmText || (options.isAlert ? 'Mengerti' : 'Lanjutkan');
+
+    if (options.isAlert) {
+      cancelBtn.style.display = 'none';
+      actionBtn.style.flex = '1 1 100%';
+    } else {
+      cancelBtn.style.display = '';
+      actionBtn.style.flex = '1';
+    }
+
+    const type = options.type || (options.isAlert ? 'info' : 'warning');
+
+    // Reset button style
+    actionBtn.className = 'confirm-btn-action';
+    if (type === 'success') {
+      actionBtn.classList.add('btn-action-primary');
+      iconWrap.style.background = 'rgba(21, 128, 61, 0.1)';
+      iconWrap.style.borderColor = 'rgba(21, 128, 61, 0.25)';
+      iconWrap.style.color = 'var(--primary)';
+      iconWrap.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>';
+    } else if (type === 'info') {
+      actionBtn.classList.add('btn-action-info');
+      iconWrap.style.background = 'rgba(37, 99, 235, 0.1)';
+      iconWrap.style.borderColor = 'rgba(37, 99, 235, 0.25)';
+      iconWrap.style.color = '#2563EB';
+      iconWrap.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>';
+    } else if (type === 'danger') {
+      iconWrap.style.background = 'rgba(201, 96, 59, 0.1)';
+      iconWrap.style.borderColor = 'rgba(201, 96, 59, 0.25)';
+      iconWrap.style.color = 'var(--warn)';
+      iconWrap.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>';
+    } else {
+      // Default: warning
+      iconWrap.style.background = 'rgba(217, 119, 6, 0.1)';
+      iconWrap.style.borderColor = 'rgba(217, 119, 6, 0.25)';
+      iconWrap.style.color = '#D97706';
+      iconWrap.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
+    }
 
     modal.classList.add('is-open');
-    cancelBtn.focus();
+    (options.isAlert ? actionBtn : cancelBtn).focus();
 
     function closeModal() {
       modal.classList.remove('is-open');
@@ -972,6 +1102,9 @@
       closeModal();
       if (typeof options.onConfirm === 'function') {
         options.onConfirm();
+      }
+      if (typeof options.onOk === 'function') {
+        options.onOk();
       }
     }
 
@@ -998,6 +1131,106 @@
     actionBtn.addEventListener('click', handleAction);
     document.addEventListener('keydown', handleKeydown);
     modal.addEventListener('click', handleBackdropClick);
+  };
+
+  window.showAlertModal = function(options) {
+    if (typeof options === 'string') {
+      options = { message: options };
+    }
+    options = options || {};
+    window.showConfirmModal({
+      title: options.title || 'Informasi',
+      message: options.message || '',
+      type: options.type || 'info',
+      confirmText: options.confirmText || options.buttonText || 'Mengerti',
+      isAlert: true,
+      onConfirm: options.onOk || options.onConfirm
+    });
+  };
+
+  window.showToast = function(message, type, duration) {
+    type = type || 'info';
+    duration = duration !== undefined ? duration : 3500;
+    const container = document.getElementById('appToastContainer');
+    if (!container) {
+      console.log(`[Toast ${type}]: ${message}`);
+      return;
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `app-toast-item toast-${type}`;
+
+    let iconSvg = '';
+    if (type === 'success') {
+      iconSvg = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="shrink: 0;"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+    } else if (type === 'error' || type === 'danger') {
+      iconSvg = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="shrink: 0;"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
+    } else if (type === 'warning') {
+      iconSvg = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="shrink: 0;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
+    } else {
+      iconSvg = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="shrink: 0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>';
+    }
+
+    toast.innerHTML = `
+      <div style="flex-shrink: 0; margin-top: 1px;">${iconSvg}</div>
+      <div style="flex: 1; font-weight: 500;">${message}</div>
+      <button type="button" class="app-toast-close" aria-label="Tutup notifikasi">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    `;
+
+    container.appendChild(toast);
+
+    requestAnimationFrame(() => {
+      toast.classList.add('is-visible');
+    });
+
+    const closeBtn = toast.querySelector('.app-toast-close');
+    let timer = null;
+
+    function dismiss() {
+      if (timer) clearTimeout(timer);
+      toast.classList.remove('is-visible');
+      setTimeout(() => {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 260);
+    }
+
+    if (closeBtn) closeBtn.addEventListener('click', dismiss);
+    if (duration > 0) {
+      timer = setTimeout(dismiss, duration);
+    }
+  };
+
+  // Intercept data-confirm on forms
+  document.addEventListener('submit', function(e) {
+    const form = e.target;
+    if (!form || !form.dataset) return;
+    const confirmMsg = form.dataset.confirm;
+    if (confirmMsg && !form._isConfirmed) {
+      e.preventDefault();
+      window.showConfirmModal({
+        title: form.dataset.confirmTitle || 'Konfirmasi Tindakan',
+        message: confirmMsg,
+        type: form.dataset.confirmType || 'danger',
+        confirmText: form.dataset.confirmBtn || 'Ya, Lanjutkan',
+        cancelText: 'Batal',
+        onConfirm: function() {
+          form._isConfirmed = true;
+          form.submit();
+        }
+      });
+    }
+  });
+
+  // Override window.alert
+  window.alert = function(msg) {
+    window.showAlertModal({
+      title: 'Perhatian',
+      message: String(msg),
+      type: 'warning',
+      buttonText: 'Mengerti'
+    });
   };
 
   // Real-time Session Guard: otomatis logout tanpa refresh halaman jika akun aktif di perangkat lain
