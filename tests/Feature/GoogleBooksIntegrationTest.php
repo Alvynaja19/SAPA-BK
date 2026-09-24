@@ -227,6 +227,11 @@ class GoogleBooksIntegrationTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertHeader('Content-Type', 'application/pdf');
+
+        $testFile = storage_path('app/public/'.$ebook->file_path);
+        if (file_exists($testFile)) {
+            @unlink($testFile);
+        }
     }
 
     public function test_student_can_stream_curated_sma_book_in_app(): void

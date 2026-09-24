@@ -8,6 +8,7 @@ use App\Models\Questionnaire;
 use App\Models\QuestionnaireResult;
 use App\Models\User;
 use App\Services\CuratedEbookCatalog;
+use App\Services\EbookPdfGenerator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -307,52 +308,9 @@ class SiswaController extends Controller
         $id = $book['id'] ?? 'buku_kurasi';
         $destPath = $dir.'/'.$id.'.pdf';
 
-        $title = $book['title'] ?? 'Buku Pembelajaran Siswa SMA';
-        $authors = is_array($book['authors'] ?? null) ? implode(', ', $book['authors']) : ($book['authors'] ?? 'Pusat Perbukuan RI');
-        $publisher = $book['publisher'] ?? 'Kementerian Pendidikan Dasar dan Menengah RI';
-        $subject = $book['subject'] ?? ($book['category'] ?? 'Mata Pelajaran SMA');
-        $classLevel = $book['class_level'] ?? 'Semua Jenjang';
-        $desc = $book['description'] ?? 'Materi panduan dan referensi belajar komprehensif bagi peserta didik.';
+        $ok = EbookPdfGenerator::generateForCuratedBook($book, $destPath);
 
-        $descPart1 = substr($desc, 0, 100);
-        $descPart2 = substr($desc, 100, 100);
-
-        $content = "%PDF-1.4\n";
-        $content .= "1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj\n";
-        $content .= "2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj\n";
-        $content .= "3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >> endobj\n";
-
-        $stream = 'BT /F1 16 Tf 50 725 Td ('.addcslashes($title, "()\n\r").") Tj ET\n";
-        $stream .= "BT /F1 12 Tf 50 695 Td (SAPA BK - Perpustakaan Digital SMA Negeri 4 Jember) Tj ET\n";
-        $stream .= 'BT /F1 10 Tf 50 665 Td ('.addcslashes('Penyusun: '.substr($authors, 0, 85), "()\n\r").") Tj ET\n";
-        $stream .= 'BT /F1 10 Tf 50 645 Td ('.addcslashes('Penerbit: '.$publisher.' | Jenjang: '.$classLevel, "()\n\r").") Tj ET\n";
-        $stream .= 'BT /F1 10 Tf 50 625 Td ('.addcslashes('Mata Pelajaran / Bidang: '.$subject, "()\n\r").") Tj ET\n";
-        $stream .= "BT /F1 11 Tf 50 590 Td (Pokok Bahasan dan Sinopsis Materi Pembelajaran:) Tj ET\n";
-        if ($descPart1 !== '') {
-            $stream .= 'BT /F1 10 Tf 50 570 Td ('.addcslashes($descPart1, "()\n\r").") Tj ET\n";
-        }
-        if ($descPart2 !== '') {
-            $stream .= 'BT /F1 10 Tf 50 550 Td ('.addcslashes($descPart2, "()\n\r").") Tj ET\n";
-        }
-        $stream .= "BT /F1 9 Tf 50 515 Td (Panduan Belajar: Dokumen resmi ini disajikan langsung di SAPA BK agar siswa dapat belajar tanpa hambatan.) Tj ET\n";
-        $stream .= "BT /F1 9 Tf 50 495 Td (Siswa dapat berdiskusi dengan Guru Bimbingan Konseling melalui fitur Chat Konseling di aplikasi.) Tj ET\n";
-
-        $content .= '4 0 obj << /Length '.strlen($stream)." >> stream\n".$stream."endstream endobj\n";
-        $content .= "5 0 obj << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> endobj\n";
-
-        $xrefPos = strlen($content);
-        $content .= "xref\n0 6\n";
-        $content .= "0000000000 65535 f \n";
-        $content .= "0000000009 00000 n \n";
-        $content .= "0000000058 00000 n \n";
-        $content .= "0000000115 00000 n \n";
-        $content .= "0000000232 00000 n \n";
-        $content .= sprintf("%010d 00000 n \n", $xrefPos - 60);
-        $content .= "trailer << /Size 6 /Root 1 0 R >>\nstartxref\n".$xrefPos."\n%%EOF";
-
-        @file_put_contents($destPath, $content);
-
-        return file_exists($destPath) ? $destPath : null;
+        return $ok && file_exists($destPath) ? $destPath : null;
     }
 
     /**
@@ -428,37 +386,9 @@ class SiswaController extends Controller
         }
         $destPath = $dir.'/'.$filename;
 
-        $title = $ebook->title ?? 'Modul Bimbingan Konseling';
-        $desc = $ebook->description ?? 'Modul bimbingan dan materi pengayaan siswa SMA Negeri 4 Jember.';
+        $ok = EbookPdfGenerator::generateForInternalEbook($ebook, $destPath);
 
-        $content = "%PDF-1.4\n";
-        $content .= "1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj\n";
-        $content .= "2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj\n";
-        $content .= "3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >> endobj\n";
-
-        $stream = 'BT /F1 18 Tf 50 720 Td ('.addcslashes($title, "()\n\r").") Tj ET\n";
-        $stream .= "BT /F1 12 Tf 50 690 Td (SAPA BK - SMA Negeri 4 Jember) Tj ET\n";
-        $stream .= "BT /F1 10 Tf 50 660 Td (Penyusun: Tim Guru Bimbingan Konseling SMAN 4 Jember) Tj ET\n";
-        $stream .= 'BT /F1 10 Tf 50 630 Td ('.addcslashes(substr($desc, 0, 150), "()\n\r").") Tj ET\n";
-        $stream .= "BT /F1 9 Tf 50 590 Td (Dokumen digital ini resmi diterbitkan untuk menunjang kegiatan belajar dan konseling siswa.) Tj ET\n";
-        $stream .= "BT /F1 9 Tf 50 570 Td (Silakan hubungi Guru BK melalui layanan Chat Konseling jika Anda membutuhkan materi bimbingan lengkap.) Tj ET\n";
-
-        $content .= '4 0 obj << /Length '.strlen($stream)." >> stream\n".$stream."endstream endobj\n";
-        $content .= "5 0 obj << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> endobj\n";
-
-        $xrefPos = strlen($content);
-        $content .= "xref\n0 6\n";
-        $content .= "0000000000 65535 f \n";
-        $content .= "0000000009 00000 n \n";
-        $content .= "0000000058 00000 n \n";
-        $content .= "0000000115 00000 n \n";
-        $content .= "0000000232 00000 n \n";
-        $content .= sprintf("%010d 00000 n \n", $xrefPos - 60);
-        $content .= "trailer << /Size 6 /Root 1 0 R >>\nstartxref\n".$xrefPos."\n%%EOF";
-
-        @file_put_contents($destPath, $content);
-
-        return file_exists($destPath) ? $destPath : null;
+        return $ok && file_exists($destPath) ? $destPath : null;
     }
 
     /**
