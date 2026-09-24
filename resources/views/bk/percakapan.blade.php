@@ -58,41 +58,118 @@
   </div>
 
   <!-- Search & Filter Card -->
-  <div class="rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-4 sm:p-5 shadow-xs">
-    <form method="GET" action="{{ route('bk.percakapan') }}" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-      <div class="relative flex-1">
-        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
-          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </span>
+  <div class="rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-5 shadow-xs">
+    <form method="GET" action="{{ route('bk.percakapan') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3.5 items-end">
+      
+      <!-- Filter Kelas Siswa -->
+      <div class="sm:col-span-1 lg:col-span-3 space-y-1.5">
+        <label for="filterKelasAi" class="block text-xs font-bold text-gray-700 dark:text-gray-300">
+          Filter Kelas Siswa
+        </label>
+        <select
+          id="filterKelasAi"
+          name="kelas"
+          class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 text-gray-900 dark:text-white text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500 transition-all cursor-pointer min-h-[42px]"
+        >
+          <option value="">Semua Kelas</option>
+          @if(isset($kelasList))
+            @foreach($kelasList as $k)
+              <option value="{{ $k }}" {{ request('kelas') === $k ? 'selected' : '' }}>
+                Kelas {{ $k }}
+              </option>
+            @endforeach
+          @endif
+        </select>
+      </div>
+
+      <!-- Filter Tanggal Konseling -->
+      <div class="sm:col-span-1 lg:col-span-3 space-y-1.5">
+        <label for="filterTanggalAi" class="block text-xs font-bold text-gray-700 dark:text-gray-300">
+          Filter Tanggal Sesi
+        </label>
         <input
-          type="text"
-          name="q"
-          value="{{ request('q') }}"
-          placeholder="Cari berdasarkan nama siswa, kelas, NISN, atau judul sesi..."
-          class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 text-gray-900 dark:text-white placeholder-gray-400 text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:bg-white dark:focus:bg-gray-900 transition-all"
+          id="filterTanggalAi"
+          type="date"
+          name="tanggal"
+          value="{{ request('tanggal') }}"
+          class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 text-gray-900 dark:text-white text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500 transition-all cursor-pointer min-h-[42px]"
         />
       </div>
 
-      <div class="flex items-center gap-2">
+      <!-- Pencarian Nama Siswa / Topik -->
+      <div class="sm:col-span-2 lg:col-span-4 space-y-1.5">
+        <label for="filterSearchAi" class="block text-xs font-bold text-gray-700 dark:text-gray-300">
+          Pencarian Siswa / Topik
+        </label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </span>
+          <input
+            id="filterSearchAi"
+            type="text"
+            name="q"
+            value="{{ request('q') }}"
+            placeholder="Cari nama siswa, kelas, NISN, atau judul..."
+            class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 text-gray-900 dark:text-white placeholder-gray-400 text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500 transition-all min-h-[42px]"
+          />
+        </div>
+      </div>
+
+      <!-- Tombol Aksi Filter -->
+      <div class="sm:col-span-2 lg:col-span-2 flex items-center gap-2">
         <button
           type="submit"
-          class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-all cursor-pointer"
+          class="flex-1 min-h-[42px] px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-all cursor-pointer flex items-center justify-center gap-1.5"
         >
-          Cari Sesi
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+          </svg>
+          <span>Terapkan</span>
         </button>
 
-        @if(request()->has('q'))
+        @if(request()->hasAny(['kelas', 'tanggal', 'q']))
           <a
             href="{{ route('bk.percakapan') }}"
-            class="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 text-xs sm:text-sm font-semibold transition-all"
+            class="min-h-[42px] px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 text-xs sm:text-sm font-semibold transition-all flex items-center justify-center"
+            title="Reset semua filter"
           >
             Reset
           </a>
         @endif
       </div>
     </form>
+
+    <!-- Ringkasan Filter Aktif -->
+    @if(request()->hasAny(['kelas', 'tanggal', 'q']))
+      <div class="flex items-center gap-2 mt-4 pt-3.5 border-t border-gray-100 dark:border-gray-800 text-xs text-gray-500 dark:text-gray-400 flex-wrap">
+        <span class="font-bold text-gray-700 dark:text-gray-300">Filter Aktif:</span>
+
+        @if(request('kelas'))
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200/50 dark:border-blue-800/40 text-[11px] font-bold">
+            Kelas: {{ request('kelas') }}
+          </span>
+        @endif
+
+        @if(request('tanggal'))
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/50 dark:border-emerald-800/40 text-[11px] font-bold">
+            Tanggal: {{ \Carbon\Carbon::parse(request('tanggal'))->translatedFormat('d M Y') }}
+          </span>
+        @endif
+
+        @if(request('q'))
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/50 dark:border-amber-800/40 text-[11px] font-bold">
+            Pencarian: "{{ request('q') }}"
+          </span>
+        @endif
+
+        <a href="{{ route('bk.percakapan') }}" class="text-[11px] text-rose-600 dark:text-rose-400 hover:underline font-bold ml-auto">
+          Hapus Semua Filter &times;
+        </a>
+      </div>
+    @endif
   </div>
 
   <!-- Sesi Percakapan List Card (TailAdmin) -->

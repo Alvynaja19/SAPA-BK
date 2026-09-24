@@ -14,6 +14,7 @@ use App\Models\KnowledgeDocument;
 use App\Models\Questionnaire;
 use App\Models\QuestionnaireQuestion;
 use App\Models\QuestionnaireResult;
+use App\Models\Student;
 use App\Models\User;
 use App\Services\DashboardAnalyticsService;
 use App\Services\RssArticleService;
@@ -79,6 +80,20 @@ class GuruBkController extends Controller
                 $q->where('mode', 'ai')->orWhereNull('mode');
             });
 
+        // Filter Kelas Siswa
+        if ($request->filled('kelas')) {
+            $kelas = trim($request->input('kelas'));
+            $query->whereHas('user', function ($uq) use ($kelas) {
+                $uq->where('kelas', $kelas);
+            });
+        }
+
+        // Filter Tanggal Konseling
+        if ($request->filled('tanggal')) {
+            $tanggal = trim($request->input('tanggal'));
+            $query->whereDate('created_at', $tanggal);
+        }
+
         if ($request->filled('q')) {
             $search = trim($request->input('q'));
             $query->where(function ($q) use ($search) {
@@ -95,7 +110,9 @@ class GuruBkController extends Controller
         $totalAi = ChatSession::where(fn ($q) => $q->where('mode', 'ai')->orWhereNull('mode'))->count();
         $totalLive = ChatSession::where('mode', 'guru_bk')->count();
 
-        return view('bk.percakapan', compact('sessions', 'totalAi', 'totalLive'));
+        $kelasList = $this->getDaftarKelasSiswa();
+
+        return view('bk.percakapan', compact('sessions', 'totalAi', 'totalLive', 'kelasList'));
     }
 
     /**
@@ -116,10 +133,26 @@ class GuruBkController extends Controller
             $query->where('teacher_id', $request->input('teacher_id'));
         }
 
+        // 1. Filter Kelas Siswa
+        if ($request->filled('kelas')) {
+            $kelas = trim($request->input('kelas'));
+            $query->whereHas('user', function ($uq) use ($kelas) {
+                $uq->where('kelas', $kelas);
+            });
+        }
+
+        // 2. Filter Tanggal Konseling
+        if ($request->filled('tanggal')) {
+            $tanggal = trim($request->input('tanggal'));
+            $query->whereDate('created_at', $tanggal);
+        }
+
+        // 3. Filter Status (opsional)
         if ($request->filled('status') && in_array($request->status, ['active', 'closed'], true)) {
             $query->where('status', $request->status);
         }
 
+        // 4. Pencarian Teks
         if ($request->filled('q')) {
             $search = trim($request->input('q'));
             $query->where(function ($q) use ($search) {
@@ -140,7 +173,28 @@ class GuruBkController extends Controller
         $totalLive = ChatSession::where('mode', 'guru_bk')->count();
         $teachers = User::where('role', 'guru_bk')->orderBy('name')->get();
 
-        return view('bk.riwayat-live-chat', compact('sessions', 'totalAi', 'totalLive', 'teachers'));
+        $kelasList = $this->getDaftarKelasSiswa();
+
+        return view('bk.riwayat-live-chat', compact('sessions', 'totalAi', 'totalLive', 'teachers', 'kelasList'));
+    }
+
+    /**
+     * Mengambil daftar unik seluruh kelas siswa yang terdaftar di sistem.
+     */
+    private function getDaftarKelasSiswa()
+    {
+        $userClasses = User::where('role', 'siswa')
+            ->whereNotNull('kelas')
+            ->where('kelas', '!=', '')
+            ->distinct()
+            ->pluck('kelas');
+
+        $studentClasses = Student::whereNotNull('kelas')
+            ->where('kelas', '!=', '')
+            ->distinct()
+            ->pluck('kelas');
+
+        return $userClasses->merge($studentClasses)->unique()->sort()->values();
     }
 
     public function detailPercakapan(int $id): View
