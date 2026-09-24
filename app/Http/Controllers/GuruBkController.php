@@ -75,7 +75,7 @@ class GuruBkController extends Controller
      */
     public function percakapan(Request $request): View
     {
-        $query = ChatSession::with(['user', 'messages'])
+        $query = ChatSession::with(['user', 'messages.evaluation'])
             ->where(function ($q) {
                 $q->where('mode', 'ai')->orWhereNull('mode');
             });
