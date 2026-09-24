@@ -155,22 +155,34 @@
           <span :class="{ 'block': $store.sidebar.isMobileOpen || $store.sidebar.isExpanded || $store.sidebar.isHovered, 'hidden': !$store.sidebar.isMobileOpen && !$store.sidebar.isExpanded && !$store.sidebar.isHovered }">Manajemen User</span>
         </a>
 
-        <!-- Riwayat Percakapan Chatbot -->
+        <!-- Riwayat Percakapan Chatbot AI -->
         <a
           href="{{ route('bk.percakapan') }}"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.percakapan*') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
-          title="Riwayat Sesi Chatbot"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ (request()->routeIs('bk.percakapan*') && !request()->routeIs('bk.live-chat.riwayat*')) ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
+          title="Riwayat Sesi Percakapan Chatbot AI"
         >
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 2a1.5 1.5 0 100 3 1.5 1.5 0 000-3zM12 5v3M4 11a3 3 0 013-3h10a3 3 0 013 3v6a3 3 0 01-3 3H7a3 3 0 01-3-3v-6zM2 13v2m20-2v2M9 13v2m6-2v2M10 17h4" />
           </svg>
-          <span :class="{ 'block': $store.sidebar.isMobileOpen || $store.sidebar.isExpanded || $store.sidebar.isHovered, 'hidden': !$store.sidebar.isMobileOpen && !$store.sidebar.isExpanded && !$store.sidebar.isHovered }">Riwayat Chat AI</span>
+          <span :class="{ 'block': $store.sidebar.isMobileOpen || $store.sidebar.isExpanded || $store.sidebar.isHovered, 'hidden': !$store.sidebar.isMobileOpen && !$store.sidebar.isExpanded && !$store.sidebar.isHovered }">Riwayat Chatbot AI</span>
         </a>
 
-        <!-- Live Chat Konseling -->
+        <!-- Riwayat Live Chat Guru BK -->
+        <a
+          href="{{ route('bk.live-chat.riwayat') }}"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.live-chat.riwayat*') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
+          title="Riwayat Sesi Konseling Live Chat Guru BK"
+        >
+          <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          </svg>
+          <span :class="{ 'block': $store.sidebar.isMobileOpen || $store.sidebar.isExpanded || $store.sidebar.isHovered, 'hidden': !$store.sidebar.isMobileOpen && !$store.sidebar.isExpanded && !$store.sidebar.isHovered }">Riwayat Live Chat BK</span>
+        </a>
+
+        <!-- Live Chat Konseling (Ruang Chat Aktif) -->
         <a
           href="{{ route('bk.live-chat') }}"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('bk.live-chat') ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ (request()->routeIs('bk.live-chat') && !request()->routeIs('bk.live-chat.riwayat*')) ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
           title="Live Chat Siswa (08:00 - 15:00)"
         >
           <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">

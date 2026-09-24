@@ -68,16 +68,84 @@ class GuruBkController extends Controller
         return view('bk.siswa', compact('siswa'));
     }
 
-    public function percakapan(): View
+    /**
+     * Riwayat Percakapan Chatbot AI Siswa.
+     * Khusus menampilkan sesi konsultasi digital antara siswa dengan Chatbot / AI Gemini.
+     */
+    public function percakapan(Request $request): View
     {
-        $sessions = ChatSession::with(['user', 'messages'])->latest()->paginate(15);
+        $query = ChatSession::with(['user', 'messages'])
+            ->where(function ($q) {
+                $q->where('mode', 'ai')->orWhereNull('mode');
+            });
 
-        return view('bk.percakapan', compact('sessions'));
+        if ($request->filled('q')) {
+            $search = trim($request->input('q'));
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($uq) use ($search) {
+                        $uq->where('name', 'like', "%{$search}%")
+                            ->orWhere('kelas', 'like', "%{$search}%")
+                            ->orWhere('nisn', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $sessions = $query->latest()->paginate(15)->withQueryString();
+        $totalAi = ChatSession::where(fn ($q) => $q->where('mode', 'ai')->orWhereNull('mode'))->count();
+        $totalLive = ChatSession::where('mode', 'guru_bk')->count();
+
+        return view('bk.percakapan', compact('sessions', 'totalAi', 'totalLive'));
+    }
+
+    /**
+     * Riwayat Sesi Live Chat Konseling Guru BK.
+     * Khusus menampilkan sesi konsultasi tatap maya langsung antara siswa dan Guru BK.
+     */
+    public function riwayatLiveChat(Request $request): View
+    {
+        $query = ChatSession::with(['user', 'teacher', 'closedBy', 'messages'])
+            ->where('mode', 'guru_bk');
+
+        $user = Auth::user();
+        if ($user->role === 'guru_bk') {
+            if ($request->input('scope') !== 'all') {
+                $query->where('teacher_id', $user->id);
+            }
+        } elseif ($request->filled('teacher_id')) {
+            $query->where('teacher_id', $request->input('teacher_id'));
+        }
+
+        if ($request->filled('status') && in_array($request->status, ['active', 'closed'], true)) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('q')) {
+            $search = trim($request->input('q'));
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($uq) use ($search) {
+                        $uq->where('name', 'like', "%{$search}%")
+                            ->orWhere('kelas', 'like', "%{$search}%")
+                            ->orWhere('nisn', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('teacher', function ($tq) use ($search) {
+                        $tq->where('name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $sessions = $query->latest()->paginate(15)->withQueryString();
+        $totalAi = ChatSession::where(fn ($q) => $q->where('mode', 'ai')->orWhereNull('mode'))->count();
+        $totalLive = ChatSession::where('mode', 'guru_bk')->count();
+        $teachers = User::where('role', 'guru_bk')->orderBy('name')->get();
+
+        return view('bk.riwayat-live-chat', compact('sessions', 'totalAi', 'totalLive', 'teachers'));
     }
 
     public function detailPercakapan(int $id): View
     {
-        $session = ChatSession::with(['user', 'messages.evaluation'])->findOrFail($id);
+        $session = ChatSession::with(['user', 'teacher', 'closedBy', 'messages.evaluation'])->findOrFail($id);
 
         return view('bk.percakapan-detail', compact('session'));
     }

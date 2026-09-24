@@ -79,6 +79,8 @@ Route::middleware('auth')->group(function () {
             return redirect()->route('admin.users');
         })->name('siswa');
         Route::get('/percakapan', [GuruBkController::class, 'percakapan'])->name('percakapan');
+        Route::get('/riwayat-ai', [GuruBkController::class, 'percakapan'])->name('percakapan.ai');
+        Route::get('/riwayat-live-chat', [GuruBkController::class, 'riwayatLiveChat'])->name('live-chat.riwayat');
         Route::get('/percakapan/{id}', [GuruBkController::class, 'detailPercakapan'])->name('percakapan.detail');
         Route::get('/live-chat', [GuruBkController::class, 'liveChat'])->name('live-chat');
         Route::get('/live-chat/api/queue', [GuruBkController::class, 'liveChatQueue'])->name('live-chat.queue');

@@ -68,6 +68,8 @@ class SapaBkTest extends TestCase
 
             $this->get('/bk/siswa')->assertRedirect(route('admin.users'));
             $this->get('/bk/percakapan')->assertStatus(200);
+            $this->get('/bk/riwayat-ai')->assertStatus(200);
+            $this->get('/bk/riwayat-live-chat')->assertStatus(200);
             $this->get('/bk/live-chat')->assertStatus(200);
             $this->get('/bk/ebook')->assertStatus(200);
             $this->get('/bk/artikel')->assertStatus(200);
@@ -94,6 +96,8 @@ class SapaBkTest extends TestCase
             $this->get('/admin/konfigurasi')->assertStatus(200);
             $this->get('/admin/log')->assertStatus(200);
             $this->get('/admin/laporan')->assertStatus(200);
+            $this->get('/bk/percakapan')->assertStatus(200);
+            $this->get('/bk/riwayat-live-chat')->assertStatus(200);
         }
     }
 
