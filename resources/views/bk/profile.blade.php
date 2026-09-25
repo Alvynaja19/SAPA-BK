@@ -229,22 +229,15 @@
             <label for="inputName" class="block text-xs font-bold text-gray-700 dark:text-gray-300">
               Nama Lengkap beserta Gelar Akademik <span class="text-rose-500">*</span>
             </label>
-            <div class="relative">
-              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </span>
-              <input
-                type="text"
-                id="inputName"
-                name="name"
-                value="{{ old('name', $user->name) }}"
-                required
-                class="w-full pl-10 pr-4 py-2.5 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all font-medium"
-                placeholder="Contoh: Habibie S.T, M.Pd"
-              />
-            </div>
+            <input
+              type="text"
+              id="inputName"
+              name="name"
+              value="{{ old('name', $user->name) }}"
+              required
+              class="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all font-medium"
+              placeholder="Contoh: Habibie S.T, M.Pd"
+            />
             <p class="text-[11px] text-gray-500 dark:text-gray-400">
               Nama resmi yang tampil pada sesi bimbingan konseling dan rekapitulasi siswa.
             </p>
@@ -252,23 +245,24 @@
 
           <!-- Email Terdaftar (Terkunci) -->
           <div class="space-y-1.5">
-            <label for="inputEmail" class="block text-xs font-bold text-gray-700 dark:text-gray-300">
-              Alamat Email Resmi (Terkunci)
-            </label>
-            <div class="relative">
-              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div class="flex items-center justify-between">
+              <label for="inputEmail" class="block text-xs font-bold text-gray-700 dark:text-gray-300">
+                Alamat Email Resmi
+              </label>
+              <span class="inline-flex items-center gap-1 text-[10.5px] font-semibold text-gray-400 dark:text-gray-500">
+                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
+                Terkunci
               </span>
-              <input
-                type="email"
-                id="inputEmail"
-                value="{{ $user->email }}"
-                disabled
-                class="w-full pl-10 pr-4 py-2.5 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-gray-100/80 dark:bg-gray-800/80 text-gray-500 dark:text-gray-400 cursor-not-allowed font-medium"
-              />
             </div>
+            <input
+              type="email"
+              id="inputEmail"
+              value="{{ $user->email }}"
+              disabled
+              class="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-gray-100/80 dark:bg-gray-800/80 text-gray-500 dark:text-gray-400 cursor-not-allowed font-medium"
+            />
             <p class="text-[11px] text-gray-500 dark:text-gray-400">
               Email resmi sekolah terhubung dengan autentikasi akun SAPA BK SMAN 4 Jember.
             </p>
@@ -279,21 +273,14 @@
             <label for="inputNoHp" class="block text-xs font-bold text-gray-700 dark:text-gray-300">
               Nomor Telepon / WhatsApp Aktif
             </label>
-            <div class="relative">
-              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-              </span>
-              <input
-                type="text"
-                id="inputNoHp"
-                name="no_hp"
-                value="{{ old('no_hp', preg_replace('/\.0+$/', '', (string)$user->no_hp)) }}"
-                class="w-full pl-10 pr-4 py-2.5 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all font-medium"
-                placeholder="Contoh: 081234567890"
-              />
-            </div>
+            <input
+              type="text"
+              id="inputNoHp"
+              name="no_hp"
+              value="{{ old('no_hp', preg_replace('/\.0+$/', '', (string)$user->no_hp)) }}"
+              class="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all font-medium"
+              placeholder="Contoh: 081234567890"
+            />
             <p class="text-[11px] text-gray-500 dark:text-gray-400">
               Digunakan saat koordinasi sesi konsultasi lanjutan atau notifikasi konseling siswa.
             </p>
@@ -301,22 +288,23 @@
 
           <!-- Unit Penugasan (Terkunci) -->
           <div class="space-y-1.5">
-            <label class="block text-xs font-bold text-gray-700 dark:text-gray-300">
-              Unit Penugasan Layanan
-            </label>
-            <div class="relative">
-              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-bold text-gray-700 dark:text-gray-300">
+                Unit Penugasan Layanan
+              </label>
+              <span class="inline-flex items-center gap-1 text-[10.5px] font-semibold text-gray-400 dark:text-gray-500">
+                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
+                Terkunci
               </span>
-              <input
-                type="text"
-                value="SMA Negeri 4 Jember : Layanan Bimbingan Konseling"
-                disabled
-                class="w-full pl-10 pr-4 py-2.5 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-gray-100/80 dark:bg-gray-800/80 text-gray-500 dark:text-gray-400 cursor-not-allowed font-medium"
-              />
             </div>
+            <input
+              type="text"
+              value="SMA Negeri 4 Jember : Layanan Bimbingan Konseling"
+              disabled
+              class="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-gray-100/80 dark:bg-gray-800/80 text-gray-500 dark:text-gray-400 cursor-not-allowed font-medium"
+            />
             <p class="text-[11px] text-gray-500 dark:text-gray-400">
               Unit organisasi resmi bimbingan konseling di bawah naungan SMA Negeri 4 Jember.
             </p>
@@ -346,21 +334,14 @@
             <label for="inputPassword" class="block text-xs font-bold text-gray-700 dark:text-gray-300">
               Kata Sandi Baru
             </label>
-            <div class="relative">
-              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-                </svg>
-              </span>
-              <input
-                type="password"
-                id="inputPassword"
-                name="password"
-                autocomplete="new-password"
-                class="w-full pl-10 pr-4 py-2.5 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all font-medium"
-                placeholder="Minimal 8 karakter"
-              />
-            </div>
+            <input
+              type="password"
+              id="inputPassword"
+              name="password"
+              autocomplete="new-password"
+              class="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all font-medium"
+              placeholder="Minimal 8 karakter"
+            />
             <p class="text-[11px] text-gray-500 dark:text-gray-400">
               Gunakan kombinasi huruf, angka, dan simbol untuk keamanan maksimal.
             </p>
@@ -371,21 +352,14 @@
             <label for="inputPasswordConfirmation" class="block text-xs font-bold text-gray-700 dark:text-gray-300">
               Ulangi Kata Sandi Baru
             </label>
-            <div class="relative">
-              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-              </span>
-              <input
-                type="password"
-                id="inputPasswordConfirmation"
-                name="password_confirmation"
-                autocomplete="new-password"
-                class="w-full pl-10 pr-4 py-2.5 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all font-medium"
-                placeholder="Ulangi kata sandi baru"
-              />
-            </div>
+            <input
+              type="password"
+              id="inputPasswordConfirmation"
+              name="password_confirmation"
+              autocomplete="new-password"
+              class="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all font-medium"
+              placeholder="Ulangi kata sandi baru"
+            />
             <p class="text-[11px] text-gray-500 dark:text-gray-400">
               Pastikan kata sandi sama persis dengan kolom sebelumnya.
             </p>
