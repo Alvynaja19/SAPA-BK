@@ -207,7 +207,7 @@
         </div>
       </div>
 
-      <hr class="border-gray-100 dark:border-gray-800" />
+      <div class="border-t border-gray-100 dark:border-gray-800" style="margin-top: 2.25rem; margin-bottom: 2.25rem;"></div>
 
       <!-- ================= SECTION 2: DATA POKOK GURU BK ================= -->
       <div class="space-y-4">
@@ -312,7 +312,7 @@
         </div>
       </div>
 
-      <hr class="border-gray-100 dark:border-gray-800" />
+      <div class="border-t border-gray-100 dark:border-gray-800" style="margin-top: 2.25rem; margin-bottom: 2.25rem;"></div>
 
       <!-- ================= SECTION 3: KEAMANAN & KATA SANDI ================= -->
       <div class="space-y-4">
@@ -367,17 +367,18 @@
         </div>
       </div>
 
-      <hr class="border-gray-100 dark:border-gray-800" />
-
       <!-- ================= SUBMIT ACTION BAR ================= -->
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
-        <p class="text-xs text-gray-500 dark:text-gray-400 text-center sm:text-left">
-          Perubahan profil langsung aktif di seluruh sistem SAPA BK setelah disimpan.
-        </p>
+      <div class="border-t border-gray-100 dark:border-gray-800 pt-8 sm:pt-10 mt-8 sm:mt-12 flex flex-col sm:flex-row items-center justify-between gap-5" style="margin-top: 3rem; padding-top: 2rem;">
+        <div class="flex items-center gap-2.5 text-xs text-gray-500 dark:text-gray-400 text-center sm:text-left max-w-md">
+          <svg class="h-4 w-4 text-brand-600 dark:text-brand-400 shrink-0 hidden sm:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span class="leading-relaxed">Perubahan profil langsung aktif di seluruh sistem SAPA BK setelah disimpan.</span>
+        </div>
 
         <button
           type="submit"
-          class="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-brand-600/25 transition-all inline-flex items-center justify-center gap-2 cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
+          class="w-full sm:w-auto min-h-[46px] px-7 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-brand-600/25 transition-all inline-flex items-center justify-center gap-2 cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 shrink-0"
         >
           <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
