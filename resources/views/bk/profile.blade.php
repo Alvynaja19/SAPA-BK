@@ -367,20 +367,17 @@
         </div>
       </div>
 
-      <!-- ================= SUBMIT ACTION BAR ================= -->
-      <div class="border-t border-gray-100 dark:border-gray-800 pt-8 sm:pt-10 mt-8 sm:mt-12 flex flex-col sm:flex-row items-center justify-between gap-5" style="margin-top: 3rem; padding-top: 2rem;">
-        <div class="flex items-center gap-2.5 text-xs text-gray-500 dark:text-gray-400 text-center sm:text-left max-w-md">
-          <svg class="h-4 w-4 text-brand-600 dark:text-brand-400 shrink-0 hidden sm:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span class="leading-relaxed">Perubahan profil langsung aktif di seluruh sistem SAPA BK setelah disimpan.</span>
-        </div>
+      <!-- Divider -->
+      <div class="border-t border-gray-100 dark:border-gray-800" style="margin-top: 2.5rem; margin-bottom: 2rem;"></div>
 
+      <!-- Submit Action Bar -->
+      <div style="display: flex; justify-content: flex-end; align-items: center; width: 100%;">
         <button
           type="submit"
-          class="w-full sm:w-auto min-h-[46px] px-7 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-brand-600/25 transition-all inline-flex items-center justify-center gap-2 cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 shrink-0"
+          class="min-h-[44px] px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-brand-600/25 transition-all cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
+          style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 24px; border-radius: 12px; cursor: pointer; width: auto;"
         >
-          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 16px; height: 16px;">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
           </svg>
           <span>Simpan Perubahan Profil</span>
