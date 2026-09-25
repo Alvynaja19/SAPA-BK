@@ -223,91 +223,105 @@
           </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <!-- Nama Lengkap (Editable) -->
-          <div class="space-y-1.5">
-            <label for="inputName" class="block text-xs font-bold text-gray-700 dark:text-gray-300">
-              Nama Lengkap beserta Gelar Akademik <span class="text-rose-500">*</span>
-            </label>
-            <input
-              type="text"
-              id="inputName"
-              name="name"
-              value="{{ old('name', $user->name) }}"
-              required
-              class="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all font-medium"
-              placeholder="Contoh: Habibie S.T, M.Pd"
-            />
-            <p class="text-[11px] text-gray-500 dark:text-gray-400">
-              Nama resmi yang tampil pada sesi bimbingan konseling dan rekapitulasi siswa.
-            </p>
-          </div>
-
-          <!-- Email Terdaftar (Terkunci) -->
-          <div class="space-y-1.5">
-            <div class="flex items-center justify-between">
-              <label for="inputEmail" class="block text-xs font-bold text-gray-700 dark:text-gray-300">
-                Alamat Email Resmi
-              </label>
-              <span class="inline-flex items-center gap-1 text-[10.5px] font-semibold text-gray-400 dark:text-gray-500">
-                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-                Terkunci
-              </span>
+        <div class="space-y-6">
+          <!-- Baris 1: Nama Lengkap & Email Resmi -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+            <!-- Nama Lengkap (Editable) -->
+            <div>
+              <div style="height: 24px; min-height: 24px; max-height: 24px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                <label for="inputName" class="text-xs font-bold text-gray-700 dark:text-gray-300">
+                  Nama Lengkap beserta Gelar Akademik <span class="text-rose-500">*</span>
+                </label>
+              </div>
+              <input
+                type="text"
+                id="inputName"
+                name="name"
+                value="{{ old('name', $user->name) }}"
+                required
+                class="w-full px-4 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 font-medium"
+                style="height: 46px; min-height: 46px; max-height: 46px; width: 100%; box-sizing: border-box; font-size: 13.5px;"
+                placeholder="Contoh: Habibie S.T, M.Pd"
+              />
+              <p class="text-[11px] text-gray-500 dark:text-gray-400" style="margin-top: 6px; line-height: 1.4;">
+                Nama resmi yang tampil pada sesi bimbingan konseling dan rekapitulasi siswa.
+              </p>
             </div>
-            <input
-              type="email"
-              id="inputEmail"
-              value="{{ $user->email }}"
-              disabled
-              class="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-gray-100/80 dark:bg-gray-800/80 text-gray-500 dark:text-gray-400 cursor-not-allowed font-medium"
-            />
-            <p class="text-[11px] text-gray-500 dark:text-gray-400">
-              Email resmi sekolah terhubung dengan autentikasi akun SAPA BK SMAN 4 Jember.
-            </p>
-          </div>
 
-          <!-- Nomor Telepon / WhatsApp (Editable) -->
-          <div class="space-y-1.5">
-            <label for="inputNoHp" class="block text-xs font-bold text-gray-700 dark:text-gray-300">
-              Nomor Telepon / WhatsApp Aktif
-            </label>
-            <input
-              type="text"
-              id="inputNoHp"
-              name="no_hp"
-              value="{{ old('no_hp', preg_replace('/\.0+$/', '', (string)$user->no_hp)) }}"
-              class="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all font-medium"
-              placeholder="Contoh: 081234567890"
-            />
-            <p class="text-[11px] text-gray-500 dark:text-gray-400">
-              Digunakan saat koordinasi sesi konsultasi lanjutan atau notifikasi konseling siswa.
-            </p>
-          </div>
-
-          <!-- Unit Penugasan (Terkunci) -->
-          <div class="space-y-1.5">
-            <div class="flex items-center justify-between">
-              <label class="block text-xs font-bold text-gray-700 dark:text-gray-300">
-                Unit Penugasan Layanan
-              </label>
-              <span class="inline-flex items-center gap-1 text-[10.5px] font-semibold text-gray-400 dark:text-gray-500">
-                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-                Terkunci
-              </span>
+            <!-- Email Terdaftar (Terkunci) -->
+            <div>
+              <div style="height: 24px; min-height: 24px; max-height: 24px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                <label for="inputEmail" class="text-xs font-bold text-gray-700 dark:text-gray-300">
+                  Alamat Email Resmi
+                </label>
+                <span class="inline-flex items-center gap-1 text-[11px] font-medium text-gray-400 dark:text-gray-500">
+                  <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                  Terkunci
+                </span>
+              </div>
+              <input
+                type="email"
+                id="inputEmail"
+                value="{{ $user->email }}"
+                disabled
+                class="w-full px-4 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-gray-100/80 dark:bg-gray-800/80 text-gray-500 dark:text-gray-400 cursor-not-allowed font-medium"
+                style="height: 46px; min-height: 46px; max-height: 46px; width: 100%; box-sizing: border-box; font-size: 13.5px;"
+              />
+              <p class="text-[11px] text-gray-500 dark:text-gray-400" style="margin-top: 6px; line-height: 1.4;">
+                Email resmi sekolah terhubung dengan autentikasi akun SAPA BK SMAN 4 Jember.
+              </p>
             </div>
-            <input
-              type="text"
-              value="SMA Negeri 4 Jember : Layanan Bimbingan Konseling"
-              disabled
-              class="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-gray-100/80 dark:bg-gray-800/80 text-gray-500 dark:text-gray-400 cursor-not-allowed font-medium"
-            />
-            <p class="text-[11px] text-gray-500 dark:text-gray-400">
-              Unit organisasi resmi bimbingan konseling di bawah naungan SMA Negeri 4 Jember.
-            </p>
+          </div>
+
+          <!-- Baris 2: Nomor Telepon & Unit Penugasan -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+            <!-- Nomor Telepon / WhatsApp (Editable) -->
+            <div>
+              <div style="height: 24px; min-height: 24px; max-height: 24px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                <label for="inputNoHp" class="text-xs font-bold text-gray-700 dark:text-gray-300">
+                  Nomor Telepon / WhatsApp Aktif
+                </label>
+              </div>
+              <input
+                type="text"
+                id="inputNoHp"
+                name="no_hp"
+                value="{{ old('no_hp', preg_replace('/\.0+$/', '', (string)$user->no_hp)) }}"
+                class="w-full px-4 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 font-medium"
+                style="height: 46px; min-height: 46px; max-height: 46px; width: 100%; box-sizing: border-box; font-size: 13.5px;"
+                placeholder="Contoh: 081234567890"
+              />
+              <p class="text-[11px] text-gray-500 dark:text-gray-400" style="margin-top: 6px; line-height: 1.4;">
+                Digunakan saat koordinasi sesi konsultasi lanjutan atau notifikasi konseling siswa.
+              </p>
+            </div>
+
+            <!-- Unit Penugasan (Terkunci) -->
+            <div>
+              <div style="height: 24px; min-height: 24px; max-height: 24px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                <label class="text-xs font-bold text-gray-700 dark:text-gray-300">
+                  Unit Penugasan Layanan
+                </label>
+                <span class="inline-flex items-center gap-1 text-[11px] font-medium text-gray-400 dark:text-gray-500">
+                  <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                  Terkunci
+                </span>
+              </div>
+              <input
+                type="text"
+                value="SMA Negeri 4 Jember : Layanan Bimbingan Konseling"
+                disabled
+                class="w-full px-4 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-gray-100/80 dark:bg-gray-800/80 text-gray-500 dark:text-gray-400 cursor-not-allowed font-medium"
+                style="height: 46px; min-height: 46px; max-height: 46px; width: 100%; box-sizing: border-box; font-size: 13.5px;"
+              />
+              <p class="text-[11px] text-gray-500 dark:text-gray-400" style="margin-top: 6px; line-height: 1.4;">
+                Unit organisasi resmi bimbingan konseling di bawah naungan SMA Negeri 4 Jember.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -328,39 +342,45 @@
           </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
           <!-- Kata Sandi Baru -->
-          <div class="space-y-1.5">
-            <label for="inputPassword" class="block text-xs font-bold text-gray-700 dark:text-gray-300">
-              Kata Sandi Baru
-            </label>
+          <div>
+            <div style="height: 24px; min-height: 24px; max-height: 24px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+              <label for="inputPassword" class="text-xs font-bold text-gray-700 dark:text-gray-300">
+                Kata Sandi Baru
+              </label>
+            </div>
             <input
               type="password"
               id="inputPassword"
               name="password"
               autocomplete="new-password"
-              class="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all font-medium"
+              class="w-full px-4 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 font-medium"
+              style="height: 46px; min-height: 46px; max-height: 46px; width: 100%; box-sizing: border-box; font-size: 13.5px;"
               placeholder="Minimal 8 karakter"
             />
-            <p class="text-[11px] text-gray-500 dark:text-gray-400">
+            <p class="text-[11px] text-gray-500 dark:text-gray-400" style="margin-top: 6px; line-height: 1.4;">
               Gunakan kombinasi huruf, angka, dan simbol untuk keamanan maksimal.
             </p>
           </div>
 
           <!-- Konfirmasi Kata Sandi Baru -->
-          <div class="space-y-1.5">
-            <label for="inputPasswordConfirmation" class="block text-xs font-bold text-gray-700 dark:text-gray-300">
-              Ulangi Kata Sandi Baru
-            </label>
+          <div>
+            <div style="height: 24px; min-height: 24px; max-height: 24px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+              <label for="inputPasswordConfirmation" class="text-xs font-bold text-gray-700 dark:text-gray-300">
+                Ulangi Kata Sandi Baru
+              </label>
+            </div>
             <input
               type="password"
               id="inputPasswordConfirmation"
               name="password_confirmation"
               autocomplete="new-password"
-              class="w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all font-medium"
+              class="w-full px-4 rounded-xl text-xs sm:text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-hidden focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 font-medium"
+              style="height: 46px; min-height: 46px; max-height: 46px; width: 100%; box-sizing: border-box; font-size: 13.5px;"
               placeholder="Ulangi kata sandi baru"
             />
-            <p class="text-[11px] text-gray-500 dark:text-gray-400">
+            <p class="text-[11px] text-gray-500 dark:text-gray-400" style="margin-top: 6px; line-height: 1.4;">
               Pastikan kata sandi sama persis dengan kolom sebelumnya.
             </p>
           </div>
