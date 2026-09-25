@@ -720,4 +720,11 @@ class GuruBkController extends Controller
 
         return back()->with('success', 'FAQ baru berhasil ditambahkan.');
     }
+
+    public function profile(): View
+    {
+        $user = Auth::user();
+
+        return view('bk.profile', compact('user'));
+    }
 }

@@ -242,9 +242,17 @@ class AuthController extends Controller
         ]);
     }
 
-    public function profile(): View
+    public function profile(): View|RedirectResponse
     {
         $user = Auth::user();
+
+        if ($user->isGuruBk()) {
+            return redirect()->route('bk.profile');
+        }
+
+        if ($user->isAdmin()) {
+            return view('bk.profile', compact('user'));
+        }
 
         return view('profile', compact('user'));
     }

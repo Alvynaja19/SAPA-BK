@@ -75,6 +75,7 @@ Route::middleware('auth')->group(function () {
     // Rute Guru BK
     Route::middleware('role:guru_bk')->prefix('bk')->as('bk.')->group(function () {
         Route::get('/dashboard', [GuruBkController::class, 'dashboard'])->name('dashboard');
+        Route::get('/profil', [GuruBkController::class, 'profile'])->name('profile');
         Route::get('/siswa', function () {
             return redirect()->route('admin.users');
         })->name('siswa');

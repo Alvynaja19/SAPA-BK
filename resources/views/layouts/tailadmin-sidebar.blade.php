@@ -295,6 +295,18 @@
           </svg>
           <span :class="{ 'block': $store.sidebar.isMobileOpen || $store.sidebar.isExpanded || $store.sidebar.isHovered, 'hidden': !$store.sidebar.isMobileOpen && !$store.sidebar.isExpanded && !$store.sidebar.isHovered }">Kelola FAQ</span>
         </a>
+
+        <!-- Profil Saya & Pengaturan Akun -->
+        <a
+          href="{{ $role === 'guru_bk' ? route('bk.profile') : route('profile') }}"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ (request()->routeIs('bk.profile') || request()->routeIs('profile')) ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
+          title="Profil Saya & Pengaturan Akun"
+        >
+          <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+          </svg>
+          <span :class="{ 'block': $store.sidebar.isMobileOpen || $store.sidebar.isExpanded || $store.sidebar.isHovered, 'hidden': !$store.sidebar.isMobileOpen && !$store.sidebar.isExpanded && !$store.sidebar.isHovered }">Profil Saya</span>
+        </a>
       </nav>
     </div>
 
@@ -302,9 +314,17 @@
 
   <!-- Sidebar Footer User Quick Info -->
   <div class="p-4 border-t border-gray-200/80 dark:border-gray-800 shrink-0">
-    <div class="flex items-center gap-3">
-      <div class="h-9 w-9 shrink-0 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 font-bold flex items-center justify-center text-xs">
-        {{ strtoupper(substr($user->name ?? 'U', 0, 2)) }}
+    <a
+      href="{{ $role === 'guru_bk' ? route('bk.profile') : route('profile') }}"
+      class="flex items-center gap-3 p-1.5 -m-1.5 rounded-xl hover:bg-gray-100/80 dark:hover:bg-gray-800/80 transition-colors group cursor-pointer"
+      title="Buka Profil Saya"
+    >
+      <div class="h-9 w-9 shrink-0 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 font-bold flex items-center justify-center text-xs overflow-hidden">
+        @if($user?->avatar)
+          <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="h-full w-full object-cover">
+        @else
+          {{ strtoupper(substr($user->name ?? 'U', 0, 2)) }}
+        @endif
       </div>
       <div
         class="overflow-hidden transition-opacity duration-200"
@@ -313,10 +333,10 @@
           'hidden': !$store.sidebar.isMobileOpen && !$store.sidebar.isExpanded && !$store.sidebar.isHovered
         }"
       >
-        <p class="text-xs font-bold text-gray-900 dark:text-white truncate">{{ $user->name ?? 'Pengguna' }}</p>
+        <p class="text-xs font-bold text-gray-900 dark:text-white truncate group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">{{ $user->name ?? 'Pengguna' }}</p>
         <p class="text-[10px] text-gray-500 dark:text-gray-400 capitalize">{{ str_replace('_', ' ', $user->role ?? '') }}</p>
       </div>
-    </div>
+    </a>
   </div>
 
 </aside>
