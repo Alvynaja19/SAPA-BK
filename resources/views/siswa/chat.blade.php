@@ -366,60 +366,6 @@
     gap: 10px;
     flex-wrap: wrap;
   }
-  .counselor-select-box {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .counselor-select-label {
-    font-size: 12.5px;
-    font-weight: 700;
-    color: #0F172A;
-    white-space: nowrap;
-  }
-  .counselor-select-dropdown-wrap {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-  }
-  .counselor-select-element {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    font-size: 13px;
-    font-weight: 700;
-    color: #0F172A !important;
-    background-color: #FFFFFF !important;
-    border: 1.5px solid #1C6EB4;
-    border-radius: 8px;
-    padding: 7px 36px 7px 12px;
-    min-height: 38px;
-    cursor: pointer;
-    box-shadow: 0 1px 3px rgba(28, 110, 180, 0.12);
-    transition: border-color .15s ease, box-shadow .15s ease;
-    max-width: 320px;
-  }
-  .counselor-select-element:hover {
-    border-color: #14558F;
-  }
-  .counselor-select-element:focus {
-    outline: none;
-    border-color: #14558F;
-    box-shadow: 0 0 0 3px rgba(28, 110, 180, 0.25);
-  }
-  .counselor-select-element option {
-    font-size: 13.5px;
-    font-weight: 600;
-    color: #0F172A !important;
-    background-color: #FFFFFF !important;
-    padding: 10px 12px;
-  }
-  .counselor-select-arrow {
-    position: absolute;
-    right: 11px;
-    pointer-events: none;
-    stroke: #1C6EB4;
-  }
   .counselor-location-tag {
     display: inline-flex;
     align-items: center;
@@ -455,78 +401,94 @@
   /* Interactive Counselor Selection Cards (Stream) */
   .counselor-choice-container {
     background: #FFFFFF;
-    border: 1.5px solid #CFE2F2;
-    border-radius: 14px;
-    padding: 20px 22px;
-    margin: 4px 0 12px;
-    box-shadow: 0 4px 14px rgba(28, 110, 180, 0.06);
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 22px 24px;
+    margin: 6px 0 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
   }
   .counselor-choice-header {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 16px;
+    gap: 14px;
+    margin-bottom: 0;
   }
   .counselor-choice-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
     background: #1C6EB4;
     color: #FFFFFF;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    box-shadow: 0 2px 6px rgba(28, 110, 180, 0.25);
+    box-shadow: 0 2px 8px rgba(28, 110, 180, 0.2);
   }
   .counselor-choice-title {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 700;
     color: #0F172A;
-    margin: 0 0 3px;
+    margin: 0 0 4px;
   }
   .counselor-choice-subtitle {
-    font-size: 13px;
-    color: #475569;
+    font-size: 13.5px;
+    color: #64748B;
     margin: 0;
-    line-height: 1.45;
+    line-height: 1.5;
   }
   .counselor-cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 18px;
+  }
+  @media (max-width: 960px) {
+    .counselor-cards-grid {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+  }
+  @media (max-width: 640px) {
+    .counselor-choice-container {
+      padding: 16px 14px;
+    }
+    .counselor-cards-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
   }
   .counselor-card {
     background: #FFFFFF;
-    border: 2px solid #E2E8F0;
-    border-radius: 12px;
-    padding: 15px;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 14px;
+    padding: 18px 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 14px;
+    gap: 16px;
     cursor: pointer;
-    transition: all .18s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;
     position: relative;
   }
   .counselor-card:hover {
     border-color: #93C5FD;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(28, 110, 180, 0.12);
+    box-shadow: 0 8px 20px rgba(28, 110, 180, 0.08);
   }
   .counselor-card.selected {
-    border-color: #1C6EB4;
-    background: #F4F8FC;
-    box-shadow: 0 4px 14px rgba(28, 110, 180, 0.18);
+    border: 2px solid #1C6EB4;
+    background: #FFFFFF;
+    box-shadow: 0 0 0 1px #1C6EB4, 0 6px 18px rgba(28, 110, 180, 0.12);
   }
   .counselor-card-top {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
   }
   .counselor-card-avatar {
-    width: 44px;
-    height: 44px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     background: #1C6EB4;
     color: #FFFFFF;
@@ -534,11 +496,11 @@
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 16px;
     position: relative;
     flex-shrink: 0;
     border: 2px solid #FFFFFF;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   }
   .counselor-card-avatar img {
     width: 100%;
@@ -547,11 +509,11 @@
     object-fit: cover;
   }
   .counselor-card-online-dot {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     background: #16A34A;
-    border: 2px solid #FFFFFF;
+    border: 2.5px solid #FFFFFF;
     position: absolute;
     bottom: 0;
     right: 0;
@@ -561,40 +523,44 @@
     min-width: 0;
   }
   .counselor-card-name {
-    font-size: 14px;
+    font-size: 14.5px;
     font-weight: 700;
     color: #0F172A;
-    margin-bottom: 2px;
+    margin-bottom: 3px;
+    line-height: 1.35;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   .counselor-card-role {
-    font-size: 11.5px;
+    font-size: 12px;
     font-weight: 500;
-    color: #475569;
-    margin-bottom: 4px;
+    color: #64748B;
+    margin-bottom: 6px;
   }
   .counselor-card-room {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
     font-size: 11px;
     font-weight: 600;
-    color: #1C6EB4;
-    background: #EBF4FC;
-    padding: 2px 6px;
-    border-radius: 4px;
+    color: #0284C7;
+    background: #F0F9FF;
+    border: 1px solid #BAE6FD;
+    padding: 3px 8px;
+    border-radius: 6px;
+    width: fit-content;
+    line-height: 1;
   }
   .btn-select-counselor {
     width: 100%;
-    min-height: 38px;
-    border-radius: 8px;
-    font-size: 12.5px;
+    min-height: 42px;
+    border-radius: 10px;
+    font-size: 13px;
     font-weight: 600;
     border: 1.5px solid #CBD5E1;
     background: #FFFFFF;
-    color: #334155;
+    color: #0F172A;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -611,7 +577,7 @@
     color: #FFFFFF;
     border-color: #1C6EB4;
     font-weight: 700;
-    box-shadow: 0 2px 6px rgba(28, 110, 180, 0.25);
+    box-shadow: 0 2px 8px rgba(28, 110, 180, 0.25);
   }
   .btn-select-counselor-icon {
     display: inline-flex;
@@ -620,12 +586,13 @@
   .counselor-choice-footer {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-top: 14px;
-    padding-top: 12px;
+    gap: 9px;
+    margin-top: 18px;
+    padding-top: 14px;
     border-top: 1px dashed #CBD5E1;
-    font-size: 12px;
-    color: #475569;
+    font-size: 12.5px;
+    color: #64748B;
+    line-height: 1.45;
   }
 
   /* Chat Stream Container */
@@ -1270,22 +1237,11 @@
     }
     .counselor-picker-right {
       width: 100%;
-      flex-direction: column;
-      align-items: stretch;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
       gap: 8px;
-    }
-    .counselor-select-box {
-      width: 100%;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 6px;
-    }
-    .counselor-select-dropdown-wrap {
-      width: 100%;
-    }
-    .counselor-select-element {
-      width: 100%;
-      max-width: 100%;
+      flex-wrap: wrap;
     }
     .counselor-cards-grid {
       grid-template-columns: 1fr;
@@ -1471,29 +1427,14 @@
           @elseif($activeGuruSession && $activeGuruSession->status === 'closed')
             <strong>Sesi Selesai</strong>: Ruang obrolan telah ditutup oleh Guru BK. Klik "Konsultasi Guru BK Baru" jika ingin bimbingan baru.
           @else
-            <strong>Pilih Guru BK</strong>: Pilih guru tujuan bimbingan di bawah ini atau melalui menu pilihan di samping.
+            <strong>Pilih Guru BK</strong>: Silakan tentukan Guru BK pada kartu di dalam obrolan sebelum mengirim pesan konsultasi.
           @endif
         </span>
       </div>
 
       <div class="counselor-picker-right">
-        @if(!$activeGuruSession || $activeGuruSession->status === 'closed')
-          <div class="counselor-select-box" id="counselor-select-container">
-            <label for="select-guru-bk" class="counselor-select-label">Pilih Guru BK:</label>
-            <div class="counselor-select-dropdown-wrap">
-              <select id="select-guru-bk" class="counselor-select-element" aria-label="Pilih Guru BK Tujuan">
-                @foreach($guruList ?? [] as $g)
-                  <option value="{{ $g->id }}" data-name="{{ $g->name }}" {{ $loop->first ? 'selected' : '' }}>
-                    Konselor: {{ $g->name }}
-                  </option>
-                @endforeach
-              </select>
-              <svg class="counselor-select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </div>
-          </div>
-        @else
+        <input type="hidden" id="select-guru-bk" value="{{ ($guruList ?? collect())->first()?->id }}" data-name="{{ ($guruList ?? collect())->first()?->name ?? '' }}">
+        @if($activeGuruSession && $activeGuruSession->status === 'active')
           <div class="counselor-active-badge">
             <span class="counselor-dot-online"></span>
             <span class="counselor-active-name">{{ $activeGuruSession->teacher?->name ?? 'Guru BK Piket' }}</span>
@@ -1504,7 +1445,7 @@
             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
             <circle cx="12" cy="10" r="3"></circle>
           </svg>
-          Ruang BK Lt. 1
+          Ruang BK Lt. 1 &bull; Siap Bimbingan
         </span>
       </div>
     </div>
@@ -1711,7 +1652,7 @@
           </div>
 
           <div class="counselor-choice-footer">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1C6EB4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1C6EB4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="12" y1="16" x2="12" y2="12"></line>
               <line x1="12" y1="8" x2="12.01" y2="8"></line>
@@ -2188,9 +2129,9 @@
         sendBtn.disabled = true;
       } else {
         chatInput.disabled = false;
-        const currentTeacherSelect = document.getElementById('select-guru-bk');
-        const selectedTeacherName = (currentTeacherSelect && currentTeacherSelect.selectedIndex >= 0) 
-          ? (currentTeacherSelect.options[currentTeacherSelect.selectedIndex].getAttribute('data-name') || '') 
+        const currentTeacherEl = document.getElementById('select-guru-bk');
+        const selectedTeacherName = currentTeacherEl 
+          ? (currentTeacherEl.getAttribute('data-name') || (currentTeacherEl.options && currentTeacherEl.selectedIndex >= 0 ? currentTeacherEl.options[currentTeacherEl.selectedIndex].getAttribute('data-name') : '')) 
           : '';
         chatInput.placeholder = activeGuruSessionId 
           ? 'Ketik pesan konsultasi langsung untuk Guru BK piket...' 
@@ -2566,11 +2507,12 @@
     }
   }
 
-  // Sinkronisasi Pemilihan Guru BK Antara Dropdown Banner dan Kartu Profil di Stream
+  // Pemilihan Guru BK Melalui Kartu Profil di Stream
   window.selectCounselorTeacher = function(teacherId, teacherName) {
     const teacherSelectEl = document.getElementById('select-guru-bk');
     if (teacherSelectEl) {
       teacherSelectEl.value = teacherId;
+      teacherSelectEl.setAttribute('data-name', teacherName || '');
     }
 
     // Perbarui status aktif seluruh kartu konselor di stream
@@ -2597,16 +2539,6 @@
       chatInput.focus();
     }
   };
-
-  // Event listener saat dropdown di banner diubah oleh siswa
-  const bannerTeacherSelectEl = document.getElementById('select-guru-bk');
-  if (bannerTeacherSelectEl) {
-    bannerTeacherSelectEl.addEventListener('change', function() {
-      const selectedOpt = this.options[this.selectedIndex];
-      const name = selectedOpt ? (selectedOpt.getAttribute('data-name') || selectedOpt.text) : '';
-      selectCounselorTeacher(this.value, name);
-    });
-  }
 
   // Inisialisasi awal pada saat memuat halaman
   if (currentMode === 'live') {

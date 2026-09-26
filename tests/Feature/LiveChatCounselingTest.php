@@ -253,7 +253,8 @@ class LiveChatCounselingTest extends TestCase
 
         $response = $this->get(route('siswa.chat'));
         $response->assertStatus(200);
-        $response->assertSee('Konselor: Dra. Hj. Siti Rahayu, M.Pd.');
+        $response->assertSee('Dra. Hj. Siti Rahayu, M.Pd.');
+        $response->assertSee('Pilih Guru BK untuk Bimbingan Konseling');
     }
 
     public function test_teacher_can_render_live_chat_page_without_error(): void
