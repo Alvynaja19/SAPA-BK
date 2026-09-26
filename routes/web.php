@@ -60,6 +60,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/tes/{id}', [SiswaController::class, 'isiTes'])->name('siswa.tes.isi');
         Route::post('/tes/{id}', [SiswaController::class, 'simpanTes'])->name('siswa.tes.simpan');
         Route::get('/tes/{id}/hasil', [SiswaController::class, 'hasilTes'])->name('siswa.tes.hasil');
+        Route::get('/api/test-notification', [SiswaController::class, 'testNotificationStatus'])->name('siswa.test.notification');
     });
 
     // API Chat & Live Chat (dengan otentikasi sesi penuh)

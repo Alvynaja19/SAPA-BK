@@ -262,6 +262,7 @@
     border: 1px solid #E4C68F;
     border-radius: var(--radius-m);
     padding: 18px;
+    transition: all .25s ease;
   }
   .reminder-card .title {
     font-size: 14px;
@@ -276,6 +277,37 @@
   }
   .reminder-card .btn {
     margin-top: 12px;
+  }
+  .reminder-card.accepted {
+    background: #F0FDF4;
+    border: 1.5px solid #86EFAC;
+    box-shadow: 0 2px 8px rgba(22, 101, 52, 0.06);
+  }
+  .reminder-card.accepted .title {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #14532D;
+    line-height: 1.35;
+  }
+  .reminder-card.accepted p {
+    font-size: 13px;
+    color: #166534;
+    line-height: 1.45;
+  }
+  .badge-accepted {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #DCFCE7;
+    color: #15803D;
+    border: 1px solid #86EFAC;
+    padding: 3px 9px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: .03em;
   }
 
   .empty-state-card {
@@ -367,9 +399,11 @@
 
   <div class="card stat-card">
     <span class="label">Tes Selesai</span>
-    <span class="value">{{ $completedTesCount }}/{{ max($totalActiveTes, 1) }}</span>
+    <span class="value">{{ $completedTesCount }}{{ $totalActiveTes > 0 ? '/' . $totalActiveTes : '' }}</span>
     <span class="caption">
-      @if(($totalActiveTes - $completedTesCount) > 0)
+      @if($totalActiveTes === 0)
+        Belum ada tes aktif dari Guru BK
+      @elseif(($totalActiveTes - $completedTesCount) > 0)
         {{ $totalActiveTes - $completedTesCount }} tes menunggu diisi
       @else
         Semua kuesioner terisi
@@ -481,29 +515,136 @@
       </div>
     </div>
 
-    <!-- Reminder Card -->
-    <div class="reminder-card">
-      <div class="title">
-        {{ $pendingQuestionnaire ? $pendingQuestionnaire->title : 'Kuesioner Gaya Belajar' }}
-      </div>
-      <p>
-        @if($pendingQuestionnaire)
-          {{ \Illuminate\Support\Str::limit($pendingQuestionnaire->description, 115) }}
-        @else
-          Belum kamu isi. Hasilnya membantu Guru BK memahami cara belajar dan pengembangan dirimu yang paling cocok.
-        @endif
-      </p>
-      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-        <a href="{{ $pendingQuestionnaire ? route('siswa.tes.isi', $pendingQuestionnaire->id) : route('siswa.tes') }}" class="btn btn-primary btn-sm">
-          Isi Sekarang
-        </a>
-        @if($pendingQuestionnaire)
-          <a href="{{ route('siswa.chat', ['mode' => 'live', 'ref' => 'tes', 'ref_id' => $pendingQuestionnaire->id]) }}" class="btn btn-ghost btn-sm" style="background: rgba(255,255,255,0.15); color: #FFFFFF; border-color: rgba(255,255,255,0.3);" title="Tanyakan kuesioner ini ke Guru BK">
-            <span>Tanya Guru BK</span>
-          </a>
-        @endif
-      </div>
+    <!-- Dynamic Test Notification Container (Real-Time) -->
+    <div id="dashboard-test-notification-container">
+      @if($testNotificationState === 'pending' && $pendingQuestionnaire)
+        <div id="dashboard-test-notification" class="reminder-card" data-state="pending">
+          <div class="title">
+            {{ $pendingQuestionnaire->title }}
+          </div>
+          <p>
+            {{ !empty($pendingQuestionnaire->description) ? \Illuminate\Support\Str::limit($pendingQuestionnaire->description, 115) : 'Belum kamu isi. Hasilnya membantu Guru BK memahami cara belajar dan pengembangan dirimu yang paling cocok.' }}
+          </p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <a href="{{ route('siswa.tes.isi', $pendingQuestionnaire->id) }}" class="btn btn-primary btn-sm">
+              Isi Sekarang
+            </a>
+            <a href="{{ route('siswa.chat', ['mode' => 'live', 'ref' => 'tes', 'ref_id' => $pendingQuestionnaire->id]) }}" class="btn btn-ghost btn-sm" style="background: rgba(255,255,255,0.15); color: #FFFFFF; border-color: rgba(255,255,255,0.3);" title="Tanyakan kuesioner ini ke Guru BK">
+              <span>Tanya Guru BK</span>
+            </a>
+          </div>
+        </div>
+      @elseif($testNotificationState === 'accepted' && $latestCompletedResult)
+        <div id="dashboard-test-notification" class="reminder-card accepted" data-state="accepted">
+          <div class="badge-accepted">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Ter-accept / Selesai</span>
+          </div>
+          <div class="title">
+            {{ $latestCompletedResult->questionnaire?->title ?? 'Asesmen Minat & Bakat' }}
+          </div>
+          <p>
+            Asesmen telah kamu selesaikan dan telah diterima (ter-accept) oleh Guru BK. Hasil dan rekomendasi bimbingan sudah siap kamu pelajari.
+          </p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px;">
+            <a href="{{ route('siswa.tes.hasil', $latestCompletedResult->id) }}" class="btn btn-primary btn-sm">
+              <span>Lihat Hasil</span>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+            <a href="{{ route('siswa.chat', ['mode' => 'live', 'ref' => 'tes', 'ref_id' => $latestCompletedResult->id]) }}" class="btn btn-ghost btn-sm" style="border-color: #86EFAC; color: #166534; background: #FFFFFF;" title="Diskusikan hasil asesmen ini dengan Guru BK">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <span>Diskusikan</span>
+            </a>
+          </div>
+        </div>
+      @else
+        <!-- Ketika Guru BK belum menambahkan soal kuis & tes: Tidak ada pemberitahuan -->
+        <div id="dashboard-test-notification" style="display: none;" data-state="none"></div>
+      @endif
     </div>
   </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+  let currentTestNotificationState = "{{ $testNotificationState }}";
+
+  async function pollTestNotificationRealtime() {
+    try {
+      const response = await fetch("{{ route('siswa.test.notification') }}", {
+        headers: {
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      });
+      const res = await response.json();
+      if (!res.success) return;
+
+      if (res.state === currentTestNotificationState) return;
+
+      currentTestNotificationState = res.state;
+      const container = document.getElementById('dashboard-test-notification-container');
+      if (!container) return;
+
+      if (res.state === 'none') {
+        container.innerHTML = '<div id="dashboard-test-notification" style="display: none;" data-state="none"></div>';
+      } else if (res.state === 'pending' && res.data) {
+        container.innerHTML = `
+          <div id="dashboard-test-notification" class="reminder-card" data-state="pending">
+            <div class="title">${escapeHtml(res.data.title)}</div>
+            <p>${escapeHtml(res.data.description)}</p>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <a href="${res.data.isi_url}" class="btn btn-primary btn-sm">
+                Isi Sekarang
+              </a>
+              <a href="${res.data.chat_url}" class="btn btn-ghost btn-sm" style="background: rgba(255,255,255,0.15); color: #FFFFFF; border-color: rgba(255,255,255,0.3);" title="Tanyakan kuesioner ini ke Guru BK">
+                <span>Tanya Guru BK</span>
+              </a>
+            </div>
+          </div>
+        `;
+      } else if (res.state === 'accepted' && res.data) {
+        container.innerHTML = `
+          <div id="dashboard-test-notification" class="reminder-card accepted" data-state="accepted">
+            <div class="badge-accepted">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Ter-accept / Selesai</span>
+            </div>
+            <div class="title">${escapeHtml(res.data.title)}</div>
+            <p>${escapeHtml(res.data.description)}</p>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px;">
+              <a href="${res.data.hasil_url}" class="btn btn-primary btn-sm">
+                <span>Lihat Hasil</span>
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+              <a href="${res.data.chat_url}" class="btn btn-ghost btn-sm" style="border-color: #86EFAC; color: #166534; background: #FFFFFF;" title="Diskusikan hasil asesmen ini dengan Guru BK">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <span>Diskusikan</span>
+              </a>
+            </div>
+          </div>
+        `;
+      }
+    } catch (err) {
+      // Quiet fail on temporary network hiccups
+    }
+  }
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+    return text.replace(/[&<>"']/g, m => map[m]);
+  }
+
+  // Interval polling real-time setiap 4 detik
+  setInterval(pollTestNotificationRealtime, 4000);
+
+  // Periksa langsung ketika siswa kembali membuka tab dashboard
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      pollTestNotificationRealtime();
+    }
+  });
+</script>
+@endpush

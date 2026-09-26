@@ -27,13 +27,36 @@ class SiswaController extends Controller
         $ebooks = Ebook::latest()->take(4)->get();
         $totalEbooks = Ebook::count();
         $completedTesCount = QuestionnaireResult::where('user_id', $user->id)->distinct('questionnaire_id')->count('questionnaire_id');
-        $totalActiveTes = Questionnaire::where('is_active', true)->count();
+        $totalActiveTes = Questionnaire::where('is_active', true)->whereHas('questions')->count();
         $latestEbook = Ebook::latest()->first();
-        $pendingQuestionnaire = Questionnaire::where('is_active', true)
-            ->whereDoesntHave('results', function ($q) use ($user) {
-                $q->where('user_id', $user->id);
-            })
-            ->first();
+
+        // Evaluasi kondisi pemberitahuan tes & kuis siswa
+        $testNotificationState = 'none'; // 'none', 'pending', 'accepted'
+        $pendingQuestionnaire = null;
+        $latestCompletedResult = null;
+
+        if ($totalActiveTes > 0) {
+            $pendingQuestionnaire = Questionnaire::where('is_active', true)
+                ->whereHas('questions')
+                ->whereDoesntHave('results', function ($q) use ($user) {
+                    $q->where('user_id', $user->id);
+                })
+                ->first();
+
+            if ($pendingQuestionnaire) {
+                $testNotificationState = 'pending';
+            } else {
+                // Semua tes aktif telah diselesaikan oleh siswa
+                $latestCompletedResult = QuestionnaireResult::with('questionnaire')
+                    ->where('user_id', $user->id)
+                    ->latest()
+                    ->first();
+
+                if ($latestCompletedResult) {
+                    $testNotificationState = 'accepted';
+                }
+            }
+        }
 
         return view('siswa.dashboard', compact(
             'user',
@@ -45,7 +68,9 @@ class SiswaController extends Controller
             'completedTesCount',
             'totalActiveTes',
             'latestEbook',
-            'pendingQuestionnaire'
+            'pendingQuestionnaire',
+            'latestCompletedResult',
+            'testNotificationState'
         ));
     }
 
@@ -422,5 +447,71 @@ class SiswaController extends Controller
         $result = QuestionnaireResult::with('questionnaire')->where('user_id', $user->id)->findOrFail($id);
 
         return view('siswa.hasil-tes', compact('result'));
+    }
+
+    /**
+     * Endpoint API status notifikasi kuesioner real-time untuk dashboard siswa.
+     */
+    public function testNotificationStatus(Request $request): JsonResponse
+    {
+        $user = Auth::user();
+        if (! $user) {
+            return response()->json(['success' => false, 'state' => 'none'], 401);
+        }
+
+        $totalActiveTes = Questionnaire::where('is_active', true)->whereHas('questions')->count();
+
+        if ($totalActiveTes === 0) {
+            return response()->json([
+                'success' => true,
+                'state' => 'none',
+            ]);
+        }
+
+        $pending = Questionnaire::where('is_active', true)
+            ->whereHas('questions')
+            ->whereDoesntHave('results', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            })
+            ->first();
+
+        if ($pending) {
+            return response()->json([
+                'success' => true,
+                'state' => 'pending',
+                'data' => [
+                    'id' => $pending->id,
+                    'title' => $pending->title,
+                    'description' => $pending->description ?: 'Belum kamu isi. Hasilnya membantu Guru BK memahami cara belajar dan pengembangan dirimu yang paling cocok.',
+                    'isi_url' => route('siswa.tes.isi', $pending->id),
+                    'chat_url' => route('siswa.chat', ['mode' => 'live', 'ref' => 'tes', 'ref_id' => $pending->id]),
+                ],
+            ]);
+        }
+
+        $latestResult = QuestionnaireResult::with('questionnaire')
+            ->where('user_id', $user->id)
+            ->latest()
+            ->first();
+
+        if ($latestResult) {
+            return response()->json([
+                'success' => true,
+                'state' => 'accepted',
+                'data' => [
+                    'id' => $latestResult->id,
+                    'title' => $latestResult->questionnaire?->title ?: 'Asesmen Minat & Bakat',
+                    'score' => $latestResult->score,
+                    'description' => 'Asesmen telah kamu selesaikan dan telah diterima (ter-accept) oleh Guru BK. Hasil dan rekomendasi bimbingan sudah siap kamu pelajari.',
+                    'hasil_url' => route('siswa.tes.hasil', $latestResult->id),
+                    'chat_url' => route('siswa.chat', ['mode' => 'live', 'ref' => 'tes', 'ref_id' => $latestResult->id]),
+                ],
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'state' => 'none',
+        ]);
     }
 }
