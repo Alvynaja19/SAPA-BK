@@ -61,12 +61,12 @@
 
   <!-- Search & Filter Card (Tata Letak 2 Baris Presisi, Lega, Bebas Tumpang Tindih) -->
   <div class="rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-5 shadow-xs">
-    <form method="GET" action="{{ route('bk.percakapan') }}" class="space-y-4">
+    <form id="aiFilterForm" method="GET" action="{{ route('bk.percakapan') }}" class="space-y-4">
       
-      <!-- Baris 1: Pencarian Siswa / Topik Percakapan (Lebar Penuh, Ikon Otomatis Hilang Saat Mengetik) -->
+      <!-- Baris 1: Pencarian Siswa / Topik Percakapan (Live Search Instant) -->
       <div class="space-y-1.5">
         <label for="filterSearchAi" class="block text-xs font-bold text-gray-700 dark:text-gray-300">
-          Pencarian Siswa / Topik Percakapan
+          Pencarian Siswa / Topik Percakapan (Live Search)
         </label>
         <div
           x-data="{ 
@@ -75,7 +75,7 @@
           }"
           class="relative"
         >
-          <!-- Ikon Kaca Pembesar (Otomatis Hilang Saat Sedang Mengetik / Fokus / Kolom Terisi) -->
+          <!-- Ikon Kaca Pembesar -->
           <div
             x-show="!query && !isFocused"
             x-transition.opacity.duration.150ms
@@ -94,24 +94,40 @@
             x-model="query"
             @focus="isFocused = true"
             @blur="isFocused = false"
-            :style="(query || isFocused) ? 'padding-left: 1rem; padding-right: 2.5rem;' : 'padding-left: 2.85rem; padding-right: 2.5rem;'"
-            placeholder="Cari nama siswa, kelas, NISN, atau judul topik percakapan..."
+            :style="(query || isFocused) ? 'padding-left: 1rem; padding-right: 4.5rem;' : 'padding-left: 2.85rem; padding-right: 4.5rem;'"
+            placeholder="Ketik nama siswa, kelas, NISN, atau topik percakapan..."
+            autocomplete="off"
             class="w-full py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 text-gray-900 dark:text-white placeholder-gray-400 text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-500 transition-all min-h-[42px]"
           />
 
-          <!-- Tombol Hapus Kata Kunci (Tampil Jika Ada Input) -->
-          <button
-            type="button"
-            x-show="query"
-            x-transition.opacity.duration.150ms
-            @click="query = ''; $nextTick(() => document.getElementById('filterSearchAi').focus())"
-            class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 cursor-pointer"
-            title="Hapus kata kunci"
-          >
-            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+          <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center gap-1.5">
+            <!-- Spinner Indikator Loading Live Search -->
+            <div
+              id="aiSearchSpinner"
+              class="hidden text-brand-600 dark:text-brand-400 animate-spin"
+              title="Mencari otomatis..."
+            >
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+              </svg>
+            </div>
+
+            <!-- Tombol Hapus Kata Kunci -->
+            <button
+              type="button"
+              x-show="query"
+              x-transition.opacity.duration.150ms
+              @click="query = ''; $nextTick(() => { document.getElementById('filterSearchAi').focus(); if(window.performAiLiveSearch) window.performAiLiveSearch(true); })"
+              class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 cursor-pointer p-1 rounded-md"
+              title="Hapus kata kunci"
+              aria-label="Hapus kata kunci pencarian"
+            >
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -180,40 +196,42 @@
     </form>
 
     <!-- Ringkasan Filter Aktif (Pill Badges) -->
-    @if(request()->hasAny(['kelas', 'tanggal', 'q']))
-      <div class="flex items-center gap-2 mt-4 pt-3.5 border-t border-gray-100 dark:border-gray-800 text-xs text-gray-500 dark:text-gray-400 flex-wrap">
-        <span class="font-bold text-gray-700 dark:text-gray-300">Filter Aktif:</span>
+    <div id="aiFiltersSummaryContainer">
+      @if(request()->hasAny(['kelas', 'tanggal', 'q']))
+        <div class="flex items-center gap-2 mt-4 pt-3.5 border-t border-gray-100 dark:border-gray-800 text-xs text-gray-500 dark:text-gray-400 flex-wrap">
+          <span class="font-bold text-gray-700 dark:text-gray-300">Filter Aktif:</span>
 
-        @if(request('kelas'))
-          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200/50 dark:border-blue-800/40 text-[11px] font-bold">
-            <span>Kelas: {{ request('kelas') }}</span>
-            <a href="{{ route('bk.percakapan', request()->except('kelas')) }}" class="hover:text-blue-900 dark:hover:text-white" title="Hapus filter kelas">&times;</a>
-          </span>
-        @endif
+          @if(request('kelas'))
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200/50 dark:border-blue-800/40 text-[11px] font-bold">
+              <span>Kelas: {{ request('kelas') }}</span>
+              <a href="{{ route('bk.percakapan', request()->except('kelas')) }}" class="hover:text-blue-900 dark:hover:text-white" title="Hapus filter kelas">&times;</a>
+            </span>
+          @endif
 
-        @if(request('tanggal'))
-          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/50 dark:border-emerald-800/40 text-[11px] font-bold">
-            <span>Tanggal: {{ \Carbon\Carbon::parse(request('tanggal'))->translatedFormat('d M Y') }}</span>
-            <a href="{{ route('bk.percakapan', request()->except('tanggal')) }}" class="hover:text-emerald-900 dark:hover:text-white" title="Hapus filter tanggal">&times;</a>
-          </span>
-        @endif
+          @if(request('tanggal'))
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/50 dark:border-emerald-800/40 text-[11px] font-bold">
+              <span>Tanggal: {{ \Carbon\Carbon::parse(request('tanggal'))->translatedFormat('d M Y') }}</span>
+              <a href="{{ route('bk.percakapan', request()->except('tanggal')) }}" class="hover:text-emerald-900 dark:hover:text-white" title="Hapus filter tanggal">&times;</a>
+            </span>
+          @endif
 
-        @if(request('q'))
-          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/50 dark:border-amber-800/40 text-[11px] font-bold">
-            <span>Pencarian: "{{ request('q') }}"</span>
-            <a href="{{ route('bk.percakapan', request()->except('q')) }}" class="hover:text-amber-900 dark:hover:text-white" title="Hapus pencarian">&times;</a>
-          </span>
-        @endif
+          @if(request('q'))
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/50 dark:border-amber-800/40 text-[11px] font-bold">
+              <span>Pencarian: "{{ request('q') }}"</span>
+              <a href="{{ route('bk.percakapan', request()->except('q')) }}" class="hover:text-amber-900 dark:hover:text-white" title="Hapus pencarian">&times;</a>
+            </span>
+          @endif
 
-        <a href="{{ route('bk.percakapan') }}" class="text-[11px] text-rose-600 dark:text-rose-400 hover:underline font-bold ml-auto">
-          Hapus Semua Filter &times;
-        </a>
-      </div>
-    @endif
+          <a href="{{ route('bk.percakapan') }}" class="text-[11px] text-rose-600 dark:text-rose-400 hover:underline font-bold ml-auto">
+            Hapus Semua Filter &times;
+          </a>
+        </div>
+      @endif
+    </div>
   </div>
 
   <!-- Sesi Percakapan List Card (TailAdmin) -->
-  <div class="rounded-3xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-xs overflow-hidden">
+  <div id="aiSessionsCard" class="rounded-3xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-xs overflow-hidden transition-opacity duration-150">
     
     <!-- Table Header -->
     <div class="p-6 border-b border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -353,3 +371,156 @@
 
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('aiFilterForm');
+  const searchInput = document.getElementById('filterSearchAi');
+  const kelasSelect = document.getElementById('filterKelasAi');
+  const tanggalInput = document.getElementById('filterTanggalAi');
+  const spinner = document.getElementById('aiSearchSpinner');
+  const cardContainer = document.getElementById('aiSessionsCard');
+  const summaryContainer = document.getElementById('aiFiltersSummaryContainer');
+
+  let debounceTimer = null;
+  let abortController = null;
+
+  function doFetch(url) {
+    if (abortController) {
+      abortController.abort();
+    }
+    abortController = new AbortController();
+
+    if (spinner) spinner.classList.remove('hidden');
+    if (cardContainer) {
+      cardContainer.classList.add('opacity-50', 'pointer-events-none');
+      cardContainer.setAttribute('aria-busy', 'true');
+    }
+
+    fetch(url, {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      signal: abortController.signal
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Network error');
+        return res.text();
+      })
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        const newCard = doc.getElementById('aiSessionsCard');
+        if (newCard && cardContainer) {
+          cardContainer.innerHTML = newCard.innerHTML;
+        }
+
+        const newSummary = doc.getElementById('aiFiltersSummaryContainer');
+        if (newSummary && summaryContainer) {
+          summaryContainer.innerHTML = newSummary.innerHTML;
+        }
+
+        window.history.replaceState(null, '', url);
+      })
+      .catch(err => {
+        if (err.name !== 'AbortError') {
+          console.error('Search error:', err);
+        }
+      })
+      .finally(() => {
+        if (spinner) spinner.classList.add('hidden');
+        if (cardContainer) {
+          cardContainer.classList.remove('opacity-50', 'pointer-events-none');
+          cardContainer.removeAttribute('aria-busy');
+        }
+      });
+  }
+
+  function triggerSearch(immediate = false) {
+    clearTimeout(debounceTimer);
+    const delay = immediate ? 0 : 280;
+
+    debounceTimer = setTimeout(() => {
+      const formData = new FormData(form);
+      const params = new URLSearchParams();
+
+      for (const [key, value] of formData.entries()) {
+        if (value && value.trim() !== '') {
+          params.set(key, value.trim());
+        }
+      }
+
+      const action = form.getAttribute('action') || window.location.pathname;
+      const queryString = params.toString();
+      const targetUrl = queryString ? `${action}?${queryString}` : action;
+
+      doFetch(targetUrl);
+    }, delay);
+  }
+
+  window.performAiLiveSearch = triggerSearch;
+
+  if (searchInput) {
+    searchInput.addEventListener('input', () => triggerSearch(false));
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        triggerSearch(true);
+      }
+    });
+  }
+
+  if (kelasSelect) {
+    kelasSelect.addEventListener('change', () => triggerSearch(true));
+  }
+
+  if (tanggalInput) {
+    tanggalInput.addEventListener('change', () => triggerSearch(true));
+  }
+
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      triggerSearch(true);
+    });
+  }
+
+  // Intercept pagination clicks inside cardContainer
+  if (cardContainer) {
+    cardContainer.addEventListener('click', (e) => {
+      const paginationLink = e.target.closest('a.page-link, .pagination a');
+      if (paginationLink && paginationLink.href) {
+        e.preventDefault();
+        doFetch(paginationLink.href);
+        window.scrollTo({ top: cardContainer.offsetTop - 80, behavior: 'smooth' });
+      }
+    });
+  }
+
+  // Intercept reset and remove filter links inside summaryContainer
+  if (summaryContainer) {
+    summaryContainer.addEventListener('click', (e) => {
+      const link = e.target.closest('a');
+      if (link && link.href) {
+        e.preventDefault();
+        const url = new URL(link.href, window.location.origin);
+        if (searchInput) {
+          const qVal = url.searchParams.get('q') || '';
+          searchInput.value = qVal;
+          if (searchInput._x_model) {
+            searchInput._x_model.set(qVal);
+          }
+        }
+        if (kelasSelect) {
+          kelasSelect.value = url.searchParams.get('kelas') || '';
+        }
+        if (tanggalInput) {
+          tanggalInput.value = url.searchParams.get('tanggal') || '';
+        }
+        doFetch(link.href);
+      }
+    });
+  }
+});
+</script>
+@endpush

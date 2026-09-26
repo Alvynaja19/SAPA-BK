@@ -82,7 +82,7 @@
       </div>
 
       <div class="flex items-center gap-2 self-start sm:self-auto shrink-0">
-        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-50 text-brand-700 dark:bg-brand-950/60 dark:text-brand-300 border border-brand-200 dark:border-brand-800 shadow-2xs">
+        <span id="artikelCountBadge" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-50 text-brand-700 dark:bg-brand-950/60 dark:text-brand-300 border border-brand-200 dark:border-brand-800 shadow-2xs">
           <span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span>
           <span>{{ $articles->total() }} Artikel Ditemukan</span>
         </span>
@@ -91,7 +91,7 @@
 
     <!-- Quick Category Tabs Navigation -->
     <div class="px-5 sm:px-6 pt-3.5 pb-3 border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900">
-      <div class="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-1">
+      <div id="artikelCategoryTabs" class="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-1">
         <!-- Tab: Semua -->
         <a
           href="{{ route('bk.artikel', array_merge(request()->except('category', 'page'), ['category' => 'all'])) }}"
@@ -155,30 +155,54 @@
 
     <!-- Search & Date Filter Toolbar -->
     <div class="p-4 sm:px-6 sm:py-3.5 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30 flex flex-col md:flex-row md:items-center justify-between gap-3">
-      <form method="GET" action="{{ route('bk.artikel') }}" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 flex-1 max-w-3xl">
+      <form id="artikelFilterForm" method="GET" action="{{ route('bk.artikel') }}" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 flex-1 max-w-3xl">
         @if(request('category') && request('category') !== 'all')
           <input type="hidden" name="category" value="{{ request('category') }}">
         @endif
 
-        <!-- Search Input (Flex container prevents icon-text collision) -->
-        <div class="flex items-center flex-1 rounded-xl border border-gray-200/90 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-1.5 shadow-2xs focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-500/20 transition-all" style="min-height: 42px;">
+        <!-- Search Input (Flex container with live search spinner and clear button) -->
+        <div class="relative flex items-center flex-1 rounded-xl border border-gray-200/90 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-1.5 shadow-2xs focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-500/20 transition-all" style="min-height: 42px;">
           <svg class="h-4 w-4 text-gray-400 shrink-0 mr-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
           <input
             type="text"
+            id="artikelSearchInput"
             name="q"
             value="{{ request('q') }}"
             placeholder="Cari kata kunci judul artikel..."
-            class="w-full bg-transparent border-0 p-0 text-xs text-gray-900 dark:text-white placeholder-gray-400 focus:outline-hidden focus:ring-0"
+            autocomplete="off"
+            class="w-full bg-transparent border-0 p-0 text-xs text-gray-900 dark:text-white placeholder-gray-400 focus:outline-hidden focus:ring-0 pr-8"
             style="outline: none; border: none; background: transparent; font-size: 13px; box-shadow: none;"
           />
+          <div class="absolute inset-y-0 right-0 pr-3 flex items-center gap-1.5">
+            <!-- Spinner Indikator Loading Live Search -->
+            <div id="artikelSearchSpinner" class="hidden text-brand-600 animate-spin" title="Mencari artikel...">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+              </svg>
+            </div>
+            <!-- Tombol Hapus Kata Kunci -->
+            <button
+              type="button"
+              id="artikelSearchClearBtn"
+              class="{{ request('q') ? '' : 'hidden' }} text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 cursor-pointer p-1"
+              title="Hapus kata kunci"
+              aria-label="Hapus kata kunci pencarian"
+            >
+              <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
         </div>
 
-        <!-- Date Picker Input (Native calendar without duplicate overlapping icon) -->
+        <!-- Date Picker Input -->
         <div class="sm:w-44 shrink-0">
           <input
             type="date"
+            id="artikelDateInput"
             name="date"
             value="{{ request('date') }}"
             title="Filter tanggal terbit"
@@ -201,33 +225,35 @@
       </form>
 
       <!-- Active Filters Tag & Reset -->
-      @if(request()->filled('q') || (request()->filled('category') && request('category') !== 'all') || request()->filled('date'))
-        <div class="flex items-center gap-2 flex-wrap text-xs self-start md:self-auto shrink-0">
-          <span class="text-gray-400 font-medium">Filter aktif:</span>
-          @if(request()->filled('q'))
-            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-[11px] font-semibold text-gray-700 dark:text-gray-200 shadow-2xs">
-              "{{ Str::limit(request('q'), 18) }}"
-              <a href="{{ route('bk.artikel', array_merge(request()->except('q', 'page'))) }}" class="text-gray-400 hover:text-rose-500 ml-0.5">&times;</a>
-            </span>
-          @endif
-          @if(request()->filled('date'))
-            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-[11px] font-semibold text-gray-700 dark:text-gray-200 shadow-2xs">
-              {{ \Carbon\Carbon::parse(request('date'))->format('d M Y') }}
-              <a href="{{ route('bk.artikel', array_merge(request()->except('date', 'page'))) }}" class="text-gray-400 hover:text-rose-500 ml-0.5">&times;</a>
-            </span>
-          @endif
-          <a
-            href="{{ route('bk.artikel') }}"
-            class="text-xs font-bold text-rose-600 hover:text-rose-700 dark:text-rose-400 hover:underline px-1 py-1"
-          >
-            Reset Semua
-          </a>
-        </div>
-      @endif
+      <div id="artikelActiveFiltersWrapper">
+        @if(request()->filled('q') || (request()->filled('category') && request('category') !== 'all') || request()->filled('date'))
+          <div class="flex items-center gap-2 flex-wrap text-xs self-start md:self-auto shrink-0">
+            <span class="text-gray-400 font-medium">Filter aktif:</span>
+            @if(request()->filled('q'))
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-[11px] font-semibold text-gray-700 dark:text-gray-200 shadow-2xs">
+                "{{ Str::limit(request('q'), 18) }}"
+                <a href="{{ route('bk.artikel', array_merge(request()->except('q', 'page'))) }}" class="text-gray-400 hover:text-rose-500 ml-0.5" title="Hapus pencarian">&times;</a>
+              </span>
+            @endif
+            @if(request()->filled('date'))
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-[11px] font-semibold text-gray-700 dark:text-gray-200 shadow-2xs">
+                {{ \Carbon\Carbon::parse(request('date'))->format('d M Y') }}
+                <a href="{{ route('bk.artikel', array_merge(request()->except('date', 'page'))) }}" class="text-gray-400 hover:text-rose-500 ml-0.5" title="Hapus filter tanggal">&times;</a>
+              </span>
+            @endif
+            <a
+              href="{{ route('bk.artikel') }}"
+              class="text-xs font-bold text-rose-600 hover:text-rose-700 dark:text-rose-400 hover:underline px-1 py-1"
+            >
+              Reset Semua
+            </a>
+          </div>
+        @endif
+      </div>
     </div>
 
-    <!-- Table Responsive -->
-    <div class="overflow-x-auto custom-scrollbar">
+    <!-- Table Responsive Wrapper -->
+    <div id="artikelTableWrapper" class="overflow-x-auto custom-scrollbar transition-opacity duration-150">
       <table class="w-full text-left border-collapse min-w-[920px]">
         <thead>
           <tr class="border-b border-gray-100 dark:border-gray-800 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider bg-gray-50/60 dark:bg-gray-800/40">
@@ -418,11 +444,13 @@
       </table>
     </div>
 
-    @if($articles->hasPages())
-      <div class="p-6 border-t border-gray-100 dark:border-gray-800">
-        {{ $articles->links() }}
-      </div>
-    @endif
+    <div id="artikelPaginationWrapper">
+      @if($articles->hasPages())
+        <div class="p-6 border-t border-gray-100 dark:border-gray-800">
+          {{ $articles->links() }}
+        </div>
+      @endif
+    </div>
   </div>
 
   <!-- MODAL 1: Tarik Artikel Terkini (RSS Feed) -->
@@ -627,3 +655,225 @@
 
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('artikelFilterForm');
+  const searchInput = document.getElementById('artikelSearchInput');
+  const clearBtn = document.getElementById('artikelSearchClearBtn');
+  const dateInput = document.getElementById('artikelDateInput');
+  const spinner = document.getElementById('artikelSearchSpinner');
+  const tableWrapper = document.getElementById('artikelTableWrapper');
+  const paginationWrapper = document.getElementById('artikelPaginationWrapper');
+  const countBadge = document.getElementById('artikelCountBadge');
+  const activeFiltersWrapper = document.getElementById('artikelActiveFiltersWrapper');
+  const categoryTabs = document.getElementById('artikelCategoryTabs');
+
+  let debounceTimer = null;
+  let abortController = null;
+
+  function doFetch(url) {
+    if (abortController) {
+      abortController.abort();
+    }
+    abortController = new AbortController();
+
+    if (spinner) spinner.classList.remove('hidden');
+    if (tableWrapper) {
+      tableWrapper.classList.add('opacity-50', 'pointer-events-none');
+      tableWrapper.setAttribute('aria-busy', 'true');
+    }
+
+    fetch(url, {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      signal: abortController.signal
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Network error');
+        return res.text();
+      })
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        const newTable = doc.getElementById('artikelTableWrapper');
+        if (newTable && tableWrapper) {
+          tableWrapper.innerHTML = newTable.innerHTML;
+        }
+
+        const newPagination = doc.getElementById('artikelPaginationWrapper');
+        if (newPagination && paginationWrapper) {
+          paginationWrapper.innerHTML = newPagination.innerHTML;
+        }
+
+        const newCount = doc.getElementById('artikelCountBadge');
+        if (newCount && countBadge) {
+          countBadge.innerHTML = newCount.innerHTML;
+        }
+
+        const newActiveFilters = doc.getElementById('artikelActiveFiltersWrapper');
+        if (newActiveFilters && activeFiltersWrapper) {
+          activeFiltersWrapper.innerHTML = newActiveFilters.innerHTML;
+        }
+
+        const newTabs = doc.getElementById('artikelCategoryTabs');
+        if (newTabs && categoryTabs) {
+          categoryTabs.innerHTML = newTabs.innerHTML;
+        }
+
+        window.history.replaceState(null, '', url);
+      })
+      .catch(err => {
+        if (err.name !== 'AbortError') {
+          console.error('Article search error:', err);
+        }
+      })
+      .finally(() => {
+        if (spinner) spinner.classList.add('hidden');
+        if (tableWrapper) {
+          tableWrapper.classList.remove('opacity-50', 'pointer-events-none');
+          tableWrapper.removeAttribute('aria-busy');
+        }
+      });
+  }
+
+  function triggerSearch(immediate = false) {
+    clearTimeout(debounceTimer);
+    const delay = immediate ? 0 : 280;
+
+    debounceTimer = setTimeout(() => {
+      const formData = new FormData(form);
+      const params = new URLSearchParams();
+
+      for (const [key, value] of formData.entries()) {
+        if (value && value.trim() !== '') {
+          params.set(key, value.trim());
+        }
+      }
+
+      const action = form.getAttribute('action') || window.location.pathname;
+      const queryString = params.toString();
+      const targetUrl = queryString ? `${action}?${queryString}` : action;
+
+      doFetch(targetUrl);
+    }, delay);
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', function () {
+      if (clearBtn) {
+        if (this.value.trim().length > 0) {
+          clearBtn.classList.remove('hidden');
+        } else {
+          clearBtn.classList.add('hidden');
+        }
+      }
+      triggerSearch(false);
+    });
+
+    searchInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        triggerSearch(true);
+      }
+    });
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function () {
+      if (searchInput) {
+        searchInput.value = '';
+        this.classList.add('hidden');
+        searchInput.focus();
+        triggerSearch(true);
+      }
+    });
+  }
+
+  if (dateInput) {
+    dateInput.addEventListener('change', () => triggerSearch(true));
+  }
+
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      triggerSearch(true);
+    });
+  }
+
+  // Intercept category tab clicks
+  if (categoryTabs) {
+    categoryTabs.addEventListener('click', (e) => {
+      const tabLink = e.target.closest('a');
+      if (tabLink && tabLink.href) {
+        e.preventDefault();
+        const url = new URL(tabLink.href, window.location.origin);
+        const catVal = url.searchParams.get('category') || '';
+        let hiddenCat = form.querySelector('input[name="category"]');
+        if (catVal && catVal !== 'all') {
+          if (!hiddenCat) {
+            hiddenCat = document.createElement('input');
+            hiddenCat.type = 'hidden';
+            hiddenCat.name = 'category';
+            form.appendChild(hiddenCat);
+          }
+          hiddenCat.value = catVal;
+        } else if (hiddenCat) {
+          hiddenCat.remove();
+        }
+        doFetch(tabLink.href);
+      }
+    });
+  }
+
+  // Intercept pagination clicks
+  if (paginationWrapper) {
+    paginationWrapper.addEventListener('click', (e) => {
+      const pageLink = e.target.closest('a.page-link, .pagination a');
+      if (pageLink && pageLink.href) {
+        e.preventDefault();
+        doFetch(pageLink.href);
+        window.scrollTo({ top: tableWrapper.offsetTop - 80, behavior: 'smooth' });
+      }
+    });
+  }
+
+  // Intercept filter tag clicks (remove tag or reset)
+  if (activeFiltersWrapper) {
+    activeFiltersWrapper.addEventListener('click', (e) => {
+      const link = e.target.closest('a');
+      if (link && link.href) {
+        e.preventDefault();
+        const url = new URL(link.href, window.location.origin);
+        if (searchInput) {
+          const qVal = url.searchParams.get('q') || '';
+          searchInput.value = qVal;
+          if (clearBtn) {
+            if (qVal) clearBtn.classList.remove('hidden');
+            else clearBtn.classList.add('hidden');
+          }
+        }
+        if (dateInput) {
+          dateInput.value = url.searchParams.get('date') || '';
+        }
+        let hiddenCat = form.querySelector('input[name="category"]');
+        const catVal = url.searchParams.get('category') || '';
+        if (catVal && catVal !== 'all') {
+          if (!hiddenCat) {
+            hiddenCat = document.createElement('input');
+            hiddenCat.type = 'hidden';
+            hiddenCat.name = 'category';
+            form.appendChild(hiddenCat);
+          }
+          hiddenCat.value = catVal;
+        } else if (hiddenCat) {
+          hiddenCat.remove();
+        }
+        doFetch(link.href);
+      }
+    });
+  }
+});
+</script>
+@endpush

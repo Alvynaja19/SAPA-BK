@@ -62,9 +62,21 @@ class GuruBkController extends Controller
         ));
     }
 
-    public function siswa(): View
+    public function siswa(Request $request): View
     {
-        $siswa = User::where('role', 'siswa')->latest()->paginate(15);
+        $query = User::where('role', 'siswa');
+
+        if ($request->filled('q')) {
+            $search = trim((string) $request->q);
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('nisn', 'like', "%{$search}%")
+                    ->orWhere('kelas', 'like', "%{$search}%");
+            });
+        }
+
+        $siswa = $query->latest()->paginate(15)->withQueryString();
 
         return view('bk.siswa', compact('siswa'));
     }

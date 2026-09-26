@@ -740,34 +740,55 @@
     </div>
   </div>
 
-  <!-- Search Controls -->
+  <!-- Search Controls (Live Instant Search) -->
   <div class="mode-filter-container">
-    <form action="{{ route('siswa.riwayat') }}" method="GET" class="filter-form" style="width: 100%;">
-      <div class="search-input-wrap" style="flex: 1;">
+    <form id="siswaRiwayatSearchForm" action="{{ route('siswa.riwayat') }}" method="GET" class="filter-form" style="width: 100%;">
+      <div class="search-input-wrap" style="flex: 1; position: relative;">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/>
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
         <input 
           type="text" 
+          id="riwayatSearchInput"
           name="q" 
           value="{{ $search ?? '' }}" 
           placeholder="Cari topik percakapan atau kata kunci bimbingan AI..." 
           class="search-input"
+          autocomplete="off"
           aria-label="Cari riwayat bimbingan AI"
+          style="padding-right: 48px;"
         />
+        <div style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 6px;">
+          <!-- Spinner Indikator Loading Live Search -->
+          <div id="riwayatSearchSpinner" style="display: none;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 1s linear infinite; color: var(--primary);">
+              <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
+              <path d="M12 2a10 10 0 0 1 10 10"/>
+            </svg>
+          </div>
+          <!-- Tombol Hapus Kata Kunci -->
+          <button 
+            type="button" 
+            id="riwayatSearchClearBtn" 
+            style="{{ empty($search) ? 'display: none;' : 'display: flex;' }} align-items: center; justify-content: center; background: none; border: none; cursor: pointer; color: var(--ink-faint); padding: 4px;"
+            title="Hapus kata kunci"
+            aria-label="Hapus kata kunci pencarian"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
       </div>
       <button type="submit" class="btn btn-ghost btn-sm">
         <span>Cari</span>
       </button>
-      @if(!empty($search))
-        <a href="{{ route('siswa.riwayat') }}" class="btn btn-ghost btn-sm" style="color: var(--ink-faint);">
-          <span>Reset</span>
-        </a>
-      @endif
     </form>
   </div>
 
+  <div id="ledgerCardWrapper" style="transition: opacity 0.15s ease;">
   @if(!empty($search))
     <div class="search-feedback-bar">
       <span>Menampilkan hasil pencarian: <strong>"{{ $search }}"</strong></span>
@@ -903,6 +924,7 @@
       </div>
     @endif
   </div>
+  </div>
 
   <!-- Professional Counseling Ethics Notice (ABKIN) -->
   <div class="ethics-notice-box">
@@ -939,6 +961,137 @@
       }
     });
   }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('siswaRiwayatSearchForm');
+    const searchInput = document.getElementById('riwayatSearchInput');
+    const clearBtn = document.getElementById('riwayatSearchClearBtn');
+    const spinner = document.getElementById('riwayatSearchSpinner');
+    const cardWrapper = document.getElementById('ledgerCardWrapper');
+
+    let debounceTimer = null;
+    let abortController = null;
+
+    function doFetch(url) {
+      if (abortController) {
+        abortController.abort();
+      }
+      abortController = new AbortController();
+
+      if (spinner) spinner.style.display = 'block';
+      if (cardWrapper) {
+        cardWrapper.style.opacity = '0.5';
+        cardWrapper.style.pointerEvents = 'none';
+        cardWrapper.setAttribute('aria-busy', 'true');
+      }
+
+      fetch(url, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        signal: abortController.signal
+      })
+        .then(res => {
+          if (!res.ok) throw new Error('Network error');
+          return res.text();
+        })
+        .then(html => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+
+          const newWrapper = doc.getElementById('ledgerCardWrapper');
+          if (newWrapper && cardWrapper) {
+            cardWrapper.innerHTML = newWrapper.innerHTML;
+          }
+
+          window.history.replaceState(null, '', url);
+        })
+        .catch(err => {
+          if (err.name !== 'AbortError') {
+            console.error('Riwayat search error:', err);
+          }
+        })
+        .finally(() => {
+          if (spinner) spinner.style.display = 'none';
+          if (cardWrapper) {
+            cardWrapper.style.opacity = '1';
+            cardWrapper.style.pointerEvents = 'auto';
+            cardWrapper.removeAttribute('aria-busy');
+          }
+        });
+    }
+
+    function triggerSearch(immediate = false) {
+      clearTimeout(debounceTimer);
+      const delay = immediate ? 0 : 280;
+
+      debounceTimer = setTimeout(() => {
+        const q = searchInput ? searchInput.value.trim() : '';
+        const action = form.getAttribute('action') || window.location.pathname;
+        const targetUrl = q ? `${action}?q=${encodeURIComponent(q)}` : action;
+
+        doFetch(targetUrl);
+      }, delay);
+    }
+
+    if (searchInput) {
+      searchInput.addEventListener('input', function () {
+        if (clearBtn) {
+          if (this.value.trim().length > 0) {
+            clearBtn.style.display = 'flex';
+          } else {
+            clearBtn.style.display = 'none';
+          }
+        }
+        triggerSearch(false);
+      });
+
+      searchInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          triggerSearch(true);
+        }
+      });
+    }
+
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function () {
+        if (searchInput) {
+          searchInput.value = '';
+          this.style.display = 'none';
+          searchInput.focus();
+          triggerSearch(true);
+        }
+      });
+    }
+
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        triggerSearch(true);
+      });
+    }
+
+    if (cardWrapper) {
+      cardWrapper.addEventListener('click', (e) => {
+        const pageLink = e.target.closest('a.page-link, .pagination a');
+        if (pageLink && pageLink.href) {
+          e.preventDefault();
+          doFetch(pageLink.href);
+          window.scrollTo({ top: cardWrapper.offsetTop - 80, behavior: 'smooth' });
+          return;
+        }
+
+        const resetLink = e.target.closest('a.reset-link');
+        if (resetLink && resetLink.href) {
+          e.preventDefault();
+          if (searchInput) {
+            searchInput.value = '';
+            if (clearBtn) clearBtn.style.display = 'none';
+          }
+          doFetch(resetLink.href);
+        }
+      });
+    }
+  });
 </script>
 @endpush
 

@@ -151,13 +151,13 @@
       </div>
     @endif
 
-    <!-- Search Input Form -->
-    <form method="GET" action="{{ route('admin.users') }}" class="flex items-center gap-2">
+    <!-- Search Input Form (Live Search Instant) -->
+    <form id="adminUsersSearchForm" method="GET" action="{{ route('admin.users') }}" class="flex items-center gap-2">
       <input type="hidden" name="tab" value="{{ $tab ?? 'users' }}">
       @if(request('role'))
         <input type="hidden" name="role" value="{{ request('role') }}">
       @endif
-      <div class="relative grow sm:w-64">
+      <div class="relative grow sm:w-72">
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
           <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -165,21 +165,45 @@
         </div>
         <input
           type="text"
+          id="adminUsersSearchInput"
           name="q"
           value="{{ request('q') }}"
           placeholder="{{ ($tab ?? 'users') === 'prapendaftaran' ? 'Cari nama / NIS / NISN / kelas...' : 'Cari nama / email / NISN...' }}"
-          class="w-full pl-9 pr-4 py-2 rounded-xl text-xs border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-hidden focus:border-brand-500"
+          autocomplete="off"
+          class="w-full pl-9 pr-14 py-2 rounded-xl text-xs border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-hidden focus:border-brand-500"
         />
+        <div class="absolute inset-y-0 right-0 pr-2.5 flex items-center gap-1">
+          <!-- Spinner Indikator Loading Live Search -->
+          <div id="adminUsersSearchSpinner" class="hidden text-brand-600 animate-spin" title="Mencari...">
+            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+          </div>
+          <!-- Tombol Hapus Kata Kunci -->
+          <button
+            type="button"
+            id="adminUsersSearchClearBtn"
+            class="{{ request('q') ? '' : 'hidden' }} text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 cursor-pointer p-1"
+            title="Hapus kata kunci"
+            aria-label="Hapus kata kunci pencarian"
+          >
+            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
       </div>
       <button
         type="submit"
-        class="px-3.5 py-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+        class="px-3.5 py-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer"
       >
         Cari
       </button>
     </form>
   </div>
 
+  <div id="adminTableContainer" class="transition-opacity duration-150">
   @if(($tab ?? 'users') === 'prapendaftaran')
     <!-- Master Siswa Pra-Pendaftaran Table -->
     <div class="rounded-3xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-xs overflow-hidden">
@@ -519,6 +543,7 @@
       @endif
     </div>
   @endif
+  </div>
 
   <!-- Modal Form Tambah Pengguna Baru (SRS F-06) -->
   <div
@@ -907,3 +932,134 @@
 
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('adminUsersSearchForm');
+  const searchInput = document.getElementById('adminUsersSearchInput');
+  const clearBtn = document.getElementById('adminUsersSearchClearBtn');
+  const spinner = document.getElementById('adminUsersSearchSpinner');
+  const tableContainer = document.getElementById('adminTableContainer');
+
+  let debounceTimer = null;
+  let abortController = null;
+
+  function doFetch(url) {
+    if (abortController) {
+      abortController.abort();
+    }
+    abortController = new AbortController();
+
+    if (spinner) spinner.classList.remove('hidden');
+    if (tableContainer) {
+      tableContainer.classList.add('opacity-50', 'pointer-events-none');
+      tableContainer.setAttribute('aria-busy', 'true');
+    }
+
+    fetch(url, {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      signal: abortController.signal
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Network error');
+        return res.text();
+      })
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        const newContainer = doc.getElementById('adminTableContainer');
+        if (newContainer && tableContainer) {
+          tableContainer.innerHTML = newContainer.innerHTML;
+        }
+
+        window.history.replaceState(null, '', url);
+      })
+      .catch(err => {
+        if (err.name !== 'AbortError') {
+          console.error('Admin users search error:', err);
+        }
+      })
+      .finally(() => {
+        if (spinner) spinner.classList.add('hidden');
+        if (tableContainer) {
+          tableContainer.classList.remove('opacity-50', 'pointer-events-none');
+          tableContainer.removeAttribute('aria-busy');
+        }
+      });
+  }
+
+  function triggerSearch(immediate = false) {
+    clearTimeout(debounceTimer);
+    const delay = immediate ? 0 : 280;
+
+    debounceTimer = setTimeout(() => {
+      const formData = new FormData(form);
+      const params = new URLSearchParams();
+
+      for (const [key, value] of formData.entries()) {
+        if (value && value.trim() !== '') {
+          params.set(key, value.trim());
+        }
+      }
+
+      const action = form.getAttribute('action') || window.location.pathname;
+      const queryString = params.toString();
+      const targetUrl = queryString ? `${action}?${queryString}` : action;
+
+      doFetch(targetUrl);
+    }, delay);
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', function () {
+      if (clearBtn) {
+        if (this.value.trim().length > 0) {
+          clearBtn.classList.remove('hidden');
+        } else {
+          clearBtn.classList.add('hidden');
+        }
+      }
+      triggerSearch(false);
+    });
+
+    searchInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        triggerSearch(true);
+      }
+    });
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function () {
+      if (searchInput) {
+        searchInput.value = '';
+        this.classList.add('hidden');
+        searchInput.focus();
+        triggerSearch(true);
+      }
+    });
+  }
+
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      triggerSearch(true);
+    });
+  }
+
+  if (tableContainer) {
+    tableContainer.addEventListener('click', (e) => {
+      const pageLink = e.target.closest('a.page-link, .pagination a');
+      if (pageLink && pageLink.href) {
+        e.preventDefault();
+        doFetch(pageLink.href);
+        window.scrollTo({ top: tableContainer.offsetTop - 80, behavior: 'smooth' });
+      }
+    });
+  }
+});
+</script>
+@endpush
