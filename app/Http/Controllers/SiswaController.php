@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use App\Models\ChatSession;
 use App\Models\Ebook;
 use App\Models\Questionnaire;
@@ -12,6 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class SiswaController extends Controller
@@ -92,6 +94,81 @@ class SiswaController extends Controller
             $currentSession = $isNew ? null : $aiSessions->first();
         }
 
+        // Cek apakah ada rujukan fitur/modul/tes/artikel yang ingin didiskusikan siswa
+        $refType = $request->query('ref');
+        $refId = $request->query('ref_id', $request->query('id'));
+        $initialAttachment = null;
+
+        if ($refType && $refId) {
+            if ($refType === 'ebook') {
+                $ebook = Ebook::with('uploader')->find($refId);
+                if ($ebook) {
+                    $initialAttachment = [
+                        'type' => 'ebook',
+                        'type_label' => 'Modul E-Book',
+                        'id' => $ebook->id,
+                        'title' => $ebook->title,
+                        'subtitle' => $ebook->uploader?->name ?? 'Guru BK SMAN 4 Jember',
+                        'description' => Str::limit($ebook->description ?? 'Modul materi bimbingan konseling.', 120),
+                        'cover_url' => $ebook->cover_path ? asset('storage/'.$ebook->cover_path) : null,
+                        'url' => route('ebook.detail', $ebook->id),
+                        'badge' => 'E-Book Perpustakaan BK',
+                    ];
+                }
+            } elseif ($refType === 'tes' || $refType === 'kuis') {
+                $result = QuestionnaireResult::with('questionnaire')->where('user_id', $user->id)->find($refId);
+                if ($result) {
+                    $initialAttachment = [
+                        'type' => 'tes',
+                        'type_label' => 'Hasil Kuesioner & Tes',
+                        'id' => $result->id,
+                        'title' => $result->questionnaire?->title ?? 'Hasil Asesmen Minat Bakat',
+                        'subtitle' => 'Skor Evaluasi: '.$result->score.' Poin',
+                        'description' => 'Diselesaikan pada '.$result->created_at?->format('d M Y, H:i').' WIB. Menunggu telaah dan konsultasi lanjutan dari Guru BK.',
+                        'score' => $result->score,
+                        'url' => route('siswa.tes.hasil', $result->id),
+                        'badge' => 'Hasil Asesmen Selesai',
+                    ];
+                } else {
+                    $questionnaire = Questionnaire::find($refId);
+                    if ($questionnaire) {
+                        $latestResult = QuestionnaireResult::where('user_id', $user->id)->where('questionnaire_id', $questionnaire->id)->latest()->first();
+                        $initialAttachment = [
+                            'type' => 'tes',
+                            'type_label' => 'Instrumen Kuesioner & Tes',
+                            'id' => $latestResult ? $latestResult->id : $questionnaire->id,
+                            'title' => $questionnaire->title,
+                            'subtitle' => $latestResult ? 'Skor: '.$latestResult->score.' Poin' : 'Instrumen Belum Dikerjakan',
+                            'description' => Str::limit($questionnaire->description ?? '', 120),
+                            'score' => $latestResult?->score,
+                            'url' => $latestResult ? route('siswa.tes.hasil', $latestResult->id) : route('siswa.tes.isi', $questionnaire->id),
+                            'badge' => 'Kuesioner BK',
+                        ];
+                    }
+                }
+            } elseif ($refType === 'artikel' || $refType === 'article') {
+                $article = Article::with('author')->where('id', $refId)->orWhere('slug', $refId)->first();
+                if ($article) {
+                    $initialAttachment = [
+                        'type' => 'artikel',
+                        'type_label' => 'Artikel Edukatif BK',
+                        'id' => $article->id,
+                        'title' => $article->title,
+                        'subtitle' => 'Penulis: '.($article->author?->name ?? $article->source_name ?? 'Guru BK SMAN 4 Jember'),
+                        'description' => Str::limit(strip_tags($article->content ?? ''), 120),
+                        'cover_url' => $article->thumbnail ? asset('storage/'.$article->thumbnail) : null,
+                        'url' => route('article.detail', $article->slug),
+                        'badge' => 'Artikel Bimbingan',
+                    ];
+                }
+            }
+
+            // Jika ada attachment yang dirujuk, alihkan mode ke Live Chat Guru BK
+            if ($initialAttachment) {
+                $currentMode = 'guru_bk';
+            }
+        }
+
         // Sesi aktif untuk masing-masing stream (agar stream lain tetap terisi)
         $activeAiSession = ($currentMode === 'ai') ? $currentSession : ($isNew ? null : $aiSessions->first());
         $activeGuruSession = ($currentMode === 'guru_bk') ? $currentSession : ($isNew ? null : ($activeLiveSession ?? $guruSessions->first()));
@@ -109,7 +186,8 @@ class SiswaController extends Controller
             'currentSession',
             'currentMode',
             'activeAiSession',
-            'activeGuruSession'
+            'activeGuruSession',
+            'initialAttachment'
         ));
     }
 

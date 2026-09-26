@@ -468,9 +468,17 @@
           </div>
         </div>
       </div>
-      <a href="{{ route('siswa.ebook') }}" class="btn btn-ghost btn-sm btn-block" style="margin-top: 14px;">
-        Lanjutkan Membaca
-      </a>
+      <div style="display: flex; gap: 8px; margin-top: 14px;">
+        <a href="{{ route('siswa.ebook') }}" class="btn btn-ghost btn-sm" style="flex: 1; justify-content: center;">
+          Baca Modul
+        </a>
+        @if(isset($latestEbook) && $latestEbook)
+          <a href="{{ route('siswa.chat', ['mode' => 'live', 'ref' => 'ebook', 'ref_id' => $latestEbook->id]) }}" class="btn btn-primary btn-sm" style="flex: 1; justify-content: center;" title="Diskusikan modul ini dengan Guru BK">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>Diskusikan</span>
+          </a>
+        @endif
+      </div>
     </div>
 
     <!-- Reminder Card -->
@@ -485,9 +493,16 @@
           Belum kamu isi. Hasilnya membantu Guru BK memahami cara belajar dan pengembangan dirimu yang paling cocok.
         @endif
       </p>
-      <a href="{{ $pendingQuestionnaire ? route('siswa.tes.isi', $pendingQuestionnaire->id) : route('siswa.tes') }}" class="btn btn-primary btn-sm">
-        Isi Sekarang
-      </a>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <a href="{{ $pendingQuestionnaire ? route('siswa.tes.isi', $pendingQuestionnaire->id) : route('siswa.tes') }}" class="btn btn-primary btn-sm">
+          Isi Sekarang
+        </a>
+        @if($pendingQuestionnaire)
+          <a href="{{ route('siswa.chat', ['mode' => 'live', 'ref' => 'tes', 'ref_id' => $pendingQuestionnaire->id]) }}" class="btn btn-ghost btn-sm" style="background: rgba(255,255,255,0.15); color: #FFFFFF; border-color: rgba(255,255,255,0.3);" title="Tanyakan kuesioner ini ke Guru BK">
+            <span>Tanya Guru BK</span>
+          </a>
+        @endif
+      </div>
     </div>
   </div>
 </div>

@@ -119,6 +119,34 @@
         </div>
 
         <!-- Content -->
+        @if(!empty($msg->metadata['attachment']))
+          @php $att = $msg->metadata['attachment']; @endphp
+          <div class="mb-3 p-3.5 rounded-2xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200/80 dark:border-blue-900/60 text-left max-w-xl">
+            <div class="flex items-center gap-2 mb-1.5 flex-wrap">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-600 text-white">
+                {{ $att['type_label'] ?? strtoupper($att['type'] ?? 'Lampiran') }}
+              </span>
+              @if(!empty($att['score']))
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
+                  {{ $att['score'] }}
+                </span>
+              @endif
+            </div>
+            <h5 class="text-xs font-bold text-gray-900 dark:text-white leading-snug">{{ $att['title'] ?? 'Lampiran Bimbingan' }}</h5>
+            @if(!empty($att['subtitle']))
+              <p class="text-[11px] font-medium text-gray-500 dark:text-gray-400 mt-0.5">{{ $att['subtitle'] }}</p>
+            @endif
+            @if(!empty($att['description']))
+              <p class="text-[11px] text-gray-600 dark:text-gray-300 mt-1 line-clamp-2 leading-relaxed">{{ $att['description'] }}</p>
+            @endif
+            @if(!empty($att['url']))
+              <a href="{{ $att['url'] }}" target="_blank" class="inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:text-white transition-all shadow-xs">
+                <span>Buka Lampiran</span>
+                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+              </a>
+            @endif
+          </div>
+        @endif
         <div class="text-xs sm:text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
           {{ $msg->content }}
         </div>

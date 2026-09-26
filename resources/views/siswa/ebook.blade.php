@@ -720,6 +720,16 @@
               <span>Baca Modul</span>
             </button>
             <a 
+              href="{{ route('siswa.chat', ['mode' => 'live', 'ref' => 'ebook', 'ref_id' => $eb->id]) }}" 
+              class="ebook-btn-dl" 
+              title="Diskusikan Modul Ini dengan Guru BK" 
+              aria-label="Diskusikan modul {{ $eb->title }} dengan Guru BK"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </a>
+            <a 
               href="{{ route('ebook.download', $eb->id) }}" 
               class="ebook-btn-dl" 
               title="Unduh PDF Modul" 
@@ -780,6 +790,12 @@
         </div>
       </div>
       <div class="ebook-modal-actions">
+        <a href="#" id="modalDiscussBtn" class="ebook-modal-btn" title="Diskusikan Modul Ini dengan Guru BK" style="background: rgba(28, 110, 180, 0.4); border-color: rgba(28, 110, 180, 0.6);">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span>Diskusikan via Chat</span>
+        </a>
         <a href="#" id="modalDownloadBtn" class="ebook-modal-btn" title="Unduh Berkas PDF">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -900,13 +916,15 @@ document.addEventListener('DOMContentLoaded', function () {
   const modal = document.getElementById('pdfReaderModal');
   const modalTitle = document.getElementById('modalTitle');
   const modalDownload = document.getElementById('modalDownloadBtn');
+  const modalDiscuss = document.getElementById('modalDiscussBtn');
   const pdfFrame = document.getElementById('pdfFrame');
   const modalClose = document.getElementById('modalCloseBtn');
 
-  function openReader(streamUrl, downloadUrl, title) {
+  function openReader(streamUrl, downloadUrl, title, ebookId) {
     if (!modal || !pdfFrame) return;
     if (modalTitle) modalTitle.textContent = title;
     if (modalDownload) modalDownload.href = downloadUrl;
+    if (modalDiscuss) modalDiscuss.href = '/chat?mode=live&ref=ebook&ref_id=' + (ebookId || '');
     pdfFrame.src = streamUrl;
     modal.classList.add('is-active');
     document.body.style.overflow = 'hidden';
@@ -924,7 +942,8 @@ document.addEventListener('DOMContentLoaded', function () {
       const streamUrl = this.getAttribute('data-stream-url');
       const downloadUrl = this.getAttribute('data-download-url');
       const title = this.getAttribute('data-title');
-      openReader(streamUrl, downloadUrl, title);
+      const ebookId = this.getAttribute('data-id');
+      openReader(streamUrl, downloadUrl, title, ebookId);
     });
   });
 

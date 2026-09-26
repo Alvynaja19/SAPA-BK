@@ -81,7 +81,7 @@
             </div>
           </div>
 
-          <a href="{{ auth()->check() ? route('siswa.chat') : route('login') }}" class="btn btn-primary btn-sm">
+          <a href="{{ auth()->check() ? route('siswa.chat', ['mode' => 'live', 'ref' => 'artikel', 'ref_id' => $article->id]) : route('login') }}" class="btn btn-primary btn-sm">
             Konsultasikan Topik Ini &rarr;
           </a>
         </div>

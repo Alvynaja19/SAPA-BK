@@ -352,10 +352,16 @@
           </div>
 
           @if($latestResult)
-            <a href="{{ route('siswa.tes.hasil', $latestResult->id) }}" class="btn btn-ghost btn-sm" aria-label="Lihat hasil kuesioner {{ $q->title }}">
-              <span>Lihat Hasil &amp; Rekomendasi</span>
-              <span aria-hidden="true">&rarr;</span>
-            </a>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <a href="{{ route('siswa.tes.hasil', $latestResult->id) }}" class="btn btn-ghost btn-sm" aria-label="Lihat hasil kuesioner {{ $q->title }}">
+                <span>Lihat Hasil</span>
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+              <a href="{{ route('siswa.chat', ['mode' => 'live', 'ref' => 'tes', 'ref_id' => $latestResult->id]) }}" class="btn btn-primary btn-sm" aria-label="Diskusikan hasil asesmen {{ $q->title }} dengan Guru BK" title="Diskusikan hasil asesmen dengan Guru BK">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <span>Diskusikan</span>
+              </a>
+            </div>
           @else
             <a href="{{ route('siswa.tes.isi', $q->id) }}" class="btn btn-primary btn-sm" aria-label="Mulai kerjakan kuesioner {{ $q->title }}">
               <span>Mulai Kerjakan</span>

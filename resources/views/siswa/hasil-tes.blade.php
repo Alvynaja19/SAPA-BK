@@ -254,7 +254,7 @@
 
     <!-- Actions -->
     <div class="hasil-actions">
-      <a href="{{ route('siswa.chat') }}" class="btn btn-primary btn-sm">
+      <a href="{{ route('siswa.chat', ['mode' => 'live', 'ref' => 'tes', 'ref_id' => $result->id]) }}" class="btn btn-primary btn-sm">
         <span>Diskusikan Hasil Ini via Chat SAPA</span>
         <span aria-hidden="true">&rarr;</span>
       </a>

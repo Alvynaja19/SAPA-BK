@@ -68,7 +68,7 @@
               </svg>
               <span>Unduh Modul (PDF)</span>
             </a>
-            <a href="{{ auth()->check() ? route('siswa.chat') : route('login') }}" class="btn btn-accent">
+            <a href="{{ auth()->check() ? route('siswa.chat', ['mode' => 'live', 'ref' => 'ebook', 'ref_id' => $ebook->id]) : route('login') }}" class="btn btn-accent">
               <span>Diskusikan Modul Ini</span>
             </a>
           </div>

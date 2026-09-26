@@ -110,6 +110,7 @@ class ChatApiController extends Controller
             'message' => 'required|string|max:2000',
             'mode' => 'nullable|string|in:ai,live,guru_bk',
             'teacher_id' => 'nullable|exists:users,id',
+            'attachment' => 'nullable|array',
         ]);
 
         $user = Auth::user() ?? $request->user();
@@ -117,9 +118,10 @@ class ChatApiController extends Controller
         $messageText = $request->input('message');
         $mode = $request->input('mode', 'ai');
         $teacherId = $request->input('teacher_id') ? (int) $request->input('teacher_id') : null;
+        $attachment = $request->input('attachment');
 
         try {
-            $result = $chatService->processMessage($messageText, $sessionId, $user, $mode, $teacherId);
+            $result = $chatService->processMessage($messageText, $sessionId, $user, $mode, $teacherId, $attachment);
         } catch (\DomainException $e) {
             return response()->json([
                 'success' => false,

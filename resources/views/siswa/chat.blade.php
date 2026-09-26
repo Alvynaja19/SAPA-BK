@@ -830,6 +830,185 @@
     box-shadow: 0 1px 3px rgba(0,0,0,0.06);
   }
 
+  /* Pending Attachment Bar above Input */
+  .pending-attachment-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: #F0F7FD;
+    border: 1.5px solid #BAdaf5;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    animation: slideDownAttachment .2s ease;
+  }
+  @keyframes slideDownAttachment {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .pending-attachment-icon-box {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    background: #1C6EB4;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .pending-attachment-content {
+    flex: 1;
+    min-width: 0;
+  }
+  .pending-attachment-tag {
+    font-size: 11px;
+    font-weight: 700;
+    color: #1C6EB4;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 1px;
+  }
+  .pending-attachment-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #0F172A;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pending-attachment-subtitle {
+    font-size: 11.5px;
+    color: #475569;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pending-attachment-action-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .btn-preview-attachment {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #1C6EB4;
+    background: #FFFFFF;
+    border: 1px solid #BAdaf5;
+    padding: 5px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all .15s ease;
+  }
+  .btn-preview-attachment:hover {
+    background: #E0EFFC;
+    border-color: #1C6EB4;
+  }
+  .btn-remove-attachment {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: transparent;
+    border: 1px solid #CBD5E1;
+    color: #64748B;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .btn-remove-attachment:hover {
+    background: #FEE2E2;
+    border-color: #F87171;
+    color: #DC2626;
+  }
+
+  /* Message Attachment Card inside bubbles */
+  .msg-attachment-card {
+    background: #FFFFFF;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    text-align: left;
+    color: #0F172A !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .msg-attachment-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .msg-attachment-type {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: #1C6EB4;
+    color: #FFFFFF !important;
+  }
+  .msg-attachment-type.ebook { background: #1C6EB4; color: #FFFFFF !important; }
+  .msg-attachment-type.tes, .msg-attachment-type.kuis { background: #15803D; color: #FFFFFF !important; }
+  .msg-attachment-type.artikel, .msg-attachment-type.article { background: #7C3AED; color: #FFFFFF !important; }
+  .msg-attachment-score {
+    font-size: 11px;
+    font-weight: 700;
+    color: #15803D !important;
+    background: #DCFCE7;
+    padding: 2px 7px;
+    border-radius: 4px;
+    border: 1px solid #86EFAC;
+  }
+  .msg-attachment-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #0F172A !important;
+    line-height: 1.35;
+    margin-bottom: 2px;
+  }
+  .msg-attachment-sub {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #475569 !important;
+    margin-bottom: 4px;
+  }
+  .msg-attachment-desc {
+    font-size: 12px;
+    color: #334155 !important;
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+  .msg-attachment-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #1C6EB4 !important;
+    background: #FFFFFF;
+    border: 1px solid #B8D5ED;
+    padding: 5px 11px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all .15s ease;
+  }
+  .msg-attachment-btn:hover {
+    background: #1C6EB4;
+    color: #FFFFFF !important;
+    border-color: #1C6EB4;
+  }
+
   /* Chat Input Area */
   .chat-input-box {
     padding: 16px 20px;
@@ -1359,6 +1538,32 @@
               <div class="bubble-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</div>
               <div class="bubble-body">
                 <div class="bubble-card">
+                  @if(!empty($msg->metadata['attachment']))
+                    @php $att = $msg->metadata['attachment']; @endphp
+                    <div class="msg-attachment-card">
+                      <div class="msg-attachment-badge">
+                        <span class="msg-attachment-type {{ $att['type'] ?? 'info' }}">
+                          {{ $att['type_label'] ?? strtoupper($att['type'] ?? 'Lampiran') }}
+                        </span>
+                        @if(!empty($att['score']))
+                          <span class="msg-attachment-score">{{ $att['score'] }}</span>
+                        @endif
+                      </div>
+                      <div class="msg-attachment-title">{{ $att['title'] ?? 'Dokumen Bimbingan' }}</div>
+                      @if(!empty($att['subtitle']))
+                        <div class="msg-attachment-sub">{{ $att['subtitle'] }}</div>
+                      @endif
+                      @if(!empty($att['description']))
+                        <div class="msg-attachment-desc">{{ \Illuminate\Support\Str::limit($att['description'], 130) }}</div>
+                      @endif
+                      @if(!empty($att['url']))
+                        <a href="{{ $att['url'] }}" target="_blank" class="msg-attachment-btn">
+                          <span>Buka Lampiran</span>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                        </a>
+                      @endif
+                    </div>
+                  @endif
                   {{ $msg->content }}
                 </div>
                 <span class="bubble-time">{{ $msg->created_at ? $msg->created_at->format('H:i') : '' }} WIB</span>
@@ -1524,6 +1729,32 @@
               <div class="bubble-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</div>
               <div class="bubble-body">
                 <div class="bubble-card">
+                  @if(!empty($msg->metadata['attachment']))
+                    @php $att = $msg->metadata['attachment']; @endphp
+                    <div class="msg-attachment-card">
+                      <div class="msg-attachment-badge">
+                        <span class="msg-attachment-type {{ $att['type'] ?? 'info' }}">
+                          {{ $att['type_label'] ?? strtoupper($att['type'] ?? 'Lampiran') }}
+                        </span>
+                        @if(!empty($att['score']))
+                          <span class="msg-attachment-score">{{ $att['score'] }}</span>
+                        @endif
+                      </div>
+                      <div class="msg-attachment-title">{{ $att['title'] ?? 'Dokumen Bimbingan' }}</div>
+                      @if(!empty($att['subtitle']))
+                        <div class="msg-attachment-sub">{{ $att['subtitle'] }}</div>
+                      @endif
+                      @if(!empty($att['description']))
+                        <div class="msg-attachment-desc">{{ \Illuminate\Support\Str::limit($att['description'], 130) }}</div>
+                      @endif
+                      @if(!empty($att['url']))
+                        <a href="{{ $att['url'] }}" target="_blank" class="msg-attachment-btn">
+                          <span>Buka Lampiran</span>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                        </a>
+                      @endif
+                    </div>
+                  @endif
                   {{ $msg->content }}
                 </div>
                 <span class="bubble-time">{{ $msg->created_at ? $msg->created_at->format('H:i') : '' }} WIB</span>
@@ -1596,6 +1827,42 @@
 
     <!-- Input Form Area -->
     <div class="chat-input-box">
+      @if(!empty($initialAttachment))
+        <div class="pending-attachment-bar" id="pending-attachment-bar">
+          <div class="pending-attachment-icon-box">
+            @if($initialAttachment['type'] === 'ebook')
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg>
+            @elseif(in_array($initialAttachment['type'], ['tes', 'kuis']))
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            @else
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            @endif
+          </div>
+          <div class="pending-attachment-content">
+            <div class="pending-attachment-tag">{{ $initialAttachment['type_label'] }}</div>
+            <div class="pending-attachment-title" title="{{ $initialAttachment['title'] }}">{{ $initialAttachment['title'] }}</div>
+            @if(!empty($initialAttachment['subtitle']) || !empty($initialAttachment['score']))
+              <div class="pending-attachment-subtitle">
+                @if(!empty($initialAttachment['score']))
+                  <strong style="color: #15803D;">{{ $initialAttachment['score'] }}</strong> &bull;
+                @endif
+                {{ $initialAttachment['subtitle'] }}
+              </div>
+            @endif
+          </div>
+          <div class="pending-attachment-action-wrap">
+            @if(!empty($initialAttachment['url']))
+              <a href="{{ $initialAttachment['url'] }}" target="_blank" class="btn-preview-attachment" title="Buka Dokumen Asli">
+                <span>Lihat</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            @endif
+            <button type="button" class="btn-remove-attachment" onclick="removePendingAttachment()" title="Batal Lampirkan" aria-label="Batal Lampirkan">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg>
+            </button>
+          </div>
+        </div>
+      @endif
       <form id="chat-form" onsubmit="handleChatSubmit(event)" class="chat-form">
         <div class="input-wrapper">
           <input 
@@ -1638,6 +1905,42 @@
   let activeGuruSessionId = "{{ $activeGuruSession?->id ?? '' }}";
   let currentGuruSessionStatus = "{{ $activeGuruSession?->status ?? 'none' }}";
   let hasActiveLiveSession = {{ (isset($guruSessions) && $guruSessions->where('status', 'active')->count() > 0) ? 'true' : 'false' }};
+  let pendingAttachment = @json($initialAttachment ?? null);
+
+  window.removePendingAttachment = function() {
+    pendingAttachment = null;
+    const bar = document.getElementById('pending-attachment-bar');
+    if (bar) bar.remove();
+  };
+
+  function renderAttachmentHtml(att) {
+    if (!att) return '';
+    const type = escapeHtml(att.type || 'info');
+    const typeLabel = escapeHtml(att.type_label || (att.type ? att.type.toUpperCase() : 'LAMPIRAN'));
+    const title = escapeHtml(att.title || 'Dokumen Bimbingan');
+    const subtitle = att.subtitle ? escapeHtml(att.subtitle) : '';
+    const desc = att.description ? escapeHtml(att.description) : '';
+    const score = att.score ? escapeHtml(att.score) : '';
+    const url = att.url ? escapeHtml(att.url) : '';
+
+    return `
+      <div class="msg-attachment-card">
+        <div class="msg-attachment-badge">
+          <span class="msg-attachment-type ${type}">${typeLabel}</span>
+          ${score ? `<span class="msg-attachment-score">${score}</span>` : ''}
+        </div>
+        <div class="msg-attachment-title">${title}</div>
+        ${subtitle ? `<div class="msg-attachment-sub">${subtitle}</div>` : ''}
+        ${desc ? `<div class="msg-attachment-desc">${desc.length > 130 ? desc.substring(0, 130) + '...' : desc}</div>` : ''}
+        ${url ? `
+          <a href="${url}" target="_blank" class="msg-attachment-btn">
+            <span>Buka Lampiran</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        ` : ''}
+      </div>
+    `;
+  }
 
   // Lacak seluruh ID pesan live chat yang sudah ditampilkan di layar
   const knownLiveMsgIds = new Set();
@@ -1953,10 +2256,18 @@
     const teacherSelectEl = document.getElementById('select-guru-bk');
     const selectedTeacherId = teacherSelectEl ? teacherSelectEl.value : null;
 
-    // Pasang pesan siswa HANYA ke stream yang sedang aktif
-    appendMessage(targetMode, 'user', text);
+    // Simpan salinan pending attachment untuk pesan ini
+    const sendingAttachment = pendingAttachment ? { ...pendingAttachment } : null;
+
+    // Pasang pesan siswa HANYA ke stream yang sedang aktif dengan lampiran jika ada
+    appendMessage(targetMode, 'user', text, sendingAttachment ? { attachment: sendingAttachment } : null);
     targetIndicator.style.display = 'flex';
     scrollStreamToBottom(targetMode);
+
+    // Hapus pending attachment bar setelah terpasang ke pengiriman pesan
+    if (pendingAttachment) {
+      removePendingAttachment();
+    }
 
     try {
       const response = await fetch("{{ route('api.chat.send') }}", {
@@ -1970,7 +2281,8 @@
           session_id: targetSessionId || null,
           message: text,
           mode: (targetMode === 'live') ? 'guru_bk' : 'ai',
-          teacher_id: (targetMode === 'live' && !targetSessionId) ? selectedTeacherId : null
+          teacher_id: (targetMode === 'live' && !targetSessionId) ? selectedTeacherId : null,
+          attachment: sendingAttachment || null
         })
       });
 
@@ -2163,10 +2475,15 @@
 
     if (role === 'user') {
       row.className = 'bubble-row user';
+      let attHtml = '';
+      if (metadata && metadata.attachment) {
+        attHtml = renderAttachmentHtml(metadata.attachment);
+      }
       row.innerHTML = `
         <div class="bubble-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</div>
         <div class="bubble-body">
           <div class="bubble-card">
+            ${attHtml}
             ${escapeHtml(content).replace(/\n/g, '<br>')}
           </div>
           <span class="bubble-time">${nowTime}</span>
@@ -2294,6 +2611,18 @@
     switchChatMode('live');
   } else {
     scrollStreamToBottom('ai');
+  }
+
+  // Pre-fill input pesan jika ada attachment bimbingan yang dilampirkan
+  if (pendingAttachment && chatInput && !chatInput.value.trim()) {
+    if (pendingAttachment.type === 'ebook') {
+      chatInput.value = `Halo Bapak/Ibu Guru BK, saya ingin berkonsultasi mengenai materi e-book "${pendingAttachment.title}".`;
+    } else if (pendingAttachment.type === 'tes' || pendingAttachment.type === 'kuis') {
+      chatInput.value = `Halo Bapak/Ibu Guru BK, saya ingin mendiskusikan hasil asesmen "${pendingAttachment.title}".`;
+    } else if (pendingAttachment.type === 'artikel' || pendingAttachment.type === 'article') {
+      chatInput.value = `Halo Bapak/Ibu Guru BK, saya ingin menanyakan lebih lanjut mengenai topik artikel "${pendingAttachment.title}".`;
+    }
+    chatInput.focus();
   }
 </script>
 @endpush

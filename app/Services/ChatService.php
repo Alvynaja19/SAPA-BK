@@ -33,7 +33,7 @@ class ChatService
      *
      * @return array{session: ChatSession, user_message: ChatMessage, assistant_message: ChatMessage}
      */
-    public function processMessage(string $messageText, ?int $sessionId = null, ?User $user = null, string $mode = 'ai', ?int $teacherId = null): array
+    public function processMessage(string $messageText, ?int $sessionId = null, ?User $user = null, string $mode = 'ai', ?int $teacherId = null, ?array $attachment = null): array
     {
         $normalizedMode = ($mode === 'live' || $mode === 'guru_bk') ? 'guru_bk' : 'ai';
 
@@ -83,12 +83,18 @@ class ChatService
             }
         }
 
+        $userMetadata = null;
+        if (! empty($attachment) && is_array($attachment)) {
+            $userMetadata = ['attachment' => $attachment];
+        }
+
         // 2. Simpan pesan dari pengguna
         $userMessage = ChatMessage::create([
             'session_id' => $session->id,
             'sender_id' => $user?->id,
             'role' => 'user',
             'content' => $messageText,
+            'metadata' => $userMetadata,
         ]);
 
         // 3. Jika mode Live Chat Guru BK, catat konfirmasi penerimaan konseling
@@ -98,6 +104,7 @@ class ChatService
                     'id' => $userMessage->id,
                     'role' => 'user',
                     'content' => $userMessage->content,
+                    'metadata' => $userMessage->metadata,
                     'time' => $userMessage->created_at ? $userMessage->created_at->format('H:i').' WIB' : 'Baru saja',
                     'sender_id' => $user?->id,
                 ], $session->status));
@@ -127,7 +134,12 @@ class ChatService
         }
 
         // 4. Generate respons AI (Python Service atau Fallback Mock Cerdas)
-        $aiResponse = $this->queryAiPipeline($messageText, $session->id, $user?->id);
+        $aiPrompt = $messageText;
+        if (! empty($attachment) && ! empty($attachment['title'])) {
+            $typeLabel = $attachment['type_label'] ?? 'Materi';
+            $aiPrompt = "[Mendiskusikan {$typeLabel}: {$attachment['title']}] {$messageText}";
+        }
+        $aiResponse = $this->queryAiPipeline($aiPrompt, $session->id, $user?->id);
 
         // 5. Simpan jawaban asisten ke basis data
         $assistantMessage = ChatMessage::create([
