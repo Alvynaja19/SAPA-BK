@@ -317,20 +317,315 @@
     box-shadow: 0 2px 5px rgba(28,110,180,0.25) !important;
   }
 
-  /* Live Counselor Banner */
+  /* Live Counselor Banner & High Contrast Picker */
   .live-counselor-banner {
     padding: 10px 20px;
-    background: #EBF3FA;
-    border-bottom: 1px solid #D0E3F3;
-    font-size: 12.5px;
-    color: #124A7A;
+    background: #F1F6FB;
+    border-bottom: 1px solid #CFE2F2;
+    font-size: 13px;
+    color: #0F172A;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
+    gap: 12px;
+    flex-wrap: wrap;
   }
   .live-counselor-banner.hidden {
     display: none !important;
+  }
+  .counselor-picker-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    flex: 1;
+    min-width: 260px;
+  }
+  .counselor-picker-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 11px;
+    background: #1C6EB4;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 6px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .counselor-picker-desc {
+    color: #1E293B;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .counselor-picker-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .counselor-select-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .counselor-select-label {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #0F172A;
+    white-space: nowrap;
+  }
+  .counselor-select-dropdown-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+  .counselor-select-element {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    font-size: 13px;
+    font-weight: 700;
+    color: #0F172A !important;
+    background-color: #FFFFFF !important;
+    border: 1.5px solid #1C6EB4;
+    border-radius: 8px;
+    padding: 7px 36px 7px 12px;
+    min-height: 38px;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(28, 110, 180, 0.12);
+    transition: border-color .15s ease, box-shadow .15s ease;
+    max-width: 320px;
+  }
+  .counselor-select-element:hover {
+    border-color: #14558F;
+  }
+  .counselor-select-element:focus {
+    outline: none;
+    border-color: #14558F;
+    box-shadow: 0 0 0 3px rgba(28, 110, 180, 0.25);
+  }
+  .counselor-select-element option {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #0F172A !important;
+    background-color: #FFFFFF !important;
+    padding: 10px 12px;
+  }
+  .counselor-select-arrow {
+    position: absolute;
+    right: 11px;
+    pointer-events: none;
+    stroke: #1C6EB4;
+  }
+  .counselor-location-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #334155;
+    background: #E2E8F0;
+    padding: 5px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .counselor-active-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #1C6EB4;
+    background: #EBF4FC;
+    padding: 5px 12px;
+    border-radius: 8px;
+    border: 1px solid #BBD8F2;
+  }
+  .counselor-dot-online {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #16A34A;
+    display: inline-block;
+  }
+
+  /* Interactive Counselor Selection Cards (Stream) */
+  .counselor-choice-container {
+    background: #FFFFFF;
+    border: 1.5px solid #CFE2F2;
+    border-radius: 14px;
+    padding: 20px 22px;
+    margin: 4px 0 12px;
+    box-shadow: 0 4px 14px rgba(28, 110, 180, 0.06);
+  }
+  .counselor-choice-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .counselor-choice-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: #1C6EB4;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(28, 110, 180, 0.25);
+  }
+  .counselor-choice-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0 0 3px;
+  }
+  .counselor-choice-subtitle {
+    font-size: 13px;
+    color: #475569;
+    margin: 0;
+    line-height: 1.45;
+  }
+  .counselor-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 12px;
+  }
+  .counselor-card {
+    background: #FFFFFF;
+    border: 2px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 14px;
+    cursor: pointer;
+    transition: all .18s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+  }
+  .counselor-card:hover {
+    border-color: #93C5FD;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(28, 110, 180, 0.12);
+  }
+  .counselor-card.selected {
+    border-color: #1C6EB4;
+    background: #F4F8FC;
+    box-shadow: 0 4px 14px rgba(28, 110, 180, 0.18);
+  }
+  .counselor-card-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .counselor-card-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #1C6EB4;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    position: relative;
+    flex-shrink: 0;
+    border: 2px solid #FFFFFF;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  .counselor-card-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .counselor-card-online-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #16A34A;
+    border: 2px solid #FFFFFF;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+  .counselor-card-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .counselor-card-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .counselor-card-role {
+    font-size: 11.5px;
+    font-weight: 500;
+    color: #475569;
+    margin-bottom: 4px;
+  }
+  .counselor-card-room {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #1C6EB4;
+    background: #EBF4FC;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .btn-select-counselor {
+    width: 100%;
+    min-height: 38px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    border: 1.5px solid #CBD5E1;
+    background: #FFFFFF;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .btn-select-counselor:hover {
+    background: #F8FAFC;
+    border-color: #94A3B8;
+  }
+  .counselor-card.selected .btn-select-counselor {
+    background: #1C6EB4;
+    color: #FFFFFF;
+    border-color: #1C6EB4;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(28, 110, 180, 0.25);
+  }
+  .btn-select-counselor-icon {
+    display: inline-flex;
+    align-items: center;
+  }
+  .counselor-choice-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed #CBD5E1;
+    font-size: 12px;
+    color: #475569;
   }
 
   /* Chat Stream Container */
@@ -784,6 +1079,41 @@
       min-height: 44px;
       padding: 10px;
     }
+    .live-counselor-banner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 14px;
+    }
+    .counselor-picker-left {
+      min-width: 0;
+      width: 100%;
+    }
+    .counselor-picker-right {
+      width: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+    }
+    .counselor-select-box {
+      width: 100%;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .counselor-select-dropdown-wrap {
+      width: 100%;
+    }
+    .counselor-select-element {
+      width: 100%;
+      max-width: 100%;
+    }
+    .counselor-cards-grid {
+      grid-template-columns: 1fr;
+    }
+    .counselor-choice-container {
+      padding: 16px 14px;
+    }
   }
 </style>
 @endpush
@@ -946,29 +1276,57 @@
 
     <!-- Banner Info Khusus Live Chat Guru BK -->
     <div class="live-counselor-banner hidden" id="live-chat-banner">
-      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-        <span id="live-banner-desc">
+      <div class="counselor-picker-left">
+        <span class="counselor-picker-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          Live Konseling
+        </span>
+        <span id="live-banner-desc" class="counselor-picker-desc">
           @if($activeGuruSession && $activeGuruSession->status === 'active')
-            <strong>Live Konseling Terhubung</strong>: Berdiskusi langsung dengan <strong>{{ $activeGuruSession->teacher?->name ?? 'Guru BK' }}</strong> (Jam Layanan: 08.00 - 15.00 WIB).
+            <strong>Sesi Aktif</strong>: Berdiskusi langsung dengan <strong>{{ $activeGuruSession->teacher?->name ?? 'Guru BK' }}</strong> (Jam Layanan: 08.00 - 15.00 WIB).
           @elseif($activeGuruSession && $activeGuruSession->status === 'closed')
-            <strong>Sesi Konseling Selesai</strong>: Ruang obrolan telah ditutup oleh Guru BK. Klik "Konsultasi Guru BK Baru" jika ingin bimbingan baru.
+            <strong>Sesi Selesai</strong>: Ruang obrolan telah ditutup oleh Guru BK. Klik "Konsultasi Guru BK Baru" jika ingin bimbingan baru.
           @else
-            <strong>Pilih Guru BK</strong>: Silakan pilih Guru BK tujuan sebelum memulai percakapan bimbingan.
+            <strong>Pilih Guru BK</strong>: Pilih guru tujuan bimbingan di bawah ini atau melalui menu pilihan di samping.
           @endif
         </span>
       </div>
 
-      <div style="display: flex; align-items: center; gap: 8px;">
+      <div class="counselor-picker-right">
         @if(!$activeGuruSession || $activeGuruSession->status === 'closed')
-          <select id="select-guru-bk" style="font-size: 11.5px; font-weight: 600; padding: 4px 8px; border-radius: 8px; border: 1px solid #B8D5ED; background: #fff; color: #1C6EB4; outline: none;">
-            @foreach($guruList ?? [] as $g)
-              <option value="{{ $g->id }}">Konselor: {{ $g->name }}</option>
-            @endforeach
-          </select>
+          <div class="counselor-select-box" id="counselor-select-container">
+            <label for="select-guru-bk" class="counselor-select-label">Pilih Guru BK:</label>
+            <div class="counselor-select-dropdown-wrap">
+              <select id="select-guru-bk" class="counselor-select-element" aria-label="Pilih Guru BK Tujuan">
+                @foreach($guruList ?? [] as $g)
+                  <option value="{{ $g->id }}" data-name="{{ $g->name }}" {{ $loop->first ? 'selected' : '' }}>
+                    Konselor: {{ $g->name }}
+                  </option>
+                @endforeach
+              </select>
+              <svg class="counselor-select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
         @else
-          <span style="font-size: 11px; font-weight: 600; color: #1C6EB4;">{{ $activeGuruSession->teacher?->name ?? 'Guru BK Piket' }}</span>
+          <div class="counselor-active-badge">
+            <span class="counselor-dot-online"></span>
+            <span class="counselor-active-name">{{ $activeGuruSession->teacher?->name ?? 'Guru BK Piket' }}</span>
+          </div>
         @endif
-        <span style="font-size: 11px; font-weight: 600;">Ruang BK Lt. 1</span>
+        <span class="counselor-location-tag">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          Ruang BK Lt. 1
+        </span>
       </div>
     </div>
 
@@ -1083,6 +1441,80 @@
           <span class="bubble-time">{{ now()->format('H:i') }} WIB</span>
         </div>
       </div>
+
+      <!-- Kartu Profil Pilihan Guru BK (Tampil saat belum ada sesi aktif atau sesi tertutup) -->
+      @if(!$activeGuruSession || $activeGuruSession->status === 'closed')
+        <div class="counselor-choice-container" id="counselor-choice-container">
+          <div class="counselor-choice-header">
+            <div class="counselor-choice-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="counselor-choice-title">Pilih Guru BK untuk Bimbingan Konseling</h3>
+              <p class="counselor-choice-subtitle">
+                Silakan tentukan Guru BK tujuan bimbingan Anda. Pesan pertama yang Anda kirim akan langsung diteruskan ke Guru BK yang dipilih.
+              </p>
+            </div>
+          </div>
+
+          <div class="counselor-cards-grid">
+            @foreach($guruList ?? [] as $g)
+              <div class="counselor-card {{ $loop->first ? 'selected' : '' }}" 
+                   id="counselor-card-{{ $g->id }}" 
+                   data-id="{{ $g->id }}" 
+                   data-name="{{ $g->name }}"
+                   onclick="selectCounselorTeacher({{ $g->id }}, '{{ addslashes($g->name) }}')">
+                <div class="counselor-card-top">
+                  <div class="counselor-card-avatar">
+                    @if($g->avatar_url)
+                      <img src="{{ $g->avatar_url }}" alt="{{ $g->name }}" />
+                    @else
+                      <span>{{ strtoupper(substr($g->name, 0, 2)) }}</span>
+                    @endif
+                    <span class="counselor-card-online-dot" title="Konselor Piket Aktif"></span>
+                  </div>
+                  <div class="counselor-card-info">
+                    <div class="counselor-card-name" title="{{ $g->name }}">{{ $g->name }}</div>
+                    <div class="counselor-card-role">Konselor Bimbingan Konseling</div>
+                    <div class="counselor-card-room">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                      </svg>
+                      <span>Ruang BK Lt. 1 &bull; Siap Bimbingan</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="counselor-card-action">
+                  <button type="button" class="btn-select-counselor" id="btn-select-counselor-{{ $g->id }}" onclick="event.stopPropagation(); selectCounselorTeacher({{ $g->id }}, '{{ addslashes($g->name) }}');">
+                    <span class="btn-select-counselor-icon" style="{{ $loop->first ? 'display: inline-flex;' : 'display: none;' }}">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    </span>
+                    <span class="btn-select-counselor-text">{{ $loop->first ? 'Konselor Terpilih' : 'Pilih Konselor Ini' }}</span>
+                  </button>
+                </div>
+              </div>
+            @endforeach
+          </div>
+
+          <div class="counselor-choice-footer">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1C6EB4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span>Setelah memilih guru, ketikkan pesan Anda pada kolom di bawah dan tekan tombol kirim untuk memulai sesi.</span>
+          </div>
+        </div>
+      @endif
 
       <!-- Render Pesan Khusus Sesi Live Chat Guru BK -->
       @if($activeGuruSession)
@@ -1453,7 +1885,13 @@
         sendBtn.disabled = true;
       } else {
         chatInput.disabled = false;
-        chatInput.placeholder = 'Ketik pesan konsultasi langsung untuk Guru BK piket...';
+        const currentTeacherSelect = document.getElementById('select-guru-bk');
+        const selectedTeacherName = (currentTeacherSelect && currentTeacherSelect.selectedIndex >= 0) 
+          ? (currentTeacherSelect.options[currentTeacherSelect.selectedIndex].getAttribute('data-name') || '') 
+          : '';
+        chatInput.placeholder = activeGuruSessionId 
+          ? 'Ketik pesan konsultasi langsung untuk Guru BK piket...' 
+          : (selectedTeacherName ? `Ketik pesan konsultasi untuk ${selectedTeacherName}...` : 'Ketik pesan konsultasi langsung untuk Guru BK piket...');
         sendBtn.disabled = false;
       }
 
@@ -1549,6 +1987,10 @@
             window.history.replaceState(null, '', '/chat/' + data.session_id);
             addSessionToSidebar('live', data.session_id, data.user_message.content);
             if (teacherSelectEl) teacherSelectEl.style.display = 'none';
+            const counselorSelectBox = document.getElementById('counselor-select-container');
+            if (counselorSelectBox) counselorSelectBox.style.display = 'none';
+            const counselorChoiceEl = document.getElementById('counselor-choice-container');
+            if (counselorChoiceEl) counselorChoiceEl.style.display = 'none';
             const bannerDesc = document.getElementById('live-banner-desc');
             if (bannerDesc && data.teacher) {
               bannerDesc.innerHTML = `<strong>Live Konseling Terhubung</strong>: Berdiskusi langsung dengan <strong>${escapeHtml(data.teacher.name)}</strong>.`;
@@ -1803,6 +2245,48 @@
     if (btnCloseArchiveEl) {
       btnCloseArchiveEl.addEventListener('click', closeDrawer);
     }
+  }
+
+  // Sinkronisasi Pemilihan Guru BK Antara Dropdown Banner dan Kartu Profil di Stream
+  window.selectCounselorTeacher = function(teacherId, teacherName) {
+    const teacherSelectEl = document.getElementById('select-guru-bk');
+    if (teacherSelectEl) {
+      teacherSelectEl.value = teacherId;
+    }
+
+    // Perbarui status aktif seluruh kartu konselor di stream
+    const cards = document.querySelectorAll('.counselor-card');
+    cards.forEach(card => {
+      const isCurrent = (card.getAttribute('data-id') == teacherId);
+      const btnText = card.querySelector('.btn-select-counselor-text');
+      const btnIcon = card.querySelector('.btn-select-counselor-icon');
+
+      if (isCurrent) {
+        card.classList.add('selected');
+        if (btnText) btnText.textContent = 'Konselor Terpilih';
+        if (btnIcon) btnIcon.style.display = 'inline-flex';
+      } else {
+        card.classList.remove('selected');
+        if (btnText) btnText.textContent = 'Pilih Konselor Ini';
+        if (btnIcon) btnIcon.style.display = 'none';
+      }
+    });
+
+    // Sesuaikan placeholder pada input pesan
+    if (chatInput && currentMode === 'live' && !activeGuruSessionId && currentGuruSessionStatus !== 'closed') {
+      chatInput.placeholder = teacherName ? `Ketik pesan konsultasi untuk ${teacherName}...` : 'Ketik pesan konsultasi langsung untuk Guru BK piket...';
+      chatInput.focus();
+    }
+  };
+
+  // Event listener saat dropdown di banner diubah oleh siswa
+  const bannerTeacherSelectEl = document.getElementById('select-guru-bk');
+  if (bannerTeacherSelectEl) {
+    bannerTeacherSelectEl.addEventListener('change', function() {
+      const selectedOpt = this.options[this.selectedIndex];
+      const name = selectedOpt ? (selectedOpt.getAttribute('data-name') || selectedOpt.text) : '';
+      selectCounselorTeacher(this.value, name);
+    });
   }
 
   // Inisialisasi awal pada saat memuat halaman

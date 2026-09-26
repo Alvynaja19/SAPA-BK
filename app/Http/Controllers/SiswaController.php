@@ -63,7 +63,7 @@ class SiswaController extends Controller
         // Daftar Guru BK yang tersedia untuk dipilih siswa
         $guruList = User::where('role', 'guru_bk')
             ->where('is_active', true)
-            ->select('id', 'name', 'no_hp')
+            ->select('id', 'name', 'no_hp', 'avatar', 'email')
             ->orderBy('name')
             ->get();
 
