@@ -2321,7 +2321,9 @@
           if (data.assistant_message && data.assistant_message.id) {
             knownLiveMsgIds.add(data.assistant_message.id);
           }
-          appendMessage('live', 'counselor', data.assistant_message.content, null, data.assistant_message.id);
+          if (data.assistant_message && data.assistant_message.content) {
+            appendMessage('live', 'counselor', data.assistant_message.content, null, data.assistant_message.id);
+          }
         } else {
           if (!activeAiSessionId && data.session_id) {
             activeAiSessionId = data.session_id;

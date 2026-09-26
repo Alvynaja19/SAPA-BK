@@ -112,19 +112,29 @@ class ChatService
                 // Abaikan jika reverb offline
             }
 
-            $teacher = $session->teacher ?? ($session->teacher_id ? User::find($session->teacher_id) : null);
-            $counselorName = $teacher?->name ?? 'Guru BK SMAN 4 Jember';
+            // Pesan otomatis konfirmasi antrean hanya dikirim satu kali saat pesan pertama kali dikirim dalam sesi
+            $hasPriorMessages = ChatMessage::where('session_id', $session->id)
+                ->where('id', '!=', $userMessage->id)
+                ->exists();
 
-            $counselorMessage = ChatMessage::create([
-                'session_id' => $session->id,
-                'sender_id' => $session->teacher_id,
-                'role' => 'counselor',
-                'content' => 'Terima kasih telah berkonsultasi, '.($user ? explode(' ', $user->name)[0] : 'Siswa').'. Pesan bimbinganmu telah masuk ke antrean '.$counselorName.'. Guru BK akan segera merespons langsung melalui sesi live chat ini.',
-                'metadata' => [
-                    'counselor' => $counselorName,
-                    'service' => 'Live Chat Konseling Guru BK',
-                ],
-            ]);
+            $counselorMessage = null;
+
+            if (! $hasPriorMessages) {
+                $teacher = $session->teacher ?? ($session->teacher_id ? User::find($session->teacher_id) : null);
+                $counselorName = $teacher?->name ?? 'Guru BK SMAN 4 Jember';
+
+                $counselorMessage = ChatMessage::create([
+                    'session_id' => $session->id,
+                    'sender_id' => $session->teacher_id,
+                    'role' => 'counselor',
+                    'content' => 'Terima kasih telah berkonsultasi, '.($user ? explode(' ', $user->name)[0] : 'Siswa').'. Pesan bimbinganmu telah masuk ke antrean '.$counselorName.'. Guru BK akan segera merespons langsung melalui sesi live chat ini.',
+                    'metadata' => [
+                        'counselor' => $counselorName,
+                        'service' => 'Live Chat Konseling Guru BK',
+                        'is_auto_reply' => true,
+                    ],
+                ]);
+            }
 
             return [
                 'session' => $session,
