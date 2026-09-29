@@ -196,13 +196,16 @@ class ChatService
         if ($this->geminiService->isConfigured()) {
             $geminiResult = $this->geminiService->generateChatResponse($queryText, $history);
             if ($geminiResult['success'] && ! empty($geminiResult['answer'])) {
+                $answer = $geminiResult['answer'];
+                $isRefusal = $this->isOutOfScopeRefusal($answer);
+
                 return [
-                    'answer' => $geminiResult['answer'],
-                    'sources' => [
+                    'answer' => $answer,
+                    'sources' => $isRefusal ? [] : [
                         'Google Gemini AI (Cloud)',
                         'Pedoman Pelayanan BK SMAN 4 Jember',
                     ],
-                    'recommended_ebooks' => $this->findRecommendedEbooks($queryText),
+                    'recommended_ebooks' => $isRefusal ? [] : $this->findRecommendedEbooks($queryText),
                     'model' => 'Google Gemini ('.$geminiResult['model'].')',
                 ];
             }
@@ -272,6 +275,31 @@ class ChatService
         }
 
         return $recommended;
+    }
+
+    /**
+     * Mendeteksi apakah jawaban merupakan penolakan halus atas pertanyaan di luar lingkup BK.
+     */
+    protected function isOutOfScopeRefusal(string $answer): bool
+    {
+        $lower = strtolower($answer);
+
+        return str_contains($lower, 'di luar topik')
+            || str_contains($lower, 'di luar bidang')
+            || str_contains($lower, 'di luar konteks')
+            || str_contains($lower, 'di luar lingkup')
+            || str_contains($lower, 'luar topik layanan')
+            || str_contains($lower, 'bukan bidang bimbingan')
+            || str_contains($lower, 'ruang lingkup saya berfokus')
+            || str_contains($lower, 'ruang lingkup kami berfokus')
+            || str_contains($lower, 'fokus utama saya adalah')
+            || str_contains($lower, 'fokus utama saya berfokus')
+            || str_contains($lower, 'khusus mendampingi')
+            || str_contains($lower, 'belum bisa membantu menjawab')
+            || str_contains($lower, 'belum bisa menjawab')
+            || str_contains($lower, 'belum bisa memberikan informasi')
+            || str_contains($lower, 'tidak bisa memberikan informasi')
+            || str_contains($lower, 'pertanyaan teknis seputar');
     }
 
     /**

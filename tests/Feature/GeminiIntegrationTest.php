@@ -183,4 +183,39 @@ class GeminiIntegrationTest extends TestCase
         $this->assertNotEmpty($result['assistant_message']->content);
         $this->assertStringContainsString('tekanan belajar', $result['assistant_message']->content);
     }
+
+    public function test_chat_service_handles_out_of_scope_questions_gracefully(): void
+    {
+        Http::fake([
+            'https://generativelanguage.googleapis.com/*' => Http::response([
+                'candidates' => [
+                    [
+                        'content' => [
+                            'parts' => [
+                                ['text' => 'Halo! Mohon maaf, topik mesin kendaraan berada di luar lingkup bimbingan konseling SAPA BK SMAN 4 Jember.'],
+                            ],
+                            'role' => 'model',
+                        ],
+                    ],
+                ],
+                'modelVersion' => 'gemini-3.5-flash-lite',
+            ], 200),
+        ]);
+
+        $geminiService = new GeminiService(apiKey: 'AIzaSyTestingKey123');
+        $chatService = new ChatService($geminiService);
+
+        $siswa = User::where('role', 'siswa')->first() ?? User::factory()->create(['role' => 'siswa']);
+
+        $result = $chatService->processMessage(
+            messageText: 'kode mesin supra x 125 apa bro?',
+            user: $siswa,
+            mode: 'ai'
+        );
+
+        $this->assertInstanceOf(ChatMessage::class, $result['assistant_message']);
+        $this->assertStringContainsString('di luar lingkup', $result['assistant_message']->content);
+        // Sources should be empty because it is out of scope refusal
+        $this->assertEmpty($result['assistant_message']->metadata['sources']);
+    }
 }
