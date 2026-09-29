@@ -265,4 +265,55 @@ class LiveChatCounselingTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Antrean Siswa Konseling');
     }
+
+    public function test_sidebar_displays_correct_notification_queue_counter_for_counselor(): void
+    {
+        $studentB = User::factory()->create([
+            'name' => 'Siswa Budi Utomo',
+            'email' => 'budi.utomo@student.sch.id',
+            'role' => 'siswa',
+            'kelas' => 'XII MIPA 3',
+            'is_active' => true,
+        ]);
+
+        // 1. Kondisi awal: belum ada siswa dalam antrean Guru BK A
+        $this->actingAs($this->teacherA);
+        $responseInitial = $this->get(route('bk.dashboard'));
+        $responseInitial->assertStatus(200);
+        $responseInitial->assertSee('queueCount: 0', false);
+
+        // 2. Siswa A menunggu antrean: notifikasi menjadi 1
+        $sessionA = ChatSession::create([
+            'user_id' => $this->student->id,
+            'teacher_id' => $this->teacherA->id,
+            'title' => 'Konsultasi Siswa A',
+            'mode' => 'guru_bk',
+            'status' => 'active',
+            'started_at' => now(),
+        ]);
+
+        $response1 = $this->get(route('bk.dashboard'));
+        $response1->assertStatus(200);
+        $response1->assertSee('queueCount: 1', false);
+
+        // 3. Siswa A dan B menunggu antrean: notifikasi menjadi 2
+        $sessionB = ChatSession::create([
+            'user_id' => $studentB->id,
+            'teacher_id' => $this->teacherA->id,
+            'title' => 'Konsultasi Siswa B',
+            'mode' => 'guru_bk',
+            'status' => 'active',
+            'started_at' => now(),
+        ]);
+
+        $response2 = $this->get(route('bk.dashboard'));
+        $response2->assertStatus(200);
+        $response2->assertSee('queueCount: 2', false);
+
+        // 4. Isolasi: Guru BK B tidak terpengaruh antrean Guru BK A (tetap 0)
+        $this->actingAs($this->teacherB);
+        $responseTeacherB = $this->get(route('bk.dashboard'));
+        $responseTeacherB->assertStatus(200);
+        $responseTeacherB->assertSee('queueCount: 0', false);
+    }
 }

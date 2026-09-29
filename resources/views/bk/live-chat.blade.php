@@ -420,13 +420,19 @@
 
             // Cek jika antrean kosong
             const listContainer = document.getElementById('student-list-container');
-            if (listContainer && listContainer.querySelectorAll('.student-card').length === 0) {
+            const remainingCount = listContainer ? listContainer.querySelectorAll('.student-card').length : 0;
+            if (listContainer && remainingCount === 0) {
               listContainer.innerHTML = `
                 <div id="queue-empty-notice" class="p-6 text-center text-xs text-gray-400 dark:text-gray-500">
                   Belum ada antrean siswa konseling aktif saat ini.
                 </div>
               `;
             }
+
+            // Segera sinkronkan perubahan badge ke sidebar
+            window.dispatchEvent(new CustomEvent('bk-queue-count-changed', {
+              detail: { count: remainingCount }
+            }));
 
             window.showToast('Sesi konseling telah berhasil diselesaikan.', 'success');
           } else {
@@ -449,6 +455,9 @@
       const res = await response.json();
       if (res.success) {
         updateQueueUI(res.data);
+        window.dispatchEvent(new CustomEvent('bk-queue-count-changed', {
+          detail: { count: typeof res.count !== 'undefined' ? res.count : (res.data ? res.data.length : 0) }
+        }));
       }
     } catch (e) {
       // Quiet fail during network glitches

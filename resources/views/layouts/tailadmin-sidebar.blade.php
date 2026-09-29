@@ -1,6 +1,13 @@
 @php
   $user = auth()->user();
   $role = $user?->role ?? 'guru_bk';
+  $bkQueueCount = 0;
+  if ($role === 'guru_bk' && $user) {
+      $bkQueueCount = \App\Models\ChatSession::where('teacher_id', $user->id)
+          ->where('mode', 'guru_bk')
+          ->where('status', 'active')
+          ->count();
+  }
 @endphp
 
 <aside
@@ -182,15 +189,70 @@
         <!-- Live Chat Konseling (Ruang Chat Aktif) -->
         <a
           href="{{ route('bk.live-chat') }}"
+          x-data="{
+            queueCount: {{ (int) $bkQueueCount }},
+            init() {
+              @if($role === 'guru_bk')
+                setInterval(() => this.checkQueue(), 6000);
+                window.addEventListener('bk-queue-count-changed', (e) => {
+                  if (e.detail && typeof e.detail.count !== 'undefined') {
+                    this.queueCount = parseInt(e.detail.count, 10) || 0;
+                  }
+                });
+              @endif
+            },
+            async checkQueue() {
+              try {
+                const res = await fetch('{{ route('bk.live-chat.queue') }}', {
+                  headers: { 'Accept': 'application/json' }
+                });
+                if (res.ok) {
+                  const data = await res.json();
+                  if (data && typeof data.count !== 'undefined') {
+                    this.queueCount = parseInt(data.count, 10) || 0;
+                  }
+                }
+              } catch (e) {
+                // Silently ignore network hiccups
+              }
+            }
+          }"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all {{ (request()->routeIs('bk.live-chat') && !request()->routeIs('bk.live-chat.riwayat*')) ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-white' }}"
           title="Live Chat Siswa (08:00 - 15:00)"
         >
-          <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-          </svg>
+          <div class="relative shrink-0 flex items-center justify-center">
+            <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+            </svg>
+            <!-- Badge counter pada icon saat sidebar collapse -->
+            <span
+              x-show="queueCount > 0 && !$store.sidebar.isMobileOpen && !$store.sidebar.isExpanded && !$store.sidebar.isHovered"
+              x-cloak
+              style="{{ $bkQueueCount > 0 ? '' : 'display: none;' }}"
+              class="absolute -top-1.5 -right-2 min-w-[16px] h-4 px-1 rounded-full bg-rose-600 text-white text-[9px] font-black flex items-center justify-center ring-2 ring-white dark:ring-gray-900 shadow-xs"
+              x-text="queueCount > 99 ? '99+' : queueCount"
+              title="Antrean siswa menunggu"
+              aria-label="Antrean siswa menunggu"
+            >{{ $bkQueueCount > 0 ? ($bkQueueCount > 99 ? '99+' : $bkQueueCount) : '' }}</span>
+          </div>
+
           <span class="flex items-center justify-between w-full" :class="{ 'block': $store.sidebar.isMobileOpen || $store.sidebar.isExpanded || $store.sidebar.isHovered, 'hidden': !$store.sidebar.isMobileOpen && !$store.sidebar.isExpanded && !$store.sidebar.isHovered }">
-            <span>Live Chat Siswa</span>
-            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Live</span>
+            <span class="truncate">Live Chat Siswa</span>
+            <div class="flex items-center gap-1.5 shrink-0 ml-1.5">
+              <!-- Badge Counter Antrean Siswa Menunggu -->
+              <span
+                x-show="queueCount > 0"
+                x-cloak
+                style="{{ $bkQueueCount > 0 ? '' : 'display: none;' }}"
+                class="inline-flex items-center justify-center min-w-[19px] h-[19px] px-1.5 rounded-full text-[10px] font-extrabold bg-rose-600 text-white shadow-xs transition-transform duration-200"
+                :class="queueCount > 0 ? 'scale-100' : 'scale-90 opacity-0'"
+                x-text="queueCount > 99 ? '99+' : queueCount"
+                title="Jumlah siswa menunggu antrean"
+                aria-label="Jumlah siswa menunggu antrean"
+              >{{ $bkQueueCount > 0 ? ($bkQueueCount > 99 ? '99+' : $bkQueueCount) : '' }}</span>
+
+              <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold {{ (request()->routeIs('bk.live-chat') && !request()->routeIs('bk.live-chat.riwayat*')) ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' }}">Live</span>
+            </div>
           </span>
         </a>
       </nav>

@@ -153,6 +153,9 @@
   </script>
 
   <style>
+    [x-cloak] {
+      display: none !important;
+    }
     body {
       font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
     }
