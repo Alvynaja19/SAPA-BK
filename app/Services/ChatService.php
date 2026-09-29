@@ -288,18 +288,22 @@ class ChatService
             || str_contains($lower, 'di luar bidang')
             || str_contains($lower, 'di luar konteks')
             || str_contains($lower, 'di luar lingkup')
+            || str_contains($lower, 'luar lingkup layanan')
             || str_contains($lower, 'luar topik layanan')
+            || str_contains($lower, 'di luar layanan saya')
             || str_contains($lower, 'bukan bidang bimbingan')
             || str_contains($lower, 'ruang lingkup saya berfokus')
             || str_contains($lower, 'ruang lingkup kami berfokus')
             || str_contains($lower, 'fokus utama saya adalah')
             || str_contains($lower, 'fokus utama saya berfokus')
             || str_contains($lower, 'khusus mendampingi')
+            || str_contains($lower, 'bertugas khusus untuk mendampingi')
             || str_contains($lower, 'belum bisa membantu menjawab')
             || str_contains($lower, 'belum bisa menjawab')
             || str_contains($lower, 'belum bisa memberikan informasi')
             || str_contains($lower, 'tidak bisa memberikan informasi')
-            || str_contains($lower, 'pertanyaan teknis seputar');
+            || str_contains($lower, 'pertanyaan teknis seputar')
+            || (str_contains($lower, 'sapa bk') && str_contains($lower, 'luar'));
     }
 
     /**
