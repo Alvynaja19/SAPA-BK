@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 /**
- * ChatService — Service Layer Terpusat untuk Komunikasi AI Chatbot (SRS NF-09 & NF-10).
+ * ChatService: Service Layer Terpusat untuk Komunikasi AI Chatbot (SRS NF-09 & NF-10).
  *
  * Mengelola komunikasi antara antarmuka Laravel dengan AI Pipeline (FastAPI / Gemini / ChromaDB)
  * serta menyimpan rekam jejak percakapan siswa ke basis data.
@@ -23,9 +23,12 @@ class ChatService
      */
     protected string $aiServiceUrl;
 
-    public function __construct()
+    protected GeminiService $geminiService;
+
+    public function __construct(?GeminiService $geminiService = null)
     {
         $this->aiServiceUrl = config('services.ai.url', 'http://127.0.0.1:8000');
+        $this->geminiService = $geminiService ?? app(GeminiService::class);
     }
 
     /**
@@ -171,15 +174,45 @@ class ChatService
     }
 
     /**
-     * Memanggil Python AI Service (RAG FastAPI) atau fallback ke Mock Engine jika service offline.
+     * Memanggil Google Gemini Official API, Python AI Service, atau fallback ke Mock Engine cerdas.
      *
      * @return array{answer: string, sources: array, recommended_ebooks: array, model: string}
      */
     protected function queryAiPipeline(string $queryText, int $sessionId, ?int $userId): array
     {
-        // Upaya memanggil Python FastAPI service jika terkonfigurasi
+        // 1. Ambil riwayat percakapan sesi sebelumnya (multi-turn dialog memory)
+        $history = ChatMessage::where('session_id', $sessionId)
+            ->whereIn('role', ['user', 'assistant'])
+            ->orderBy('id', 'asc')
+            ->take(8)
+            ->get()
+            ->map(fn ($m) => [
+                'role' => $m->role,
+                'content' => $m->content,
+            ])
+            ->toArray();
+
+        // 2. Jalur Utama: Google Gemini Official Cloud API (jika GEMINI_API_KEY terpasang)
+        if ($this->geminiService->isConfigured()) {
+            $geminiResult = $this->geminiService->generateChatResponse($queryText, $history);
+            if ($geminiResult['success'] && ! empty($geminiResult['answer'])) {
+                return [
+                    'answer' => $geminiResult['answer'],
+                    'sources' => [
+                        'Google Gemini AI (Cloud)',
+                        'Pedoman Pelayanan BK SMAN 4 Jember',
+                    ],
+                    'recommended_ebooks' => $this->findRecommendedEbooks($queryText),
+                    'model' => 'Google Gemini ('.$geminiResult['model'].')',
+                ];
+            }
+
+            Log::warning('Gemini API tidak memberikan balasan valid, beralih ke fallback: '.($geminiResult['error'] ?? 'Unknown error'));
+        }
+
+        // 3. Upaya memanggil Python FastAPI service jika terkonfigurasi & online
         try {
-            $response = Http::timeout(5)->post("{$this->aiServiceUrl}/api/chat", [
+            $response = Http::timeout(3)->post("{$this->aiServiceUrl}/api/chat", [
                 'session_id' => (string) $sessionId,
                 'message' => $queryText,
                 'user_id' => $userId,
@@ -196,11 +229,49 @@ class ChatService
                 ];
             }
         } catch (\Throwable $e) {
-            Log::info('Python RAG Service offline, beralih ke SAPA-BK Internal RAG Mock: '.$e->getMessage());
+            // Service Python offline, lanjutkan ke mock cerdas
         }
 
-        // Fallback: Engine RAG Mock Cerdas Kontekstual SMAN 4 Jember (SRS Bab 9.4)
+        // 4. Fallback: Engine Cerdas Kontekstual SMAN 4 Jember (SRS Bab 9.4)
         return $this->generateContextualMockResponse($queryText);
+    }
+
+    /**
+     * Merekomendasikan e-book perpustakaan BK SMAN 4 Jember yang relevan dengan pertanyaan siswa.
+     *
+     * @return array<int, array{id: int, title: string, url: string}>
+     */
+    protected function findRecommendedEbooks(string $query): array
+    {
+        $q = strtolower($query);
+        $recommended = [];
+        $keywords = [];
+
+        if (str_contains($q, 'jurusan') || str_contains($q, 'kuliah') || str_contains($q, 'snbt') || str_contains($q, 'snbp') || str_contains($q, 'ptn')) {
+            $keywords = ['Karir', 'Kuliah', 'Jurusan'];
+        } elseif (str_contains($q, 'stress') || str_contains($q, 'stres') || str_contains($q, 'cemas') || str_contains($q, 'mental')) {
+            $keywords = ['Stres', 'Cemas', 'Mental'];
+        } elseif (str_contains($q, 'belajar') || str_contains($q, 'fokus') || str_contains($q, 'waktu')) {
+            $keywords = ['Belajar', 'Waktu'];
+        }
+
+        if (! empty($keywords)) {
+            $ebooks = Ebook::where(function ($queryBuilder) use ($keywords) {
+                foreach ($keywords as $kw) {
+                    $queryBuilder->orWhere('title', 'like', "%{$kw}%");
+                }
+            })->take(2)->get();
+
+            foreach ($ebooks as $ebook) {
+                $recommended[] = [
+                    'id' => $ebook->id,
+                    'title' => $ebook->title,
+                    'url' => route('ebook.detail', $ebook->id),
+                ];
+            }
+        }
+
+        return $recommended;
     }
 
     /**

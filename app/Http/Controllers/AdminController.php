@@ -14,6 +14,8 @@ use App\Models\Student;
 use App\Models\User;
 use App\Services\DashboardAnalyticsService;
 use App\Services\ExcelCsvReader;
+use App\Services\GeminiService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -474,14 +476,22 @@ class AdminController extends Controller
      */
     public function konfigurasi(): View
     {
+        $apiKey = config('services.gemini.api_key', env('GEMINI_API_KEY'));
+        $isConfigured = ! empty($apiKey) && trim((string) $apiKey) !== '';
+        $maskedKey = $isConfigured
+            ? substr((string) $apiKey, 0, 6).str_repeat('•', max(strlen((string) $apiKey) - 10, 16)).substr((string) $apiKey, -4)
+            : 'Belum Dikonfigurasi (Tambahkan di file .env)';
+
         $config = [
-            'llm_provider' => 'Google Gemini (Official Cloud)',
-            'llm_model' => env('GEMINI_MODEL', 'gemini-2.0-flash'),
-            'api_key_masked' => 'AIzaSy'.str_repeat('•', 24).'K9L',
-            'temperature' => '0.4',
-            'max_tokens' => '2048',
+            'llm_provider' => 'Google Gemini (Official Cloud REST API)',
+            'llm_model' => config('services.gemini.model', env('GEMINI_MODEL', 'gemini-2.0-flash')),
+            'api_key' => $apiKey,
+            'api_key_masked' => $maskedKey,
+            'is_key_configured' => $isConfigured,
+            'temperature' => (string) config('services.gemini.temperature', env('GEMINI_TEMPERATURE', 0.7)),
+            'max_tokens' => (string) config('services.gemini.max_tokens', env('GEMINI_MAX_TOKENS', 2048)),
             'vector_db' => 'ChromaDB',
-            'vector_host' => 'http://127.0.0.1:8000',
+            'vector_host' => config('services.ai.url', env('AI_SERVICE_URL', 'http://127.0.0.1:8000')),
             'collection_name' => 'sman4_jember_bk_knowledge',
             'chunk_size' => '512',
             'chunk_overlap' => '64',
@@ -496,13 +506,68 @@ class AdminController extends Controller
      */
     public function simpanKonfigurasi(Request $request): RedirectResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'llm_model' => 'required|string',
             'temperature' => 'required|numeric|min:0|max:1',
             'collection_name' => 'required|string',
+            'gemini_api_key' => 'nullable|string',
         ]);
 
-        return back()->with('success', 'Konfigurasi parameter LLM & Vector DB berhasil diperbarui!');
+        $envUpdates = [
+            'GEMINI_MODEL' => $validated['llm_model'],
+            'GEMINI_TEMPERATURE' => (string) $validated['temperature'],
+        ];
+
+        if (! empty($validated['gemini_api_key']) && ! str_contains($validated['gemini_api_key'], '•')) {
+            $envUpdates['GEMINI_API_KEY'] = trim($validated['gemini_api_key']);
+        }
+
+        $this->updateEnvironmentFile($envUpdates);
+
+        return back()->with('success', 'Konfigurasi parameter Google Gemini & Sistem berhasil diperbarui!');
+    }
+
+    /**
+     * Menguji koneksi nyata ke Google Gemini AI service.
+     */
+    public function testAiConnection(Request $request, GeminiService $geminiService): JsonResponse
+    {
+        $testApiKey = $request->input('api_key');
+        if ($testApiKey && str_contains($testApiKey, '•')) {
+            $testApiKey = null;
+        }
+
+        $testModel = $request->input('model');
+
+        $result = $geminiService->testConnection($testApiKey, $testModel);
+
+        return response()->json($result);
+    }
+
+    /**
+     * Memperbarui variabel konfigurasi dalam file .env secara aman.
+     *
+     * @param  array<string, string>  $data
+     */
+    protected function updateEnvironmentFile(array $data): void
+    {
+        $envPath = base_path('.env');
+        if (! file_exists($envPath) || ! is_writable($envPath)) {
+            return;
+        }
+
+        $content = file_get_contents($envPath);
+
+        foreach ($data as $key => $value) {
+            $escaped = preg_quote($key, '/');
+            if (preg_match("/^{$escaped}=/m", $content)) {
+                $content = preg_replace("/^{$escaped}=.*/m", "{$key}={$value}", $content);
+            } else {
+                $content .= "\n{$key}={$value}";
+            }
+        }
+
+        file_put_contents($envPath, $content);
     }
 
     /**

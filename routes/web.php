@@ -139,6 +139,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
         Route::get('/konfigurasi', [AdminController::class, 'konfigurasi'])->name('konfigurasi');
         Route::post('/konfigurasi', [AdminController::class, 'simpanKonfigurasi'])->name('konfigurasi.store');
+        Route::post('/konfigurasi/test', [AdminController::class, 'testAiConnection'])->name('konfigurasi.test');
         Route::get('/log', [AdminController::class, 'log'])->name('log');
         Route::get('/laporan', [AdminController::class, 'laporan'])->name('laporan');
     });

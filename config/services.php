@@ -39,4 +39,11 @@ return [
         'url' => env('AI_SERVICE_URL', 'http://127.0.0.1:8001'),
     ],
 
+    'gemini' => [
+        'api_key' => env('GEMINI_API_KEY'),
+        'model' => env('GEMINI_MODEL', 'gemini-3.5-flash-lite'),
+        'temperature' => (float) env('GEMINI_TEMPERATURE', 0.7),
+        'max_tokens' => (int) env('GEMINI_MAX_TOKENS', 2048),
+    ],
+
 ];
