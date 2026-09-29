@@ -107,6 +107,8 @@ Route::middleware('auth')->group(function () {
         Route::put('/tes/{id}', [GuruBkController::class, 'updateTes'])->name('tes.update');
         Route::delete('/tes/{id}', [GuruBkController::class, 'hapusTes'])->name('tes.destroy');
         Route::get('/tes/{id}/hasil', [GuruBkController::class, 'hasilTes'])->name('tes.hasil');
+        Route::get('/tes/hasil/{resultId}/detail', [GuruBkController::class, 'detailHasilTes'])->name('tes.hasil.detail');
+        Route::post('/tes/hasil/{resultId}/tindak-lanjut', [GuruBkController::class, 'simpanTindakLanjut'])->name('tes.hasil.tindak-lanjut');
         Route::get('/tes/{id}/soal', [GuruBkController::class, 'kelolaSoal'])->name('tes.soal');
         Route::post('/tes/{id}/soal', [GuruBkController::class, 'simpanSoal'])->name('tes.soal.store');
         Route::put('/tes/{id}/soal/{soalId}', [GuruBkController::class, 'updateSoal'])->name('tes.soal.update');

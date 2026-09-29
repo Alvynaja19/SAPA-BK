@@ -587,10 +587,109 @@ class GuruBkController extends Controller
 
     public function hasilTes(int $id): View
     {
-        $questionnaire = Questionnaire::findOrFail($id);
-        $results = QuestionnaireResult::with('user')->where('questionnaire_id', $id)->latest()->paginate(15);
+        $questionnaire = Questionnaire::with('questions')->findOrFail($id);
+        $results = QuestionnaireResult::with(['user', 'counselor'])->where('questionnaire_id', $id)->latest()->paginate(15);
 
         return view('bk.hasil-tes', compact('questionnaire', 'results'));
+    }
+
+    /**
+     * API Detail Hasil Tes dan Jawaban Butir Soal Siswa (SRS F-47).
+     */
+    public function detailHasilTes(int $resultId): JsonResponse
+    {
+        $result = QuestionnaireResult::with(['user', 'counselor', 'questionnaire.questions' => fn ($q) => $q->orderBy('order')])
+            ->findOrFail($resultId);
+
+        $answers = is_array($result->answers) ? $result->answers : [];
+
+        $questions = $result->questionnaire->questions->map(function ($q) use ($answers) {
+            $userAnswer = $answers[$q->id] ?? null;
+            $selectedLabel = null;
+
+            if (is_array($q->options)) {
+                foreach ($q->options as $optIdx => $opt) {
+                    $optVal = is_array($opt) ? ($opt['value'] ?? $optIdx) : $opt;
+                    $optLabel = is_array($opt) ? ($opt['label'] ?? $optVal) : $opt;
+                    if ((string) $optVal === (string) $userAnswer) {
+                        $selectedLabel = $optLabel;
+                        break;
+                    }
+                }
+            }
+
+            return [
+                'id' => $q->id,
+                'order' => $q->order,
+                'question_text' => $q->question_text,
+                'answer_value' => $userAnswer,
+                'answer_label' => $selectedLabel ?? $userAnswer ?? 'Belum dijawab',
+                'options' => $q->options,
+            ];
+        });
+
+        // Tautan kontak WhatsApp siswa bila tersedia nomor telepon
+        $rawPhone = $result->user?->no_hp;
+        $waUrl = null;
+        if ($rawPhone) {
+            $cleanPhone = preg_replace('/[^0-9]/', '', $rawPhone);
+            if (str_starts_with($cleanPhone, '0')) {
+                $cleanPhone = '62'.substr($cleanPhone, 1);
+            }
+            $pesanWa = rawurlencode("Halo {$result->user->name}, terkait hasil pengerjaan asesmen '{$result->questionnaire->title}' di SAPA BK SMAN 4 Jember, Bapak/Ibu Guru BK ingin berdiskusi mengenai rekomendasi belajarmu. Apakah ada waktu luang untuk konseling?");
+            $waUrl = "https://wa.me/{$cleanPhone}?text={$pesanWa}";
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'id' => $result->id,
+                'student_name' => $result->user?->name ?? 'Siswa',
+                'student_nisn' => $result->user?->nisn ?? '—',
+                'student_kelas' => $result->user?->kelas ?? 'Siswa',
+                'student_phone' => $result->user?->no_hp,
+                'wa_url' => $waUrl,
+                'questionnaire_title' => $result->questionnaire->title,
+                'score' => $result->score,
+                'total_questions' => $result->questionnaire->questions->count(),
+                'completed_at' => $result->created_at?->format('d M Y, H:i').' WIB',
+                'tindak_lanjut' => $result->tindak_lanjut,
+                'tindak_lanjut_at' => $result->tindak_lanjut_at?->format('d M Y, H:i').' WIB',
+                'counselor_name' => $result->counselor?->name,
+                'questions' => $questions,
+            ],
+        ]);
+    }
+
+    /**
+     * Menyimpan catatan tindak lanjut dan rekomendasi konselor atas hasil tes siswa.
+     */
+    public function simpanTindakLanjut(Request $request, int $resultId): JsonResponse|RedirectResponse
+    {
+        $validated = $request->validate([
+            'tindak_lanjut' => 'required|string|max:3000',
+        ]);
+
+        $result = QuestionnaireResult::with('user')->findOrFail($resultId);
+        $result->update([
+            'tindak_lanjut' => $validated['tindak_lanjut'],
+            'tindak_lanjut_by' => Auth::id(),
+            'tindak_lanjut_at' => now(),
+        ]);
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Catatan tindak lanjut bimbingan berhasil disimpan!',
+                'data' => [
+                    'tindak_lanjut' => $result->tindak_lanjut,
+                    'tindak_lanjut_at' => $result->tindak_lanjut_at?->format('d M Y, H:i').' WIB',
+                    'counselor_name' => Auth::user()?->name ?? 'Guru BK',
+                ],
+            ]);
+        }
+
+        return back()->with('success', 'Catatan tindak lanjut bimbingan berhasil disimpan!');
     }
 
     public function updateTes(Request $request, int $id): RedirectResponse

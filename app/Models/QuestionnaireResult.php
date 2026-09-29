@@ -15,6 +15,9 @@ class QuestionnaireResult extends Model
         'user_id',
         'answers',
         'score',
+        'tindak_lanjut',
+        'tindak_lanjut_by',
+        'tindak_lanjut_at',
     ];
 
     protected function casts(): array
@@ -22,6 +25,7 @@ class QuestionnaireResult extends Model
         return [
             'answers' => 'array',
             'score' => 'integer',
+            'tindak_lanjut_at' => 'datetime',
         ];
     }
 
@@ -33,5 +37,10 @@ class QuestionnaireResult extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function counselor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'tindak_lanjut_by');
     }
 }

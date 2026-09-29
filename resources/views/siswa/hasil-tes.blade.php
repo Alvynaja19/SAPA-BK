@@ -237,6 +237,21 @@
     </div>
 
     <!-- BK Recommendations -->
+    @if($result->tindak_lanjut)
+      <div style="background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: var(--radius-m); padding: 18px 20px; box-shadow: var(--shadow-card);">
+        <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #166534; font-size: 13.5px; margin-bottom: 8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span>Catatan Tindak Lanjut Khusus dari Guru BK:</span>
+        </div>
+        <p style="font-size: 14px; color: #1F2937; line-height: 1.65; margin: 0; white-space: pre-line;">
+          {{ $result->tindak_lanjut }}
+        </p>
+        <div style="font-size: 11.5px; color: #4B5563; margin-top: 10px; font-weight: 500;">
+          Diberikan oleh <strong>{{ $result->counselor?->name ?? 'Guru BK SMAN 4 Jember' }}</strong> pada {{ $result->tindak_lanjut_at?->format('d M Y, H:i') }} WIB
+        </div>
+      </div>
+    @endif
+
     <div class="hasil-recom-box">
       <div class="hasil-recom-head">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--accent);">

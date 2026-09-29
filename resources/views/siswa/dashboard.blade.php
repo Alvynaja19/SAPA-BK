@@ -546,6 +546,11 @@
           <p>
             Asesmen telah kamu selesaikan dan telah diterima (ter-accept) oleh Guru BK. Hasil dan rekomendasi bimbingan sudah siap kamu pelajari.
           </p>
+          @if($latestCompletedResult->tindak_lanjut)
+            <div style="margin-top: 8px; padding: 10px 12px; background: rgba(255, 255, 255, 0.85); border-radius: 8px; border: 1px solid #BBF7D0; font-size: 12.5px; color: #166534; line-height: 1.5;">
+              <strong>Catatan Guru BK:</strong> {{ Str::limit($latestCompletedResult->tindak_lanjut, 110) }}
+            </div>
+          @endif
           <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px;">
             <a href="{{ route('siswa.tes.hasil', $latestCompletedResult->id) }}" class="btn btn-primary btn-sm">
               <span>Lihat Hasil</span>
