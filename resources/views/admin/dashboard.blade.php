@@ -26,20 +26,20 @@
   </div>
 
   <!-- Grafik Utama: Tren Konsultasi Siswa (Dengan 3 Sub-Kartu Metrik Terintegrasi) -->
-  <div class="bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-4 sm:p-6 shadow-xs space-y-4">
+  <div class="bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-4 sm:p-5 shadow-xs space-y-3">
     
     <!-- Header Grafik & Filter Periode -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-gray-100 dark:border-gray-800/70">
       
       <!-- Judul & Subjudul -->
-      <div class="flex items-center gap-3">
-        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/40">
-          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+      <div class="flex items-center gap-2.5">
+        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/40">
+          <svg class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
           </svg>
         </div>
         <div>
-          <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white tracking-tight">
+          <h2 class="text-sm sm:text-base font-bold text-gray-900 dark:text-white tracking-tight">
             Tren Konsultasi Siswa
           </h2>
           <p class="text-xs text-gray-500 dark:text-gray-400">
@@ -54,7 +54,7 @@
           type="button"
           @click="switchPeriod('week')"
           :class="period === 'week' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
-          class="px-3.5 py-1.5 rounded-lg transition-all min-h-[34px] flex items-center justify-center"
+          class="px-3 py-1 rounded-lg transition-all min-h-[30px] flex items-center justify-center"
         >
           Minggu
         </button>
@@ -62,7 +62,7 @@
           type="button"
           @click="switchPeriod('month')"
           :class="period === 'month' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
-          class="px-3.5 py-1.5 rounded-lg transition-all min-h-[34px] flex items-center justify-center"
+          class="px-3 py-1 rounded-lg transition-all min-h-[30px] flex items-center justify-center"
         >
           Bulan
         </button>
@@ -70,7 +70,7 @@
           type="button"
           @click="switchPeriod('year')"
           :class="period === 'year' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
-          class="px-3.5 py-1.5 rounded-lg transition-all min-h-[34px] flex items-center justify-center"
+          class="px-3 py-1 rounded-lg transition-all min-h-[30px] flex items-center justify-center"
         >
           Tahun
         </button>
@@ -78,25 +78,26 @@
 
     </div>
 
-    <!-- 3 Sub-Kartu Metrik: Chatbot AI, Live Chat Guru BK, Total Konsultasi -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4 pt-1">
+    <!-- 3 Sub-Kartu Metrik: Pasti 1 Baris & Dikecilkan (Sleek Compact Row) -->
+    <div class="grid grid-cols-3 gap-2 sm:gap-3.5 pt-0.5">
       
-      <!-- Sub-Card 1: Chatbot AI -->
-      <div class="bg-gray-50/70 dark:bg-gray-800/40 border border-gray-200/60 dark:border-gray-800 rounded-2xl p-4 transition-all">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="h-2.5 w-2.5 rounded-full bg-emerald-500 shrink-0" aria-hidden="true"></span>
-            <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Konsultasi Chatbot AI</span>
+      <!-- Sub-Card 1: Konsultasi Chatbot AI -->
+      <div class="bg-gray-50/80 dark:bg-gray-800/40 border border-gray-200/70 dark:border-gray-800 rounded-xl p-2.5 sm:p-3 transition-all min-w-0">
+        <div class="flex items-center justify-between gap-1 flex-wrap">
+          <div class="flex items-center gap-1.5 min-w-0">
+            <span class="h-2 w-2 rounded-full bg-emerald-500 shrink-0" aria-hidden="true"></span>
+            <span class="text-[11px] sm:text-xs font-semibold text-gray-700 dark:text-gray-300 truncate">Konsultasi Chatbot AI</span>
           </div>
           <span
-            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/50 dark:border-emerald-800/40"
-            x-text="'↗ ' + activePeriodData.pct_ai"
+            class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-semibold shrink-0"
+            :class="activePeriodData.pct_val_ai < 0 ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200/50' : 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/50'"
+            x-text="activePeriodData.pct_ai_badge || activePeriodData.pct_ai"
           >
-            ↗ +0.0%
+            0.0%
           </span>
         </div>
         <div
-          class="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight mt-2"
+          class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white tracking-tight mt-1"
           x-text="activePeriodData.ai_count"
         >
           0
@@ -104,21 +105,22 @@
       </div>
 
       <!-- Sub-Card 2: Live Chat Guru BK -->
-      <div class="bg-gray-50/70 dark:bg-gray-800/40 border border-gray-200/60 dark:border-gray-800 rounded-2xl p-4 transition-all">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="h-2.5 w-2.5 rounded-full bg-blue-500 shrink-0" aria-hidden="true"></span>
-            <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Live Chat Guru BK</span>
+      <div class="bg-gray-50/80 dark:bg-gray-800/40 border border-gray-200/70 dark:border-gray-800 rounded-xl p-2.5 sm:p-3 transition-all min-w-0">
+        <div class="flex items-center justify-between gap-1 flex-wrap">
+          <div class="flex items-center gap-1.5 min-w-0">
+            <span class="h-2 w-2 rounded-full bg-blue-500 shrink-0" aria-hidden="true"></span>
+            <span class="text-[11px] sm:text-xs font-semibold text-gray-700 dark:text-gray-300 truncate">Live Chat Guru BK</span>
           </div>
           <span
-            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200/50 dark:border-blue-800/40"
-            x-text="'↗ ' + activePeriodData.pct_live"
+            class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-semibold shrink-0"
+            :class="activePeriodData.pct_val_live < 0 ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200/50' : 'bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200/50'"
+            x-text="activePeriodData.pct_live_badge || activePeriodData.pct_live"
           >
-            ↗ +0.0%
+            0.0%
           </span>
         </div>
         <div
-          class="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight mt-2"
+          class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white tracking-tight mt-1"
           x-text="activePeriodData.live_count"
         >
           0
@@ -126,21 +128,22 @@
       </div>
 
       <!-- Sub-Card 3: Total Konsultasi -->
-      <div class="bg-gray-50/70 dark:bg-gray-800/40 border border-gray-200/60 dark:border-gray-800 rounded-2xl p-4 transition-all">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="h-2.5 w-2.5 rounded-full bg-slate-700 dark:bg-slate-300 shrink-0" aria-hidden="true"></span>
-            <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Total Konsultasi</span>
+      <div class="bg-gray-50/80 dark:bg-gray-800/40 border border-gray-200/70 dark:border-gray-800 rounded-xl p-2.5 sm:p-3 transition-all min-w-0">
+        <div class="flex items-center justify-between gap-1 flex-wrap">
+          <div class="flex items-center gap-1.5 min-w-0">
+            <span class="h-2 w-2 rounded-full bg-slate-700 dark:bg-slate-300 shrink-0" aria-hidden="true"></span>
+            <span class="text-[11px] sm:text-xs font-semibold text-gray-700 dark:text-gray-300 truncate">Total Konsultasi</span>
           </div>
           <span
-            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200/60 dark:border-slate-700"
-            x-text="'↗ ' + activePeriodData.pct_total"
+            class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-semibold shrink-0"
+            :class="activePeriodData.pct_val_total < 0 ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200/50' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200/60'"
+            x-text="activePeriodData.pct_total_badge || activePeriodData.pct_total"
           >
-            ↗ +0.0%
+            0.0%
           </span>
         </div>
         <div
-          class="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight mt-2"
+          class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white tracking-tight mt-1"
           x-text="activePeriodData.total_count"
         >
           0
@@ -149,8 +152,8 @@
 
     </div>
 
-    <!-- Chart Canvas -->
-    <div class="relative w-full h-[260px] sm:h-[290px] pt-2">
+    <!-- Chart Canvas Dikecilkan (Hanya 180px - 210px) -->
+    <div class="relative w-full h-[180px] sm:h-[210px] pt-1">
       <canvas id="adminTrendChart" class="w-full h-full"></canvas>
     </div>
 
@@ -541,6 +544,12 @@
           pct_ai: '+0.0%',
           pct_live: '+0.0%',
           pct_total: '+0.0%',
+          pct_ai_badge: '0.0%',
+          pct_live_badge: '0.0%',
+          pct_total_badge: '0.0%',
+          pct_val_ai: 0,
+          pct_val_live: 0,
+          pct_val_total: 0,
           comparison_text: 'Stabil dibanding periode sebelumnya',
           labels: [],
           ai: [],

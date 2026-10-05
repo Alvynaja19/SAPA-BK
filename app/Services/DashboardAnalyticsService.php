@@ -195,6 +195,17 @@ class DashboardAnalyticsService
         $liveLastYear = $lastYearSessions->filter(fn ($s) => $s->mode === 'guru_bk')->count();
         $pctChangeLiveYear = $liveLastYear > 0 ? round((($liveCurrentYear - $liveLastYear) / $liveLastYear) * 100, 1) : ($liveCurrentYear > 0 ? 100 : 0);
 
+        $formatBadge = function ($pct) {
+            if ($pct > 0) {
+                return '↗ +'.$pct.'%';
+            }
+            if ($pct < 0) {
+                return '↘ '.$pct.'%';
+            }
+
+            return '0.0%';
+        };
+
         return [
             'periods' => [
                 'week' => [
@@ -207,6 +218,12 @@ class DashboardAnalyticsService
                     'pct_ai' => ($pctAiWeek >= 0 ? '+' : '').$pctAiWeek.'%',
                     'pct_live' => ($pctLiveWeek >= 0 ? '+' : '').$pctLiveWeek.'%',
                     'pct_total' => ($pctWeek >= 0 ? '+' : '').$pctWeek.'%',
+                    'pct_ai_badge' => $formatBadge($pctAiWeek),
+                    'pct_live_badge' => $formatBadge($pctLiveWeek),
+                    'pct_total_badge' => $formatBadge($pctWeek),
+                    'pct_val_ai' => $pctAiWeek,
+                    'pct_val_live' => $pctLiveWeek,
+                    'pct_val_total' => $pctWeek,
                     'pct_val' => $pctWeek,
                     'comparison_text' => ($pctWeek >= 0 ? '↑ ' : '↓ ').abs($pctWeek).'% dibanding 7 hari sebelumnya',
                     'period_subtitle' => '7 hari terakhir',
@@ -221,6 +238,12 @@ class DashboardAnalyticsService
                     'pct_ai' => ($pctChangeAiMonth >= 0 ? '+' : '').$pctChangeAiMonth.'%',
                     'pct_live' => ($pctChangeLiveMonth >= 0 ? '+' : '').$pctChangeLiveMonth.'%',
                     'pct_total' => ($pctMonth >= 0 ? '+' : '').$pctMonth.'%',
+                    'pct_ai_badge' => $formatBadge($pctChangeAiMonth),
+                    'pct_live_badge' => $formatBadge($pctChangeLiveMonth),
+                    'pct_total_badge' => $formatBadge($pctMonth),
+                    'pct_val_ai' => $pctChangeAiMonth,
+                    'pct_val_live' => $pctChangeLiveMonth,
+                    'pct_val_total' => $pctMonth,
                     'pct_val' => $pctMonth,
                     'comparison_text' => ($pctMonth >= 0 ? '↑ ' : '↓ ').abs($pctMonth).'% dibanding bulan sebelumnya',
                     'period_subtitle' => $now->translatedFormat('F Y'),
@@ -235,6 +258,12 @@ class DashboardAnalyticsService
                     'pct_ai' => ($pctChangeAiYear >= 0 ? '+' : '').$pctChangeAiYear.'%',
                     'pct_live' => ($pctChangeLiveYear >= 0 ? '+' : '').$pctChangeLiveYear.'%',
                     'pct_total' => ($pctYear >= 0 ? '+' : '').$pctYear.'%',
+                    'pct_ai_badge' => $formatBadge($pctChangeAiYear),
+                    'pct_live_badge' => $formatBadge($pctChangeLiveYear),
+                    'pct_total_badge' => $formatBadge($pctYear),
+                    'pct_val_ai' => $pctChangeAiYear,
+                    'pct_val_live' => $pctChangeLiveYear,
+                    'pct_val_total' => $pctYear,
                     'pct_val' => $pctYear,
                     'comparison_text' => ($pctYear >= 0 ? '↑ ' : '↓ ').abs($pctYear).'% dibanding tahun sebelumnya',
                     'period_subtitle' => 'Tahun '.$now->year,
