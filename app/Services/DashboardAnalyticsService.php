@@ -203,7 +203,7 @@ class DashboardAnalyticsService
                 return '↘ '.$pct.'%';
             }
 
-            return '0.0%';
+            return '↗ +0.0%';
         };
 
         return [
