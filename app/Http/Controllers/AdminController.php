@@ -48,6 +48,9 @@ class AdminController extends Controller
 
         $trendData = $analytics->getTrendData();
         $popularTopics = $analytics->getPopularTopics();
+        $bkCategories = $analytics->getBkCategoriesDistribution();
+        $handlingStatus = $analytics->getCounselingHandlingStatus();
+        $studentActivities = $analytics->getStudentActivities(8);
         $recentSessions = $analytics->getRecentSessions(10);
         $recentUsers = User::latest()->take(6)->get();
         $recentKnowledge = KnowledgeDocument::with('uploader')->latest()->take(4)->get();
@@ -56,6 +59,9 @@ class AdminController extends Controller
             'stats',
             'trendData',
             'popularTopics',
+            'bkCategories',
+            'handlingStatus',
+            'studentActivities',
             'recentSessions',
             'recentUsers',
             'recentKnowledge'

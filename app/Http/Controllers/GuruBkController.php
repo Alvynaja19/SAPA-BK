@@ -50,6 +50,9 @@ class GuruBkController extends Controller
 
         $trendData = $analytics->getTrendData($counselorId);
         $popularTopics = $analytics->getPopularTopics();
+        $bkCategories = $analytics->getBkCategoriesDistribution($counselorId);
+        $handlingStatus = $analytics->getCounselingHandlingStatus($counselorId);
+        $studentActivities = $analytics->getStudentActivities(8, $counselorId);
         $recentSessions = $analytics->getRecentSessions(10, $counselorId);
         $pendingEvaluations = ChatMessage::where('role', 'assistant')->doesntHave('evaluation')->latest()->take(5)->get();
 
@@ -57,6 +60,9 @@ class GuruBkController extends Controller
             'stats',
             'trendData',
             'popularTopics',
+            'bkCategories',
+            'handlingStatus',
+            'studentActivities',
             'recentSessions',
             'pendingEvaluations'
         ));
