@@ -472,9 +472,9 @@
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     // 1. Data Riil Tren Konsultasi Siswa (Chatbot AI vs Live Chat Guru BK)
-    var trendLabels = @json($trendData['periods']['year']['labels'] ?? ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des']);
-    var trendAiData = @json($trendData['periods']['year']['ai'] ?? [0,0,0,0,0,0,0,0,0,0,0,0]);
-    var trendLiveData = @json($trendData['periods']['year']['live'] ?? [0,0,0,0,0,0,0,0,0,0,0,0]);
+    var trendLabels = {!! json_encode($trendData['periods']['year']['labels'] ?? ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des']) !!};
+    var trendAiData = {!! json_encode($trendData['periods']['year']['ai'] ?? [0,0,0,0,0,0,0,0,0,0,0,0]) !!};
+    var trendLiveData = {!! json_encode($trendData['periods']['year']['live'] ?? [0,0,0,0,0,0,0,0,0,0,0,0]) !!};
 
     var uniqueVisitorOptions = {
       chart: {
