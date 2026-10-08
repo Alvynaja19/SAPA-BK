@@ -1,6 +1,6 @@
 @extends('layouts.tailadmin')
 
-@section('title', 'Dashboard | Gradient Able Template')
+@section('title', 'Dashboard Administrator | SAPA BK SMAN 4 Jember')
 
 @push('styles')
 <!-- Google Font: Poppins & FontAwesome & Feather Icons -->
@@ -153,7 +153,7 @@
   .feed-blog li {
     position: relative;
     padding-left: 30px;
-    margin-bottom: 40px;
+    margin-bottom: 35px;
     list-style: none;
   }
   .feed-blog li:last-child {
@@ -163,7 +163,7 @@
     line-height: 1.5;
     font-size: 14px;
     font-weight: 500;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     color: #222;
   }
   .feed-blog li .feed-user-img {
@@ -171,10 +171,18 @@
     left: -20px;
     top: -5px;
   }
-  .feed-blog li .feed-user-img img {
+  .feed-blog li .feed-user-img .img-initial {
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    background-color: #eafbf8;
+    color: #059669;
+    border: 2px solid #2ed8b6;
   }
   .feed-blog li .feed-user-img:after {
     content: '';
@@ -190,19 +198,10 @@
     border-color: #2ed8b6;
   }
   .feed-blog li.diactive-feed .feed-user-img:after {
-    border-color: #ff5370;
-  }
-  .img-radius {
-    border-radius: 50%;
-  }
-  .wid-100 {
-    width: 100px;
-    height: 70px;
-    object-fit: cover;
-    border-radius: 4px;
+    border-color: #4099ff;
   }
   .badge-custom {
-    padding: 4px 8px;
+    padding: 3px 8px;
     font-size: 11px;
     font-weight: 600;
     border-radius: 3px;
@@ -217,142 +216,146 @@
 @section('content')
 <div class="gradient-able-scope space-y-6">
 
-  <!-- 1. Empat Order Cards (Gradient Able) -->
+  <!-- 1. Empat Order Cards (Data SAPA BK dengan Desain Asli Gradient Able) -->
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
     
-    <!-- Card 1: Orders Received -->
+    <!-- Card 1: Konsultasi Chatbot AI (Blue Gradient) -->
     <div class="card bg-c-blue order-card">
       <div class="card-body">
-        <h6>Orders Received</h6>
+        <h6>Konsultasi Chatbot AI</h6>
         <h2>
-          <i class="feather icon-shopping-cart"></i>
-          <span>{{ $stats['total_ai_sessions'] > 0 ? $stats['total_ai_sessions'] : '486' }}</span>
+          <i class="feather icon-message-circle"></i>
+          <span>{{ number_format($stats['total_ai_sessions'] ?? 0) }}</span>
         </h2>
         <p>
-          Completed Orders
-          <span class="float-end">{{ $stats['total_ai_sessions'] > 0 ? $stats['total_ai_sessions'] : '351' }}</span>
+          Sesi Terselesaikan
+          <span class="float-end">{{ number_format($stats['total_ai_sessions'] ?? 0) }} Sesi</span>
         </p>
       </div>
     </div>
 
-    <!-- Card 2: Total Sales -->
+    <!-- Card 2: Live Chat Guru BK (Green Gradient) -->
     <div class="card bg-c-green order-card">
       <div class="card-body">
-        <h6>Total Sales</h6>
+        <h6>Live Chat Guru BK</h6>
         <h2>
-          <i class="feather icon-tag"></i>
-          <span>{{ $stats['total_live_sessions'] > 0 ? $stats['total_live_sessions'] : '1641' }}</span>
+          <i class="feather icon-users"></i>
+          <span>{{ number_format($stats['total_live_sessions'] ?? 0) }}</span>
         </h2>
         <p>
-          This Month
-          <span class="float-end">{{ $stats['total_live_sessions'] > 0 ? $stats['total_live_sessions'] : '213' }}</span>
+          Sesi Aktif Berjalan
+          <span class="float-end">{{ number_format($stats['active_live_sessions'] ?? 0) }} Sesi</span>
         </p>
       </div>
     </div>
 
-    <!-- Card 3: Revenue -->
+    <!-- Card 3: Total Siswa Terdaftar (Yellow Gradient) -->
     <div class="card bg-c-yellow order-card">
       <div class="card-body">
-        <h6>Revenue</h6>
+        <h6>Total Siswa Terdaftar</h6>
         <h2>
-          <i class="feather icon-repeat"></i>
-          <span>${{ $stats['total_siswa'] > 0 ? number_format($stats['total_siswa'] * 50 + 2562) : '42,562' }}</span>
+          <i class="feather icon-user-check"></i>
+          <span>{{ number_format($stats['total_siswa'] ?? 0) }}</span>
         </h2>
         <p>
-          This Month
-          <span class="float-end">${{ $stats['total_siswa'] > 0 ? number_format($stats['total_siswa'] * 6 + 32) : '5,032' }}</span>
+          Siswa Bimbingan Aktif
+          <span class="float-end">SMAN 4 Jember</span>
         </p>
       </div>
     </div>
 
-    <!-- Card 4: Total Profit -->
+    <!-- Card 4: Konseling Tuntas (Red Gradient) -->
     <div class="card bg-c-red order-card">
       <div class="card-body">
-        <h6>Total Profit</h6>
+        <h6>Konseling Tuntas</h6>
         <h2>
           <i class="feather icon-award"></i>
-          <span>${{ ($handlingStatus['completed']['count'] ?? 0) > 0 ? number_format(($handlingStatus['completed']['count'] ?? 0) * 50 + 562) : '9,562' }}</span>
+          <span>{{ number_format($handlingStatus['completed']['count'] ?? 0) }}</span>
         </h2>
         <p>
-          This Month
-          <span class="float-end">${{ ($handlingStatus['completed']['count'] ?? 0) > 0 ? number_format(($handlingStatus['completed']['count'] ?? 0) * 3 + 42) : '542' }}</span>
+          Tingkat Efektivitas
+          <span class="float-end">{{ $handlingStatus['completed']['percentage'] ?? 0 }}% Kasus</span>
         </p>
       </div>
     </div>
 
   </div>
 
-  <!-- 2. Baris Grafik: Unique Visitor & Customers Donut Charts -->
+  <!-- 2. Baris Grafik: Tren Konsultasi Siswa & Donut Analytics Layanan -->
   <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
     
-    <!-- Unique Visitor (Line Chart) -->
+    <!-- Unique Visitor Style: Tren Konsultasi Chatbot AI vs Live Chat Guru BK -->
     <div class="card">
       <div class="card-header">
-        <h5>Unique Visitor</h5>
+        <h5>Tren Konsultasi Siswa</h5>
       </div>
       <div class="card-body" style="padding: 20px 20px 5px 20px;">
         <div id="unique-visitor-chart" style="min-height: 280px;"></div>
       </div>
     </div>
 
-    <!-- Customers Donut Charts (2 Kartu Berdampingan) -->
+    <!-- Customers Donut Charts (2 Kartu Berdampingan Sesuai Gradient Able) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
       
-      <!-- Customers (White Card) -->
+      <!-- Customers 1: Rasio Layanan (White Card) -->
       <div class="card">
         <div class="card-body">
           <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-            <span style="font-size: 15px; color: #666; font-weight: 500;">Customers</span>
+            <span style="font-size: 15px; color: #666; font-weight: 500;">Rasio Layanan</span>
             <div style="text-align: right;">
-              <h2 style="font-size: 28px; font-weight: 600; margin: 0; line-height: 1.1; color: #222;">826</h2>
+              <h2 style="font-size: 28px; font-weight: 600; margin: 0; line-height: 1.1; color: #222;">
+                {{ number_format($stats['total_sessions'] ?? 0) }}
+              </h2>
               <span class="text-c-green" style="font-size: 13px; font-weight: 600;">
-                8.2% <i class="feather icon-trending-up"></i>
+                {{ $trendData['periods']['year']['pct_total'] ?? '+0%' }} <i class="feather icon-trending-up"></i>
               </span>
             </div>
           </div>
           <div id="customer-chart" style="margin: 5px 0;"></div>
           <div style="display: flex; justify-content: space-around; text-align: center; margin-top: 15px;">
             <div>
-              <h3 style="margin: 0; font-size: 22px; font-weight: 600; color: #222;">
-                <i class="fas fa-circle f-10 text-c-green" style="margin-right: 6px;"></i>674
+              <h3 style="margin: 0; font-size: 20px; font-weight: 600; color: #222;">
+                <i class="fas fa-circle f-10 text-c-green" style="margin-right: 6px;"></i>{{ number_format($stats['total_ai_sessions'] ?? 0) }}
               </h3>
-              <span style="font-size: 13px; color: #888;">New</span>
+              <span style="font-size: 12px; color: #888;">Chatbot AI</span>
             </div>
             <div>
-              <h3 style="margin: 0; font-size: 22px; font-weight: 600; color: #222;">
-                <i class="fas fa-circle text-c-blue f-10" style="margin-right: 6px;"></i>182
+              <h3 style="margin: 0; font-size: 20px; font-weight: 600; color: #222;">
+                <i class="fas fa-circle text-c-blue f-10" style="margin-right: 6px;"></i>{{ number_format($stats['total_live_sessions'] ?? 0) }}
               </h3>
-              <span style="font-size: 13px; color: #888;">Return</span>
+              <span style="font-size: 12px; color: #888;">Live Guru BK</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Customers (Blue Card) -->
+      <!-- Customers 2: Alur Penanganan (Blue Card) -->
       <div class="card bg-primary-custom" style="color: #fff;">
         <div class="card-body">
           <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-            <span style="font-size: 15px; color: #fff; font-weight: 500;">Customers</span>
+            <span style="font-size: 15px; color: #fff; font-weight: 500;">Penanganan Kasus</span>
             <div style="text-align: right;">
-              <h2 style="font-size: 28px; font-weight: 600; margin: 0; line-height: 1.1; color: #fff;">826</h2>
+              <h2 style="font-size: 28px; font-weight: 600; margin: 0; line-height: 1.1; color: #fff;">
+                {{ number_format($handlingStatus['total_cases'] ?? 0) }}
+              </h2>
               <span style="font-size: 13px; font-weight: 600; color: #fff;">
-                8.2% <i class="feather icon-trending-up"></i>
+                {{ $handlingStatus['completed']['percentage'] ?? 0 }}% Tuntas <i class="feather icon-check"></i>
               </span>
             </div>
           </div>
           <div id="customer-chart-1" style="margin: 5px 0;"></div>
           <div style="display: flex; justify-content: space-around; text-align: center; margin-top: 15px;">
             <div>
-              <h3 style="margin: 0; font-size: 22px; font-weight: 600; color: #fff;">
-                <i class="fas fa-circle f-10 text-c-green" style="margin-right: 6px;"></i>674
+              <h3 style="margin: 0; font-size: 20px; font-weight: 600; color: #fff;">
+                <i class="fas fa-circle f-10 text-c-green" style="margin-right: 6px;"></i>{{ number_format($handlingStatus['completed']['count'] ?? 0) }}
               </h3>
-              <span style="font-size: 13px; color: #fff;">New</span>
+              <span style="font-size: 12px; color: #fff;">Tuntas</span>
             </div>
             <div>
-              <h3 style="margin: 0; font-size: 22px; font-weight: 600; color: #fff;">
-                <i class="fas fa-circle f-10" style="color: #fff; margin-right: 6px;"></i>182
+              <h3 style="margin: 0; font-size: 20px; font-weight: 600; color: #fff;">
+                <i class="fas fa-circle f-10" style="color: #fff; margin-right: 6px;"></i>{{ number_format(($handlingStatus['in_progress']['count'] ?? 0) + ($handlingStatus['waiting']['count'] ?? 0)) }}
               </h3>
-              <span style="font-size: 13px; color: #fff;">Return</span>
+              <span style="font-size: 12px; color: #fff;">Dalam Proses</span>
             </div>
           </div>
         </div>
@@ -362,97 +365,97 @@
 
   </div>
 
-  <!-- 3. Baris Social Cards & Activity Feed -->
+  <!-- 3. Baris Social Cards & Activity Feed (Data Riil SAPA BK) -->
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
     
     <!-- Kolom Kiri: 2 Social Cards (4 Kolom) -->
     <div class="lg:col-span-4 flex flex-col gap-6">
       
-      <!-- Social Card 1: Subscribers -->
+      <!-- Social Card 1: Siswa Terdaftar -->
       <div class="card social-card">
         <div class="card-body">
-          <i class="d-block f-40 text-c-blue fa fa-envelope-open" style="display: block; margin-bottom: 15px;"></i>
+          <i class="d-block f-40 text-c-blue feather icon-users" style="display: block; margin-bottom: 15px;"></i>
           <h4 class="m-t-20" style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">
-            <span class="text-c-blue">8.62k</span> Subscribers
+            <span class="text-c-blue">{{ number_format($stats['total_siswa'] ?? 0) }}</span> Siswa Terdaftar
           </h4>
           <p class="m-b-20" style="color: #888; font-size: 13px; margin-bottom: 20px;">
-            Your main list is growing
+            Total akun siswa bimbingan aktif SMAN 4 Jember
           </p>
-          <a href="{{ route('admin.users') }}" class="btn-primary-custom">
-            Manage List
+          <a href="{{ route('admin.users', ['role' => 'siswa']) }}" class="btn-primary-custom">
+            Kelola Pengguna
           </a>
         </div>
       </div>
 
-      <!-- Social Card 2: Followers -->
+      <!-- Social Card 2: Materi & Panduan BK -->
       <div class="card social-card">
         <div class="card-body">
-          <i class="d-block f-40 text-c-green fab fa-twitter" style="display: block; margin-bottom: 15px;"></i>
+          <i class="d-block f-40 text-c-green feather icon-book-open" style="display: block; margin-bottom: 15px;"></i>
           <h4 class="m-t-20" style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">
-            <span class="text-c-green">+40</span> Followers
+            <span class="text-c-green">+{{ number_format(($stats['total_ebooks'] ?? 0) + ($stats['total_articles'] ?? 0)) }}</span> Materi BK
           </h4>
           <p class="m-b-20" style="color: #888; font-size: 13px; margin-bottom: 20px;">
-            Your main list is growing
+            E-Book panduan bimbingan &amp; artikel motivasi
           </p>
-          <a href="{{ route('admin.konfigurasi') }}" class="btn-success-custom">
-            Check them out
+          <a href="{{ route('ebook.index') }}" class="btn-success-custom">
+            Katalog Materi
           </a>
         </div>
       </div>
 
     </div>
 
-    <!-- Kolom Kanan: Activity Feed (8 Kolom) -->
+    <!-- Kolom Kanan: Activity Feed (8 Kolom) Riwayat Bimbingan Siswa -->
     <div class="lg:col-span-8">
       <div class="card">
         <div class="card-header">
-          <h5>Activity Feed</h5>
+          <h5>Activity Feed Bimbingan Siswa</h5>
         </div>
         <div class="card-body" style="padding-top: 25px;">
           <ul class="feed-blog ps-0">
             
-            <!-- Feed Item 1: Eddie -->
-            <li class="active-feed">
-              <div class="feed-user-img">
-                <img src="{{ asset('images/user/avatar-1.jpg') }}" class="img-radius" alt="User-Profile" />
-              </div>
-              <h6>
-                <span class="badge-custom bg-danger-custom">File</span> Eddie uploaded new files:
-                <small style="color: #888; font-weight: 400; font-size: 12px; margin-left: 5px;">2 hours ago</small>
-              </h6>
-              <p style="color: #666; font-size: 13px; line-height: 1.6; margin: 12px 0 15px 0;">
-                hii <b>@everone</b> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
-              </p>
-              <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                <div style="text-align: center;">
-                  <img src="{{ asset('images/gallery-grid/img-grd-gal-1.jpg') }}" alt="Old Scooter" class="wid-100" />
-                  <h6 style="margin-top: 10px; margin-bottom: 2px; font-size: 13px; font-weight: 600;">Old Scooter</h6>
-                  <p style="color: #888; margin: 0; font-size: 11px;">PNG-100KB</p>
+            @forelse($studentActivities as $index => $activity)
+              <li class="{{ $index === 0 ? 'active-feed' : 'diactive-feed' }}">
+                <div class="feed-user-img">
+                  <div class="img-initial">
+                    {{ $activity['avatar_letter'] ?? 'S' }}
+                  </div>
                 </div>
-                <div style="text-align: center;">
-                  <img src="{{ asset('images/gallery-grid/img-grd-gal-2.jpg') }}" alt="Wall Art" class="wid-100" />
-                  <h6 style="margin-top: 10px; margin-bottom: 2px; font-size: 13px; font-weight: 600;">Wall Art</h6>
-                  <p style="color: #888; margin: 0; font-size: 11px;">PNG-150KB</p>
+                <h6>
+                  <span class="badge-custom {{ $index % 2 === 0 ? 'bg-primary-custom' : 'bg-success-custom' }}">
+                    {{ $activity['badge'] ?? 'Konseling' }}
+                  </span>
+                  <span style="font-weight: 600; margin-left: 4px;">{{ $activity['student_name'] }}</span>
+                  <small style="color: #888; font-weight: 400; font-size: 12px; margin-left: 5px;">
+                    {{ $activity['time_ago'] }}
+                  </small>
+                </h6>
+                <p style="color: #666; font-size: 13px; line-height: 1.6; margin: 8px 0 10px 0;">
+                  {{ $activity['title'] }}
+                  @if(!empty($activity['detail']))
+                    : <span style="color: #888;">{{ $activity['detail'] }}</span>
+                  @endif
+                </p>
+                <div>
+                  <a href="{{ $activity['action_url'] }}" class="text-c-blue" style="font-size: 12px; font-weight: 600; text-decoration: none;">
+                    Periksa Sesi Konseling &rarr;
+                  </a>
                 </div>
-                <div style="text-align: center;">
-                  <img src="{{ asset('images/gallery-grid/img-grd-gal-3.jpg') }}" alt="Microphone" class="wid-100" />
-                  <h6 style="margin-top: 10px; margin-bottom: 2px; font-size: 13px; font-weight: 600;">Microphone</h6>
-                  <p style="color: #888; margin: 0; font-size: 11px;">PNG-150KB</p>
+              </li>
+            @empty
+              <li class="active-feed">
+                <div class="feed-user-img">
+                  <div class="img-initial">BK</div>
                 </div>
-              </div>
-            </li>
-
-            <!-- Feed Item 2: Sarah -->
-            <li class="diactive-feed">
-              <div class="feed-user-img">
-                <img src="{{ asset('images/user/avatar-1.jpg') }}" class="img-radius" alt="User-Profile" />
-              </div>
-              <h6>
-                <span class="badge-custom bg-success-custom">Task</span> Sarah marked the Pending Review:
-                <span class="text-c-green" style="margin-left: 4px;">Trash Can Icon Design</span>
-                <small style="color: #888; font-weight: 400; font-size: 12px; margin-left: 5px;">2 hours ago</small>
-              </h6>
-            </li>
+                <h6>
+                  <span class="badge-custom bg-primary-custom">Informasi</span>
+                  Layanan Bimbingan Konseling Siaga
+                </h6>
+                <p style="color: #666; font-size: 13px; line-height: 1.6; margin: 8px 0 10px 0;">
+                  Belum ada percakapan atau konsultasi baru dari siswa hari ini. Sistem siaga menerima konsultasi melalui Chatbot AI maupun Live Chat Guru BK.
+                </p>
+              </li>
+            @endforelse
 
           </ul>
         </div>
@@ -468,7 +471,11 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    // 1. Unique Visitor Line Chart
+    // 1. Data Riil Tren Konsultasi Siswa (Chatbot AI vs Live Chat Guru BK)
+    var trendLabels = @json($trendData['periods']['year']['labels'] ?? ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des']);
+    var trendAiData = @json($trendData['periods']['year']['ai'] ?? [0,0,0,0,0,0,0,0,0,0,0,0]);
+    var trendLiveData = @json($trendData['periods']['year']['live'] ?? [0,0,0,0,0,0,0,0,0,0,0,0]);
+
     var uniqueVisitorOptions = {
       chart: {
         height: 280,
@@ -495,7 +502,7 @@
         }
       },
       xaxis: {
-        categories: ['15 Jan', "Feb '00", '15 Feb', "Mar '00", '15 Mar', "Apr '00", '15 Apr', "May '00", '15 May', "Jun '00"],
+        categories: trendLabels,
         axisBorder: {
           show: false
         },
@@ -510,8 +517,7 @@
       },
       yaxis: {
         show: true,
-        min: 10,
-        max: 70,
+        min: 0,
         labels: {
           style: {
             colors: '#a3aed0'
@@ -533,19 +539,23 @@
       },
       series: [
         {
-          name: 'Arts',
-          data: [20, 50, 30, 60, 30, 50]
+          name: 'Chatbot AI',
+          data: trendAiData
         },
         {
-          name: 'Commerce',
-          data: [60, 30, 65, 45, 67, 35]
+          name: 'Live Chat Guru BK',
+          data: trendLiveData
         }
       ]
     };
     var chart1 = new ApexCharts(document.querySelector("#unique-visitor-chart"), uniqueVisitorOptions);
     chart1.render();
 
-    // 2. Customer Donut Chart (White Card)
+    // 2. Customer Donut Chart: Rasio Layanan (Chatbot AI vs Live Guru BK)
+    var aiCount = {{ $stats['total_ai_sessions'] ?? 0 }};
+    var liveCount = {{ $stats['total_live_sessions'] ?? 0 }};
+    var donutData1 = (aiCount === 0 && liveCount === 0) ? [0, 0] : [aiCount, liveCount];
+
     var customerChartOptions = {
       chart: {
         height: 150,
@@ -561,7 +571,7 @@
           }
         }
       },
-      labels: ['New', 'Return'],
+      labels: ['Chatbot AI', 'Live Guru BK'],
       legend: {
         show: false
       },
@@ -580,12 +590,16 @@
       stroke: {
         width: 0
       },
-      series: [674, 182]
+      series: donutData1
     };
     var chart2 = new ApexCharts(document.querySelector("#customer-chart"), customerChartOptions);
     chart2.render();
 
-    // 3. Customer Donut Chart 1 (Blue Card)
+    // 3. Customer Donut Chart: Penanganan Kasus (Tuntas vs Dalam Proses)
+    var completedCases = {{ $handlingStatus['completed']['count'] ?? 0 }};
+    var inProgressCases = {{ ($handlingStatus['in_progress']['count'] ?? 0) + ($handlingStatus['waiting']['count'] ?? 0) }};
+    var donutData2 = (completedCases === 0 && inProgressCases === 0) ? [0, 0] : [completedCases, inProgressCases];
+
     var customerChart1Options = {
       chart: {
         height: 150,
@@ -601,7 +615,7 @@
           }
         }
       },
-      labels: ['New', 'Return'],
+      labels: ['Kasus Tuntas', 'Dalam Proses'],
       legend: {
         show: false
       },
@@ -620,7 +634,7 @@
       stroke: {
         width: 0
       },
-      series: [674, 182]
+      series: donutData2
     };
     var chart3 = new ApexCharts(document.querySelector("#customer-chart-1"), customerChart1Options);
     chart3.render();
