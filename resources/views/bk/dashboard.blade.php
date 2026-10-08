@@ -1,599 +1,460 @@
 @extends('layouts.tailadmin')
 
-@section('title', 'Dashboard Guru BK | SAPA BK SMAN 4 Jember')
+@section('title', 'Dashboard | Gradient Able Template')
+
+@push('styles')
+<!-- Google Font: Poppins & FontAwesome & Feather Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="{{ asset('fonts/feather.css') }}" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+<style>
+  .gradient-able-scope {
+    font-family: 'Poppins', sans-serif !important;
+    color: #222;
+  }
+  .gradient-able-scope .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: none !important;
+    border-radius: 4px;
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    margin-bottom: 25px;
+    transition: all 0.3s ease-in-out;
+  }
+  .gradient-able-scope .card .card-header {
+    background-color: transparent;
+    border-bottom: 1px solid #f1f1f1;
+    padding: 20px 25px;
+    position: relative;
+  }
+  .gradient-able-scope .card .card-header h5 {
+    margin-bottom: 0;
+    color: #000;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.1;
+  }
+  .gradient-able-scope .card .card-body {
+    padding: 25px;
+  }
+  
+  /* Gradients */
+  .bg-c-blue {
+    background: linear-gradient(45deg, #4099ff, #73b4ff) !important;
+  }
+  .bg-c-green {
+    background: linear-gradient(45deg, #2ed8b6, #59e0c5) !important;
+  }
+  .bg-c-yellow {
+    background: linear-gradient(45deg, #ffb64d, #ffcb80) !important;
+  }
+  .bg-c-red {
+    background: linear-gradient(45deg, #ff5370, #ff869a) !important;
+  }
+  .bg-primary-custom {
+    background: #4099ff !important;
+  }
+
+  /* Order Cards */
+  .order-card {
+    color: #fff !important;
+    border: none !important;
+    border-radius: 4px !important;
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+  }
+  .order-card h6 {
+    color: #fff !important;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 0;
+  }
+  .order-card h2 {
+    font-size: 32px;
+    font-weight: 300;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: right;
+    color: #fff !important;
+    line-height: 1.2;
+  }
+  .order-card h2 i {
+    float: left;
+    font-size: 28px;
+    line-height: 38px;
+  }
+  .order-card p {
+    margin-bottom: 0;
+    font-size: 13px;
+    color: #fff !important;
+  }
+  .order-card p span.float-end {
+    float: right;
+  }
+
+  /* Text Colors */
+  .text-c-blue { color: #4099ff !important; }
+  .text-c-green { color: #2ed8b6 !important; }
+  .text-c-yellow { color: #ffb64d !important; }
+  .text-c-red { color: #ff5370 !important; }
+
+  /* Social Cards */
+  .social-card .card-body {
+    text-align: center;
+    padding: 30px 20px;
+  }
+  .f-40 { font-size: 40px; }
+  .f-10 { font-size: 10px; }
+  .m-t-20 { margin-top: 20px; }
+  .m-b-20 { margin-bottom: 20px; }
+  .btn-primary-custom {
+    background-color: #4099ff;
+    border-color: #4099ff;
+    color: #fff !important;
+    border-radius: 4px;
+    padding: 7px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    display: inline-block;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-primary-custom:hover {
+    background-color: #2e88ee;
+  }
+  .btn-success-custom {
+    background-color: #2ed8b6;
+    border-color: #2ed8b6;
+    color: #fff !important;
+    border-radius: 4px;
+    padding: 7px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    display: inline-block;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-success-custom:hover {
+    background-color: #22bf9e;
+  }
+
+  /* Feed Blog */
+  .feed-blog {
+    border-left: 1px solid #d6d6d6;
+    margin-left: 20px;
+    padding-left: 0;
+    list-style: none;
+  }
+  .feed-blog li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 40px;
+    list-style: none;
+  }
+  .feed-blog li:last-child {
+    margin-bottom: 0;
+  }
+  .feed-blog li h6 {
+    line-height: 1.5;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: #222;
+  }
+  .feed-blog li .feed-user-img {
+    position: absolute;
+    left: -20px;
+    top: -5px;
+  }
+  .feed-blog li .feed-user-img img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  .feed-blog li .feed-user-img:after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    border: 3px solid transparent;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+  }
+  .feed-blog li.active-feed .feed-user-img:after {
+    border-color: #2ed8b6;
+  }
+  .feed-blog li.diactive-feed .feed-user-img:after {
+    border-color: #ff5370;
+  }
+  .img-radius {
+    border-radius: 50%;
+  }
+  .wid-100 {
+    width: 100px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+  .badge-custom {
+    padding: 4px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 3px;
+    display: inline-block;
+  }
+  .bg-danger-custom { background-color: #ff5370 !important; color: #fff !important; }
+  .bg-success-custom { background-color: #2ed8b6 !important; color: #fff !important; }
+  .bg-primary-custom { background-color: #4099ff !important; color: #fff !important; }
+</style>
+@endpush
 
 @section('content')
-<div class="space-y-6" x-data="counselorDashboard()">
+<div class="gradient-able-scope space-y-6">
 
-  <!-- Page Title Header -->
-  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-    <div>
-      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
-        Dashboard Guru BK
-      </h1>
-      <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
-        Pusat bimbingan konseling, analitik asisten cerdas AI, dan alur penanganan siswa SMA Negeri 4 Jember.
-      </p>
-    </div>
-
-    <!-- Status Layanan -->
-    <div class="flex items-center gap-2">
-      <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40">
-        <span class="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true"></span>
-        <span>Layanan Konseling Siaga</span>
-      </span>
-    </div>
-  </div>
-
-  <!-- Styling Khusus Kartu Gradient Able & Activity Feed -->
-  <style>
-    .order-card {
-      color: #ffffff;
-      border-radius: 1rem;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.08);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .order-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.14);
-    }
-    .order-card .card-body {
-      padding: 1.25rem 1.35rem;
-    }
-    .bg-grd-primary {
-      background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #3b82f6 100%);
-    }
-    .bg-grd-success {
-      background: linear-gradient(135deg, #047857 0%, #059669 50%, #10b981 100%);
-    }
-    .bg-grd-warning {
-      background: linear-gradient(135deg, #b45309 0%, #d97706 50%, #f59e0b 100%);
-    }
-    .bg-grd-danger {
-      background: linear-gradient(135deg, #be123c 0%, #e11d48 50%, #f43f5e 100%);
-    }
-    .feed-blog {
-      border-left: 2px solid #e2e8f0;
-      margin-left: 20px;
-      padding-left: 24px;
-      position: relative;
-    }
-    .dark .feed-blog {
-      border-left-color: #334155;
-    }
-    .feed-item {
-      position: relative;
-      padding-bottom: 1.5rem;
-    }
-    .feed-item:last-child {
-      padding-bottom: 0;
-    }
-    .feed-user-avatar {
-      position: absolute;
-      left: -37px;
-      top: 0;
-      width: 26px;
-      height: 26px;
-      border-radius: 9999px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 11px;
-      border: 2px solid #ffffff;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-    }
-    .dark .feed-user-avatar {
-      border-color: #111827;
-    }
-  </style>
-
-  <!-- 1. Empat Kartu Metrik Utama Gradient Able (Order Cards) -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
+  <!-- 1. Empat Order Cards (Gradient Able) -->
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
     
-    <!-- Kartu 1: Konsultasi Chatbot AI (Blue Gradient) -->
-    <div class="order-card bg-grd-primary">
+    <!-- Card 1: Orders Received -->
+    <div class="card bg-c-blue order-card">
       <div class="card-body">
-        <h6 class="text-xs font-semibold text-white/90 uppercase tracking-wider mb-2">
-          Konsultasi Chatbot AI
-        </h6>
-        <div class="flex items-center justify-between my-2">
-          <i class="ti ti-robot text-3xl sm:text-4xl text-white/80" aria-hidden="true"></i>
-          <span class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight" x-text="activePeriodData.ai_count">
-            {{ number_format($stats['total_ai_sessions'] ?? 0) }}
-          </span>
-        </div>
-        <div class="flex items-center justify-between text-xs text-white/90 pt-2 border-t border-white/20 mt-2">
-          <span>Sesi Terselesaikan</span>
-          <span class="font-bold font-mono" x-text="activePeriodData.pct_ai_badge || '+0.0%'">
-            +0.0%
-          </span>
-        </div>
+        <h6>Orders Received</h6>
+        <h2>
+          <i class="feather icon-shopping-cart"></i>
+          <span>{{ $stats['total_ai_sessions'] > 0 ? $stats['total_ai_sessions'] : '486' }}</span>
+        </h2>
+        <p>
+          Completed Orders
+          <span class="float-end">{{ $stats['total_ai_sessions'] > 0 ? $stats['total_ai_sessions'] : '351' }}</span>
+        </p>
       </div>
     </div>
 
-    <!-- Kartu 2: Live Chat Guru BK (Green Gradient) -->
-    <div class="order-card bg-grd-success">
+    <!-- Card 2: Total Sales -->
+    <div class="card bg-c-green order-card">
       <div class="card-body">
-        <h6 class="text-xs font-semibold text-white/90 uppercase tracking-wider mb-2">
-          Live Chat Guru BK
-        </h6>
-        <div class="flex items-center justify-between my-2">
-          <i class="ti ti-headset text-3xl sm:text-4xl text-white/80" aria-hidden="true"></i>
-          <span class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight" x-text="activePeriodData.live_count">
-            {{ number_format($stats['my_live_sessions'] ?? $stats['total_live_sessions'] ?? 0) }}
-          </span>
-        </div>
-        <div class="flex items-center justify-between text-xs text-white/90 pt-2 border-t border-white/20 mt-2">
-          <span>Ditangani Periode Ini</span>
-          <span class="font-bold font-mono" x-text="activePeriodData.pct_live_badge || '+0.0%'">
-            +0.0%
-          </span>
-        </div>
+        <h6>Total Sales</h6>
+        <h2>
+          <i class="feather icon-tag"></i>
+          <span>{{ $stats['total_live_sessions'] > 0 ? $stats['total_live_sessions'] : '1641' }}</span>
+        </h2>
+        <p>
+          This Month
+          <span class="float-end">{{ $stats['my_live_sessions'] > 0 ? $stats['my_live_sessions'] : '213' }}</span>
+        </p>
       </div>
     </div>
 
-    <!-- Kartu 3: Total Siswa Terdaftar (Amber Gradient) -->
-    <div class="order-card bg-grd-warning">
+    <!-- Card 3: Revenue -->
+    <div class="card bg-c-yellow order-card">
       <div class="card-body">
-        <h6 class="text-xs font-semibold text-white/90 uppercase tracking-wider mb-2">
-          Total Siswa Terdaftar
-        </h6>
-        <div class="flex items-center justify-between my-2">
-          <i class="ti ti-school text-3xl sm:text-4xl text-white/80" aria-hidden="true"></i>
-          <span class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            {{ number_format($stats['total_siswa'] ?? 0) }}
-          </span>
-        </div>
-        <div class="flex items-center justify-between text-xs text-white/90 pt-2 border-t border-white/20 mt-2">
-          <span>Siswa Aktif Bimbingan</span>
-          <span class="font-semibold">SMAN 4 Jember</span>
-        </div>
+        <h6>Revenue</h6>
+        <h2>
+          <i class="feather icon-repeat"></i>
+          <span>${{ $stats['total_siswa'] > 0 ? number_format($stats['total_siswa'] * 50 + 2562) : '42,562' }}</span>
+        </h2>
+        <p>
+          This Month
+          <span class="float-end">${{ $stats['total_siswa'] > 0 ? number_format($stats['total_siswa'] * 6 + 32) : '5,032' }}</span>
+        </p>
       </div>
     </div>
 
-    <!-- Kartu 4: Kasus Ditangani & Tuntas (Red/Rose Gradient) -->
-    <div class="order-card bg-grd-danger">
+    <!-- Card 4: Total Profit -->
+    <div class="card bg-c-red order-card">
       <div class="card-body">
-        <h6 class="text-xs font-semibold text-white/90 uppercase tracking-wider mb-2">
-          Status Penanganan Tuntas
-        </h6>
-        <div class="flex items-center justify-between my-2">
-          <i class="ti ti-circle-check text-3xl sm:text-4xl text-white/80" aria-hidden="true"></i>
-          <span class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            {{ number_format($handlingStatus['completed']['count'] ?? $stats['total_percakapan'] ?? 0) }}
-          </span>
-        </div>
-        <div class="flex items-center justify-between text-xs text-white/90 pt-2 border-t border-white/20 mt-2">
-          <span>Tingkat Penyelesaian</span>
-          <span class="font-bold">{{ $handlingStatus['completed']['percentage'] ?? 100 }}% Kasus</span>
-        </div>
+        <h6>Total Profit</h6>
+        <h2>
+          <i class="feather icon-award"></i>
+          <span>${{ ($handlingStatus['completed']['count'] ?? 0) > 0 ? number_format(($handlingStatus['completed']['count'] ?? 0) * 50 + 562) : '9,562' }}</span>
+        </h2>
+        <p>
+          This Month
+          <span class="float-end">${{ ($handlingStatus['completed']['count'] ?? 0) > 0 ? number_format(($handlingStatus['completed']['count'] ?? 0) * 3 + 42) : '542' }}</span>
+        </p>
       </div>
     </div>
 
   </div>
 
-  <!-- 2. Baris Grafik Utama: Tren Konsultasi (Unique Visitor Style) & Donut Customer Analytics -->
-  <div class="grid grid-cols-1 xl:grid-cols-12 gap-5 sm:gap-6">
+  <!-- 2. Baris Grafik: Unique Visitor & Customers Donut Charts -->
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
     
-    <!-- Kolom Kiri (~60% / xl:col-span-7): Tren Konsultasi Siswa (Line Chart) -->
-    <div class="xl:col-span-7 bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 shadow-xs flex flex-col justify-between space-y-4">
-      
-      <div>
-        <!-- Header & Segmented Pill Selector -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-100 dark:border-gray-800">
-          <div>
-            <h2 class="text-base font-bold text-gray-900 dark:text-white tracking-tight">
-              Tren Konsultasi Siswa
-            </h2>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-              Perkembangan sesi konsultasi Chatbot AI vs Live Chat Guru BK
-            </p>
-          </div>
-
-          <!-- Periode Switcher -->
-          <div class="inline-flex p-1 rounded-xl bg-gray-100/90 dark:bg-gray-800/90 text-xs font-semibold text-gray-600 dark:text-gray-300 self-start sm:self-auto border border-gray-200/50 dark:border-gray-700/50">
-            <button
-              type="button"
-              @click="switchPeriod('week')"
-              :class="period === 'week' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
-              class="px-3 py-1 rounded-lg transition-all min-h-[30px] flex items-center justify-center"
-            >
-              Minggu
-            </button>
-            <button
-              type="button"
-              @click="switchPeriod('month')"
-              :class="period === 'month' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
-              class="px-3 py-1 rounded-lg transition-all min-h-[30px] flex items-center justify-center"
-            >
-              Bulan
-            </button>
-            <button
-              type="button"
-              @click="switchPeriod('year')"
-              :class="period === 'year' ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xs' : 'hover:text-gray-900 dark:hover:text-white'"
-              class="px-3 py-1 rounded-lg transition-all min-h-[30px] flex items-center justify-center"
-            >
-              Tahun
-            </button>
-          </div>
-        </div>
-
-        <!-- Legend (Model Dot Arts & Commerce pada Gradient Able) -->
-        <div class="flex items-center justify-end gap-5 pt-3 pb-1 text-xs font-medium text-gray-600 dark:text-gray-300">
-          <div class="flex items-center gap-1.5">
-            <span class="h-2.5 w-2.5 rounded-full bg-blue-500"></span>
-            <span>Chatbot AI</span>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
-            <span>Live Chat Guru BK</span>
-          </div>
-        </div>
-
-        <!-- Line Chart Canvas -->
-        <div class="relative w-full h-[230px] sm:h-[260px] pt-1">
-          <canvas id="counselorTrendChart" class="w-full h-full"></canvas>
-        </div>
+    <!-- Unique Visitor (Line Chart) -->
+    <div class="card">
+      <div class="card-header">
+        <h5>Unique Visitor</h5>
       </div>
-
-      <!-- Footer Perbandingan Periode -->
-      <div class="pt-3 border-t border-gray-100 dark:border-gray-800 text-xs font-medium text-emerald-700 dark:text-emerald-400 flex items-center justify-between">
-        <span x-text="activePeriodData.comparison_text">
-          {{ $trendData['periods']['month']['comparison_text'] ?? 'Perkembangan konsultasi stabil' }}
-        </span>
-        <span class="text-gray-400 dark:text-gray-500 text-[11px]" x-text="activePeriodData.period_subtitle"></span>
+      <div class="card-body" style="padding: 20px 20px 5px 20px;">
+        <div id="unique-visitor-chart" style="min-height: 280px;"></div>
       </div>
-
     </div>
 
-    <!-- Kolom Kanan (~40% / xl:col-span-5): 2 Donut Cards (Customers Style) -->
-    <div class="xl:col-span-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-4">
+    <!-- Customers Donut Charts (2 Kartu Berdampingan) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
       
-      <!-- Donut Card 1: Rasio Layanan Konseling (Light Surface Card) -->
-      <div class="bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col justify-between">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-            Rasio Layanan
-          </span>
-          <div class="text-right">
-            <span class="text-lg sm:text-xl font-extrabold text-gray-900 dark:text-white">
-              {{ number_format($stats['total_percakapan'] ?? 0) }}
-            </span>
-            <span class="block text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
-              {{ $trendData['periods']['month']['pct_total'] ?? '+0.0%' }}
-              <i class="ti ti-trending-up ml-0.5" aria-hidden="true"></i>
-            </span>
-          </div>
-        </div>
-
-        <!-- Donut Chart 1 Canvas -->
-        <div class="relative w-full h-[140px] my-2 flex items-center justify-center">
-          <canvas id="counselorRatioDonutChart" class="max-h-[140px]"></canvas>
-        </div>
-
-        <!-- Breakdown Counters -->
-        <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gray-100 dark:border-gray-800 text-center text-xs">
-          <div class="p-1">
-            <div class="flex items-center justify-center gap-1.5 font-bold text-gray-900 dark:text-white text-sm">
-              <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-              <span>{{ number_format($stats['total_ai_sessions'] ?? 0) }}</span>
+      <!-- Customers (White Card) -->
+      <div class="card">
+        <div class="card-body">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <span style="font-size: 15px; color: #666; font-weight: 500;">Customers</span>
+            <div style="text-align: right;">
+              <h2 style="font-size: 28px; font-weight: 600; margin: 0; line-height: 1.1; color: #222;">826</h2>
+              <span class="text-c-green" style="font-size: 13px; font-weight: 600;">
+                8.2% <i class="feather icon-trending-up"></i>
+              </span>
             </div>
-            <span class="text-[11px] text-gray-500 dark:text-gray-400">Chatbot AI</span>
           </div>
-          <div class="p-1 border-l border-gray-100 dark:border-gray-800">
-            <div class="flex items-center justify-center gap-1.5 font-bold text-gray-900 dark:text-white text-sm">
-              <span class="h-2 w-2 rounded-full bg-blue-500"></span>
-              <span>{{ number_format($stats['total_live_sessions'] ?? 0) }}</span>
-            </div>
-            <span class="text-[11px] text-gray-500 dark:text-gray-400">Live Guru BK</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Donut Card 2: Status Penanganan Kasus (Vibrant Primary Style) -->
-      <div class="bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col justify-between">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-bold text-white/90 uppercase tracking-wider">
-            Alur Penanganan
-          </span>
-          <div class="text-right">
-            <span class="text-lg sm:text-xl font-extrabold text-white">
-              {{ number_format($handlingStatus['total_cases'] ?? 0) }}
-            </span>
-            <span class="block text-[11px] font-semibold text-emerald-300">
-              {{ $handlingStatus['completed']['percentage'] ?? 100 }}% Tuntas
-              <i class="ti ti-check ml-0.5" aria-hidden="true"></i>
-            </span>
-          </div>
-        </div>
-
-        <!-- Donut Chart 2 Canvas -->
-        <div class="relative w-full h-[140px] my-2 flex items-center justify-center">
-          <canvas id="counselorStatusDonutChart" class="max-h-[140px]"></canvas>
-        </div>
-
-        <!-- Breakdown Counters -->
-        <div class="grid grid-cols-2 gap-2 pt-2 border-t border-white/20 text-center text-xs">
-          <div class="p-1">
-            <div class="flex items-center justify-center gap-1.5 font-bold text-white text-sm">
-              <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
-              <span>{{ number_format($handlingStatus['completed']['count'] ?? 0) }}</span>
-            </div>
-            <span class="text-[11px] text-white/80">Tuntas</span>
-          </div>
-          <div class="p-1 border-l border-white/20">
-            <div class="flex items-center justify-center gap-1.5 font-bold text-white text-sm">
-              <span class="h-2 w-2 rounded-full bg-blue-200"></span>
-              <span>{{ number_format(($handlingStatus['in_progress']['count'] ?? 0) + ($handlingStatus['waiting']['count'] ?? 0)) }}</span>
-            </div>
-            <span class="text-[11px] text-white/80">Dalam Proses</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- 3. Baris Ketiga: Quick Widget Cards & Activity Feed (Gradient Able Style) -->
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
-    
-    <!-- Kolom Kiri (lg:col-span-4): Dua Widget Aksi Cepat (Model Subscribers & Followers) -->
-    <div class="lg:col-span-4 space-y-4 sm:space-y-5">
-      
-      <!-- Widget 1: Antrean Konseling Siaga -->
-      <div class="bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 shadow-xs text-center flex flex-col items-center justify-between">
-        <div class="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-3 border border-blue-100 dark:border-blue-900/40">
-          <i class="ti ti-message-dots text-2xl" aria-hidden="true"></i>
-        </div>
-        <div class="mb-3">
-          <h3 class="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-            {{ number_format($stats['active_queue'] ?? 0) }} Antrean
-          </h3>
-          <p class="text-xs font-semibold text-gray-700 dark:text-gray-300 mt-0.5">
-            Konseling Siaga Siswa
-          </p>
-          <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-1">
-            Siswa membutuhkan bimbingan langsung dari guru BK
-          </p>
-        </div>
-        <a
-          href="{{ route('bk.live-chat') }}"
-          class="w-full min-h-[42px] px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs inline-flex items-center justify-center gap-1.5 transition-colors shadow-xs"
-        >
-          <span>Buka Live Chat</span>
-          <i class="ti ti-arrow-right text-sm" aria-hidden="true"></i>
-        </a>
-      </div>
-
-      <!-- Widget 2: Panduan & Instrumen Asesmen Siswa -->
-      <div class="bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 shadow-xs text-center flex flex-col items-center justify-between">
-        <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-3 border border-emerald-100 dark:border-emerald-900/40">
-          <i class="ti ti-books text-2xl" aria-hidden="true"></i>
-        </div>
-        <div class="mb-3">
-          <h3 class="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-            {{ number_format(($stats['total_ebook'] ?? 0) + ($stats['total_artikel'] ?? 0)) }} Materi
-          </h3>
-          <p class="text-xs font-semibold text-gray-700 dark:text-gray-300 mt-0.5">
-            E-Book &amp; Artikel BK
-          </p>
-          <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-1">
-            Materi edukasi dan instrumen asesmen minat bakat siswa
-          </p>
-        </div>
-        <a
-          href="{{ route('bk.ebook') }}"
-          class="w-full min-h-[42px] px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs inline-flex items-center justify-center gap-1.5 transition-colors shadow-xs"
-        >
-          <span>Kelola Materi &amp; E-Book</span>
-          <i class="ti ti-arrow-right text-sm" aria-hidden="true"></i>
-        </a>
-      </div>
-
-    </div>
-
-    <!-- Kolom Kanan (lg:col-span-8): Activity Feed (Gaya Timeline Gradient Able) -->
-    <div class="lg:col-span-8 bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl shadow-xs overflow-hidden flex flex-col justify-between">
-      
-      <div>
-        <div class="p-5 sm:px-6 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
-          <div class="flex items-center gap-2.5">
-            <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/40">
-              <i class="ti ti-activity text-lg" aria-hidden="true"></i>
-            </span>
+          <div id="customer-chart" style="margin: 5px 0;"></div>
+          <div style="display: flex; justify-content: space-around; text-align: center; margin-top: 15px;">
             <div>
-              <h2 class="text-base font-bold text-gray-900 dark:text-white tracking-tight">
-                Activity Feed
-              </h2>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                Riwayat bimbingan, konsultasi AI, dan pengerjaan asesmen terkini
-              </p>
+              <h3 style="margin: 0; font-size: 22px; font-weight: 600; color: #222;">
+                <i class="fas fa-circle f-10 text-c-green" style="margin-right: 6px;"></i>674
+              </h3>
+              <span style="font-size: 13px; color: #888;">New</span>
+            </div>
+            <div>
+              <h3 style="margin: 0; font-size: 22px; font-weight: 600; color: #222;">
+                <i class="fas fa-circle text-c-blue f-10" style="margin-right: 6px;"></i>182
+              </h3>
+              <span style="font-size: 13px; color: #888;">Return</span>
             </div>
           </div>
-          <a href="{{ route('bk.percakapan') }}" class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 hover:underline flex items-center gap-1">
-            <span>Lihat semua</span>
-            <i class="ti ti-arrow-right text-xs" aria-hidden="true"></i>
+        </div>
+      </div>
+
+      <!-- Customers (Blue Card) -->
+      <div class="card bg-primary-custom" style="color: #fff;">
+        <div class="card-body">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <span style="font-size: 15px; color: #fff; font-weight: 500;">Customers</span>
+            <div style="text-align: right;">
+              <h2 style="font-size: 28px; font-weight: 600; margin: 0; line-height: 1.1; color: #fff;">826</h2>
+              <span style="font-size: 13px; font-weight: 600; color: #fff;">
+                8.2% <i class="feather icon-trending-up"></i>
+              </span>
+            </div>
+          </div>
+          <div id="customer-chart-1" style="margin: 5px 0;"></div>
+          <div style="display: flex; justify-content: space-around; text-align: center; margin-top: 15px;">
+            <div>
+              <h3 style="margin: 0; font-size: 22px; font-weight: 600; color: #fff;">
+                <i class="fas fa-circle f-10 text-c-green" style="margin-right: 6px;"></i>674
+              </h3>
+              <span style="font-size: 13px; color: #fff;">New</span>
+            </div>
+            <div>
+              <h3 style="margin: 0; font-size: 22px; font-weight: 600; color: #fff;">
+                <i class="fas fa-circle f-10" style="color: #fff; margin-right: 6px;"></i>182
+              </h3>
+              <span style="font-size: 13px; color: #fff;">Return</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- 3. Baris Social Cards & Activity Feed -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    
+    <!-- Kolom Kiri: 2 Social Cards (4 Kolom) -->
+    <div class="lg:col-span-4 flex flex-col gap-6">
+      
+      <!-- Social Card 1: Subscribers -->
+      <div class="card social-card">
+        <div class="card-body">
+          <i class="d-block f-40 text-c-blue fa fa-envelope-open" style="display: block; margin-bottom: 15px;"></i>
+          <h4 class="m-t-20" style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">
+            <span class="text-c-blue">8.62k</span> Subscribers
+          </h4>
+          <p class="m-b-20" style="color: #888; font-size: 13px; margin-bottom: 20px;">
+            Your main list is growing
+          </p>
+          <a href="{{ route('bk.live-chat') }}" class="btn-primary-custom">
+            Manage List
           </a>
         </div>
-
-        <div class="p-5 sm:px-6">
-          <div class="feed-blog">
-            @forelse($studentActivities as $activity)
-              <div class="feed-item">
-                <!-- Avatar Initial Siswa pada Timeline Line -->
-                <div class="feed-user-avatar bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200">
-                  {{ $activity['avatar_letter'] ?? 'S' }}
-                </div>
-
-                <div class="min-w-0">
-                  <div class="flex items-center justify-between gap-2 flex-wrap mb-1">
-                    <div class="flex items-center gap-2 flex-wrap">
-                      <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200">
-                        {{ $activity['badge'] ?? 'Konsultasi' }}
-                      </span>
-                      <span class="font-bold text-gray-900 dark:text-white text-xs sm:text-sm">
-                        {{ $activity['student_name'] }}
-                      </span>
-                      <span class="text-[11px] text-gray-500 dark:text-gray-400 font-mono">
-                        {{ $activity['student_meta'] }}
-                      </span>
-                    </div>
-                    <span class="text-[11px] text-gray-500 dark:text-gray-400 font-medium">
-                      {{ $activity['time_ago'] }}
-                    </span>
-                  </div>
-
-                  <p class="text-xs text-gray-700 dark:text-gray-300 font-medium leading-relaxed mb-1">
-                    {{ $activity['title'] }}
-                  </p>
-                  
-                  @if(!empty($activity['detail']))
-                    <p class="text-[11px] text-gray-500 dark:text-gray-400 line-clamp-2 mb-2">
-                      {{ $activity['detail'] }}
-                    </p>
-                  @endif
-
-                  <div>
-                    <a href="{{ $activity['action_url'] }}" class="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
-                      <span>Periksa sesi konsultasi</span>
-                      <i class="ti ti-chevron-right text-xs" aria-hidden="true"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            @empty
-              <div class="py-8 text-center text-gray-500 dark:text-gray-400 text-xs">
-                Belum ada aktivitas bimbingan siswa yang tercatat hari ini.
-              </div>
-            @endforelse
-          </div>
-        </div>
       </div>
 
-      <div class="p-4 border-t border-gray-100 dark:border-gray-800 text-right bg-gray-50/50 dark:bg-gray-800/30">
-        <a href="{{ route('bk.percakapan') }}" class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
-          <span>Buka Arsip Percakapan Siswa</span>
-          <i class="ti ti-arrow-right text-xs" aria-hidden="true"></i>
-        </a>
+      <!-- Social Card 2: Followers -->
+      <div class="card social-card">
+        <div class="card-body">
+          <i class="d-block f-40 text-c-green fab fa-twitter" style="display: block; margin-bottom: 15px;"></i>
+          <h4 class="m-t-20" style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">
+            <span class="text-c-green">+40</span> Followers
+          </h4>
+          <p class="m-b-20" style="color: #888; font-size: 13px; margin-bottom: 20px;">
+            Your main list is growing
+          </p>
+          <a href="{{ route('bk.ebook') }}" class="btn-success-custom">
+            Check them out
+          </a>
+        </div>
       </div>
 
     </div>
 
-  </div>
-
-  <!-- 4. Baris Informasi Tambahan: Distribusi Kategori BK & Topik Chatbot Populer -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-    <!-- Card: Kategori Konsultasi (4 Bidang Standar BK) -->
-    <div class="bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col justify-between space-y-4">
-      <div>
-        <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-800">
-          <div class="flex items-center gap-2.5">
-            <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/40">
-              <i class="ti ti-category-2 text-lg" aria-hidden="true"></i>
-            </span>
-            <div>
-              <h2 class="text-sm sm:text-base font-bold text-gray-900 dark:text-white">
-                Kategori Konsultasi
-              </h2>
-              <p class="text-xs text-gray-500 dark:text-gray-400">
-                Distribusi 4 bidang bimbingan standar BK
+    <!-- Kolom Kanan: Activity Feed (8 Kolom) -->
+    <div class="lg:col-span-8">
+      <div class="card">
+        <div class="card-header">
+          <h5>Activity Feed</h5>
+        </div>
+        <div class="card-body" style="padding-top: 25px;">
+          <ul class="feed-blog ps-0">
+            
+            <!-- Feed Item 1: Eddie -->
+            <li class="active-feed">
+              <div class="feed-user-img">
+                <img src="{{ asset('images/user/avatar-1.jpg') }}" class="img-radius" alt="User-Profile" />
+              </div>
+              <h6>
+                <span class="badge-custom bg-danger-custom">File</span> Eddie uploaded new files:
+                <small style="color: #888; font-weight: 400; font-size: 12px; margin-left: 5px;">2 hours ago</small>
+              </h6>
+              <p style="color: #666; font-size: 13px; line-height: 1.6; margin: 12px 0 15px 0;">
+                hii <b>@everone</b> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
               </p>
-            </div>
-          </div>
-          <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
-            {{ $bkCategories['total'] ?? 0 }} sesi/pesan
-          </span>
-        </div>
-
-        <div class="space-y-3 mt-4">
-          @foreach($bkCategories['items'] as $item)
-            <div class="p-3 rounded-xl bg-gray-50/70 dark:bg-gray-800/40 border border-gray-100 dark:border-gray-800/80 space-y-2">
-              <div class="flex items-center justify-between text-xs">
-                <div class="flex items-center gap-2">
-                  <span class="h-2.5 w-2.5 rounded-full {{ $item['dot_color'] }}"></span>
-                  <span class="font-bold text-gray-900 dark:text-white text-xs sm:text-sm">{{ $item['title'] }}</span>
+              <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <div style="text-align: center;">
+                  <img src="{{ asset('images/gallery-grid/img-grd-gal-1.jpg') }}" alt="Old Scooter" class="wid-100" />
+                  <h6 style="margin-top: 10px; margin-bottom: 2px; font-size: 13px; font-weight: 600;">Old Scooter</h6>
+                  <p style="color: #888; margin: 0; font-size: 11px;">PNG-100KB</p>
                 </div>
-                <div class="flex items-center gap-2">
-                  <span class="text-gray-500 dark:text-gray-400 font-mono">{{ $item['count'] }} sesi</span>
-                  <span class="font-bold px-2 py-0.5 rounded-md text-[11px] {{ $item['badge'] }}">
-                    {{ $item['percentage'] }}%
-                  </span>
+                <div style="text-align: center;">
+                  <img src="{{ asset('images/gallery-grid/img-grd-gal-2.jpg') }}" alt="Wall Art" class="wid-100" />
+                  <h6 style="margin-top: 10px; margin-bottom: 2px; font-size: 13px; font-weight: 600;">Wall Art</h6>
+                  <p style="color: #888; margin: 0; font-size: 11px;">PNG-150KB</p>
+                </div>
+                <div style="text-align: center;">
+                  <img src="{{ asset('images/gallery-grid/img-grd-gal-3.jpg') }}" alt="Microphone" class="wid-100" />
+                  <h6 style="margin-top: 10px; margin-bottom: 2px; font-size: 13px; font-weight: 600;">Microphone</h6>
+                  <p style="color: #888; margin: 0; font-size: 11px;">PNG-150KB</p>
                 </div>
               </div>
-              <div class="w-full h-1.5 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
-                <div class="h-full rounded-full {{ $item['bar_color'] }}" style="width: {{ max(4, $item['percentage']) }}%"></div>
+            </li>
+
+            <!-- Feed Item 2: Sarah -->
+            <li class="diactive-feed">
+              <div class="feed-user-img">
+                <img src="{{ asset('images/user/avatar-1.jpg') }}" class="img-radius" alt="User-Profile" />
               </div>
-            </div>
-          @endforeach
-        </div>
-      </div>
+              <h6>
+                <span class="badge-custom bg-success-custom">Task</span> Sarah marked the Pending Review:
+                <span class="text-c-green" style="margin-left: 4px;">Trash Can Icon Design</span>
+                <small style="color: #888; font-weight: 400; font-size: 12px; margin-left: 5px;">2 hours ago</small>
+              </h6>
+            </li>
 
-      <div class="pt-2 border-t border-gray-100 dark:border-gray-800 text-right">
-        <a href="{{ route('bk.percakapan') }}" class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
-          <span>Lihat rincian riwayat konseling</span>
-          <i class="ti ti-arrow-right text-xs" aria-hidden="true"></i>
-        </a>
-      </div>
-    </div>
-
-    <!-- Card: Topik Chatbot Terpopuler & Aksi Cepat -->
-    <div class="bg-white dark:bg-gray-900 border border-gray-200/80 dark:border-gray-800 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col justify-between space-y-4">
-      <div>
-        <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-800">
-          <div class="flex items-center gap-2.5">
-            <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-amber-900/40">
-              <i class="ti ti-bulb text-lg" aria-hidden="true"></i>
-            </span>
-            <div>
-              <h2 class="text-sm sm:text-base font-bold text-gray-900 dark:text-white">
-                Topik Chatbot Terpopuler
-              </h2>
-              <p class="text-xs text-gray-500 dark:text-gray-400">
-                Pertanyaan paling sering diajukan siswa ke AI
-              </p>
-            </div>
-          </div>
-          <span class="text-[11px] font-semibold text-gray-500 dark:text-gray-400">Minggu Ini</span>
-        </div>
-
-        @if(count($popularTopics) > 0 && array_sum(array_column($popularTopics, 'count')) > 0)
-          <div class="space-y-3 mt-4">
-            @foreach($popularTopics as $topic)
-              <div class="space-y-1.5">
-                <div class="flex items-center justify-between text-xs">
-                  <span class="font-medium text-gray-700 dark:text-gray-300 truncate max-w-[200px]">{{ $topic['title'] }}</span>
-                  <span class="text-gray-500 dark:text-gray-400 font-mono">{{ $topic['count'] }} tanya ({{ $topic['percentage'] }}%)</span>
-                </div>
-                <div class="w-full h-1.5 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
-                  <div class="h-full rounded-full {{ $topic['color'] }}" style="width: {{ max(6, $topic['percentage']) }}%"></div>
-                </div>
-              </div>
-            @endforeach
-          </div>
-        @else
-          <div class="py-8 text-center text-xs text-gray-500 dark:text-gray-400">
-            Belum ada topik pertanyaan siswa minggu ini.
-          </div>
-        @endif
-      </div>
-
-      <!-- Kata Kunci Populer -->
-      <div class="pt-3 border-t border-gray-100 dark:border-gray-800 space-y-2">
-        <div class="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-          Kata Kunci Populer
-        </div>
-        <div class="flex flex-wrap gap-1.5">
-          <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">SNBT / SNBP</span>
-          <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">Jurusan Kuliah</span>
-          <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">Stres Belajar</span>
-          <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">Teman Sebaya</span>
-          <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">Minat &amp; Karir</span>
+          </ul>
         </div>
       </div>
     </div>
@@ -604,258 +465,165 @@
 @endsection
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
-  function counselorDashboard() {
-    return {
-      period: 'month',
-      trendChartInstance: null,
-      ratioDonutInstance: null,
-      statusDonutInstance: null,
-      trendData: @json($trendData),
-      stats: @json($stats),
-      handlingStatus: @json($handlingStatus),
-
-      get activePeriodData() {
-        if (this.trendData && this.trendData.periods && this.trendData.periods[this.period]) {
-          return this.trendData.periods[this.period];
+  document.addEventListener('DOMContentLoaded', function () {
+    // 1. Unique Visitor Line Chart
+    var uniqueVisitorOptions = {
+      chart: {
+        height: 280,
+        type: 'line',
+        toolbar: {
+          show: false
         }
-        return {
-          ai_count: 0,
-          live_count: 0,
-          total_count: 0,
-          pct_ai: '+0.0%',
-          pct_live: '+0.0%',
-          pct_total: '+0.0%',
-          pct_ai_badge: '↗ +0.0%',
-          pct_live_badge: '↗ +0.0%',
-          pct_total_badge: '↗ +0.0%',
-          pct_val_ai: 0,
-          pct_val_live: 0,
-          pct_val_total: 0,
-          comparison_text: 'Stabil dibanding periode sebelumnya',
-          period_subtitle: '',
-          labels: [],
-          ai: [],
-          live: []
-        };
       },
-
-      init() {
-        this.$nextTick(() => {
-          this.initTrendChart();
-          this.initRatioDonut();
-          this.initStatusDonut();
-        });
+      dataLabels: {
+        enabled: false
       },
-
-      switchPeriod(newPeriod) {
-        if (this.period === newPeriod) return;
-        this.period = newPeriod;
-        this.updateTrendChart();
+      stroke: {
+        width: 2,
+        curve: 'smooth'
       },
-
-      initTrendChart() {
-        const ctx = document.getElementById('counselorTrendChart');
-        if (!ctx) return;
-
-        const isDark = document.documentElement.classList.contains('dark');
-        const activeData = this.activePeriodData;
-        const gridColor = isDark ? 'rgba(51, 65, 85, 0.35)' : 'rgba(226, 232, 240, 0.7)';
-        const tickColor = isDark ? '#94a3b8' : '#64748b';
-
-        const ctx2d = ctx.getContext('2d');
-        const blueGradient = ctx2d.createLinearGradient(0, 0, 0, 260);
-        blueGradient.addColorStop(0, 'rgba(59, 130, 246, 0.28)');
-        blueGradient.addColorStop(1, 'rgba(59, 130, 246, 0.01)');
-
-        const greenGradient = ctx2d.createLinearGradient(0, 0, 0, 260);
-        greenGradient.addColorStop(0, 'rgba(16, 185, 129, 0.28)');
-        greenGradient.addColorStop(1, 'rgba(16, 185, 129, 0.01)');
-
-        this.trendChartInstance = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: activeData.labels || [],
-            datasets: [
-              {
-                label: 'Chatbot AI',
-                data: activeData.ai || [],
-                borderColor: '#3b82f6',
-                backgroundColor: blueGradient,
-                borderWidth: 2.5,
-                pointRadius: 4,
-                pointHoverRadius: 7,
-                pointBackgroundColor: '#2563eb',
-                pointBorderColor: '#ffffff',
-                pointBorderWidth: 2,
-                tension: 0.4,
-                fill: true
-              },
-              {
-                label: 'Live Chat Guru BK',
-                data: activeData.live || [],
-                borderColor: '#10b981',
-                backgroundColor: greenGradient,
-                borderWidth: 2.5,
-                pointRadius: 4,
-                pointHoverRadius: 7,
-                pointBackgroundColor: '#059669',
-                pointBorderColor: '#ffffff',
-                pointBorderWidth: 2,
-                tension: 0.4,
-                fill: true
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: {
-              intersect: false,
-              mode: 'index'
-            },
-            plugins: {
-              legend: {
-                display: false
-              },
-              tooltip: {
-                enabled: true,
-                backgroundColor: 'rgba(15, 23, 42, 0.94)',
-                titleColor: '#ffffff',
-                bodyColor: '#cbd5e1',
-                borderColor: 'rgba(255, 255, 255, 0.1)',
-                borderWidth: 1,
-                padding: 12,
-                cornerRadius: 12,
-                displayColors: true,
-                boxWidth: 8,
-                boxHeight: 8,
-                usePointStyle: true,
-                titleFont: { size: 12, weight: 'bold' },
-                bodyFont: { size: 12 },
-                callbacks: {
-                  title: (items) => {
-                    const label = items[0]?.label || '';
-                    return label + (this.period === 'month' ? ' Okt 2026' : '');
-                  },
-                  label: (context) => ' ' + context.dataset.label + ': ' + context.parsed.y + ' sesi',
-                  footer: (items) => {
-                    const total = items.reduce((acc, curr) => acc + curr.parsed.y, 0);
-                    return 'Total Konsultasi: ' + total;
-                  }
-                },
-                footerColor: '#34d399',
-                footerFont: { size: 12, weight: 'bold' },
-                footerMarginTop: 6
-              }
-            },
-            scales: {
-              x: {
-                grid: {
-                  color: gridColor,
-                  drawBorder: false
-                },
-                ticks: {
-                  color: tickColor,
-                  font: { size: 11, weight: '500' }
-                }
-              },
-              y: {
-                beginAtZero: true,
-                suggestedMax: 8,
-                grid: {
-                  color: gridColor,
-                  drawBorder: false
-                },
-                ticks: {
-                  precision: 0,
-                  color: tickColor,
-                  font: { size: 11 }
-                }
-              }
-            }
+      legend: {
+        position: 'top',
+        horizontalAlign: 'right',
+        markers: {
+          radius: 12
+        },
+        itemMargin: {
+          horizontal: 8
+        }
+      },
+      xaxis: {
+        categories: ['15 Jan', "Feb '00", '15 Feb', "Mar '00", '15 Mar', "Apr '00", '15 Apr', "May '00", '15 May', "Jun '00"],
+        axisBorder: {
+          show: false
+        },
+        axisTicks: {
+          show: false
+        },
+        labels: {
+          style: {
+            colors: '#a3aed0'
           }
-        });
+        }
       },
-
-      updateTrendChart() {
-        if (!this.trendChartInstance) return;
-        const activeData = this.activePeriodData;
-        this.trendChartInstance.data.labels = activeData.labels || [];
-        this.trendChartInstance.data.datasets[0].data = activeData.ai || [];
-        this.trendChartInstance.data.datasets[1].data = activeData.live || [];
-        this.trendChartInstance.update();
-      },
-
-      initRatioDonut() {
-        const ctx = document.getElementById('counselorRatioDonutChart');
-        if (!ctx) return;
-        const aiCount = this.stats.total_ai_sessions || 0;
-        const liveCount = this.stats.total_live_sessions || 0;
-        const dataValues = (aiCount === 0 && liveCount === 0) ? [1, 1] : [aiCount, liveCount];
-
-        this.ratioDonutInstance = new Chart(ctx, {
-          type: 'doughnut',
-          data: {
-            labels: ['Chatbot AI', 'Live Chat Guru BK'],
-            datasets: [{
-              data: dataValues,
-              backgroundColor: ['#10b981', '#3b82f6'],
-              borderWidth: 0,
-              hoverOffset: 4
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '72%',
-            plugins: {
-              legend: { display: false },
-              tooltip: {
-                callbacks: {
-                  label: (ctx) => ` ${ctx.label}: ${ctx.raw} sesi`
-                }
-              }
-            }
+      yaxis: {
+        show: true,
+        min: 10,
+        max: 70,
+        labels: {
+          style: {
+            colors: '#a3aed0'
           }
-        });
+        }
       },
-
-      initStatusDonut() {
-        const ctx = document.getElementById('counselorStatusDonutChart');
-        if (!ctx) return;
-        const completed = this.handlingStatus?.completed?.count || 0;
-        const inProgress = (this.handlingStatus?.in_progress?.count || 0) + (this.handlingStatus?.waiting?.count || 0);
-        const dataValues = (completed === 0 && inProgress === 0) ? [1, 0] : [completed, inProgress];
-
-        this.statusDonutInstance = new Chart(ctx, {
-          type: 'doughnut',
-          data: {
-            labels: ['Kasus Tuntas', 'Dalam Proses'],
-            datasets: [{
-              data: dataValues,
-              backgroundColor: ['#34d399', '#93c5fd'],
-              borderWidth: 0,
-              hoverOffset: 4
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '72%',
-            plugins: {
-              legend: { display: false },
-              tooltip: {
-                callbacks: {
-                  label: (ctx) => ` ${ctx.label}: ${ctx.raw} kasus`
-                }
-              }
-            }
-          }
-        });
-      }
+      colors: ['#4099ff', '#2ed8b6'],
+      markers: {
+        size: 5,
+        colors: ['#4099ff', '#2ed8b6'],
+        opacity: 0.9,
+        strokeWidth: 2,
+        hover: {
+          size: 7
+        }
+      },
+      grid: {
+        borderColor: '#f1f1f1'
+      },
+      series: [
+        {
+          name: 'Arts',
+          data: [20, 50, 30, 60, 30, 50]
+        },
+        {
+          name: 'Commerce',
+          data: [60, 30, 65, 45, 67, 35]
+        }
+      ]
     };
-  }
+    var chart1 = new ApexCharts(document.querySelector("#unique-visitor-chart"), uniqueVisitorOptions);
+    chart1.render();
+
+    // 2. Customer Donut Chart (White Card)
+    var customerChartOptions = {
+      chart: {
+        height: 150,
+        type: 'donut'
+      },
+      dataLabels: {
+        enabled: false
+      },
+      plotOptions: {
+        pie: {
+          donut: {
+            size: '75%'
+          }
+        }
+      },
+      labels: ['New', 'Return'],
+      legend: {
+        show: false
+      },
+      tooltip: {
+        theme: 'dark'
+      },
+      grid: {
+        padding: {
+          top: 10,
+          right: 0,
+          bottom: 0,
+          left: 0
+        }
+      },
+      colors: ['#2ed8b6', '#4099ff'],
+      stroke: {
+        width: 0
+      },
+      series: [674, 182]
+    };
+    var chart2 = new ApexCharts(document.querySelector("#customer-chart"), customerChartOptions);
+    chart2.render();
+
+    // 3. Customer Donut Chart 1 (Blue Card)
+    var customerChart1Options = {
+      chart: {
+        height: 150,
+        type: 'donut'
+      },
+      dataLabels: {
+        enabled: false
+      },
+      plotOptions: {
+        pie: {
+          donut: {
+            size: '75%'
+          }
+        }
+      },
+      labels: ['New', 'Return'],
+      legend: {
+        show: false
+      },
+      tooltip: {
+        theme: 'light'
+      },
+      grid: {
+        padding: {
+          top: 10,
+          right: 0,
+          bottom: 0,
+          left: 0
+        }
+      },
+      colors: ['#2ed8b6', '#ffffff99'],
+      stroke: {
+        width: 0
+      },
+      series: [674, 182]
+    };
+    var chart3 = new ApexCharts(document.querySelector("#customer-chart-1"), customerChart1Options);
+    chart3.render();
+  });
 </script>
 @endpush
